@@ -4,9 +4,9 @@ public enum CommonReturnTypeStatus {
     SUCCESS("success"),
     FAILED("fail");
 
-    private String str;
+    private final String str;
 
-    private CommonReturnTypeStatus(String str) {
+    CommonReturnTypeStatus(String str) {
         this.str = str;
     }
 

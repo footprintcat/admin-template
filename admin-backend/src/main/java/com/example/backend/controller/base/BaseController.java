@@ -3,9 +3,9 @@ package com.example.backend.controller.base;
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturnType;
-import com.example.backend.common.Response.CommonReturnTypeStatus;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,19 +15,16 @@ import java.util.HashMap;
 
 public class BaseController {
 
-    @Autowired
+    @Resource
     HttpServletRequest httpServletRequest;
+
+    @Value("${project-config.production}")
+    Boolean production;
 
     /**
      * content-type 常量
      */
     public static final String CONTENT_TYPE_FORMED = "application/x-www-form-urlencoded";
-
-    /**
-     * PageHelper分页常量
-     */
-    public static final Integer COMMON_START_PAGE = 1;
-    public static final Integer COMMON_PAGE_SIZE = 10;
 
     // /**
     //  * 获取用户登录状态
@@ -82,15 +79,19 @@ public class BaseController {
             responseData.put("errMsg", BusinessErrorCode.UNKNOWN_ERROR.getErrMsg());
         }
 
-        HashMap<Object, Object> exceptionDetails = new HashMap<>();
-        exceptionDetails.put("errMessage", ex.getMessage());
-        exceptionDetails.put("errCause", ex.getCause());
-        exceptionDetails.put("errLocalizedMessage", ex.getLocalizedMessage());
-        exceptionDetails.put("errStackTrace", ex.getStackTrace());
-        exceptionDetails.put("errSuppressed", ex.getSuppressed());
-        exceptionDetails.put("errClass", ex.getClass());
-        responseData.put("exception", exceptionDetails);
+        if (production) {
+        } else {
+            // 线上环境不打印错误详情
+            HashMap<Object, Object> exceptionDetails = new HashMap<>();
+            exceptionDetails.put("errMessage", ex.getMessage());
+            exceptionDetails.put("errCause", ex.getCause());
+            exceptionDetails.put("errLocalizedMessage", ex.getLocalizedMessage());
+            exceptionDetails.put("errStackTrace", ex.getStackTrace());
+            exceptionDetails.put("errSuppressed", ex.getSuppressed());
+            exceptionDetails.put("errClass", ex.getClass());
+            responseData.put("exception", exceptionDetails);
+        }
 
-        return CommonReturnType.create(responseData, CommonReturnTypeStatus.FAILED);
+        return CommonReturnType.error(responseData, "系统内部错误");
     }
 }

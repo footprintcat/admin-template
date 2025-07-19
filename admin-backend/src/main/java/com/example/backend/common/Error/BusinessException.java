@@ -5,7 +5,7 @@ package com.example.backend.common.Error;
  */
 public class BusinessException extends Exception implements CommonError {
 
-    private CommonError commonError;
+    private final CommonError commonError;
 
     public BusinessException(CommonError commonError) {
         super();

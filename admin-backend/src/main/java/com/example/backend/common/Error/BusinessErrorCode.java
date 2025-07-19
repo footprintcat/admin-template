@@ -21,12 +21,12 @@ public enum BusinessErrorCode implements CommonError {
     // 占位
     PLACE_HOLDER(99999, "这是一个占位符错误");
 
-    private BusinessErrorCode(int errCode, String errMsg) {
+    BusinessErrorCode(int errCode, String errMsg) {
         this.errCode = errCode;
         this.errMsg = errMsg;
     }
 
-    private int errCode;
+    private final int errCode;
     private String errMsg;
 
     @Override
