@@ -23,12 +23,12 @@ public class DemoController extends BaseController {
     public CommonReturnType test() {
         List<User> userList = userServiceImpl.getUserList();
         List<UserDTO> collect = UserDTO.fromEntity(userList);
-        return CommonReturnType.create(collect);
+        return CommonReturnType.success(collect);
     }
 
     @RequestMapping("/testError")
     public CommonReturnType testError() {
-        return CommonReturnType.create(0 / 0);
+        return CommonReturnType.success(0 / 0);
     }
 
     @RequestMapping("/testBusinessError")

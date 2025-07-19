@@ -1,9 +1,42 @@
 server:
   port: 8412
+  servlet:
+    session:
+      cookie:
+        http-only: false
+      timeout: 7200 # 秒  120分钟 = 7200秒
 
 spring:
+  application:
+    name: admin-template
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mine?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8
+    # %2b表示+号
+    url: jdbc:mysql://localhost:3306/admin_template?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8
     username: root
     password: 123456
+  servlet:
+    multipart: # 上传文件大小限制
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 100MB
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: is_delete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+# Swagger 文档
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+project-config:
+  production: false
