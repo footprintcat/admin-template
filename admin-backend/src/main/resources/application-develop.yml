@@ -1,0 +1,16 @@
+project-config:
+  env: develop
+  config-name: application-develop.yml
+  site-id: develop
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/admin_template?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8
+    username: root
+    password: 123456
+
+mybatis-plus:
+  configuration:
+    # 打印 SQL
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

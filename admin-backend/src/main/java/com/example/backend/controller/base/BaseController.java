@@ -5,56 +5,31 @@ import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturnType;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.swing.text.html.Option;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Optional;
 
+@Slf4j
 public class BaseController {
 
     @Resource
     HttpServletRequest httpServletRequest;
 
-    @Value("${project-config.production}")
-    Boolean production;
+    @Value("${project-config.env}")
+    String env;
 
     /**
      * content-type 常量
      */
     public static final String CONTENT_TYPE_FORMED = "application/x-www-form-urlencoded";
-
-    // /**
-    //  * 获取用户登录状态
-    //  */
-    // public Boolean isLogin() {
-    //     SessionManager sessionManager = LocalSessionManager.getInstance(httpServletRequest);
-    //     return (Boolean) sessionManager.getValue("IS_LOGIN");
-    // }
-    //
-    // /**
-    //  * 保存用户的登录状态
-    //  *
-    //  * @return String uuidToken
-    //  */
-    // public String onLogin(UserModel userModel) {
-    //     SessionManager sessionManager = LocalSessionManager.getInstance(httpServletRequest);
-    //     sessionManager.setValue("IS_LOGIN", true);
-    //     sessionManager.setValue("user", userModel);
-    //     return;
-    // }
-    //
-    // /**
-    //  * 用户退出登录
-    //  */
-    // public void onLogout(String token) {
-    //     SessionManager sessionManager = LocalSessionManager.getInstance(httpServletRequest);
-    //     sessionManager.setValue("IS_LOGIN", false);
-    //     sessionManager.remove("user");
-    //     return;
-    // }
 
     /**
      * 定义ExceptionHandler解决未被Controller层吸收的Exception
@@ -67,21 +42,24 @@ public class BaseController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Object handlerException(HttpServletRequest request, Exception ex) {
+        log.error("全局捕获异常：", ex);
         HashMap<Object, Object> responseData = new HashMap<>();
 
-        if (ex instanceof BusinessException) {
-            BusinessException businessException = (BusinessException) ex;
-            responseData.put("errCode", businessException.getErrCode());
-            responseData.put("errMsg", businessException.getErrMsg());
+        int errCode;
+        String errMessage;
+        if (ex instanceof BusinessException businessException) {
+            errCode = businessException.getErrCode();
+            errMessage = businessException.getErrMsg();
         } else {
             // 生产环境输出格式化信息
-            responseData.put("errCode", BusinessErrorCode.UNKNOWN_ERROR.getErrCode());
-            responseData.put("errMsg", BusinessErrorCode.UNKNOWN_ERROR.getErrMsg());
+            errCode = BusinessErrorCode.UNKNOWN_ERROR.getErrCode();
+            errMessage = BusinessErrorCode.UNKNOWN_ERROR.getErrMsg();
         }
+        responseData.put("errCode", errCode);
+        responseData.put("errMsg", errMessage);
 
-        if (production) {
-        } else {
-            // 线上环境不打印错误详情
+        if (Objects.equals(env, "develop")) {
+            // 非线上环境, 打印错误详情
             HashMap<Object, Object> exceptionDetails = new HashMap<>();
             exceptionDetails.put("errMessage", ex.getMessage());
             exceptionDetails.put("errCause", ex.getCause());
@@ -92,6 +70,6 @@ public class BaseController {
             responseData.put("exception", exceptionDetails);
         }
 
-        return CommonReturnType.error(responseData, "系统内部错误");
+        return CommonReturnType.error(responseData, Optional.ofNullable(errMessage).orElse("系统内部错误"));
     }
 }

@@ -15,7 +15,7 @@ import java.util.Objects;
 
 @Slf4j
 @Service
-public class SystemLogService extends ServiceImpl<SystemLogMapper, SystemLog> {
+public class SystemLogServiceBak extends ServiceImpl<SystemLogMapper, SystemLog> {
 
     public static void loginSetSession(HttpSession session, User user) {
         session.setAttribute("userId", String.valueOf(user.getId()));
@@ -49,7 +49,7 @@ public class SystemLogService extends ServiceImpl<SystemLogMapper, SystemLog> {
 
                 systemLog.setSessionId(sessionId);
                 if (Objects.nonNull(session.getAttribute("userId"))) { // 已登录
-                    systemLog.setUserId(session.getAttribute("userId").toString());
+                    systemLog.setUserId((Long) session.getAttribute("userId"));
                 }
                 if (Objects.nonNull(session.getAttribute("roleId"))) { // 已登录
                     systemLog.setRoleId(session.getAttribute("roleId").toString());

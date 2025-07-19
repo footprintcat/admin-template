@@ -1,12 +1,15 @@
 package com.example.backend.common.Error;
 
-public enum BusinessErrorCode implements CommonError {
+public enum BusinessErrorCode implements ICommonError {
     // 10000 通用错误类型
     UNKNOWN_ERROR(10001, "未知错误"),
     PARAMETER_VALIDATION_ERROR(10002, "参数不合法"),
     NOT_SUPPORT(10003, "操作或方法不支持"),
     NOT_IMPLEMENT(10004, "方法未实现"),
     FAULT_ERROR(10005, "致命错误"),
+    INCORRECT_DATA(10006, "数据不正确"),
+    ILLEGAL_CALL(10007, "非法调用"),
+    EXCESSIVE_DATA_VOLUME(10008, "数据量过大，请缩小查询范围后重试"),
 
     // 20000 用户信息相关错误定义
     USER_NOT_EXIST(20001, "用户不存在"),
@@ -17,6 +20,12 @@ public enum BusinessErrorCode implements CommonError {
 
     // 30000 权限相关错误定义
     OPERATION_NOT_ALLOWED(30001, "用户没有此操作的权限"),
+
+    // 40000 OPEN 开放平台相关错误定义
+    OPEN_AUTHENTICATION_FAILURE(40001, "用户身份验证失败"),
+
+    // 50000 三方平台或设备调用异常
+    THIRD_PARTY_SERVICE_EXCEPTION(50001, "三方服务异常"),
 
     // 占位
     PLACE_HOLDER(99999, "这是一个占位符错误");
@@ -40,7 +49,7 @@ public enum BusinessErrorCode implements CommonError {
     }
 
     @Override
-    public CommonError setErrMsg(String errMsg) {
+    public ICommonError setErrMsg(String errMsg) {
         this.errMsg = errMsg;
         return this;
     }

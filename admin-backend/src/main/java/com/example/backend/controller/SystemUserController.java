@@ -6,7 +6,7 @@ import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.UserDTO;
 import com.example.backend.entity.User;
-import com.example.backend.service.SystemLogService;
+import com.example.backend.service.SystemLogServiceBak;
 import com.example.backend.service.SystemUserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +41,7 @@ public class SystemUserController extends BaseController {
         if (systemUserService.checkPasswordIsCorrect(user, inputPassword)) {
             // 密码正确，登录成功
             UserDTO dto = UserDTO.fromEntity(user);
-            SystemLogService.loginSetSession(session, user);
+            SystemLogServiceBak.loginSetSession(session, user);
             return CommonReturnType.success(dto);
         } else {
             return CommonReturnType.error("登录失败，请检查用户名密码是否正确");

@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 
 /**
  * Element Plus 表单验证
- * GiHub refer: https://github.com/yiminghe/async-validator
+ * GiHub refer: <a href="https://github.com/yiminghe/async-validator">...</a>
  */
 public class FieldRuleBuilder {
 
@@ -43,6 +43,12 @@ public class FieldRuleBuilder {
         return this;
     }
 
+    public FieldRuleBuilder pattern(String regEx, String message) {
+        rules.put("pattern", regEx);
+        rules.put("message", fieldDisplayName + message);
+        return this;
+    }
+
     public FieldRuleBuilder number() {
         rules.put("type", "number");
         rules.put("message", fieldDisplayName + "必须为数字");
@@ -55,7 +61,19 @@ public class FieldRuleBuilder {
         return this;
     }
 
+    public FieldRuleBuilder min(Double min) {
+        rules.put("min", min);
+        rules.put("message", fieldDisplayName + "过短");
+        return this;
+    }
+
     public FieldRuleBuilder max(Integer max) {
+        rules.put("max", max);
+        rules.put("message", fieldDisplayName + "过长");
+        return this;
+    }
+
+    public FieldRuleBuilder max(Double max) {
         rules.put("max", max);
         rules.put("message", fieldDisplayName + "过长");
         return this;

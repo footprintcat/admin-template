@@ -8,7 +8,8 @@ public enum FieldType {
     DATETIME("time"),
     DATE("date"),
     TAG("tag"),
-    BOOLEAN("checkbox");
+    BOOLEAN("checkbox"),
+    ;
 
     private final String value;
 

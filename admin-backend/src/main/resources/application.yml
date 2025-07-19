@@ -15,28 +15,20 @@ spring:
     url: jdbc:mysql://localhost:3306/admin_template?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8
     username: root
     password: 123456
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher # Swagger API文档配置
   servlet:
     multipart: # 上传文件大小限制
       enabled: true
-      max-file-size: 50MB
-      max-request-size: 100MB
+      max-file-size: 50MB      # 上传单个文件最大值
+      max-request-size: 100MB  # 上传文件总的最大值
 
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  global-config:
-    db-config:
-      logic-delete-field: is_delete # 全局逻辑删除的实体字段名
-      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
-      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
-
-# Swagger 文档
-springdoc:
-  api-docs:
-    enabled: true
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html
+mybatis:
+  type-aliases-package: com.example.backend.entity
+  mapper-locations: classpath:mapper/*.xml
 
 project-config:
-  production: false
+  env: production
+  config-name: application.yml
+  site-id: develop

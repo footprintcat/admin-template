@@ -4,21 +4,17 @@ import com.example.backend.entity.User;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class UserDTO implements Serializable {
+public class UserDTO {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
-    private Integer id;
+    private Long id;
     private String username;
     private String nickname;
     private Integer roleId;
-
+    private String telephone;
 
     public static UserDTO fromEntity(User entity) {
         if (entity == null) {

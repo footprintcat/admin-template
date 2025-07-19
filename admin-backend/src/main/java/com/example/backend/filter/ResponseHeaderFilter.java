@@ -1,6 +1,6 @@
 package com.example.backend.filter;
 
-import com.example.backend.service.SystemLogService;
+import com.example.backend.service.SystemLogServiceBak;
 import jakarta.annotation.Resource;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -20,7 +20,7 @@ public class ResponseHeaderFilter implements Filter {
 
     @Lazy
     @Resource
-    SystemLogService systemLogService;
+    SystemLogServiceBak systemLogService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

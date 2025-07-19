@@ -1,0 +1,7 @@
+project-config:
+  env: production
+  config-name: application-production.yml
+
+# mybatis-plus:
+#   configuration:
+#     log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl

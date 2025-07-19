@@ -1,6 +1,0 @@
-project-config:
-  production: true
-
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl

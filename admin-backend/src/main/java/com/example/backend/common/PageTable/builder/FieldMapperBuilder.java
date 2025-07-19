@@ -3,7 +3,7 @@ package com.example.backend.common.PageTable.builder;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class FieldMapperBuilder {
 
@@ -15,8 +15,8 @@ public class FieldMapperBuilder {
         return builder;
     }
 
-    public FieldMapperBuilder add(String prop, String label, HashMap mapper) {
-        JSONObject jsonObject = new JSONObject(2);
+    public FieldMapperBuilder add(String prop, String label, Map<?, ?> mapper) {
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("key", prop);
         jsonObject.put("value", label);
         jsonObject.put("mapper", mapper);

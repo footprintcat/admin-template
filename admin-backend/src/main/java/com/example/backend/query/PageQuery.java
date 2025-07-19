@@ -15,6 +15,11 @@ public class PageQuery {
      */
     private int pageSize = 10;
 
+    /**
+     * 每页最多查询出多少条数据
+     */
+    private final int maxPageSize = 1000;
+
     public void setPageIndex(int page) {
         if (page < 1) {
             page = 1;
@@ -26,8 +31,8 @@ public class PageQuery {
         if (pageSize < 1) {
             pageSize = 1;
         }
-        if (pageSize > 1000) {
-            pageSize = 1000;
+        if (pageSize > maxPageSize) {
+            pageSize = maxPageSize;
         }
         this.pageSize = pageSize;
     }

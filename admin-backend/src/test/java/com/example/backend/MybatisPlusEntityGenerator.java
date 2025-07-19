@@ -36,7 +36,11 @@ public class MybatisPlusEntityGenerator {
         /**
          * 请按字母顺序添加
          */
+        // includeTables.add("privilege");
+        // includeTables.add("role");
+        // includeTables.add("system_config");
         // includeTables.add("system_log");
+        // includeTables.add("system_menu");
         // includeTables.add("user");
 
         if (includeTables.isEmpty()) {
@@ -61,6 +65,9 @@ public class MybatisPlusEntityGenerator {
                     return switch (typeCode) {
                         case Types.SMALLINT, Types.TINYINT -> DbColumnType.INTEGER;
                         case Types.DECIMAL -> DbColumnType.DOUBLE; // (mysql) decimal -> (java) Double
+                        case Types.DATE -> DbColumnType.LOCAL_DATE;
+                        case Types.TIME -> DbColumnType.LOCAL_TIME;
+                        case Types.TIMESTAMP -> DbColumnType.LOCAL_DATE_TIME; // (mysql) DATETIME & TIMESTAMP -> (java) LocalDateTime
                         default -> typeRegistry.getColumnType(metaInfo);
                     };
                 }))

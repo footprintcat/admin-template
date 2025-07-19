@@ -7,7 +7,7 @@ public class CommonReturnType {
     // 表明对应请求的返回处理结果 "success" 或 "fail"
     private String status;
 
-    // Status 是否是 SUCCESS
+    // status 是否是 SUCCESS
     private Boolean isSuccess;
 
     // 若 status == "success" 则data内返回前端需要的JSON数据

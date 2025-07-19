@@ -4,9 +4,9 @@ import java.lang.reflect.Field;
 
 public class CommonUtils {
 
-    public static Double getValueByFeildName(Object obj, String fieldName) {
+    public static Double getValueByFieldName(Object obj, String fieldName) {
         try {
-            Class aClass = obj.getClass();
+            Class<?> aClass = obj.getClass();
             Field field = aClass.getDeclaredField(fieldName);
             field.setAccessible(true);
             Object o = field.get(obj);
@@ -28,4 +28,14 @@ public class CommonUtils {
             return null;
         }
     }
+
+    /**
+     * 转换为指定位数的字符串，前面不够补0
+     */
+    public static String ToFixedString(Long number, Integer count) {
+        String strNumber = Long.toString(number);
+        int paddingLength = count - strNumber.length();
+        return "0".repeat(Math.max(0, paddingLength)) + strNumber;
+    }
+
 }

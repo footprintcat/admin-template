@@ -1,7 +1,8 @@
 package com.example.backend.common.PageTable.enums;
 
 public enum EditType {
-    CAN_NOT_EDIT("plainText"),
+    CAN_NOT_EDIT("hidden"),
+    PLAIN_TEXT("plainText"),
     INPUT("input"),
     INPUT_NUMBER("input-number"),
     TEXTAREA("textarea"),
@@ -9,7 +10,10 @@ public enum EditType {
     IMAGE("image"),
     // DATETIME("time"), // not implement yet
     DATE("date"),
-    CHECKBOX("checkbox");
+    CHECKBOX("checkbox"),
+    // 带候选项的输入框（需要配置 autoCompleteDropDown 属性）
+    INPUT_AUTO_COMPLETE("autocomplete"),
+    ;
 
     private final String value;
 
