@@ -16,3 +16,5 @@ app.use(pinia)
 app.use(router)
 
 app.mount('#app')
+
+console.log('BUILD_TIME', new Date(__APP_BUILD_TIME__).toLocaleString())

@@ -14,10 +14,16 @@ const pathSrc = path.resolve(__dirname, 'src')
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: './',
+  base: '/',
   server: {
     host: '0.0.0.0', // 允许局域网访问
     port: 5173,
+
+    // npm run dev 时自动打开页面
+    open: true,
+  },
+  define: {
+    __APP_BUILD_TIME__: JSON.stringify(Date.now()),
   },
   plugins: [
     vue(),
