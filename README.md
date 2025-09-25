@@ -92,6 +92,17 @@
 
 - ECharts 6.0
 
+### 🌎 浏览器支持 Browsers support
+
+本地开发推荐使用最新版 Chrome 浏览器，[点击下载](https://www.google.com/intl/zh-CN/chrome/)。
+
+生产环境支持现代浏览器，不再支持 IE 浏览器，[点击查看 Vue 3 支持的浏览器](https://cn.vuejs.org/about/faq#what-browsers-does-vue-support)。
+
+<!-- http://godban.github.io/browsers-support-badges/ -->
+| <img src="https://i.imgtg.com/2023/04/11/8z7ot.png" alt="Internet Explorer" width="28px" height="28px" /><br/>IE | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="Edge" width="28px" height="28px" /><br/>Edge | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="28px" height="28px" /><br/>Firefox | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="28px" height="28px" /><br/>Chrome | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="28px" height="28px" /><br/>Safari
+| --------- | --------- | --------- | --------- | --------- |
+| not support | last 2 versions | last 2 versions | last 2 versions | last 2 versions |
+
 ## 📫 免责条款
 
 本开源项目仅供合法合规用途使用。使用者应承诺遵守《中华人民共和国网络安全法》、《数据安全法》、《个人信息保护法》等相关法律法规。<b>严禁使用本项目从事任何违反中国法律或危害国家安全的行为。项目开发者不对任何因使用本项目而产生的法律责任或后果负责。</b>使用者须对自身行为承担全部责任。
