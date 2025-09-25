@@ -1,0 +1,16 @@
+{
+    // 窗口失去焦点自动保存文件
+    "files.autoSave": "onWindowChange",
+    // 保存文件时删除行尾的空格
+    "files.trimTrailingWhitespace": true,
+    // 自动从当前 Git 仓库的默认远程仓库提取提交
+    "git.autofetch": true,
+    // 配置文件 File Nesting
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+      "package.json": "package-lock.json,LICENSE",
+      ".gitignore": ".gitattributes",
+      "tsconfig.json":"tsconfig.*.json,auto-imports.d.ts,components.d.ts,decs.d.ts",
+    }
+}

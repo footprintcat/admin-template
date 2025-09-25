@@ -7,6 +7,12 @@
 
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+
+    "types": [
+      // 使自动导入的 element-plus 组件在开发时支持 ts 类型提示
+      "element-plus/global",
+    ],
+
   }
 }

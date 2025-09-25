@@ -2,8 +2,7 @@ https://cn.vuejs.org/guide/introduction.html
 
 ```bash
 # 创建一个带有 TypeScript、Vue Router、Pinia、ESLint 和 Prettier 的项目
-npm create vue@latest admin-frontend -- --typescript --vue-router --pinia --eslint --prettier
-# npm create vue@latest admin-frontend -- --bare --typescript --vue-router --pinia --eslint --prettier
+npm create vue@latest admin-frontend -- --bare --typescript --vue-router --pinia --eslint --prettier
 
 # 查看支持的参数
 npm create vue@latest -- --help
