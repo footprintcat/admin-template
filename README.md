@@ -8,8 +8,8 @@
 <b>适合小个体的后台管理框架</b>
 
 <p align="center">
-	<a href="https://github.com/coder-xiaomo/admin-template"><img src="https://img.shields.io/badge/JianGou-v1.0.0-brightgreen.svg"></a>
-	<a href="./LICENSE"><img src="https://img.shields.io/github/license/coder-xiaomo/admin-template"></a>
+	<a href="https://github.com/footprintcat/admin-template"><img src="https://img.shields.io/badge/JianGou-v1.0.0-brightgreen.svg"></a>
+	<a href="./LICENSE"><img src="https://img.shields.io/github/license/footprintcat/admin-template"></a>
 </p>
 
 </div>
