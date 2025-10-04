@@ -1,10 +1,24 @@
-# 后台管理 通用模板
+> [!CAUTION]
+> 🚧 简构框架目前尚处于开发阶段，暂未完成开发，请过段时间再来看吧
+
+<div align="center">
+
+# 简构
+
+<b>适合小个体的后台管理框架</b>
+
+<p align="center">
+	<a href="https://github.com/coder-xiaomo/admin-template"><img src="https://img.shields.io/badge/JianGou-v1.0.0-brightgreen.svg"></a>
+	<a href="./LICENSE"><img src="https://img.shields.io/github/license/coder-xiaomo/admin-template"></a>
+</p>
+
+</div>
 
 ## 📖 简介
 
-适合小公司和个人开发者的 Vue 3 后台管理框架，含 Spring Boot 3 单体架构后端。
+**简构 (Jiǎn Gòu)​ 框架**是一个适合小公司和个人开发者的 Vue 3 后台管理框架，含 Spring Boot 3 单体架构后端通用模板。
 
-本模板结构清晰，依赖简洁，开箱即用，使用了[最新的主流技术](#tech-stack)开发，经过多项目生产验证，无过度封装设计，入门者也能快速掌握。
+本框架结构清晰，依赖简洁，开箱即用，使用了[最新的主流技术](#tech-stack)开发，经过多项目生产验证，无过度封装设计，入门者也能快速掌握。
 
 可使用本框架快速实现业务的 CRUD 逻辑，不论是搭建企业业务系统，还是接外包活，亦或是给自己写各类管理系统，都可使用本框架快速完成。
 
