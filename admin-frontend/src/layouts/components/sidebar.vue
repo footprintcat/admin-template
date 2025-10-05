@@ -1,0 +1,3 @@
+<template>
+  sidebar.vue
+</template>

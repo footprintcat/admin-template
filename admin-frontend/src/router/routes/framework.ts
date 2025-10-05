@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import AppLayout from '@/layouts/AppLayout.vue'
 
 /**
  * 框架路由
@@ -12,7 +13,7 @@ const frameworkRoute: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: AppLayout,
     children: [
       {
         path: 'dashboard',
@@ -21,7 +22,7 @@ const frameworkRoute: Array<RouteRecordRaw> = [
           title: '系统首页',
           permiss: 'dashboard',
         },
-        component: () => import('@/views/dashboard.vue'),
+        component: () => import('@/views/core/dashboard.vue'),
       },
     ],
   },

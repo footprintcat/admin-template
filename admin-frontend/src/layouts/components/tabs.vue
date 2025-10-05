@@ -1,0 +1,3 @@
+<template>
+  tabs.vue
+</template>
