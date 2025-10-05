@@ -1,68 +1,76 @@
 import { defineStore } from 'pinia'
 import type { PersistenceOptions } from 'pinia-plugin-persistedstate'
+import { computed, ref } from 'vue'
 
 interface ListItem {
-    name: string
-    path: string
-    title: string
+  name: string
+  path: string
+  title: string
 }
 
 // 总是添加 dashboard 标签
-const dashboardTab = {
-    id: 'dashboard',
-    title: '系统首页',
-    path: '/dashboard',
+const dashboardTab: ListItem = {
+  name: 'dashboard',
+  path: '/dashboard',
+  title: '系统首页',
 }
 
-export const useTabsStore = defineStore('tabs', {
-    state: () => {
-        return {
-            list: <ListItem[]>[],
-        }
-    },
-    getters: {
-        show: state => {
-            return state.list.length > 0
-        },
-        nameList: state => {
-            return state.list.map(item => item.name)
-        },
-    },
-    actions: {
-        delTabsItem(index: number) {
-            this.list.splice(index, 1)
+export const useTabsStore = defineStore('tabs', () => {
+  const list = ref<Array<ListItem>>([])
 
-            // 至少保留1个tab
-            if (this.list.length === 0) {
-                this.list.push(dashboardTab)
-            }
-        },
-        setTabsItem(data: ListItem) {
-            // TODO 临时解决方案，待优化
-            for (const index in this.list) {
-                const item = this.list[index]
-                if (item.name === data.name) {
-                    this.delTabsItem(index)
-                    break
-                }
-            }
-            this.list.push(data)
-        },
-        clearTabs() {
-            this.list = [
-                // 关闭所有tab后，保留系统首页
-                dashboardTab,
-            ]
-        },
-        closeTabsOther(data: ListItem[]) {
-            this.list = data
-        },
-    },
-    // 持久化配置
-    persist: <PersistenceOptions>{
-        // 存储到 localStorage 中的键名
-        key: 'tab-store',
-        // 需要持久化的数据，如果是全部则不需要配置 paths
-        paths: ['list'],
-    },
+  const show = computed(() => list.value.length > 0)
+  const nameList = computed(() => list.value.map((item: ListItem) => item.name))
+
+  function delTabsItem(index: number) {
+    list.value.splice(index, 1)
+
+    // 至少保留1个tab
+    if (list.value.length === 0) {
+      list.value.push(dashboardTab)
+    }
+  }
+  function setTabsItem(data: ListItem) {
+    // TODO 临时解决方案，待优化
+    for (const i in list.value) {
+      const index = Number(i)
+      const item = list.value[index]
+      if (item.name === data.name) {
+        delTabsItem(index)
+        break
+      }
+    }
+    list.value.push(data)
+  }
+  function clearTabs() {
+    list.value = [
+      // 关闭所有tab后，保留系统首页
+      dashboardTab,
+    ]
+  }
+  function closeTabsOther(data: Array<ListItem>) {
+    list.value = data
+  }
+
+  return {
+    // state
+    list,
+
+    // getters
+    show,
+    nameList,
+
+    // action
+    delTabsItem,
+    setTabsItem,
+    clearTabs,
+    closeTabsOther,
+  }
+}, {
+  // 持久化配置
+  persist: <PersistenceOptions>{
+    // 存储到 localStorage 中的键名
+    key: 'tab-store',
+    // 需要持久化的数据，如果是全部则不需要配置 paths
+    paths: ['list'],
+  },
 })
