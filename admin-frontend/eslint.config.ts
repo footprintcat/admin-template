@@ -42,7 +42,7 @@ export default defineConfigWithVueTs(
     },
   },
   {
-  // import 自动排序
+    // import 自动排序
     plugins: {
       import: eslintPluginImport,
     },
@@ -59,6 +59,7 @@ export default defineConfigWithVueTs(
             'sibling', // 同级目录导入
             'index',    // 当前目录索引文件
             'object',   // 对象导入
+            'type',  // import type 分组
           ],
           'newlines-between': 'always', // 组之间用空行分隔
           alphabetize: {
@@ -76,16 +77,69 @@ export default defineConfigWithVueTs(
               group: 'internal',
               position: 'before',
             },
+            // 将类型导入单独分组
+            {
+              pattern: '**/*.types',
+              group: 'internal',
+              position: 'after',
+            },
+            {
+              pattern: '**/types',
+              group: 'internal',
+              position: 'after',
+            },
           ],
+          // 区分类型导入和值导入
+          // distinctGroup: false,
+          distinctGroup: true,  // 改为 true 以区分类型导入
+          // 类型导入放在值导入之后
+          warnOnUnassignedImports: true,
           pathGroupsExcludedImportTypes: ['builtin'],
         },
       ],
+
+      // 强制类型导入使用 import type
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports', // 优先使用 type imports
+          fixStyle: 'separate-type-imports', // 将类型导入分离到单独的 import 语句
+        },
+      ],
+
+      // 禁止在类型导入中混合值导入
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+
+      // Vue 组合式 API 的导入顺序规则
+      'vue/prefer-import-from-vue': 'error', // 优先从 'vue' 导入
+
+      // 自定义规则：确保 Vue API 按特定顺序导入
+      'sort-imports': [
+        'error',
+        {
+          ignoreCase: true,
+          ignoreDeclarationSort: true, // 让 import/order 处理主要排序
+          ignoreMemberSort: false, // 确保成员排序
+          memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+          // 自定义成员排序（针对 Vue API）
+          allowSeparatedGroups: true,
+        },
+      ],
+
       // 确保所有导入都在文件顶部
       'import/first': 'error',
       // 导入后需要空行
-      'import/newline-after-import': 'error',
+      // 'import/newline-after-import': 'error',
+      // 确保 import 语句块之后至少有一个空行
+      'import/newline-after-import': ['error', { count: 1 }],
       // 禁止重复导入
-      'import/no-duplicates': 'error',
+      // 'import/no-duplicates': 'error',
+      'import/no-duplicates': [
+        'error',
+        {
+          considerQueryString: true,
+        },
+      ],
       // 禁止使用默认导出作为命名导入
       'import/no-named-as-default': 'warn',
       // 禁止未使用的导入
@@ -94,6 +148,11 @@ export default defineConfigWithVueTs(
       'import/exports-last': 'error', // 导出放在文件末尾
       'import/no-absolute-path': 'error', // 禁止绝对路径导入
       'import/no-webpack-loader-syntax': 'error', // 禁止 webpack loader 语法
+
+      // 不允许导入多次
+      // docs: https://eslint.org/docs/latest/rules/no-duplicate-imports
+      // 'no-duplicate-imports': 'error',
+
     },
   },
 )
