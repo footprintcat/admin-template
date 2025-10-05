@@ -22,18 +22,17 @@
 <script setup lang="ts">
 // import { defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
-// import { useSidebarStore } from '../store/sidebar'
-// import { useTabsStore } from '../store/tabs'
+
+import { useSidebarStore } from '@/stores/sidebar'
+import { useTabsStore } from '@/stores/tabs'
+
 import vHeader from './components/header.vue'
 import vSidebar from './components/sidebar.vue'
 import vTabs from './components/tabs.vue'
 
-// const sidebar = useSidebarStore()
-// const tabs = useTabsStore()
+const sidebar = useSidebarStore()
+const tabs = useTabsStore()
 const route = useRoute()
 
 // const errorPage403 = defineAsyncComponent(() => import('./error-page/403.vue'))
-
-const tabs = { nameList: [] }
-const sidebar = { collapse: false }
 </script>

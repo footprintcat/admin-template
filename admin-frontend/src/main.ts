@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -24,11 +25,11 @@ app.use(router)
 // 自定义权限指令
 const permission = usePermissionStore()
 app.directive('permission', {
-    mounted(el, binding) {
-        if (!permission.key.includes(String(binding.value))) {
-            el['hidden'] = true
-        }
-    },
+  mounted(el, binding) {
+    if (!permission.key.includes(String(binding.value))) {
+      el['hidden'] = true
+    }
+  },
 })
 
 app.mount('#app')
