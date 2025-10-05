@@ -1,0 +1,32 @@
+.global-top-title {
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 2px;
+  color: #242f42;
+  font-weight: bold;
+}
+/* 总览页 上方标题样式 */
+.global-top-title.overview-page {
+  margin-top: 14vh;
+  margin-bottom: 14vh;
+}
+/* 功能页 上方标题样式 */
+.global-top-title.function-page {
+  margin-bottom: 20px;
+}
+/* 功能页 上方标题样式(不带icon) */
+.global-top-title.function-page-no-icon {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+/* 首页 */
+.global-top-title.dashboard-page {
+  font-size: 34px;
+  margin-top: 6px;
+  margin-bottom: 32px;
+}
+/* 小号 */
+.global-top-title.small-title {
+  letter-spacing: 1px;
+  font-size: 20px;
+}

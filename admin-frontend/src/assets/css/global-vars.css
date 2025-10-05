@@ -1,0 +1,30 @@
+:root {
+  /* 顶部导航栏高度 */
+  --header-height: 70px;
+  /* Tab选项卡标题高度 */
+  --tab-title-height: 40px;
+  /* 正文高度 */
+  --content-height: calc(
+    100vh - var(--header-height) - var(--tab-title-height)
+  );
+  /* Tab选项卡标题高度 + 正文高度（除去顶部导航栏外，剩余内容高度） */
+  --tab-and-content-height: calc(
+    var(--tab-title-height) + var(--content-height)
+  );
+
+  /* 以下变量会使用其他 class 进行覆盖 */
+  /* 侧边栏展开的宽度 */
+  --sidebar-width: 0;
+  /* 侧边栏收起的宽度 */
+  --sidebar-collapse-width: 0;
+}
+
+.sidebar-classic {
+  --sidebar-width: 200px;
+  --sidebar-collapse-width: 0;
+}
+
+.sidebar-double-column {
+  --sidebar-width: 272px;
+  --sidebar-collapse-width: 72px;
+}
