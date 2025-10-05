@@ -61,12 +61,30 @@ export default defineConfigWithVueTs(
             'object',   // 对象导入
             'type',  // import type 分组
           ],
-          'newlines-between': 'always', // 组之间用空行分隔
+          // 'newlines-between': 'always', // 组之间用空行分隔
+          'newlines-between': 'never', // 组之间不使用空行分隔
           alphabetize: {
             order: 'asc', // 按字母顺序升序排列
             caseInsensitive: true, // 忽略大小写
           },
           pathGroups: [
+            // 添加 Vue 相关导入的路径组，确保它们在最前面
+            ...[
+              'vue',
+              'vue-router',
+              'pinia',
+              'element-plus',
+              '@element-plus/**',
+            ].map(pattern => ({
+              pattern: pattern,
+              group: 'external',
+              position: 'before',
+            })),
+            {
+              pattern: '@/utils/**',
+              group: 'internal',
+              position: 'before',
+            },
             {
               pattern: '@/**', // 如果你的项目有 @ 别名
               group: 'internal',

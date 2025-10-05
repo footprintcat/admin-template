@@ -82,16 +82,16 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useSidebarStore } from '@/stores/sidebar'
-import { useThemeStore } from '@/stores/theme'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import defaultAvatarUrl from '@/assets/img/default-avatar.jpg'
+import { ArrowDown, Brush, Expand, Fold, FullScreen, Guide, Message } from '@element-plus/icons-vue'
 import settings from '@/utils/settings'
 import { userLogout } from '@/utils/user_utils'
-// import ThemeSettingDrawer from './theme-setting-drawer.vue'
+import defaultAvatarUrl from '@/assets/img/default-avatar.jpg'
+import { useSidebarStore } from '@/stores/sidebar'
+import { useThemeStore } from '@/stores/theme'
 import useUserStore from '@/stores/user'
-import { ArrowDown, Brush, Expand, Fold, FullScreen, Guide, Message } from '@element-plus/icons-vue'
+// import ThemeSettingDrawer from './theme-setting-drawer.vue'
 
 const message: number = 2
 
