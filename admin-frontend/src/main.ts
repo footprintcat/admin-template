@@ -11,7 +11,7 @@ import './assets/css/global-style.css'
 import App from './App.vue'
 import router from './router'
 
-import { usePermissionStore } from './store/permission'
+import { usePermissionStore } from './stores/permission'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
