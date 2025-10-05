@@ -14,7 +14,9 @@ const pathSrc = path.resolve(__dirname, 'src')
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/',
+  // base 需要以 / 结尾
+  // base: '/',
+  base: '/manage/',
   server: {
     host: '0.0.0.0', // 允许局域网访问
     port: 5173,
