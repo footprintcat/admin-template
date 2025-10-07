@@ -58,6 +58,7 @@
 import { computed, nextTick, onMounted, ref, toRaw, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { Download } from '@element-plus/icons-vue'
 import type { SidebarItem } from '@/utils/sidebar_item'
 import { doubleColumnHomeItem, getTopItemByChildIndex, sidebarMenuItemListClassic, sidebarMenuItemListDoubleColumn } from '@/utils/sidebar_item'
 import { useSidebarStore } from '@/stores/sidebar'
