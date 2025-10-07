@@ -17,4 +17,9 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
+  "cSpell.words": [
+    "footprintcat",
+    "persistedstate",
+    "pinia"
+  ],
 }
