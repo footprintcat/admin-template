@@ -35,8 +35,8 @@
 
 <script setup lang="ts">
 import { nextTick, onBeforeUpdate, onMounted, ref } from 'vue'
-import { ArrowDown, Close } from '@element-plus/icons-vue'
 import { onBeforeRouteUpdate, type RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
+import { ArrowDown, Close } from '@element-plus/icons-vue'
 import { useTabsStore } from '@/stores/tabs'
 
 const route = useRoute()

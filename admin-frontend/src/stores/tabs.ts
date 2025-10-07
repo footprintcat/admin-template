@@ -1,6 +1,6 @@
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { PersistenceOptions } from 'pinia-plugin-persistedstate'
-import { computed, ref } from 'vue'
 
 interface ListItem {
   name: string

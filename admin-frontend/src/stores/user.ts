@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
 import { computed } from 'vue'
+import { defineStore } from 'pinia'
 
 interface UserState {
   isEmpty: boolean

@@ -1,7 +1,7 @@
 import type { Router } from 'vue-router'
 import { useTabsStore } from '@/stores/tabs'
-import send_request from './send_request'
 import useUserStore from '@/stores/user'
+import send_request from './send_request'
 // import { clearFrontendLocalStorage } from './local_storage_util'
 
 export function userLogout(router: Router) {
