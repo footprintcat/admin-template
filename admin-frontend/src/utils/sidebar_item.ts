@@ -53,6 +53,12 @@ export const sidebarItemsClassic: Array<SidebarItem> = [
     subs: [
       {
         icon: 'User',
+        index: '/system/user/manage',
+        title: '用户管理',
+        permission: ':system:user:manage',
+      },
+      {
+        icon: 'User',
         index: '/system/system-user',
         title: '用户管理',
         permission: 'system-user',

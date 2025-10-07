@@ -1,6 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import AppLayout from '@/layouts/AppLayout.vue'
 import frameworkRoute from './framework'
+import systemRoute from './system'
 
 /**
  * 业务路由定义 (合并入口)
@@ -24,6 +25,9 @@ const routeList: Array<RouteRecordRaw> = [
 
       // 框架基础页面路由
       ...frameworkRoute,
+
+      // system 模块路由
+      ...systemRoute,
     ],
   },
 
