@@ -8,10 +8,6 @@ const frameworkRoute: Array<RouteRecordRaw> = [
   // 在此处定义您的页面路由
   {
     path: '/',
-    redirect: '/dashboard',
-  },
-  {
-    path: '/',
     name: 'Home',
     component: AppLayout,
     children: [
