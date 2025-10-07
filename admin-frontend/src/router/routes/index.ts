@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import AppLayout from '@/layouts/AppLayout.vue'
 import frameworkRoute from './framework'
 
 /**
@@ -13,11 +14,18 @@ const routeList: Array<RouteRecordRaw> = [
     redirect: '/dashboard',
   },
 
-  // 框架基础页面路由
-  ...frameworkRoute,
+  {
+    path: '/',
+    name: 'Home',
+    component: AppLayout,
+    children: [
+      // 在此处定义您的页面路由
+      // 建议按照业务模块创建不同的 router/routes/*.ts, 然后在此处统一引入
 
-  // 在此处定义您的页面路由
-  // 建议按照业务模块创建不同的 router/routes/*.ts, 然后在此处统一引入
+      // 框架基础页面路由
+      ...frameworkRoute,
+    ],
+  },
 
   /*
   {
