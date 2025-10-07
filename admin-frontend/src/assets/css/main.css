@@ -13,8 +13,8 @@ body,
 }
 
 body {
-  font-family: "PingFang SC", "Helvetica Neue", Helvetica, "microsoft yahei",
-    arial, STHeiTi, sans-serif;
+  font-family:
+    'PingFang SC', 'Helvetica Neue', Helvetica, 'microsoft yahei', arial, STHeiTi, sans-serif;
 }
 
 a {
@@ -48,13 +48,20 @@ iframe {
   left: var(--sidebar-collapse-width);
 }
 
-/* 普通页面添加 class="container" 即包含滚动条 */
 .container {
-  padding: 30px;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-sizing: border-box;
+  height: 100%;
+}
+
+.container > div {
+  padding: 30px;
+}
+
+/* views 下的页面添加 class="no-scroll" 即不显示滚动条 */
+.container > div:not(.no-scroll) {
   height: 100%;
   overflow-y: auto;
 }
@@ -119,8 +126,7 @@ iframe {
   margin-top: -7px;
 }
 
-.el-time-spinner__wrapper
-  .el-scrollbar__wrap:not(.el-scrollbar__wrap--hidden-default) {
+.el-time-spinner__wrapper .el-scrollbar__wrap:not(.el-scrollbar__wrap--hidden-default) {
   padding-bottom: 0;
 }
 

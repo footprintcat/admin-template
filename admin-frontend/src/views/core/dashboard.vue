@@ -1,4 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  dashboard.vue
+  <div class="no-scroll">
+    dashboard.vue
+  </div>
 </template>
