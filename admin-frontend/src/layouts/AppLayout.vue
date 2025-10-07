@@ -22,12 +22,10 @@
 <script setup lang="ts">
 // import { defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
-
 import { useSidebarStore } from '@/stores/sidebar'
 import { useTabsStore } from '@/stores/tabs'
-
 import vHeader from './components/header.vue'
-import vSidebar from './components/sidebar.vue'
+import vSidebar from './components/sidebar/sidebar.vue'
 import vTabs from './components/tabs.vue'
 
 const sidebar = useSidebarStore()

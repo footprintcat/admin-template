@@ -1,7 +1,7 @@
+import { ElLoading, ElMessage } from 'element-plus'
 // import { clearFrontendLocalStorage } from './local_storage_util'
 import request from './request'
 import settings from './settings'
-import { ElMessage, ElLoading } from 'element-plus'
 
 async function base(url, method = 'POST', params, showLoading, callback) {
   if (!url) {
@@ -12,7 +12,7 @@ async function base(url, method = 'POST', params, showLoading, callback) {
     lock: true,
     text: '请稍候',
     background: 'rgba(0, 0, 0, 0.7)',
-  });
+  })
 
   // 2024.06.16 修复打开 el-dialog 后, 弹窗在el-loading上层的bug
   const elLaoadingMask = document.querySelector('.el-loading-mask')
@@ -35,10 +35,10 @@ async function base(url, method = 'POST', params, showLoading, callback) {
     if (!result.isSuccess) {
       // 用户未登录情况
       if (result.data && result.data.errCode == 20003) {
-        ElMessage.error({ message: result?.data?.errMsg || '用户未登录', grouping: true });
+        ElMessage.error({ message: result?.data?.errMsg || '用户未登录', grouping: true })
         // clearFrontendLocalStorage()
 
-        // window.location.reload();
+        // window.location.reload()
         // 如果同时发出多个请求，可能会多次进来，第二次及之后进入时，hash已经变成 #/login 了
         const locationHash = window.location.hash.substring(1) // 去除最前面的 '#'
         if (!locationHash.includes('/login')) {

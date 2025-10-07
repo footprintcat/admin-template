@@ -61,7 +61,7 @@ export default defineConfigWithVueTs(
             'object',   // 对象导入
             'type',  // import type 分组
           ],
-          // 'newlines-between': 'always', // 组之间用空行分隔
+          // // 'newlines-between': 'always', // 组之间用空行分隔
           'newlines-between': 'never', // 组之间不使用空行分隔
           alphabetize: {
             order: 'asc', // 按字母顺序升序排列
@@ -163,7 +163,7 @@ export default defineConfigWithVueTs(
       // 禁止未使用的导入
       'import/no-unused-modules': 'warn',
 
-      'import/exports-last': 'error', // 导出放在文件末尾
+      // 'import/exports-last': 'error', // 导出放在文件末尾
       'import/no-absolute-path': 'error', // 禁止绝对路径导入
       'import/no-webpack-loader-syntax': 'error', // 禁止 webpack loader 语法
 
