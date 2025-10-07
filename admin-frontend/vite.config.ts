@@ -18,7 +18,7 @@ export default defineConfig({
   base: '/manage/',
   server: {
     host: '0.0.0.0', // 允许局域网访问
-    port: 5173,
+    port: 5983,
 
     // npm run dev 时自动打开页面
     open: true,
