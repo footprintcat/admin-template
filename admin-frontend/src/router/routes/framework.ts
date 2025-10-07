@@ -20,7 +20,7 @@ const frameworkRoute: Array<RouteRecordRaw> = [
         name: 'dashboard',
         meta: {
           title: '系统首页',
-          permiss: 'dashboard',
+          permission: 'dashboard',
         },
         component: () => import('@/views/core/dashboard.vue'),
       },

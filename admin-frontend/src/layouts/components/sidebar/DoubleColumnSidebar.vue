@@ -8,10 +8,10 @@
     ]">
       <!-- 菜单项 -->
       <div class="top-level-sidebar-container" @mouseenter="sidebarMouseHover(true)">
-        <div v-for="item in sidebarMenuItemListWithHomeItem" class="top-level-sidebar-item"
+        <div v-for="(item, index) in sidebarMenuItemListWithHomeItem" :key="`sidebar_${index}`" class="top-level-sidebar-item"
           :class="(item.index === (activeTopItem ? activeTopItem.index : '')) ? 'active' : 'inactive'"
           @mouseenter="topItemMouseEnter(item, true)" @mouseleave="topItemMouseEnter(item, false)"
-          @click="onTopItemClicked(item)" v-permiss="item.permiss">
+          @click="onTopItemClicked(item)" v-permission="item.permission">
           <el-icon :size="20" class="top-level-sidebar-item-icon">
             <component :is="item.icon"></component>
           </el-icon>

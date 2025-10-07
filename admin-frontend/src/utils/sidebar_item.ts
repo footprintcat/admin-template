@@ -5,7 +5,7 @@ export interface SidebarItem {
   index: string
   title: string
   shortTitle?: string // <=4 个字的标题
-  permiss: string
+  permission: string
   subs?: Array<SidebarItem>
 }
 
@@ -14,13 +14,13 @@ const dashboardItemList: Array<SidebarItem> = [
     icon: 'HomeFilled',//'/assets/image/svg/alert_warning.svg',
     index: '/dashboard',
     title: '系统首页', // 站点基础信息
-    permiss: 'dashboard',
+    permission: 'dashboard',
   },
   {
     icon: 'Guide',
     index: '/navi',
     title: '系统导航',
-    permiss: 'navi',
+    permission: 'navi',
   },
 ]
 
@@ -28,7 +28,7 @@ const dashboardSidebarItem: SidebarItem = {
   icon: 'Odometer',
   index: '/',
   title: '仪表盘',
-  permiss: 'data',
+  permission: 'data',
   subs: dashboardItemList,
 }
 
@@ -49,43 +49,43 @@ export const sidebarItemsClassic: Array<SidebarItem> = [
     icon: 'Setting',
     index: '/system',
     title: '系统管理',
-    permiss: 'system',
+    permission: 'system',
     subs: [
       {
         icon: 'User',
         index: '/system/system-user',
         title: '用户管理',
-        permiss: 'system-user',
+        permission: 'system-user',
       },
       {
         icon: 'Avatar',
         index: '/system/system-role',
         title: '角色管理',
-        permiss: 'system-role',
+        permission: 'system-role',
       },
       {
         icon: 'Lock',
         index: '/system/system-privilege',
         title: '权限管理',
-        permiss: 'system-privilege',
+        permission: 'system-privilege',
       },
       {
         icon: 'Menu',
         index: '/system/system-menu',
         title: '菜单管理',
-        permiss: 'system-menu',
+        permission: 'system-menu',
       },
       {
         icon: 'Setting',
         index: '/system/system-setting',
         title: '系统设置',
-        permiss: 'system-setting',
+        permission: 'system-setting',
       },
       {
         icon: 'FlowbiteFixTablesOutline',
         index: '/system/system-log',
         title: '系统日志',
-        permiss: 'system-log',
+        permission: 'system-log',
       },
     ],
   },
@@ -93,13 +93,13 @@ export const sidebarItemsClassic: Array<SidebarItem> = [
     icon: 'Sunset',
     index: '/about',
     title: '关于站点',
-    permiss: 'site-info',
+    permission: 'site-info',
     subs: [
       {
         icon: 'Sunset',
         index: '/site-info',
         title: '站点信息',
-        permiss: 'site-info',
+        permission: 'site-info',
       },
     ],
   },
@@ -113,7 +113,7 @@ export const doubleColumnHomeItem: SidebarItem = {
   icon: 'House',
   index: '',
   title: '全部菜单',
-  permiss: 'data',
+  permission: 'data',
   subs: sidebarItemsDoubleColumn, //.filter(i => i.subs).map(i => i.subs).flat(),
 }
 
@@ -145,11 +145,11 @@ function copyMenuWithoutSubs(menu: SidebarItem): SidebarItem {
 }
 
 export function filterMenu(searchText: string | undefined, sidebarItemList: SidebarItem[]): SidebarItem[] {
-  const permiss = usePermissionStore()
+  const permission = usePermissionStore()
 
   const result: SidebarItem[] = []
   for (const sidebarItem of sidebarItemList) {
-    if (sidebarItem.permiss && !permiss.key.includes(sidebarItem.permiss)) {
+    if (sidebarItem.permission && !permission.key.includes(sidebarItem.permission)) {
       // console.log('跳过没有权限的菜单', sidebarItem)
       continue
     }
@@ -159,7 +159,7 @@ export function filterMenu(searchText: string | undefined, sidebarItemList: Side
       const cloneMenu = copyMenuWithoutSubs(sidebarItem)
       // 不管子菜单标题是否匹配都保留
       if (sidebarItem.subs && sidebarItem.subs.length > 0) {
-        const subResult = filterMenu(undefined, sidebarItem.subs) // 走一遍 filterMenu 是为确保菜单经过 permiss 过滤
+        const subResult = filterMenu(undefined, sidebarItem.subs) // 走一遍 filterMenu 是为确保菜单经过 permission 过滤
         if (subResult.length > 0) {
           cloneMenu.subs = subResult
         }

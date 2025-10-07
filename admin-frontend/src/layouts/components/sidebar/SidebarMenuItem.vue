@@ -1,7 +1,7 @@
 <template>
   <template v-for="item in props.sidebarItem">
     <template v-if="item.subs">
-      <el-sub-menu :index="item.index" :key="item.index" v-permiss="item.permiss">
+      <el-sub-menu :index="item.index" :key="item.index" v-permission="item.permission">
         <template #title>
           <el-icon>
             <component :is="item.icon"></component>
@@ -13,7 +13,7 @@
       </el-sub-menu>
     </template>
     <template v-else>
-      <el-menu-item :index="item.index" :key="item.index" v-permiss="item.permiss">
+      <el-menu-item :index="item.index" :key="item.index" v-permission="item.permission">
         <el-icon v-if="props.forceShowIcon || item.icon">
           <component :is="item.icon"></component>
         </el-icon>
