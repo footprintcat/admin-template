@@ -1,12 +1,14 @@
 <template>
-  <div class="manage-list-wrapper " :class="[props.tableFillHeight ? 'fill-height' : '']">
+  <div class="manage-list-wrapper" :class="[props.tableFillHeight ? 'fill-height' : '']">
     <!-- 顶部查询条件 -->
     <div class="top-container">
       1
     </div>
 
-    <div class="table-container">
-      <el-table height="100%">
+    <div class="table-container" :class="[props.tableFillHeight ? 'fill-height' : '']">
+      <!-- el-table 设置 height="100%" 后 前后不能再添加其他元素 否则高度会被无限撑大 -->
+      <!-- 如果要添加其他元素，可以设置 style="height: 100%;" -->
+      <el-table ref="manageListTableRef" height="100%">
 
       </el-table>
     </div>
@@ -19,6 +21,8 @@
 </template>
 
 <script setup lang="ts">
+import type { ElTable } from 'element-plus'
+
 const props = defineProps({
   tableFillHeight: {
     type: Boolean,
@@ -26,6 +30,8 @@ const props = defineProps({
     default: true,
   },
 })
+
+const manageListTableRef = ref<InstanceType<typeof ElTable>>()
 </script>
 
 <style scoped>
@@ -41,6 +47,9 @@ const props = defineProps({
 
 .manage-list-wrapper.fill-height {
   height: 100%;
+  /* 重要：避免 flex 项目无限扩展 */
+  /* 不添加 min-height 会导致 网页高度缩小时，表格高度不会缩小 */
+  min-height: 0;
 }
 
 .top-container {
@@ -53,11 +62,14 @@ const props = defineProps({
 
 .table-container {
   min-height: 150px;
-  flex-grow: 1;
   background-color: #ffffff;
   border-radius: 2px;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
   overflow: auto;
+}
+
+.table-container.fill-height {
+  flex-grow: 1;
 }
 
 .footer-container {
