@@ -75,7 +75,8 @@ iframe {
 
 /* 不添加时, 默认展示滚动条 */
 .container > div:not(.no-scroll) {
-  min-height: 100%;
+  height: 100%;
+  /* min-height: 100%; */
   overflow-y: auto;
 }
 
