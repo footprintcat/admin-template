@@ -49,7 +49,7 @@ iframe {
 }
 
 .container {
-  background: #fff;
+  background: #f6f6f6;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-sizing: border-box;
@@ -58,11 +58,24 @@ iframe {
 
 .container > div {
   padding: 30px;
+  box-sizing: border-box;
 }
 
 /* views 下的页面添加 class="no-scroll" 即不显示滚动条 */
-.container > div:not(.no-scroll) {
+.container > div.no-scroll {
   height: 100%;
+}
+
+/* 高度过小时， no-scroll 也显示滚动条 */
+@media (max-height: 500px) {
+  .container > div.no-scroll {
+    overflow-y: auto;
+  }
+}
+
+/* 不添加时, 默认展示滚动条 */
+.container > div:not(.no-scroll) {
+  min-height: 100%;
   overflow-y: auto;
 }
 
