@@ -1,7 +1,7 @@
 <template>
   <div class="manage-list-wrapper" :class="[props.tableFillHeight ? 'fill-height' : '']">
     <!-- 顶部查询条件 -->
-    <div class="top-container">
+    <div class="top-container container-style">
       <manage-list-search-form :search-form-label-position="props.searchFormLabelPosition"
         :search-input-list="props.searchInputList" />
       <div>
@@ -16,8 +16,8 @@
       </div>
     </div>
 
-    <div class="table-container" :class="[props.tableFillHeight ? 'fill-height' : '']" v-loading="isLoading"
-      element-loading-text="请稍候...">
+    <div class="table-container container-style" :class="[props.tableFillHeight ? 'fill-height' : '']"
+      v-loading="isLoading" element-loading-text="请稍候...">
       <!-- el-table 设置 height="100%" 后 前后不能再添加其他元素 否则高度会被无限撑大 -->
       <!-- 如果要添加其他元素，可以设置 style="height: 100%;" -->
       <el-table ref="manageListTableRef" height="100%" :data="tableData">
@@ -29,7 +29,7 @@
     </div>
 
     <!-- 底部元素组件 -->
-    <div class="footer-container">
+    <div class="footer-container container-style">
       2
     </div>
 
@@ -128,19 +128,22 @@ function handleExportFile() {
   min-height: 0;
 }
 
+.container-style {
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0px 0px 10px 0px hsla(0, 0%, 0%, 0.05);
+  border-radius: 3px;
+}
+
 .top-container {
   background-color: #ffffff;
   padding: 16px 20px;
   margin-bottom: 16px;
-  border-radius: 2px;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 }
 
 .table-container {
   min-height: 150px;
   background-color: #ffffff;
-  border-radius: 2px;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
   overflow: auto;
 }
 
