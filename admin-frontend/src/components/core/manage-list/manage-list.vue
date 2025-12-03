@@ -2,7 +2,17 @@
   <div class="manage-list-wrapper" :class="[props.tableFillHeight ? 'fill-height' : '']">
     <!-- 顶部查询条件 -->
     <div class="top-container">
-      1
+      <manage-list-search-form :search-form-label-position="props.searchFormLabelPosition"
+        :search-input-list="props.searchInputList" />
+      <div>
+        <el-button type="primary" :icon="Search">
+          查询
+        </el-button>
+        <el-button type="primary" plain :icon="Download">
+          导出到文件
+        </el-button>
+        <el-button type="default" :icon="RefreshRight" circle style="float: right;"></el-button>
+      </div>
     </div>
 
     <div class="table-container" :class="[props.tableFillHeight ? 'fill-height' : '']">
@@ -22,13 +32,23 @@
 
 <script setup lang="ts">
 import type { ElTable } from 'element-plus'
+import { Download, RefreshRight, Search } from '@element-plus/icons-vue'
+import ManageListSearchForm from './components/manage-list-search-form.vue'
+import type { SearchInputList } from './types/search-input'
 
-const props = defineProps({
-  tableFillHeight: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
+interface Props {
+  tableFillHeight?: boolean
+  showExportButton?: boolean
+  /** 搜索输入框label */
+  searchFormLabelPosition?: 'top' | 'left'
+  searchInputList?: SearchInputList
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tableFillHeight: true,
+  showExportButton: true,
+  searchFormLabelPosition: 'top',
+  searchInputList: () => [] satisfies SearchInputList,
 })
 
 const manageListTableRef = ref<InstanceType<typeof ElTable>>()
@@ -54,7 +74,7 @@ const manageListTableRef = ref<InstanceType<typeof ElTable>>()
 
 .top-container {
   background-color: #ffffff;
-  padding: 16px;
+  padding: 16px 20px;
   margin-bottom: 16px;
   border-radius: 2px;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
