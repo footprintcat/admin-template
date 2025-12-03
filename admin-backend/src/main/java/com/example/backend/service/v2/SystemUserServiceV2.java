@@ -168,9 +168,9 @@ public class SystemUserServiceV2 {
      * @param pageQuery
      * @return
      */
-    public Page<SystemUser> getUserPageWithoutSuAccount(PageQuery pageQuery, @NotNull SystemUserDTO systemUserDTO) {
+    public Page<SystemUser> getUserPage(PageQuery pageQuery, @NotNull SystemUserDTO systemUserDTO) {
         Page<SystemUser> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
-        return systemUserMapper.getUserPageWithoutSuAccount(page, systemUserDTO);
+        return systemUserMapper.getUserPage(page, systemUserDTO);
     }
 
     /**
@@ -178,7 +178,7 @@ public class SystemUserServiceV2 {
      *
      * @return
      */
-    public List<SystemUser> getUserListWithoutSuAccount(@NotNull SystemUserDTO systemUserDTO) {
-        return systemUserMapper.getUserListWithoutSuAccount(systemUserDTO);
+    public List<SystemUser> getUserList(@NotNull SystemUserDTO systemUserDTO) {
+        return systemUserMapper.getUserList(systemUserDTO);
     }
 }

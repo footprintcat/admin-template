@@ -22,17 +22,15 @@
         where id = #{userId} LIMIT 1
     </update>
 
-    <select id="getUserPageWithoutSuAccount" resultType="com.example.backend.entity.SystemUser">
-        <include refid="getUserListWithoutSuAccount" />
+    <select id="getUserPage" resultType="com.example.backend.entity.SystemUser">
+        <include refid="getUserList" />
     </select>
-    <select id="getUserListWithoutSuAccount" resultType="com.example.backend.entity.SystemUser">
-        <include refid="getUserListWithoutSuAccount" />
+    <select id="getUserList" resultType="com.example.backend.entity.SystemUser">
+        <include refid="getUserList" />
     </select>
-    <sql id="getUserListWithoutSuAccount">
+    <sql id="getUserList">
         SELECT * FROM system_user
         <where>
-            <!-- 过滤 su 账号 -->
-            id != 1
             <if test="query.id != null and query.id != ''">
                 AND id = #{query.id}
             </if>

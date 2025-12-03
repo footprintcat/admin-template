@@ -59,7 +59,7 @@ public class ManageUserController extends BaseController {
     @ResponseBody
     public CommonReturnType list(PageQuery pageQuery, SystemUserDTO systemUserDTO) {
         // 查询分页数据
-        Page<SystemUser> systemUserPage = systemUserServiceV2.getUserPageWithoutSuAccount(pageQuery, systemUserDTO);
+        Page<SystemUser> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, systemUserDTO);
 
         // 查询 roleMap
         HashMap<Integer, String> roleMap = roleServiceV2.getRoleMap();
@@ -218,7 +218,7 @@ public class ManageUserController extends BaseController {
     @GetMapping("/export")
     @ResponseBody
     public CommonReturnType exportUserList(SystemUserDTO systemUserDTO) {
-        List<SystemUser> userList = systemUserServiceV2.getUserListWithoutSuAccount(systemUserDTO);
+        List<SystemUser> userList = systemUserServiceV2.getUserList(systemUserDTO);
         List<SystemUserDTO> systemUserDTOList = SystemUserDTO.fromEntity(userList);
 
         // 当前时间

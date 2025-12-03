@@ -32,7 +32,7 @@ public interface SystemUserMapper extends BaseMapper<SystemUser> {
 
     Boolean alterPassword(Long userId, @Param("newPasswordHash") String newPasswordHash);
 
-    Page<SystemUser> getUserPageWithoutSuAccount(Page<?> page, @Param("query") SystemUserDTO systemUserDTO);
+    Page<SystemUser> getUserPage(Page<?> page, @Param("query") SystemUserDTO systemUserDTO);
 
-    List<SystemUser> getUserListWithoutSuAccount(@Param("query") SystemUserDTO systemUserDTO);
+    List<SystemUser> getUserList(@Param("query") SystemUserDTO systemUserDTO);
 }
