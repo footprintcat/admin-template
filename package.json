@@ -1,0 +1,8 @@
+{
+  "json-comments": {
+    "tips": "请安装JSONComments插件为JSON文件提供注释功能, 详见: https://github.com/zhangfisher/json_comments_extension",
+    "admin-frontend/package.json": {
+      "dependencies.xlsx": "https://cdn.sheetjs.com/ | https://git.sheetjs.com/SheetJS/sheetjs"
+    }
+  }
+}
