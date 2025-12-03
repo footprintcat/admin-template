@@ -53,6 +53,7 @@ import { ElMessage, type ElTable } from 'element-plus'
 import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import ExportFileDialog from './export-file/export-file-dialog.vue'
+import type { RequestParam } from './types/request-param'
 import type { SearchInputList } from './types/search-input'
 
 interface Props {
@@ -76,7 +77,7 @@ interface Props {
    * 非查询条件的额外默认值
    */
   extraInitialParams?: Record<string, unknown>
-  fetchData: (params: unknown) => Promise<Array<unknown>>
+  fetchData: (requestParams: RequestParam) => Promise<Array<unknown>>
   /**
    * 组件挂载时是否拉取数据
    */
@@ -140,14 +141,20 @@ async function handleFetchData(gotoFirstPage: boolean) {
     console.log('')
   }
   console.log('==========', 'fetchData start', '==========')
-  const param = manageListSearchFormRef.value?.getParams()
+  const params = manageListSearchFormRef.value?.getParams()
   // if (props.debug) {
   //   console.log('[debug] param', param)
   // }
-  const requestParam = {
-    ...param,
+  const requestParam: RequestParam = {
+    params: {
+      ...params,
+    },
+    pageQuery: {
+      pageIndex: 1,
+      pageSize: 5,
+    },
   }
-  console.log('request param', param)
+  console.log('request params', params)
   props.fetchData(requestParam)
     .then(result => {
       console.log('result', result)

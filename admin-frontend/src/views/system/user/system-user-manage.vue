@@ -35,8 +35,9 @@
 
 <script setup lang="ts">
 import { User, UserFilled } from '@element-plus/icons-vue'
-import { get } from '@/utils/api'
+import { post } from '@/utils/api'
 import ManageList from '@/components/core/manage-list/manage-list.vue'
+import type { RequestParam } from '@/components/core/manage-list/types/request-param'
 import type { SearchInputList } from '@/components/core/manage-list/types/search-input'
 
 const extraInitialParams = {
@@ -98,7 +99,7 @@ const searchInputList: SearchInputList = [
   },
 ]
 
-function fetchData(): Promise<Array<unknown>> {
-  return get('/v2/manage/user/list')
+function fetchData(requestParam: RequestParam): Promise<Array<unknown>> {
+  return post('/v2/manage/user/list', requestParam)
 }
 </script>

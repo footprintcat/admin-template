@@ -17,6 +17,8 @@ import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDTO;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.query.PageQuery;
+import com.example.backend.query.request.manage.system.user.ManageUserListRequest;
+import com.example.backend.query.response.manage.ManageListResponse;
 import com.example.backend.service.v2.RoleServiceV2;
 import com.example.backend.service.v2.SystemUserServiceV2;
 import jakarta.annotation.Resource;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,8 +54,31 @@ public class ManageUserController extends BaseController {
     /**
      * 获取用户列表
      *
-     * @param pageQuery 分页参数
-     * @param systemUserDTO   筛选条件
+     * @param queryRequest 筛选条件
+     * @return
+     */
+    @PostMapping("/list")
+    @ResponseBody
+    public CommonReturnType list(@RequestBody ManageUserListRequest queryRequest) {
+        // 查询分页数据
+        Page<SystemUser> page = systemUserServiceV2.getUserPage(queryRequest.getPageQuery(), queryRequest.getParams());
+
+        // 分页数据转为 DTO
+        List<SystemUser> list = page.getRecords();
+        List<SystemUserDTO> dtoList = SystemUserDTO.fromEntity(list);
+
+        ManageListResponse<SystemUserDTO> response = ManageListResponse.<SystemUserDTO>create()
+                .setTotal(page.getTotal())
+                .setList(dtoList);
+
+        return CommonReturnType.success(response);
+    }
+
+    /**
+     * 获取用户列表
+     *
+     * @param pageQuery     分页参数
+     * @param systemUserDTO 筛选条件
      * @return
      */
     @GetMapping("/list")

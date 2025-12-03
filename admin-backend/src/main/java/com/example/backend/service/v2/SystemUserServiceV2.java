@@ -168,7 +168,7 @@ public class SystemUserServiceV2 {
      * @param pageQuery
      * @return
      */
-    public Page<SystemUser> getUserPage(PageQuery pageQuery, @NotNull SystemUserDTO systemUserDTO) {
+    public Page<SystemUser> getUserPage(@NotNull PageQuery pageQuery, @NotNull SystemUserDTO systemUserDTO) {
         Page<SystemUser> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
         return systemUserMapper.getUserPage(page, systemUserDTO);
     }
