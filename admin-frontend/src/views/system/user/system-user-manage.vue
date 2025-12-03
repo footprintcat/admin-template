@@ -16,7 +16,8 @@
 
     <!-- 用户管理 -->
     <!-- <el-config-provider size="small"> -->
-    <manage-list :search-input-list="searchInputList" :fetch-data="fetchData" />
+    <manage-list :search-input-list="searchInputList" :fetch-data="fetchData" :extra-initial-params="extraInitialParams"
+      :debug="true" />
     <!-- </el-config-provider> -->
 
     <!--
@@ -37,6 +38,10 @@ import { User, UserFilled } from '@element-plus/icons-vue'
 import { get } from '@/utils/api'
 import ManageList from '@/components/core/manage-list/manage-list.vue'
 import type { SearchInputList } from '@/components/core/manage-list/types/search-input'
+
+const extraInitialParams = {
+  id: '1',
+}
 
 const searchInputList: SearchInputList = [
   {

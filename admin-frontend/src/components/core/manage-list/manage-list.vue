@@ -4,14 +4,13 @@
     <div class="top-container container-style">
       <manage-list-search-form ref="manageListSearchFormRef" :search-form-label-position="props.searchFormLabelPosition"
         :search-input-list="props.searchInputList" :extra-initial-params="props.extraInitialParams"
-        @update:params="handleParamsUpdate" />
+        @change="handleParamsUpdate" />
       <div>
         <el-button type="primary" :icon="Search" @click="handleFetchData(true)"
           :loading="props.allowParallelFetch ? false : isLoading">
           查询
         </el-button>
-        <el-button type="danger" plain :icon="Delete" @click="handleResetParams"
-          :loading="props.allowParallelFetch ? false : isLoading">
+        <el-button type="danger" plain :icon="Delete" @click="handleResetParams">
           重置查询条件
         </el-button>
         <!-- type="primary" plain -->
@@ -77,11 +76,20 @@ interface Props {
   extraInitialParams?: Record<string, unknown>
   fetchData: (params: unknown) => Promise<Array<unknown>>
   /**
+   * 组件挂载时是否拉取数据
+   */
+  fetchDataOnMounted?: boolean
+  /**
    * 是否允许并行请求
    * - true: 点击查询按钮时，查询按钮不会显示 loading 状态，请求中允许再次点击
    * - false: 点击查询按钮时，查询按钮呈现 loading 状态，此时再次点击不触发 fetchData
    */
   allowParallelFetch?: boolean
+  /**
+   * 调试模式
+   * 启用后将会打印更多日志信息
+   */
+  debug?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -89,7 +97,9 @@ const props = withDefaults(defineProps<Props>(), {
   showExportButton: true,
   searchFormLabelPosition: 'top',
   searchInputList: () => [] satisfies SearchInputList,
+  fetchDataOnMounted: true,
   allowParallelFetch: false,
+  debug: false,
 })
 
 // 组件 ref
@@ -98,7 +108,9 @@ const manageListSearchFormRef = ref<InstanceType<typeof ManageListSearchForm>>()
 
 // 查询条件
 function handleParamsUpdate(params: Record<string, unknown>) {
-  console.log('paramsUpdate', params)
+  if (props.debug) {
+    console.log('[debug] paramsUpdate', params)
+  }
 }
 
 function handleResetParams() {
@@ -120,9 +132,21 @@ async function handleFetchData(gotoFirstPage: boolean) {
   if (gotoFirstPage) {
     // TODO 回到第1页
   }
-
   fetchingCount.value++
-  props.fetchData({})
+
+  if (props.debug) {
+    console.log('')
+  }
+  console.log('==========', 'fetchData start', '==========')
+  const param = manageListSearchFormRef.value?.getParams()
+  if (props.debug) {
+    console.log('[debug] param', param)
+  }
+  const requestParam = {
+    ...param,
+  }
+  console.log('request param', param)
+  props.fetchData(requestParam)
     .then(result => {
       console.log('result', result)
       tableData.value = result.data.list
@@ -135,9 +159,32 @@ async function handleFetchData(gotoFirstPage: boolean) {
       })
     })
     .finally(() => {
+      console.log('==========', 'fetchData finish', '==========')
       fetchingCount.value--
     })
 }
+
+onMounted(() => {
+  if (props.debug) {
+    // 获取当前组件实例
+    const instance = getCurrentInstance()
+    if (instance && instance.parent) {
+      // 获取当前组件名称
+      const componentName: string = instance.type.__name || ''
+      // 获取父组件名称
+      const parent = instance.parent
+      const parentName: string = parent.type.__name || ''
+
+      const consoleLogStyle = 'background-color: #ffcf77; padding: 2px 5px;'
+      console.log('%c[debug]', consoleLogStyle, '[', parentName, '] 组件中的 [', componentName, '] 组件已开启 debug 模式')
+    }
+  }
+
+  // nextTick 是非必要调用，需要
+  nextTick(() => {
+    handleFetchData(false)
+  })
+})
 
 // 文件导出
 const showExportFileDialog = ref<boolean>(false)

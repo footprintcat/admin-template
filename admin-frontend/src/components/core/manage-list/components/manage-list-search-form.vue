@@ -90,8 +90,9 @@ function resetParams() {
 
 // ref 变化时，emit 通知父组件
 watch(params, (newParams) => {
-  emit('update:params', newParams)
-  emit('change', newParams)
+  const paramsRaw = toRaw(newParams)
+  emit('update:params', paramsRaw)
+  emit('change', paramsRaw)
 }, {
   deep: true,
 })
