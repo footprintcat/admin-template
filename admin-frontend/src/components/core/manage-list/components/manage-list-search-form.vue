@@ -3,7 +3,8 @@
     <el-form-item v-for="(searchInput, index) in props.searchInputList" :key="index" :label="searchInput.label"
       :style="{ width: `${calcItemWidth(searchInput.columnGap)}px` }">
       <template v-if="searchInput.type === 'text'">
-        <el-input v-model="tempVModel" clearable :placeholder="searchInput.placeHolder || `请输入${searchInput.label}`" />
+        <el-input v-model="params[searchInput.field]" clearable
+          :placeholder="searchInput.placeHolder || `请输入${searchInput.label}`" />
       </template>
       <template v-else-if="searchInput.type === 'dropdown'">
         <el-select v-model="tempVModel" clearable filterable :multiple="searchInput.multipleSelection" collapse-tags
@@ -34,11 +35,65 @@ interface Props {
   /** 搜索输入框label */
   searchFormLabelPosition?: 'top' | 'left'
   searchInputList?: SearchInputList
+  /** 初始参数值 */
+  extraInitialParams?: Record<string, unknown>
 }
 
 const props = withDefaults(defineProps<Props>(), {
   searchFormLabelPosition: 'top',
   searchInputList: () => [] satisfies SearchInputList,
+  extraInitialParams: () => ({}),
+})
+
+const emit = defineEmits<{
+  'update:params': [params: Record<string, unknown>]
+  'change': [params: Record<string, unknown>]
+}>()
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const params = ref<Record<string, any>>({})
+
+// 初始化参数结构
+watch(() => props.searchInputList, (newList) => {
+  resetParams()
+}, { immediate: true })
+
+function resetParams() {
+  // 与查询条件 无关的 查询参数初值
+  const newParams = JSON.parse(JSON.stringify(props.extraInitialParams))
+  for (const searchInput of props.searchInputList) {
+    if (searchInput.field in newParams) {
+      // 已经有默认值了
+      continue
+    }
+
+    // 与查询条件 有关的 查询参数初值
+    if (searchInput.initialValue !== undefined) {
+      newParams[searchInput.field] = typeof searchInput.initialValue === 'function'
+        ? searchInput.initialValue()
+        : searchInput.initialValue
+      continue
+    }
+
+    // 根据类型设置初始值
+    if (searchInput.type === 'dropdown' && searchInput.multipleSelection) {
+      newParams[searchInput.field] = []
+    } else if (searchInput.type === 'datetime-range') {
+      newParams[searchInput.field] = []
+    } else {
+      newParams[searchInput.field] = null
+    }
+  }
+  params.value = newParams
+  console.log('params', newParams)
+}
+
+// ref 变化时，emit 通知父组件
+watch(params, (newParams) => {
+  emit('update:params', newParams)
+  emit('change', newParams)
+}, {
+  deep: true,
 })
 
 // 搜索条件中，一个单位宽度是多宽
@@ -52,6 +107,7 @@ function calcItemWidth(columnGap?: number) {
     : elFormItemWidth
 }
 
+// TODO
 const tempVModel = ref()
 const tempOptions = [
   {
@@ -75,4 +131,11 @@ const tempOptions = [
     label: 'Option5',
   },
 ]
+
+defineExpose({
+  params,
+  getParams: () => toRaw(params.value),
+  getParamsRef: () => params,
+  resetParams: resetParams,
+})
 </script>

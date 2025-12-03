@@ -2,17 +2,26 @@
   <div class="manage-list-wrapper" :class="[props.tableFillHeight ? 'fill-height' : '']">
     <!-- 顶部查询条件 -->
     <div class="top-container container-style">
-      <manage-list-search-form :search-form-label-position="props.searchFormLabelPosition"
-        :search-input-list="props.searchInputList" />
+      <manage-list-search-form ref="manageListSearchFormRef" :search-form-label-position="props.searchFormLabelPosition"
+        :search-input-list="props.searchInputList" :extra-initial-params="props.extraInitialParams"
+        @update:params="handleParamsUpdate" />
       <div>
-        <el-button type="primary" :icon="Search" @click="handleFetchData"
+        <el-button type="primary" :icon="Search" @click="handleFetchData(true)"
           :loading="props.allowParallelFetch ? false : isLoading">
           查询
         </el-button>
+        <el-button type="danger" plain :icon="Delete" @click="handleResetParams"
+          :loading="props.allowParallelFetch ? false : isLoading">
+          重置查询条件
+        </el-button>
+        <!-- type="primary" plain -->
         <el-button type="primary" plain :icon="Download" @click="handleExportFile">
           导出到文件
         </el-button>
-        <el-button type="default" :icon="RefreshRight" circle style="float: right;"></el-button>
+
+        <el-tooltip placement="left" content="刷新">
+          <el-button type="default" :icon="RefreshRight" circle style="float: right;" @click="handleFetchData(false)" />
+        </el-tooltip>
       </div>
     </div>
 
@@ -40,7 +49,7 @@
 
 <script setup lang="ts">
 import { ElMessage, type ElTable } from 'element-plus'
-import { Download, RefreshRight, Search } from '@element-plus/icons-vue'
+import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import ExportFileDialog from './export-file/export-file-dialog.vue'
 import type { SearchInputList } from './types/search-input'
@@ -54,9 +63,18 @@ interface Props {
    * 是否展示导出按钮
    */
   showExportButton?: boolean
-  /** 搜索输入框label */
+  /**
+   * 搜索输入框label
+   */
   searchFormLabelPosition?: 'top' | 'left'
+  /**
+   * 查询条件
+   */
   searchInputList?: SearchInputList
+  /**
+   * 非查询条件的额外默认值
+   */
+  extraInitialParams?: Record<string, unknown>
   fetchData: (params: unknown) => Promise<Array<unknown>>
   /**
    * 是否允许并行请求
@@ -76,6 +94,20 @@ const props = withDefaults(defineProps<Props>(), {
 
 // 组件 ref
 const manageListTableRef = ref<InstanceType<typeof ElTable>>()
+const manageListSearchFormRef = ref<InstanceType<typeof ManageListSearchForm>>()
+
+// 查询条件
+function handleParamsUpdate(params: Record<string, unknown>) {
+  console.log('paramsUpdate', params)
+}
+
+function handleResetParams() {
+  manageListSearchFormRef.value?.resetParams()
+  ElMessage.info({
+    message: '已重置查询条件',
+    grouping: true,
+  })
+}
 
 // 请求状态
 const fetchingCount = ref<number>(0)
@@ -84,7 +116,11 @@ const isLoading = computed<boolean>(() => fetchingCount.value > 0)
 // 表格数据
 const tableData = ref<Array<unknown>>([])
 
-async function handleFetchData() {
+async function handleFetchData(gotoFirstPage: boolean) {
+  if (gotoFirstPage) {
+    // TODO 回到第1页
+  }
+
   fetchingCount.value++
   props.fetchData({})
     .then(result => {

@@ -15,14 +15,19 @@
     -->
 
     <!-- 用户管理 -->
+    <!-- <el-config-provider size="small"> -->
     <manage-list :search-input-list="searchInputList" :fetch-data="fetchData" />
-    <!-- <manage-list :search-input-list="searchInputList" :fetch-data="fetchData" >
+    <!-- </el-config-provider> -->
+
+    <!--
+    <manage-list :search-input-list="searchInputList" :fetch-data="fetchData" >
       <template #customTableColumn>
           <el-table-column prop="id" label="用户id"></el-table-column>
           <el-table-column prop="username" label="用户姓名"></el-table-column>
           <el-table-column prop="username2" label="用户姓名"></el-table-column>
-      </template>
-    </manage-list> -->
+      </ template>
+    </manage-list>
+    -->
 
   </div>
 </template>
@@ -35,23 +40,28 @@ import type { SearchInputList } from '@/components/core/manage-list/types/search
 
 const searchInputList: SearchInputList = [
   {
+    field: 'id',
     label: '用户ID',
     type: 'text',
   },
   {
+    field: 'id2',
     label: 'datetime range',
     type: 'datetime-range',
     columnGap: 2,
   },
   {
+    field: 'id3',
     label: '没有placeHolder',
     type: 'datetime',
   },
   {
+    field: 'id4',
     label: '用户类型',
     type: 'dropdown',
   },
   {
+    field: 'id5',
     label: '多选',
     type: 'dropdown',
     multipleSelection: true,
