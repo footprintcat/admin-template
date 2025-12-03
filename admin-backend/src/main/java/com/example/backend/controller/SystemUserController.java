@@ -4,8 +4,8 @@ import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.UserDTO;
-import com.example.backend.entity.User;
+import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.entity.SystemUser;
 import com.example.backend.service.SystemLogServiceBak;
 import com.example.backend.service.SystemUserService;
 import jakarta.annotation.Resource;
@@ -31,16 +31,16 @@ public class SystemUserController extends BaseController {
 
         // 通过用户名查出用户信息
         // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<SystemUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(User::getUsername, inputUsername)
+                .eq(SystemUser::getUsername, inputUsername)
                 .last("LIMIT 1");
-        User user = systemUserService.getOne(queryWrapper);
+        SystemUser user = systemUserService.getOne(queryWrapper);
 
         // 判断密码是否正确
         if (systemUserService.checkPasswordIsCorrect(user, inputPassword)) {
             // 密码正确，登录成功
-            UserDTO dto = UserDTO.fromEntity(user);
+            SystemUserDTO dto = SystemUserDTO.fromEntity(user);
             SystemLogServiceBak.loginSetSession(session, user);
             return CommonReturnType.success(dto);
         } else {

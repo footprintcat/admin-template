@@ -1,8 +1,8 @@
 package com.example.backend.repository;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.backend.entity.User;
-import com.example.backend.mapper.UserMapper;
+import com.example.backend.entity.SystemUser;
+import com.example.backend.mapper.SystemUserMapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
  * @since 2025-01-23
  */
 @Service
-public class UserRepository extends ServiceImpl<UserMapper, User> {
+public class UserRepository extends ServiceImpl<SystemUserMapper, SystemUser> {
 
 }

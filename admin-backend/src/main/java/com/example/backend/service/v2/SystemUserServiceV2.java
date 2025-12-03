@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Utils.SessionUtils;
-import com.example.backend.dto.UserDTO;
-import com.example.backend.entity.User;
-import com.example.backend.mapper.UserMapper;
+import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.entity.SystemUser;
+import com.example.backend.mapper.SystemUserMapper;
 import com.example.backend.query.PageQuery;
 import com.example.backend.service.System.RoleService;
 import jakarta.annotation.Resource;
@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class UserServiceV2 {
+public class SystemUserServiceV2 {
 
     @Resource
-    private UserMapper userMapper;
+    private SystemUserMapper systemUserMapper;
     @Resource
     private RoleService roleService;
 
@@ -32,19 +32,19 @@ public class UserServiceV2 {
      *
      * @return User
      */
-    public User getCurrentLoginUser(HttpSession session) {
+    public SystemUser getCurrentLoginUser(HttpSession session) {
         try {
             Long userId = SessionUtils.getUserId(session);
             if (userId == null) {
                 return null;
             }
-            return userMapper.selectById(userId);
+            return systemUserMapper.selectById(userId);
         } catch (Exception e) {
             return null;
         }
     }
 
-    public User getCurrentLoginUser(HttpServletRequest httpServletRequest) {
+    public SystemUser getCurrentLoginUser(HttpServletRequest httpServletRequest) {
         return getCurrentLoginUser(httpServletRequest.getSession());
     }
 
@@ -54,11 +54,11 @@ public class UserServiceV2 {
      * @param username
      * @return
      */
-    public User getUserByUsername(String username) {
+    public SystemUser getUserByUsername(String username) {
         if (username == null) {
             return null;
         }
-        return userMapper.selectByUsername(username);
+        return systemUserMapper.selectByUsername(username);
     }
 
     /**
@@ -67,27 +67,27 @@ public class UserServiceV2 {
      * @param userId
      * @return
      */
-    public User getUserById(Long userId) {
+    public SystemUser getUserById(Long userId) {
         if (userId == null || userId <= 0) {
             return null;
         }
-        return userMapper.selectById(userId);
+        return systemUserMapper.selectById(userId);
     }
 
     /**
      * 判断用户密码是否正确，并且登录
      *
-     * @param user
+     * @param systemUser
      * @param password
      * @return
      */
-    public boolean checkPasswordIsCorrect(User user, String password) {
-        if (user == null) {
+    public boolean checkPasswordIsCorrect(SystemUser systemUser, String password) {
+        if (systemUser == null) {
             return false;
         }
-        String inputEncryptPwd = DigestUtils.sha512Hex(password);
-        String userEncryptPwd = user.getPassword();
-        return Objects.equals(inputEncryptPwd, userEncryptPwd);
+        String inputPasswordHash = DigestUtils.sha512Hex(password);
+        String userPasswordHash = systemUser.getPasswordHash();
+        return Objects.equals(inputPasswordHash, userPasswordHash);
     }
 
     /**
@@ -96,11 +96,11 @@ public class UserServiceV2 {
      * @param user
      * @return
      */
-    public void addUser(User user) {
+    public void addUser(SystemUser user) {
         if (user == null) {
             return;
         }
-        userMapper.insert(user);
+        systemUserMapper.insert(user);
     }
 
     /**
@@ -109,11 +109,11 @@ public class UserServiceV2 {
      * @param user
      * @return
      */
-    public void updateUser(User user) {
+    public void updateUser(SystemUser user) {
         if (user == null) {
             return;
         }
-        userMapper.updateUserInfoByPrimaryKey(user);
+        systemUserMapper.updateUserInfoByPrimaryKey(user);
     }
 
     /**
@@ -138,7 +138,7 @@ public class UserServiceV2 {
             throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED);
         }
 
-        User userToDelete = userMapper.selectById(inputUserId);
+        SystemUser userToDelete = systemUserMapper.selectById(inputUserId);
         if (userToDelete == null) {
             throw new BusinessException(BusinessErrorCode.USER_NOT_EXIST, "要删除的用户不存在");
         }
@@ -159,7 +159,7 @@ public class UserServiceV2 {
         }
 
         // 执行删除
-        userMapper.deleteById(userToDeleteId);
+        systemUserMapper.deleteById(userToDeleteId);
     }
 
     /**
@@ -168,9 +168,9 @@ public class UserServiceV2 {
      * @param pageQuery
      * @return
      */
-    public Page<User> getUserPageWithoutSuAccount(PageQuery pageQuery, @NotNull UserDTO userDTO) {
-        Page<User> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
-        return userMapper.getUserPageWithoutSuAccount(page, userDTO);
+    public Page<SystemUser> getUserPageWithoutSuAccount(PageQuery pageQuery, @NotNull SystemUserDTO systemUserDTO) {
+        Page<SystemUser> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
+        return systemUserMapper.getUserPageWithoutSuAccount(page, systemUserDTO);
     }
 
     /**
@@ -178,7 +178,7 @@ public class UserServiceV2 {
      *
      * @return
      */
-    public List<User> getUserListWithoutSuAccount(@NotNull UserDTO userDTO) {
-        return userMapper.getUserListWithoutSuAccount(userDTO);
+    public List<SystemUser> getUserListWithoutSuAccount(@NotNull SystemUserDTO systemUserDTO) {
+        return systemUserMapper.getUserListWithoutSuAccount(systemUserDTO);
     }
 }

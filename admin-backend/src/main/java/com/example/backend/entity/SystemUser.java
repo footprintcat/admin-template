@@ -20,9 +20,9 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@Schema(name = "User", description = "")
-@TableName("user")
-public class User implements Serializable {
+@Schema(name = "SystemUser", description = "")
+@TableName("system_user")
+public class SystemUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,8 +32,8 @@ public class User implements Serializable {
     @TableField("username")
     private String username;
 
-    @TableField("password")
-    private String password;
+    @TableField("password_hash")
+    private String passwordHash;
 
     @TableField("role_id")
     private Integer roleId;

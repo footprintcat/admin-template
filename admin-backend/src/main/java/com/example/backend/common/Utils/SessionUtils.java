@@ -1,6 +1,6 @@
 package com.example.backend.common.Utils;
 
-import com.example.backend.entity.User;
+import com.example.backend.entity.SystemUser;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.HashMap;
@@ -26,12 +26,12 @@ public class SessionUtils {
      * 调用前请确保 user != null
      *
      * @param session
-     * @param user
+     * @param systemUser
      */
-    public static void setSession(HttpSession session, User user) {
-        session.setAttribute("username", user.getUsername());
-        session.setAttribute("user_id", user.getId());
-        session.setAttribute("role_id", user.getRoleId());
+    public static void setSession(HttpSession session, SystemUser systemUser) {
+        session.setAttribute("username", systemUser.getUsername());
+        session.setAttribute("user_id", systemUser.getId());
+        session.setAttribute("role_id", systemUser.getRoleId());
     }
 
     public static boolean isLogin(HttpSession session) {

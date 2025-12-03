@@ -6,12 +6,12 @@ import com.example.backend.common.Utils.IPUtils;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.common.Utils.StringUtils;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.UserDTO;
+import com.example.backend.dto.SystemUserDTO;
 import com.example.backend.entity.SystemLog;
-import com.example.backend.entity.User;
+import com.example.backend.entity.SystemUser;
 import com.example.backend.service.System.SystemLogService;
 import com.example.backend.service.System.UserService;
-import com.example.backend.service.v2.UserServiceV2;
+import com.example.backend.service.v2.SystemUserServiceV2;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Objects;
 
+// TODO
+@Deprecated
 @CrossOrigin
 @RestController
 @RequestMapping("/v1/user")
@@ -34,7 +36,7 @@ public class UserController extends BaseController {
     @Resource
     private UserService userService;
     @Resource
-    private UserServiceV2 userServiceV2;
+    private SystemUserServiceV2 systemUserServiceV2;
     @Resource
     private SystemLogService systemLogService;
 
@@ -48,14 +50,14 @@ public class UserController extends BaseController {
 
         // 通过用户名查出用户信息
         // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
-        User userByUsername = userServiceV2.getUserByUsername(inputUsername);
-        UserDTO userDTO = null;
+        SystemUser userByUsername = systemUserServiceV2.getUserByUsername(inputUsername);
+        SystemUserDTO systemUserDTO = null;
 
         // 判断密码是否正确
-        boolean isCorrect = userServiceV2.checkPasswordIsCorrect(userByUsername, inputPassword);
+        boolean isCorrect = systemUserServiceV2.checkPasswordIsCorrect(userByUsername, inputPassword);
         if (isCorrect) {
             // 密码正确，登录成功
-            userDTO = UserDTO.fromEntity(userByUsername);
+            systemUserDTO = SystemUserDTO.fromEntity(userByUsername);
             SessionUtils.setSession(session, userByUsername);
         }
 
@@ -68,7 +70,7 @@ public class UserController extends BaseController {
         systemLog.setUserId(Objects.isNull(userByUsername) ? null : userByUsername.getId());
         systemLogService.add(systemLog);
 
-        return CommonReturnType.success(userDTO);
+        return CommonReturnType.success(systemUserDTO);
     }
 
     @PostMapping("/getInfo")
@@ -102,13 +104,13 @@ public class UserController extends BaseController {
         return CommonReturnType.success();
     }
 
-    @PostMapping("/alterPSW")
-    public CommonReturnType alterPSW(@RequestBody JSONObject params) {
+    @PostMapping("/alterPassword")
+    public CommonReturnType alterPassword(@RequestBody JSONObject params) {
         Long userId = params.getLong("userId");
-        String oldPSW = params.getString("oldPSW");
-        String newPSW = params.getString("newPSW");
+        String oldPassword = params.getString("oldPassword");
+        String newPassword = params.getString("newPassword");
 
-        userService.alterPSW(userId, oldPSW, newPSW);
+        userService.alterPassword(userId, oldPassword, newPassword);
         return CommonReturnType.success();
     }
 
@@ -121,10 +123,10 @@ public class UserController extends BaseController {
         }
 
         // 获取当前用户username
-        User userByHttpServlet = userServiceV2.getCurrentLoginUser(httpServletRequest);
+        SystemUser userByHttpServlet = systemUserServiceV2.getCurrentLoginUser(httpServletRequest);
 
         // 判断密码是否正确
-        boolean isCorrect = userServiceV2.checkPasswordIsCorrect(userByHttpServlet, inputPassword);
+        boolean isCorrect = systemUserServiceV2.checkPasswordIsCorrect(userByHttpServlet, inputPassword);
 
         if (!isCorrect) {
             return CommonReturnType.error("密码有误！请重输");

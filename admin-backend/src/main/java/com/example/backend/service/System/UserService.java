@@ -1,7 +1,7 @@
 package com.example.backend.service.System;
 
-import com.example.backend.entity.User;
-import com.example.backend.mapper.UserMapper;
+import com.example.backend.entity.SystemUser;
+import com.example.backend.mapper.SystemUserMapper;
 import jakarta.annotation.Resource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
@@ -10,18 +10,18 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     @Resource
-    private UserMapper userMapper;
+    private SystemUserMapper systemUserMapper;
 
-    public Boolean alterPSW(Long userId, String oldPSW, String newPSW) {
-        User user = userMapper.selectById(userId);
-        if (user == null)
-            return false;
-        String encriptPwd = user.getPassword();
-        String s = DigestUtils.sha512Hex(oldPSW);
-        if (s.equals(encriptPwd)) {
-            String encriptNewPSW = DigestUtils.sha512Hex(newPSW);
-            return userMapper.alterPassword(user.getId(), encriptNewPSW);
+    public void alterPassword(Long userId, String oldPassword, String newPassword) {
+        SystemUser user = systemUserMapper.selectById(userId);
+        if (user == null) {
+            return;
         }
-        return false;
+        String userPasswordHash = user.getPasswordHash();
+        String oldPasswordHash = DigestUtils.sha512Hex(oldPassword);
+        if (oldPasswordHash.equals(userPasswordHash)) {
+            String newPasswordHash = DigestUtils.sha512Hex(newPassword);
+            systemUserMapper.alterPassword(user.getId(), newPasswordHash);
+        }
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.backend.mapper.SystemUserMapper">
+
+    <select id="selectByUsername" resultType="com.example.backend.entity.SystemUser">
+        select id, username, password_hash, role_id
+        from system_user
+        where username = #{username}
+    </select>
+
+    <update id="updateUserInfoByPrimaryKey" parameterType="com.example.backend.entity.SystemUser">
+        update system_user
+        set username  = #{username,jdbcType=VARCHAR},
+            role_id   = #{roleId,jdbcType=INTEGER},
+            telephone = #{telephone,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="alterPassword">
+        update system_user
+        set password_hash = #{newPasswordHash}
+        where id = #{userId} LIMIT 1
+    </update>
+
+    <select id="getUserPageWithoutSuAccount" resultType="com.example.backend.entity.SystemUser">
+        <include refid="getUserListWithoutSuAccount" />
+    </select>
+    <select id="getUserListWithoutSuAccount" resultType="com.example.backend.entity.SystemUser">
+        <include refid="getUserListWithoutSuAccount" />
+    </select>
+    <sql id="getUserListWithoutSuAccount">
+        SELECT * FROM system_user
+        <where>
+            <!-- 过滤 su 账号 -->
+            id != 1
+            <if test="query.id != null and query.id != ''">
+                AND id = #{query.id}
+            </if>
+            <if test="query.username != null and query.username != ''">
+                AND username LIKE concat('%',#{query.username},'%')
+            </if>
+            <if test="query.roleId != null">
+                AND role_id = #{query.roleId}
+            </if>
+            <if test="query.telephone != null and query.telephone != ''">
+                AND telephone LIKE concat('%',#{query.telephone},'%')
+            </if>
+        </where>
+    </sql>
+</mapper>

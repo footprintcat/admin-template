@@ -14,11 +14,11 @@ import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.UserDTO;
-import com.example.backend.entity.User;
+import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.entity.SystemUser;
 import com.example.backend.query.PageQuery;
 import com.example.backend.service.v2.RoleServiceV2;
-import com.example.backend.service.v2.UserServiceV2;
+import com.example.backend.service.v2.SystemUserServiceV2;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 public class ManageUserController extends BaseController {
 
     @Resource
-    private UserServiceV2 userServiceV2;
+    private SystemUserServiceV2 systemUserServiceV2;
     @Resource
     private RoleServiceV2 roleServiceV2;
 
@@ -52,14 +52,14 @@ public class ManageUserController extends BaseController {
      * 获取用户列表
      *
      * @param pageQuery 分页参数
-     * @param userDTO   筛选条件
+     * @param systemUserDTO   筛选条件
      * @return
      */
     @GetMapping("/list")
     @ResponseBody
-    public CommonReturnType list(PageQuery pageQuery, UserDTO userDTO) {
+    public CommonReturnType list(PageQuery pageQuery, SystemUserDTO systemUserDTO) {
         // 查询分页数据
-        Page<User> userPage = userServiceV2.getUserPageWithoutSuAccount(pageQuery, userDTO);
+        Page<SystemUser> systemUserPage = systemUserServiceV2.getUserPageWithoutSuAccount(pageQuery, systemUserDTO);
 
         // 查询 roleMap
         HashMap<Integer, String> roleMap = roleServiceV2.getRoleMap();
@@ -68,8 +68,8 @@ public class ManageUserController extends BaseController {
         String roleListForMock = JSONArray.from(roleMap.keySet().stream().map(Object::toString).collect(Collectors.toList())).toString();
 
         // 分页数据转为 DTO
-        List<User> userList = userPage.getRecords();
-        List<UserDTO> userDTOList = UserDTO.fromEntity(userList);
+        List<SystemUser> userList = systemUserPage.getRecords();
+        List<SystemUserDTO> systemUserDTOList = SystemUserDTO.fromEntity(userList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -123,8 +123,8 @@ public class ManageUserController extends BaseController {
 
         // 拼装返回结果
         JSONObject map = new JSONObject();
-        map.put("total", userPage.getTotal());
-        map.put("list", userDTOList);
+        map.put("total", systemUserPage.getTotal());
+        map.put("list", systemUserDTOList);
         map.put("columns", columns);
         map.put("fieldMapper", fieldMapper);
         map.put("idFieldName", idFieldName);
@@ -141,21 +141,21 @@ public class ManageUserController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public CommonReturnType edit(HttpServletRequest httpServletRequest, @ModelAttribute UserDTO userDTO, String password) {
+    public CommonReturnType edit(HttpServletRequest httpServletRequest, @ModelAttribute SystemUserDTO systemUserDTO, String password) {
         // 查询当前登录用户
-        User currentLoginUser = userServiceV2.getCurrentLoginUser(httpServletRequest);
+        SystemUser currentLoginUser = systemUserServiceV2.getCurrentLoginUser(httpServletRequest);
         if (currentLoginUser == null) {
             return CommonReturnType.error("当前用户未登录");
-        } else if (Objects.equals(String.valueOf(currentLoginUser.getId()), userDTO.getId())) {
+        } else if (Objects.equals(String.valueOf(currentLoginUser.getId()), systemUserDTO.getId())) {
             return CommonReturnType.error("不可以修改当前登录账号，如需修改个人账号信息，请前往个人中心进行修改");
         }
 
         // 传入参数 - 要修改的用户
-        User user = UserDTO.toEntity(userDTO);
+        SystemUser systemUser = SystemUserDTO.toEntity(systemUserDTO);
 
-        if (user.getId() == null || user.getId() < 1) {
+        if (systemUser.getId() == null || systemUser.getId() < 1) {
             // 通过 username 查询系统中是否存在该用户
-            User existUser = userServiceV2.getUserByUsername(user.getUsername());
+            SystemUser existUser = systemUserServiceV2.getUserByUsername(systemUser.getUsername());
 
             // 新增用户
             if (existUser != null) {
@@ -165,24 +165,24 @@ public class ManageUserController extends BaseController {
                 return CommonReturnType.error("密码不能为空");
             }
             String passwordHash = DigestUtils.sha512Hex(password);
-            user.setPassword(passwordHash);
-            user.setId(null);
-            userServiceV2.addUser(user);
+            systemUser.setPasswordHash(passwordHash);
+            systemUser.setId(null);
+            systemUserServiceV2.addUser(systemUser);
         } else {
             // 查询系统中是否存在该用户
-            User existUser = userServiceV2.getUserById(user.getId());
+            SystemUser existUser = systemUserServiceV2.getUserById(systemUser.getId());
 
             // 修改用户
             if (existUser == null) {
                 return CommonReturnType.error("用户不存在，操作失败");
             }
             if (password == null || password.isEmpty()) {
-                user.setPassword(null);
+                systemUser.setPasswordHash(null);
             } else {
                 String passwordHash = DigestUtils.sha512Hex(password);
-                user.setPassword(passwordHash);
+                systemUser.setPasswordHash(passwordHash);
             }
-            userServiceV2.updateUser(user);
+            systemUserServiceV2.updateUser(systemUser);
         }
         return CommonReturnType.success();
     }
@@ -197,13 +197,13 @@ public class ManageUserController extends BaseController {
     @ResponseBody
     public CommonReturnType delete(HttpServletRequest httpServletRequest, Long id) {
         // 先查询用户名是否存在
-        User existUser = userServiceV2.getUserById(id);
+        SystemUser existUser = systemUserServiceV2.getUserById(id);
         if (existUser == null) {
             return CommonReturnType.error("用户不存在，删除失败");
         }
 
         try {
-            userServiceV2.deleteUserWithVerify(httpServletRequest.getSession(), existUser.getId());
+            systemUserServiceV2.deleteUserWithVerify(httpServletRequest.getSession(), existUser.getId());
             return CommonReturnType.success();
         } catch (BusinessException e) {
             return CommonReturnType.error(e.getErrMsg());
@@ -217,9 +217,9 @@ public class ManageUserController extends BaseController {
      */
     @GetMapping("/export")
     @ResponseBody
-    public CommonReturnType exportUserList(UserDTO userDTO) {
-        List<User> userList = userServiceV2.getUserListWithoutSuAccount(userDTO);
-        List<UserDTO> userDTOList = UserDTO.fromEntity(userList);
+    public CommonReturnType exportUserList(SystemUserDTO systemUserDTO) {
+        List<SystemUser> userList = systemUserServiceV2.getUserListWithoutSuAccount(systemUserDTO);
+        List<SystemUserDTO> systemUserDTOList = SystemUserDTO.fromEntity(userList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();
@@ -227,7 +227,7 @@ public class ManageUserController extends BaseController {
         String dateTime = format.format(now);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("list", userDTOList);
+        map.put("list", systemUserDTOList);
         map.put("sheetName", "用户表-" + System.currentTimeMillis());
         map.put("fileName", "用户表_导出时间_" + dateTime);
 

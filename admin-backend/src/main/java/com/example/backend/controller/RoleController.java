@@ -8,7 +8,7 @@ import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.RoleDTO;
 import com.example.backend.entity.Role;
-import com.example.backend.entity.User;
+import com.example.backend.entity.SystemUser;
 import com.example.backend.repository.RoleRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.System.PrivilegeService;
@@ -154,8 +154,8 @@ public class RoleController extends BaseController {
         }
 
         // 如果角色存在关联用户，则不允许删除
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getRoleId, roleId);
+        LambdaQueryWrapper<SystemUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SystemUser::getRoleId, roleId);
         if (userRepository.exists(queryWrapper)) {
             return CommonReturnType.error("角色下还存在用户，请先修改用户关联角色，再尝试删除");
         }
