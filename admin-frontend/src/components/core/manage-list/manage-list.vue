@@ -18,6 +18,8 @@
           导出到文件
         </el-button>
 
+        TODO: 排序
+
         <el-tooltip placement="left" content="刷新">
           <el-button type="default" :icon="RefreshRight" circle style="float: right;" @click="handleFetchData(false)" />
         </el-tooltip>
@@ -139,9 +141,9 @@ async function handleFetchData(gotoFirstPage: boolean) {
   }
   console.log('==========', 'fetchData start', '==========')
   const param = manageListSearchFormRef.value?.getParams()
-  if (props.debug) {
-    console.log('[debug] param', param)
-  }
+  // if (props.debug) {
+  //   console.log('[debug] param', param)
+  // }
   const requestParam = {
     ...param,
   }

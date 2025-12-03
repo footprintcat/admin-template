@@ -7,17 +7,19 @@
           :placeholder="searchInput.placeHolder || `请输入${searchInput.label}`" />
       </template>
       <template v-else-if="searchInput.type === 'dropdown'">
-        <el-select v-model="tempVModel" clearable filterable :multiple="searchInput.multipleSelection" collapse-tags
-          collapse-tags-tooltip :placeholder="searchInput.placeHolder || `请输入${searchInput.label}`">
+        <el-select v-model="params[searchInput.field]" clearable filterable :multiple="searchInput.multipleSelection"
+          collapse-tags collapse-tags-tooltip :placeholder="searchInput.placeHolder || `请输入${searchInput.label}`">
           <el-option v-for="item in tempOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </template>
       <template v-else-if="searchInput.type === 'datetime'">
-        <el-date-picker v-model="tempVModel" clearable
-          :placeholder="searchInput.placeHolder || `请选择${searchInput.label}`" />
+        <el-date-picker v-model="params[searchInput.field]" clearable
+          :placeholder="searchInput.placeHolder || `请选择${searchInput.label}`"
+          :format="getElementPlusDateTimePickerFormat(searchInput.showTimePart)"
+          :value-format="getElementPlusDateTimePickerValueFormat(searchInput.valueFormat)" />
       </template>
       <template v-else-if="searchInput.type === 'datetime-range'">
-        <el-date-picker v-model="tempVModel" clearable type="datetimerange"
+        <el-date-picker v-model="params[searchInput.field]" clearable type="datetimerange"
           :start-placeholder="searchInput.placeHolderStart || `请选择开始时间`"
           :end-placeholder="searchInput.placeHolderEnd || `请选择结束时间`" />
       </template>
@@ -29,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { getElementPlusDateTimePickerFormat, getElementPlusDateTimePickerValueFormat } from '../scripts/datetime-search';
 import type { SearchInputList } from '../types/search-input'
 
 interface Props {
@@ -109,7 +112,6 @@ function calcItemWidth(columnGap?: number) {
 }
 
 // TODO
-const tempVModel = ref()
 const tempOptions = [
   {
     value: 'Option1',
