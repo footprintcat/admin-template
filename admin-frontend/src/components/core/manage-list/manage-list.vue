@@ -5,7 +5,8 @@
       <manage-list-search-form :search-form-label-position="props.searchFormLabelPosition"
         :search-input-list="props.searchInputList" />
       <div>
-        <el-button type="primary" :icon="Search">
+        <el-button type="primary" :icon="Search" @click="handleFetchData"
+          :loading="props.allowParallelFetch ? false : isLoading">
           查询
         </el-button>
         <el-button type="primary" plain :icon="Download">
@@ -15,11 +16,15 @@
       </div>
     </div>
 
-    <div class="table-container" :class="[props.tableFillHeight ? 'fill-height' : '']">
+    <div class="table-container" :class="[props.tableFillHeight ? 'fill-height' : '']" v-loading="isLoading"
+      element-loading-text="请稍候...">
       <!-- el-table 设置 height="100%" 后 前后不能再添加其他元素 否则高度会被无限撑大 -->
       <!-- 如果要添加其他元素，可以设置 style="height: 100%;" -->
-      <el-table ref="manageListTableRef" height="100%">
-
+      <el-table ref="manageListTableRef" height="100%" :data="tableData">
+        <slot name="customTableColumn">
+          <el-table-column prop="id" label="用户id"></el-table-column>
+          <el-table-column prop="username" label="用户姓名"></el-table-column>
+        </slot>
       </el-table>
     </div>
 
@@ -31,17 +36,30 @@
 </template>
 
 <script setup lang="ts">
-import type { ElTable } from 'element-plus'
+import { ElMessage, type ElTable } from 'element-plus'
 import { Download, RefreshRight, Search } from '@element-plus/icons-vue'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import type { SearchInputList } from './types/search-input'
 
 interface Props {
+  /**
+   * 表格是否撑满容器
+   */
   tableFillHeight?: boolean
+  /**
+   * 是否展示导出按钮
+   */
   showExportButton?: boolean
   /** 搜索输入框label */
   searchFormLabelPosition?: 'top' | 'left'
   searchInputList?: SearchInputList
+  fetchData: (params: unknown) => Promise<Array<unknown>>
+  /**
+   * 是否允许并行请求
+   * - true: 点击查询按钮时，查询按钮不会显示 loading 状态，请求中允许再次点击
+   * - false: 点击查询按钮时，查询按钮呈现 loading 状态，此时再次点击不触发 fetchData
+   */
+  allowParallelFetch?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -49,9 +67,37 @@ const props = withDefaults(defineProps<Props>(), {
   showExportButton: true,
   searchFormLabelPosition: 'top',
   searchInputList: () => [] satisfies SearchInputList,
+  allowParallelFetch: false,
 })
 
+// 组件 ref
 const manageListTableRef = ref<InstanceType<typeof ElTable>>()
+
+// 请求状态
+const fetchingCount = ref<number>(0)
+const isLoading = computed<boolean>(() => fetchingCount.value > 0)
+
+// 表格数据
+const tableData = ref<Array<unknown>>([])
+
+async function handleFetchData() {
+  fetchingCount.value++
+  props.fetchData({})
+    .then(result => {
+      console.log('result', result)
+      tableData.value = result.data.list
+    })
+    .catch((error) => {
+      console.error('manage-list fetchData 查询失败', error)
+      ElMessage.error({
+        message: '查询失败，网络连接异常',
+        grouping: true,
+      })
+    })
+    .finally(() => {
+      fetchingCount.value--
+    })
+}
 </script>
 
 <style scoped>
