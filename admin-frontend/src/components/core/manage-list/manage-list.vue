@@ -9,7 +9,7 @@
           :loading="props.allowParallelFetch ? false : isLoading">
           查询
         </el-button>
-        <el-button type="primary" plain :icon="Download">
+        <el-button type="primary" plain :icon="Download" @click="handleExportFile">
           导出到文件
         </el-button>
         <el-button type="default" :icon="RefreshRight" circle style="float: right;"></el-button>
@@ -32,6 +32,9 @@
     <div class="footer-container">
       2
     </div>
+
+    <!-- 导出文件弹窗 -->
+    <export-file-dialog v-model="showExportFileDialog" />
   </div>
 </template>
 
@@ -39,6 +42,7 @@
 import { ElMessage, type ElTable } from 'element-plus'
 import { Download, RefreshRight, Search } from '@element-plus/icons-vue'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
+import ExportFileDialog from './export-file/export-file-dialog.vue'
 import type { SearchInputList } from './types/search-input'
 
 interface Props {
@@ -97,6 +101,12 @@ async function handleFetchData() {
     .finally(() => {
       fetchingCount.value--
     })
+}
+
+// 文件导出
+const showExportFileDialog = ref<boolean>(false)
+function handleExportFile() {
+  showExportFileDialog.value = true
 }
 </script>
 
