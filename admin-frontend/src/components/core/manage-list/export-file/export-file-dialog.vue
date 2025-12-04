@@ -54,21 +54,21 @@ const dialogVisible = computed({
   },
 })
 
-const form = reactive({} as any)     // 弹窗字段的值
+const form = reactive({}) // 弹窗字段的值
 
 // 导出 Excel 弹窗
-const exportFormVisible: any = ref(false)
+const exportFormVisible = ref<boolean>(false)
 const supportExportFormatList = ref(['xlsx', 'xls', 'csv', 'html', 'txt', 'json', 'rtf'] as Array<string>) // 支持的导出格式
 const exportConfig = ref<ExportConfig>({
   withFilter: true, // 导出时是否携带查询条件
   ext: 'xlsx', // 所选导出格式
-} as any)
-const exportInfo = computed(() => {
+})
+const exportInfo = computed<null | { info: string; type: 'info' | 'warning' }>(() => {
   if (['xlsx', 'xls'].includes(exportConfig.value.ext)) {
     return null
   }
-  let info = '建议选择 xlsx 或 xls 格式'
-  let type = 'info'
+  let info: string = '建议选择 xlsx 或 xls 格式'
+  let type: 'info' | 'warning' = 'info'
   if (['rtf'].includes(exportConfig.value.ext)) {
     // 不推荐的导出格式
     info = '该格式易出现编码问题，' + info
