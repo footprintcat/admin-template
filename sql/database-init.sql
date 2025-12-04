@@ -30,7 +30,8 @@ CREATE TABLE `system_user` (
   PRIMARY KEY (`id`) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '系统用户表';
+COMMENT = '系统用户表'
+ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for system_tenant
@@ -49,7 +50,8 @@ CREATE TABLE `system_tenant` (
   PRIMARY KEY (`id`) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '系统租户表';
+COMMENT = '系统租户表'
+ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for role
@@ -64,7 +66,8 @@ CREATE TABLE `role` (
   `is_delete` tinyint NOT NULL DEFAULT 0 COMMENT '逻辑删除',
   PRIMARY KEY (`id`) USING BTREE
 )
-ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+ROW_FORMAT = Dynamic;
 
 -- 数据库初始数据
 

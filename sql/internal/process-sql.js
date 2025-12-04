@@ -167,7 +167,7 @@ function processSQLFile(inputFilePath, outputFilePath, tableOrder = []) {
       .replaceAll(') ENGINE = InnoDB', ')\nENGINE = InnoDB')
       // 优化 COLLATE 和 COMMENT 之间的换行
       .replaceAll('COLLATE = utf8mb4_0900_ai_ci COMMENT', 'COLLATE = utf8mb4_0900_ai_ci\nCOMMENT')
-      .replaceAll(' ROW_FORMAT = Dynamic;', ';')
+      .replaceAll(' ROW_FORMAT = Dynamic', '\nROW_FORMAT = Dynamic')
       .replaceAll('`  (', '` (')
 
     const finalFileContent =
