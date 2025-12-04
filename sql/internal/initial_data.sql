@@ -1,7 +1,10 @@
+-- ----------------------------
 -- 数据库初始数据
+-- ----------------------------
 
 -- system_user
-INSERT INTO `system_user` (`id`, `username`, `password_hash`) VALUES (1, 'admin', '');
+INSERT INTO `system_user` (`id`, `username`, `nickname`, `password_hash`) VALUES
+(1, 'admin', '系统管理员', '');
 
 -- system_tenant
 -- TODO

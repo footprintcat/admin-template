@@ -6,3 +6,5 @@
 - initial_data.sql:     初始数据
 - order.json:           表排序
 - process-sql.js:       SQL 处理 node 脚本
+
+- initial_data_develop.sql: 数据库调试用数据。仅用于开发环境，请勿在生产环境中使用此文件

@@ -5,14 +5,25 @@ const path = require('path');
 
 // cd sql
 // node process-sql.js ./admin_template.sql ../database-init.sql ./order.json
+// 或者使用默认参数 （见 `main()` 函数）
+// node process-sql.js
+
+// 是否跳过 DROP TABLE IF EXISTS 语句
+const skipDropTableIfExists = false
 
 /**
  * 处理 SQL 文件
+ *
+ * @param {boolean} isDevelopSQL - 是否为开发环境 SQL
  * @param {string} inputFilePath - 输入 SQL 文件路径
  * @param {string} outputFilePath - 输出 SQL 文件路径
  * @param {Array|string} tableOrder - 表名排序顺序（可以是数组或JSON文件路径）
  */
-function processSQLFile(inputFilePath, outputFilePath, tableOrder = []) {
+function processSQLFile(isDevelopSQL, inputFilePath, outputFilePath, tableOrder = []) {
+
+  // 是否跳过 @xxx@ 特殊表
+  const skipSpecialTables = !isDevelopSQL
+
   try {
     // 读取 SQL 文件
     const sqlContent = fs.readFileSync(inputFilePath, 'utf8');
@@ -55,9 +66,11 @@ function processSQLFile(inputFilePath, outputFilePath, tableOrder = []) {
           const line = lines[i].trim();
 
           // 跳过 DROP TABLE IF EXISTS 行
-          if (line.includes('DROP TABLE IF EXISTS')) {
-            i++;
-            continue;
+          if (skipDropTableIfExists) {
+            if (line.includes('DROP TABLE IF EXISTS')) {
+              i++;
+              continue;
+            }
           }
 
           // 如果是 CREATE TABLE 语句，移除 AUTO_INCREMENT
@@ -80,7 +93,7 @@ function processSQLFile(inputFilePath, outputFilePath, tableOrder = []) {
               i = j; // 跳过已处理的行
 
               // 移除 AUTO_INCREMENT
-              createStmt = createStmt.replace(/AUTO_INCREMENT\s*=\s*\d+/gi, '');
+              createStmt = createStmt.replace(/ AUTO_INCREMENT\s*=\s*\d+/gi, '');
               createStmt = createStmt.replace(/\s+AUTO_INCREMENT\b/gi, '');
 
               processedLines.push(createStmt);
@@ -100,6 +113,11 @@ function processSQLFile(inputFilePath, outputFilePath, tableOrder = []) {
         if (processedBlock) {
           const tableName = extractTableName(processedBlock);
           if (tableName) {
+            if (skipSpecialTables && tableName.startsWith('@') && tableName.endsWith('@')) {
+              console.log(' ', `跳过特殊表: ${tableName}`)
+              continue
+            }
+            console.log(' ', `表: ${tableName}`)
             tableBlocks.push({
               block: processedBlock,
               tableName: tableName
@@ -164,11 +182,22 @@ function processSQLFile(inputFilePath, outputFilePath, tableOrder = []) {
     const finalSQL = tableBlocks.map(item => item.block).join('\n\n') + '\n';
 
     const finalSQL2 = finalSQL
-      .replaceAll(') ENGINE = InnoDB', ')\nENGINE = InnoDB')
+      .replaceAll(') ENGINE = InnoDB', ')\nENGINE = InnoDB') // 换行
       // 优化 COLLATE 和 COMMENT 之间的换行
-      .replaceAll('COLLATE = utf8mb4_0900_ai_ci COMMENT', 'COLLATE = utf8mb4_0900_ai_ci\nCOMMENT')
-      .replaceAll(' ROW_FORMAT = Dynamic', '\nROW_FORMAT = Dynamic')
-      .replaceAll('`  (', '` (')
+      .replaceAll('COLLATE = utf8mb4_0900_ai_ci COMMENT', 'COLLATE = utf8mb4_0900_ai_ci\nCOMMENT') // 换行
+      .replaceAll('ROW_FORMAT = DYNAMIC', 'ROW_FORMAT = Dynamic') // 统一为大驼峰
+      .replaceAll(' ROW_FORMAT = Dynamic', '\nROW_FORMAT = Dynamic') // 换行
+      .replaceAll('`  (', '` (') // 去除多余空格
+
+    const initialDataSQL = // 带前后换行
+      '\n' +
+      fs.readFileSync(path.join(path.dirname(inputFilePath), 'initial_data.sql'), 'utf8').trim() +
+      '\n' +
+      (
+        isDevelopSQL
+          ? '\n' + fs.readFileSync(path.join(path.dirname(inputFilePath), 'initial_data_develop.sql'), 'utf8').trim() + '\n'
+          : ''
+      )
 
     const finalFileContent =
       '-- ----------------------------\n' +
@@ -177,7 +206,7 @@ function processSQLFile(inputFilePath, outputFilePath, tableOrder = []) {
       '-- 包含：\n' +
       '--   1. 所有表结构定义\n' +
       '--   2. 必需的基础数据\n' +
-      '-- \n' +
+      '--\n' +
       '-- 注意：\n' +
       '--   1. 本 sql 文件由 internal 目录中脚本生成，重新生成会被覆盖，不建议直接修改\n' +
       '--   2. 请先创建数据库，并使用 `use <database>;` 命令进入对应数据库后再执行当前脚本\n' +
@@ -186,13 +215,17 @@ function processSQLFile(inputFilePath, outputFilePath, tableOrder = []) {
       '-- ----------------------------\n' +
       '\n' +
       'SET NAMES utf8mb4;\n' +
-      `${startMarker}\n\n` +
-      '-- 基础表结构定义\n\n' +
+      `${startMarker}\n` +
+      '\n' +
+      '-- ----------------------------\n' +
+      '-- 基础表结构定义\n' +
+      '-- ----------------------------\n' +
+      '\n' +
       finalSQL2 +
+      initialDataSQL +
       '\n' +
-      fs.readFileSync(path.join(path.dirname(inputFilePath), 'initial_data.sql'), 'utf8').trim() +
-      '\n' +
-      `\n${endMarker}\n`;
+      endMarker +
+      '\n';
 
     // 保存到新文件
     fs.writeFileSync(outputFilePath, finalFileContent, 'utf8');
@@ -231,9 +264,9 @@ function extractTableName(tableBlock) {
  */
 function main() {
   const config = {
-    inputFile: 'input.sql',
-    outputFile: 'output_sorted.sql',
-    tableOrder: [] // 默认顺序
+    inputFile: './admin_template.sql',
+    outputFile: '../database-init.sql',
+    tableOrder: 'order.json', // [] // 默认顺序
   };
 
   if (!fs.existsSync(config.inputFile)) {
@@ -252,7 +285,8 @@ function main() {
   console.log('表排序顺序:', config.tableOrder);
   console.log('---');
 
-  processSQLFile(config.inputFile, config.outputFile, config.tableOrder);
+  processSQLFile(false, config.inputFile, config.outputFile, config.tableOrder);
+  processSQLFile(true, config.inputFile, config.outputFile.replace('.sql', '.develop.sql'), config.tableOrder);
 }
 
 /**
@@ -276,7 +310,8 @@ function runStandalone() {
     console.log('---');
 
     // 如果提供了第三个参数，当作排序依据
-    processSQLFile(inputFile, outputFile, tableOrderParam);
+    processSQLFile(false, inputFile, outputFile, tableOrderParam);
+    processSQLFile(true, inputFile, outputFile.replace('.sql', '.develop.sql'), tableOrderParam);
   } else {
     console.log('用法:');
     console.log('1. node process-sql.js');
