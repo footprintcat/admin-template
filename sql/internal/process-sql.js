@@ -8,9 +8,6 @@ const path = require('path');
 // 或者使用默认参数 （见 `main()` 函数）
 // node process-sql.js
 
-// 是否跳过 DROP TABLE IF EXISTS 语句
-const skipDropTableIfExists = false
-
 /**
  * 处理 SQL 文件
  *
@@ -20,6 +17,9 @@ const skipDropTableIfExists = false
  * @param {Array|string} tableOrder - 表名排序顺序（可以是数组或JSON文件路径）
  */
 function processSQLFile(isDevelopSQL, inputFilePath, outputFilePath, tableOrder = []) {
+
+  // 是否跳过 DROP TABLE IF EXISTS 语句
+  const skipDropTableIfExists = !isDevelopSQL
 
   // 是否跳过 @xxx@ 特殊表
   const skipSpecialTables = !isDevelopSQL
