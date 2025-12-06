@@ -6,7 +6,8 @@ import type { Router } from 'vue-router'
  * 此守卫仅用作代码示例, 正式项目中可以安全的删除
  */
 export function createFooBarGuard(router: Router) {
-  router.beforeEach(() => {
+  router.beforeEach((to, from) => {
     console.log('router.beforeEach triggered!')
+    // console.log('to', to, 'from', from)
   })
 }

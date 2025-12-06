@@ -1,5 +1,6 @@
 import type { Router } from 'vue-router'
 import { createFooBarGuard } from './foo-bar'
+import { createSiteTitleUpdateGuardGuard } from './site-title-update-guard'
 
 /**
  * 路由守卫合并入口
@@ -8,6 +9,7 @@ import { createFooBarGuard } from './foo-bar'
  */
 export function setupRouterGuards(router: Router) {
 
+  createSiteTitleUpdateGuardGuard(router)
   createFooBarGuard(router)
 
 }
