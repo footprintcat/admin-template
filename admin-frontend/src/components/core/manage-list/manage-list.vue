@@ -44,6 +44,11 @@
               :sortable="column.sortable ? 'custom' : false" :default-sort="column.defaultSort"
               :sort-orders="['ascending', 'descending', null]" resizable
               :show-overflow-tooltip="column.showOverflowTooltip">
+              <!-- 字段翻译 -->
+              <template #default="scope" v-if="column.transformMap">
+                <!-- {{ Object.keys(scope) }} -->
+                {{ column.transformMap[scope.row[column.field]] || column.transformDefaultValue }}
+              </template>
             </el-table-column>
           </template>
         </slot>
@@ -72,8 +77,9 @@
       </div>
       <!-- 分页组件 -->
       <el-pagination v-model:current-page="pageQuery.pageIndex" v-model:page-size="pageQuery.pageSize"
-        :page-sizes="[5, 10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        :page-sizes="props.pageSizeOptions" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handlePageSizeChange" @current-change="handleCurrentChange" />
+      <!-- :disabled="isLoading" -->
     </div>
 
     <!-- 导出文件弹窗 -->
@@ -127,6 +133,10 @@ interface Props {
    */
   allowParallelFetch?: boolean
   /**
+   * 每页条数选项
+   */
+  pageSizeOptions?: number[]
+  /**
    * 调试模式
    * 启用后将会打印更多日志信息
    */
@@ -140,6 +150,7 @@ const props = withDefaults(defineProps<Props>(), {
   searchInputList: () => [] satisfies SearchInputList,
   fetchDataOnMounted: true,
   allowParallelFetch: false,
+  pageSizeOptions: () => [5, 10, 15, 20, 25, 50, 100, 150, 200],
   debug: false,
 })
 
@@ -308,7 +319,6 @@ async function handleFetchData({
 
       // 如果超出最后一页, 则跳转到最后一页
       const totalPageCount = Math.ceil(total.value / pageQuery.value.pageSize)
-      pageQuery.value.pageIndex += 10
       if (pageQuery.value.pageIndex > totalPageCount) {
         console.log('当前页', pageQuery.value.pageIndex, '总页数', totalPageCount, '当前页 > 总页数，将跳转到最后一页')
         pageQuery.value.pageIndex = totalPageCount
@@ -372,7 +382,7 @@ onMounted(() => {
 })
 
 // 分页事件处理
-function handleSizeChange(newSize: number) {
+function handlePageSizeChange(newSize: number) {
   pageQuery.value.pageSize = newSize
   pageQuery.value.pageIndex = 1
   handleFetchData({ gotoFirstPage: true })
@@ -388,6 +398,32 @@ const showExportFileDialog = ref<boolean>(false)
 function handleExportFile() {
   showExportFileDialog.value = true
 }
+
+
+// 校验
+onMounted(() => {
+  // 校验 searchInputList 中的 field 是否重复
+  const fieldSet = new Set<string>()
+  for (const input of props.searchInputList) {
+    if (fieldSet.has(input.field)) {
+      console.error(`manage-list 组件 searchInputList 中存在重复的 field: ${input.field}`)
+    } else {
+      fieldSet.add(input.field)
+    }
+  }
+
+  /*
+  // 校验 tableColumnList 中的 field 是否重复
+  fieldSet.clear()
+  for (const column of props.tableColumnList) {
+    if (fieldSet.has(column.field)) {
+      console.error(`manage-list 组件 tableColumnList 中存在重复的 field: ${column.field}`)
+    } else {
+      fieldSet.add(column.field)
+    }
+  }
+  */
+})
 </script>
 
 <style scoped>

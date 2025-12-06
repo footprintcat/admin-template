@@ -42,7 +42,8 @@ import type { SearchInputList } from '@/components/core/manage-list/types/search
 import type { TableColumnList } from '@/components/core/manage-list/types/table-column'
 
 const extraInitialParams = {
-  id: '1',
+  foobar: '1',
+  extraParam: 'extraParamValue',
 }
 
 const searchInputList: SearchInputList = [
@@ -50,7 +51,7 @@ const searchInputList: SearchInputList = [
     field: 'id',
     label: '用户ID',
     type: 'text',
-    initialValue: '2',
+    // initialValue: '2',
   },
   {
     field: 'id2',
@@ -80,7 +81,7 @@ const searchInputList: SearchInputList = [
     initialValue: () => new Date(),
   },
   {
-    field: 'datetime1',
+    field: 'datetime2',
     label: '日期',
     type: 'datetime',
     valueFormat: 'timestamp',
@@ -121,9 +122,26 @@ const tableColumnList: TableColumnList = [
     sortable: true,
   },
   {
+    field: 'status',
+    label: '用户状态',
+    type: 'text',
+    sortable: true,
+    transformMap: {
+      'NORMAL': '正常',
+    },
+    transformDefaultValue: '⚠ 没有找到字典!!!',
+  },
+  {
     field: 'telephone',
     label: '电话',
     type: 'text',
+    sortable: false,
+  },
+  {
+    field: 'test1',
+    label: '电话',
+    type: 'datetime',
+    valueFormat: 'timestamp',
     sortable: false,
   },
 ]
