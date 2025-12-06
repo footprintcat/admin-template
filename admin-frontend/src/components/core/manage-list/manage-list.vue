@@ -23,6 +23,7 @@
 
         <el-tooltip placement="left" content="刷新">
           <el-button type="default" :icon="RefreshRight" circle style="float: right;"
+            :loading="props.allowParallelFetch ? false : isLoading"
             @click="handleFetchData({ gotoFirstPage: false })" />
         </el-tooltip>
       </div>
@@ -51,7 +52,25 @@
 
     <!-- 底部元素组件 -->
     <div class="footer-container container-style">
-      2
+      <!-- 排序信息显示 -->
+      <div class="sort-info">
+        <el-text>
+          <template v-if="sortList.length === 0">
+            暂无排序
+          </template>
+          <template v-else>
+            按{{
+              sortList
+                .map(item => ` [${[fieldNameMap[item.field]]}] ${item.order === 'ascending' ? '升序' : '降序'}`)
+                .join('、')
+            }}排序
+          </template>
+        </el-text>
+      </div>
+      <!-- 分页组件 -->
+      <el-pagination v-model:current-page="pageQuery.pageIndex" v-model:page-size="pageQuery.pageSize"
+        :page-sizes="[5, 10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
     <!-- 导出文件弹窗 -->
@@ -64,7 +83,7 @@ import { ElMessage, type ElTable, type TableColumnCtx } from 'element-plus'
 import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import ExportFileDialog from './export-file/export-file-dialog.vue'
-import type { RequestParam, SortItem } from './types/request-param'
+import type { RequestParam, SortItemWithLabel } from './types/request-param'
 import type { SearchInputList } from './types/search-input'
 import type { TableColumnList } from './types/table-column'
 
@@ -126,9 +145,9 @@ const manageListTableRef = ref<InstanceType<typeof ElTable>>()
 const manageListSearchFormRef = ref<InstanceType<typeof ManageListSearchForm>>()
 
 // 排序信息
-const sortList = ref<Array<SortItem>>([])
+const sortList = ref<Array<SortItemWithLabel>>([])
 // 初始排序状态
-const initialSortList = ref<Array<SortItem>>([])
+const initialSortList = ref<Array<SortItemWithLabel>>([])
 
 // 查询条件
 function handleParamsUpdate(params: Record<string, unknown>) {
@@ -143,11 +162,23 @@ function handleResetParams() {
     message: '已重置查询条件',
     grouping: true,
   })
+
+  // 重新查询数据
+  handleFetchData({ gotoFirstPage: true })
 }
 
 // 表格排序
 const hasFilterColumn = computed<boolean>(() => {
   return props.tableColumnList.some(column => column.sortable)
+})
+
+// 筛选条件 field -> label 映射
+const fieldNameMap = computed<Record<string, string>>(() => {
+  const map: Record<string, string> = {}
+  props.tableColumnList.forEach(column => {
+    map[column.field] = column.label
+  })
+  return map
 })
 
 function handleResetFilters() {
@@ -167,7 +198,7 @@ function handleResetFilters() {
 }
 
 // 手动设置表格列的排序状态
-function updateTableSortState(sortItems: SortItem[]) {
+function updateTableSortState(sortItems: SortItemWithLabel[]) {
   const columns = manageListTableRef.value?.columns || []
   columns.forEach(col => {
     if (col.property) {
@@ -181,9 +212,10 @@ function handleTableSortChange(data: { column: TableColumnCtx, prop: string, ord
   // console.log('table sort change', data)
 
   // 多列排序逻辑
-  const { prop, order } = data
+  const { column, prop, order } = data
   const sortField: string = prop
   const sortOrder: 'ascending' | 'descending' | null = order
+  const label: string = column.label
 
   // 查找是否已存在该字段的排序
   const existingIndex = sortList.value.findIndex(item => item.field === sortField)
@@ -200,7 +232,7 @@ function handleTableSortChange(data: { column: TableColumnCtx, prop: string, ord
     }
   } else if (sortOrder !== null) {
     // 添加新的排序
-    sortList.value.push({ field: sortField, order: sortOrder })
+    sortList.value.push({ field: sortField, order: sortOrder, label: label })
   }
 
   // 更新表格排序状态
@@ -218,12 +250,21 @@ function handleTableSortChange(data: { column: TableColumnCtx, prop: string, ord
 const fetchingCount = ref<number>(0)
 const isLoading = computed<boolean>(() => fetchingCount.value > 0)
 
+// 分页信息
+const pageQuery = ref<{ pageIndex: number; pageSize: number }>({
+  pageIndex: 1,
+  pageSize: 5,
+})
+
+// 总条数
+const total = ref<number>(0)
+
 // 表格数据
 const tableData = ref<Array<unknown>>([])
 
 async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
   if (gotoFirstPage) {
-    // TODO 回到第1页
+    pageQuery.value.pageIndex = 1
   }
   fetchingCount.value++
 
@@ -240,10 +281,13 @@ async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
     params: {
       ...params,
     },
-    sort: sortList.value,
+    sort: sortList.value.map(item => ({
+      field: item.field,
+      order: item.order,
+    })),
     pageQuery: {
-      pageIndex: 1,
-      pageSize: 5,
+      pageIndex: pageQuery.value.pageIndex,
+      pageSize: pageQuery.value.pageSize,
     },
   }
   console.log('request params', params)
@@ -251,6 +295,7 @@ async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
     .then(result => {
       console.log('result', result)
       tableData.value = result.data.list
+      total.value = result.data.total || 0
     })
     .catch((error) => {
       console.error('manage-list fetchData 查询失败', error)
@@ -287,7 +332,11 @@ onMounted(() => {
   // 初始化初始排序状态
   initialSortList.value = props.tableColumnList
     .filter(column => column.defaultSort)
-    .map(column => ({ field: column.field, order: column.defaultSort })) as SortItem[]
+    .map(column => ({
+      field: column.field,
+      order: column.defaultSort || null,
+      label: column.label,
+    }))
 
   // 应用初始排序
   sortList.value = [...initialSortList.value]
@@ -298,6 +347,18 @@ onMounted(() => {
     handleFetchData({ gotoFirstPage: false })
   })
 })
+
+// 分页事件处理
+function handleSizeChange(newSize: number) {
+  pageQuery.value.pageSize = newSize
+  pageQuery.value.pageIndex = 1
+  handleFetchData({ gotoFirstPage: true })
+}
+
+function handleCurrentChange(newPage: number) {
+  pageQuery.value.pageIndex = newPage
+  handleFetchData({ gotoFirstPage: false })
+}
 
 // 文件导出
 const showExportFileDialog = ref<boolean>(false)
@@ -352,6 +413,9 @@ function handleExportFile() {
   background-color: #ffffff;
   border-top: 1px solid #e8e8e8;
   padding: var(--footer-vertical-padding) var(--footer-horizontal-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* 隐藏 table 下的分隔线 */
