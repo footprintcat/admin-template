@@ -127,6 +127,8 @@ const manageListSearchFormRef = ref<InstanceType<typeof ManageListSearchForm>>()
 
 // 排序信息
 const sortList = ref<Array<SortItem>>([])
+// 初始排序状态
+const initialSortList = ref<Array<SortItem>>([])
 
 // 查询条件
 function handleParamsUpdate(params: Record<string, unknown>) {
@@ -149,13 +151,29 @@ const hasFilterColumn = computed<boolean>(() => {
 })
 
 function handleResetFilters() {
-  // 重置排序信息
-  sortList.value = []
-  // 重置表格排序状态
-  manageListTableRef.value?.clearSort()
+  // 重置排序信息到初始状态
+  sortList.value = [...initialSortList.value]
+
+  // 更新表格排序状态
+  updateTableSortState(initialSortList.value)
+
   ElMessage.info({
-    message: '已重置排序',
+    message: '已重置排序到初始状态',
     grouping: true,
+  })
+
+  // 重新查询数据
+  handleFetchData({ gotoFirstPage: true })
+}
+
+// 手动设置表格列的排序状态
+function updateTableSortState(sortItems: SortItem[]) {
+  const columns = manageListTableRef.value?.columns || []
+  columns.forEach(col => {
+    if (col.property) {
+      const sortItem = sortItems.find(item => item.field === col.property)
+      col.order = sortItem ? sortItem.order : null
+    }
   })
 }
 
@@ -185,14 +203,8 @@ function handleTableSortChange(data: { column: TableColumnCtx, prop: string, ord
     sortList.value.push({ field: sortField, order: sortOrder })
   }
 
-  // 完全手动设置所有列的排序状态，不受 Element Plus 默认行为影响
-  const columns = manageListTableRef.value?.columns || []
-  columns.forEach(col => {
-    if (col.property) {
-      const sortItem = sortList.value.find(item => item.field === col.property)
-      col.order = sortItem ? sortItem.order : null
-    }
-  })
+  // 更新表格排序状态
+  updateTableSortState(sortList.value)
 
   // console.log('sortList', toRaw(sortList.value))
   console.log('sortList', JSON.stringify(sortList.value))
@@ -272,8 +284,17 @@ onMounted(() => {
     }
   }
 
-  // nextTick 是非必要调用，需要
+  // 初始化初始排序状态
+  initialSortList.value = props.tableColumnList
+    .filter(column => column.defaultSort)
+    .map(column => ({ field: column.field, order: column.defaultSort })) as SortItem[]
+
+  // 应用初始排序
+  sortList.value = [...initialSortList.value]
+
+  // 手动设置表格列的初始排序状态
   nextTick(() => {
+    updateTableSortState(initialSortList.value)
     handleFetchData({ gotoFirstPage: false })
   })
 })
