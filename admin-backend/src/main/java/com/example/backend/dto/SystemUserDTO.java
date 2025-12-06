@@ -15,6 +15,7 @@ public class SystemUserDTO {
     private String nickname;
     private Integer roleId;
     private String telephone;
+    private String status;
 
     public static SystemUserDTO fromEntity(SystemUser entity) {
         if (entity == null) {

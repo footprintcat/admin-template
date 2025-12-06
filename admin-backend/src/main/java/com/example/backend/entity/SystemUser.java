@@ -3,7 +3,9 @@ package com.example.backend.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,13 +34,30 @@ public class SystemUser implements Serializable {
     @TableField("username")
     private String username;
 
+    @TableField("nickname")
+    private String nickname;
+
     @TableField("password_hash")
     private String passwordHash;
 
+    // TODO
     @TableField("role_id")
     private Integer roleId;
 
+    // TODO
     @Schema(description = "电话")
     @TableField("telephone")
     private String telephone;
+
+    @TableField("status")
+    private String status;
+
+    @TableLogic
+    @TableField("is_delete")
+    private Boolean isDelete;
+
+    @Version
+    @TableField("version")
+    private Long version;
+
 }
