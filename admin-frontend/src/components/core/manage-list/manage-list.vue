@@ -47,6 +47,9 @@
             </el-table-column>
           </template>
         </slot>
+        <template #empty>
+          暂无符合条件的数据
+        </template>
       </el-table>
     </div>
 
@@ -252,8 +255,8 @@ const isLoading = computed<boolean>(() => fetchingCount.value > 0)
 
 // 分页信息
 const pageQuery = ref<{ pageIndex: number; pageSize: number }>({
-  pageIndex: 1,
-  pageSize: 5,
+  pageIndex: 1, // 从 1 开始
+  pageSize: 10,
 })
 
 // 总条数
@@ -262,7 +265,13 @@ const total = ref<number>(0)
 // 表格数据
 const tableData = ref<Array<unknown>>([])
 
-async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
+async function handleFetchData({
+  gotoFirstPage,
+  pageIndexReEvaluateCount,
+}: {
+  gotoFirstPage: boolean
+  pageIndexReEvaluateCount?: number
+}) {
   if (gotoFirstPage) {
     pageQuery.value.pageIndex = 1
   }
@@ -296,6 +305,20 @@ async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
       console.log('result', result)
       tableData.value = result.data.list
       total.value = result.data.total || 0
+
+      // 如果超出最后一页, 则跳转到最后一页
+      const totalPageCount = Math.ceil(total.value / pageQuery.value.pageSize)
+      pageQuery.value.pageIndex += 10
+      if (pageQuery.value.pageIndex > totalPageCount) {
+        console.log('当前页', pageQuery.value.pageIndex, '总页数', totalPageCount, '当前页 > 总页数，将跳转到最后一页')
+        pageQuery.value.pageIndex = totalPageCount
+        // 重新请求数据
+        if (pageIndexReEvaluateCount && pageIndexReEvaluateCount >= 3) {
+          console.error('manage-list fetchData 超出最后一页 重试已达上限，停止重试')
+          return
+        }
+        handleFetchData({ gotoFirstPage: false, pageIndexReEvaluateCount: (pageIndexReEvaluateCount || 0) + 1 })
+      }
     })
     .catch((error) => {
       console.error('manage-list fetchData 查询失败', error)
