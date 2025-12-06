@@ -6,7 +6,7 @@
         :search-input-list="props.searchInputList" :extra-initial-params="props.extraInitialParams"
         @change="handleParamsUpdate" />
       <div>
-        <el-button type="primary" :icon="Search" @click="handleFetchData(true)"
+        <el-button type="primary" :icon="Search" @click="handleFetchData({ gotoFirstPage: true })"
           :loading="props.allowParallelFetch ? false : isLoading">
           查询
         </el-button>
@@ -21,7 +21,8 @@
         TODO: 排序
 
         <el-tooltip placement="left" content="刷新">
-          <el-button type="default" :icon="RefreshRight" circle style="float: right;" @click="handleFetchData(false)" />
+          <el-button type="default" :icon="RefreshRight" circle style="float: right;"
+            @click="handleFetchData({ gotoFirstPage: false })" />
         </el-tooltip>
       </div>
     </div>
@@ -30,10 +31,19 @@
       v-loading="isLoading" element-loading-text="请稍候...">
       <!-- el-table 设置 height="100%" 后 前后不能再添加其他元素 否则高度会被无限撑大 -->
       <!-- 如果要添加其他元素，可以设置 style="height: 100%;" -->
-      <el-table ref="manageListTableRef" height="100%" :data="tableData">
+      <el-table ref="manageListTableRef" height="100%" :data="tableData" @sort-change="handleTableSortChange"
+        :border="true">
         <slot name="customTableColumn">
-          <el-table-column prop="id" label="用户id"></el-table-column>
-          <el-table-column prop="username" label="用户姓名"></el-table-column>
+          <!-- <el-table-column prop="id" label="用户id"></el-table-column> -->
+          <!-- <el-table-column prop="username" label="用户姓名"></el-table-column> -->
+          <template v-for="column in props.tableColumnList" :key="column.field">
+            <el-table-column :prop="column.field" :label="column.label" :width="column.width"
+              :min-width="column.minWidth" :align="column.align" :header-align="column.headerAlign"
+              :sortable="column.sortable ? 'custom' : false" :default-sort="column.defaultSort"
+              :sort-orders="['ascending', 'descending', null]" resizable
+              :show-overflow-tooltip="column.showOverflowTooltip">
+            </el-table-column>
+          </template>
         </slot>
       </el-table>
     </div>
@@ -49,12 +59,13 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage, type ElTable } from 'element-plus'
+import { ElMessage, type ElTable, type TableColumnCtx } from 'element-plus'
 import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import ExportFileDialog from './export-file/export-file-dialog.vue'
 import type { RequestParam } from './types/request-param'
 import type { SearchInputList } from './types/search-input'
+import type { TableColumnList } from './types/table-column'
 
 interface Props {
   /**
@@ -72,7 +83,11 @@ interface Props {
   /**
    * 查询条件
    */
-  searchInputList?: SearchInputList
+  searchInputList: SearchInputList
+  /**
+   * 表格列
+   */
+  tableColumnList: TableColumnList
   /**
    * 非查询条件的额外默认值
    */
@@ -131,7 +146,7 @@ const isLoading = computed<boolean>(() => fetchingCount.value > 0)
 // 表格数据
 const tableData = ref<Array<unknown>>([])
 
-async function handleFetchData(gotoFirstPage: boolean) {
+async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
   if (gotoFirstPage) {
     // TODO 回到第1页
   }
@@ -173,6 +188,12 @@ async function handleFetchData(gotoFirstPage: boolean) {
     })
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function handleTableSortChange(data: { column: TableColumnCtx, prop: string, order: any }) {
+  console.log('table sort change')
+  handleFetchData({ gotoFirstPage: true })
+}
+
 onMounted(() => {
   if (props.debug) {
     // 获取当前组件实例
@@ -191,7 +212,7 @@ onMounted(() => {
 
   // nextTick 是非必要调用，需要
   nextTick(() => {
-    handleFetchData(false)
+    handleFetchData({ gotoFirstPage: false })
   })
 })
 

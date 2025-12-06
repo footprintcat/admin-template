@@ -16,8 +16,8 @@
 
     <!-- 用户管理 -->
     <!-- <el-config-provider size="small"> -->
-    <manage-list :search-input-list="searchInputList" :fetch-data="fetchData" :extra-initial-params="extraInitialParams"
-      :debug="true" />
+    <manage-list :search-input-list="searchInputList" :table-column-list="tableColumnList" :fetch-data="fetchData"
+      :extra-initial-params="extraInitialParams" :debug="true" />
     <!-- </el-config-provider> -->
 
     <!--
@@ -39,6 +39,7 @@ import { post } from '@/utils/api'
 import ManageList from '@/components/core/manage-list/manage-list.vue'
 import type { RequestParam } from '@/components/core/manage-list/types/request-param'
 import type { SearchInputList } from '@/components/core/manage-list/types/search-input'
+import type { TableColumnList } from '@/components/core/manage-list/types/table-column'
 
 const extraInitialParams = {
   id: '1',
@@ -96,6 +97,34 @@ const searchInputList: SearchInputList = [
     label: '多选',
     type: 'dropdown',
     multipleSelection: true,
+  },
+]
+
+const tableColumnList: TableColumnList = [
+  {
+    field: 'id',
+    label: '用户ID',
+    type: 'text',
+    sortable: true,
+    defaultSort: 'descending',
+  },
+  {
+    field: 'username',
+    label: '用户姓名',
+    type: 'text',
+    sortable: true,
+  },
+  {
+    field: 'nickname',
+    label: '用户昵称',
+    type: 'text',
+    sortable: true,
+  },
+  {
+    field: 'telephone',
+    label: '电话',
+    type: 'text',
+    sortable: false,
   },
 ]
 
