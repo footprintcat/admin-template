@@ -165,9 +165,7 @@ const initialSortList = ref<Array<SortItemWithLabel>>([])
 
 // 查询条件
 function handleParamsUpdate(params: Record<string, unknown>) {
-  if (props.debug) {
-    console.log('[debug] paramsUpdate', params)
-  }
+  // console.log('paramsUpdate', params)
 }
 
 function handleResetParams() {
@@ -294,9 +292,7 @@ async function handleFetchData({
   }
   console.log('==========', 'fetchData start', '==========')
   const params = manageListSearchFormRef.value?.getParams()
-  // if (props.debug) {
-  //   console.log('[debug] param', param)
-  // }
+  // console.log('param', param)
   const requestParam: RequestParam = {
     params: {
       ...params,
@@ -310,7 +306,10 @@ async function handleFetchData({
       pageSize: pageQuery.value.pageSize,
     },
   }
-  console.log('request params', params)
+  console.log('request params', requestParam)
+  if (props.debug) {
+    console.log('\t', 'params', requestParam.params, '\n\t', 'sort', JSON.stringify(requestParam.sort), '\n\t', 'pageQuery', requestParam.pageQuery)
+  }
   props.fetchData(requestParam)
     .then(result => {
       console.log('result', result)
