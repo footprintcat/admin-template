@@ -14,14 +14,12 @@
           重置查询条件
         </el-button>
         <el-button type="danger" plain :icon="Delete" @click="handleResetFilters" v-if="hasFilterColumn">
-          重置筛选条件
+          重置排序
         </el-button>
         <!-- type="primary" plain -->
         <el-button type="primary" plain :icon="Download" @click="handleExportFile">
           导出到文件
         </el-button>
-
-        TODO: 排序
 
         <el-tooltip placement="left" content="刷新">
           <el-button type="default" :icon="RefreshRight" circle style="float: right;"
@@ -66,7 +64,7 @@ import { ElMessage, type ElTable, type TableColumnCtx } from 'element-plus'
 import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import ExportFileDialog from './export-file/export-file-dialog.vue'
-import type { RequestParam } from './types/request-param'
+import type { RequestParam, SortItem } from './types/request-param'
 import type { SearchInputList } from './types/search-input'
 import type { TableColumnList } from './types/table-column'
 
@@ -127,6 +125,9 @@ const props = withDefaults(defineProps<Props>(), {
 const manageListTableRef = ref<InstanceType<typeof ElTable>>()
 const manageListSearchFormRef = ref<InstanceType<typeof ManageListSearchForm>>()
 
+// 排序信息
+const sortList = ref<Array<SortItem>>([])
+
 // 查询条件
 function handleParamsUpdate(params: Record<string, unknown>) {
   if (props.debug) {
@@ -142,26 +143,60 @@ function handleResetParams() {
   })
 }
 
-// 筛选条件
+// 表格排序
 const hasFilterColumn = computed<boolean>(() => {
   return props.tableColumnList.some(column => column.sortable)
 })
 
 function handleResetFilters() {
-  // TODO
+  // 重置排序信息
+  sortList.value = []
+  // 重置表格排序状态
+  manageListTableRef.value?.clearSort()
   ElMessage.info({
-    message: 'TODO: 重置筛选条件功能待实现',
-    grouping: true,
-  })
-  ElMessage.info({
-    message: '已重置筛选条件',
+    message: '已重置排序',
     grouping: true,
   })
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleTableSortChange(data: { column: TableColumnCtx, prop: string, order: any }) {
-  console.log('table sort change')
+function handleTableSortChange(data: { column: TableColumnCtx, prop: string, order: 'ascending' | 'descending' | null }) {
+  // console.log('table sort change', data)
+
+  // 多列排序逻辑
+  const { prop, order } = data
+  const sortField: string = prop
+  const sortOrder: 'ascending' | 'descending' | null = order
+
+  // 查找是否已存在该字段的排序
+  const existingIndex = sortList.value.findIndex(item => item.field === sortField)
+
+  // 更新 sortList
+  if (existingIndex !== -1) {
+    // 更新现有排序
+    if (sortOrder === null) {
+      // 移除排序
+      sortList.value.splice(existingIndex, 1)
+    } else {
+      // 更新排序方向
+      sortList.value[existingIndex]!.order = sortOrder
+    }
+  } else if (sortOrder !== null) {
+    // 添加新的排序
+    sortList.value.push({ field: sortField, order: sortOrder })
+  }
+
+  // 完全手动设置所有列的排序状态，不受 Element Plus 默认行为影响
+  const columns = manageListTableRef.value?.columns || []
+  columns.forEach(col => {
+    if (col.property) {
+      const sortItem = sortList.value.find(item => item.field === col.property)
+      col.order = sortItem ? sortItem.order : null
+    }
+  })
+
+  // console.log('sortList', toRaw(sortList.value))
+  console.log('sortList', JSON.stringify(sortList.value))
+
   handleFetchData({ gotoFirstPage: true })
 }
 
@@ -181,7 +216,8 @@ async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
   fetchingCount.value++
 
   if (props.debug) {
-    console.log('')
+    // console.log('')
+    console.log(new Date().toLocaleString())
   }
   console.log('==========', 'fetchData start', '==========')
   const params = manageListSearchFormRef.value?.getParams()
@@ -192,6 +228,7 @@ async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
     params: {
       ...params,
     },
+    sort: sortList.value,
     pageQuery: {
       pageIndex: 1,
       pageSize: 5,
@@ -212,6 +249,9 @@ async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
     })
     .finally(() => {
       console.log('==========', 'fetchData finish', '==========')
+      if (props.debug) {
+        console.log('')
+      }
       fetchingCount.value--
     })
 }
