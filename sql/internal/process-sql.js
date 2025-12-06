@@ -3,7 +3,7 @@ const path = require('path');
 
 // usage: node process-sql.js <input.sql> <output.sql> <order.json>
 
-// cd sql
+// cd sql/internal
 // node process-sql.js ./admin_template.sql ../database-init.sql ./order.json
 // 或者使用默认参数 （见 `main()` 函数）
 // node process-sql.js

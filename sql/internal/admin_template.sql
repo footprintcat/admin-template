@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Date: 04/12/2025 17:56:28
+ Date: 05/12/2025 09:29:45
 */
 
 SET NAMES utf8mb4;
@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role`  (
   `id` bigint NOT NULL COMMENT '雪花id',
   `parent_role_id` bigint NULL DEFAULT NULL COMMENT '父角色id',
+  `level` int NOT NULL COMMENT '角色层级',
   `role_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色名称',
   `comment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
@@ -47,8 +48,9 @@ DROP TABLE IF EXISTS `system_tenant`;
 CREATE TABLE `system_tenant`  (
   `id` bigint NOT NULL COMMENT '雪花id',
   `parent_tenant_id` bigint NULL DEFAULT NULL COMMENT '父租户id',
-  `tenant_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '租户名称',
-  `tenant_intro` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '租户简介',
+  `level` int NOT NULL COMMENT '租户层级',
+  `tenant_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '租户名称',
+  `tenant_intro` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '租户简介',
   `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'NORMAL' COMMENT '租户状态：NORMAL-正常（可用）, LOCKED-锁定（禁用）, DISABLED-停用, EXPIRED-过期',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
