@@ -13,6 +13,9 @@
         <el-button type="danger" plain :icon="Delete" @click="handleResetParams">
           重置查询条件
         </el-button>
+        <el-button type="danger" plain :icon="Delete" @click="handleResetFilters" v-if="hasFilterColumn">
+          重置筛选条件
+        </el-button>
         <!-- type="primary" plain -->
         <el-button type="primary" plain :icon="Download" @click="handleExportFile">
           导出到文件
@@ -139,6 +142,31 @@ function handleResetParams() {
   })
 }
 
+// 筛选条件
+const hasFilterColumn = computed<boolean>(() => {
+  return props.tableColumnList.some(column => column.sortable)
+})
+
+function handleResetFilters() {
+  // TODO
+  ElMessage.info({
+    message: 'TODO: 重置筛选条件功能待实现',
+    grouping: true,
+  })
+  ElMessage.info({
+    message: '已重置筛选条件',
+    grouping: true,
+  })
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function handleTableSortChange(data: { column: TableColumnCtx, prop: string, order: any }) {
+  console.log('table sort change')
+  handleFetchData({ gotoFirstPage: true })
+}
+
+
+
 // 请求状态
 const fetchingCount = ref<number>(0)
 const isLoading = computed<boolean>(() => fetchingCount.value > 0)
@@ -186,12 +214,6 @@ async function handleFetchData({ gotoFirstPage }: { gotoFirstPage: boolean }) {
       console.log('==========', 'fetchData finish', '==========')
       fetchingCount.value--
     })
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleTableSortChange(data: { column: TableColumnCtx, prop: string, order: any }) {
-  console.log('table sort change')
-  handleFetchData({ gotoFirstPage: true })
 }
 
 onMounted(() => {
