@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.example.backend.common.Enums.system.SystemUserStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,7 +57,7 @@ public class SystemUser implements Serializable {
 
     @Schema(description = "用户状态：NORMAL-正常（可用）, LOCKED-锁定（禁用）, DISABLED-停用, EXPIRED-过期")
     @TableField("status")
-    private String status;
+    private SystemUserStatusEnum status;
 
     @Schema(description = "创建人")
     @TableField("create_by")
