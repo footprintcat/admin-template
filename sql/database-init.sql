@@ -63,9 +63,9 @@ COMMENT = '系统租户表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for role
+-- Table structure for system_role
 -- ----------------------------
-CREATE TABLE `role` (
+CREATE TABLE `system_role` (
   `id` bigint NOT NULL COMMENT '雪花id',
   `parent_role_id` bigint NULL DEFAULT NULL COMMENT '父角色id',
   `level` int NOT NULL COMMENT '角色层级',

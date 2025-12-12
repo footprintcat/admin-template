@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.backend.entity.SystemLog;
-import com.example.backend.entity.User;
+import com.example.backend.entity.SystemUser;
 import com.example.backend.mapper.SystemLogMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +17,9 @@ import java.util.Objects;
 @Service
 public class SystemLogServiceBak extends ServiceImpl<SystemLogMapper, SystemLog> {
 
-    public static void loginSetSession(HttpSession session, User user) {
-        session.setAttribute("userId", String.valueOf(user.getId()));
-        session.setAttribute("roleId", String.valueOf(user.getRoleId()));
+    public static void loginSetSession(HttpSession session, SystemUser systemUser) {
+        session.setAttribute("userId", String.valueOf(systemUser.getId()));
+        session.setAttribute("roleId", String.valueOf(systemUser.getRoleId()));
         session.setAttribute("loginTime", System.currentTimeMillis());
 
         if (Objects.isNull(session.getAttribute("sessionId"))) {

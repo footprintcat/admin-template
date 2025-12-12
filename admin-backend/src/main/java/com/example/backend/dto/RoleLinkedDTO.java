@@ -1,6 +1,6 @@
 package com.example.backend.dto;
 
-import com.example.backend.entity.Role;
+import com.example.backend.entity.SystemRole;
 import lombok.Data;
 
 @Data
@@ -10,14 +10,14 @@ public class RoleLinkedDTO {
     public Integer parentRoleId;
     public RoleLinkedDTO parentRole;
 
-    public static RoleLinkedDTO createRoleLinkedDTO(Role role) {
-        if (role == null) {
+    public static RoleLinkedDTO createRoleLinkedDTO(SystemRole systemRole) {
+        if (systemRole == null) {
             return null;
         }
         RoleLinkedDTO dto = new RoleLinkedDTO();
-        dto.id = role.getId();
-        dto.roleName = role.getRoleName();
-        dto.parentRoleId = role.getParentRoleId();
+        dto.id = systemRole.getId();
+        dto.roleName = systemRole.getRoleName();
+        dto.parentRoleId = systemRole.getParentRoleId();
         return dto;
     }
 }

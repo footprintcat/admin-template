@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.backend.mapper.RoleMapper">
-    <resultMap id="BaseResultMap" type="com.example.backend.entity.Role">
+<mapper namespace="com.example.backend.mapper.SystemRoleMapper">
+    <resultMap id="BaseResultMap" type="com.example.backend.entity.SystemRole">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="role_name" jdbcType="VARCHAR" property="roleName" />
         <result column="comment" jdbcType="VARCHAR" property="comment" />
@@ -11,14 +11,14 @@
         id, role_name, comment
     </sql>
 
-    <select id="getRolePage" parameterType="map" resultMap="BaseResultMap">
+    <select id="getSystemRolePage" parameterType="map" resultMap="BaseResultMap">
         <include refid="getRoleListFragment" />
     </select>
-    <select id="getRoleList" parameterType="map" resultMap="BaseResultMap">
+    <select id="getSystemRoleList" parameterType="map" resultMap="BaseResultMap">
         <include refid="getRoleListFragment" />
     </select>
     <sql id="getRoleListFragment">
-        SELECT * FROM role
+        SELECT * FROM systemRole
         <where>
             <if test="query.id != null">
                 AND id = #{query.id}

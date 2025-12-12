@@ -9,7 +9,7 @@ import com.example.backend.common.Enums.PrivilegeTypeEnum;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.dto.PrivilegeDTO;
 import com.example.backend.entity.Privilege;
-import com.example.backend.entity.Role;
+import com.example.backend.entity.SystemRole;
 import com.example.backend.mapper.PrivilegeMapper;
 import com.example.backend.repository.RoleRepository;
 import jakarta.annotation.Resource;
@@ -337,9 +337,9 @@ public class PrivilegeService {
         //     },
         //     ...
         // ]
-        LambdaQueryWrapper<Role> qw2 = new LambdaQueryWrapper<>();
-        qw2.orderByAsc(Role::getId);
-        List<Role> list = roleRepository.list(qw2);
+        LambdaQueryWrapper<SystemRole> qw2 = new LambdaQueryWrapper<>();
+        qw2.orderByAsc(SystemRole::getId);
+        List<SystemRole> list = roleRepository.list(qw2);
         List<JSONObject> roleList = list.stream().map(role -> {
             JSONObject object = new JSONObject();
             object.put("roleId", role.getId());

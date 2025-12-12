@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Date: 05/12/2025 09:29:45
+ Date: 12/12/2025 17:03:32
 */
 
 SET NAMES utf8mb4;
@@ -23,10 +23,10 @@ CREATE TABLE `@table_template@`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统租户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for role
+-- Table structure for system_role
 -- ----------------------------
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE `role`  (
+DROP TABLE IF EXISTS `system_role`;
+CREATE TABLE `system_role`  (
   `id` bigint NOT NULL COMMENT '雪花id',
   `parent_role_id` bigint NULL DEFAULT NULL COMMENT '父角色id',
   `level` int NOT NULL COMMENT '角色层级',

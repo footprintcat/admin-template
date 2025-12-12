@@ -23,7 +23,7 @@ import java.util.Date;
 @Setter
 @Schema(name = "Role", description = "")
 @TableName("role")
-public class Role implements Serializable {
+public class SystemRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -19,7 +19,7 @@ import com.example.backend.entity.SystemUser;
 import com.example.backend.query.PageQuery;
 import com.example.backend.query.request.manage.system.user.ManageUserListRequest;
 import com.example.backend.query.response.manage.ManageListResponse;
-import com.example.backend.service.v2.RoleServiceV2;
+import com.example.backend.service.v2.SystemRoleServiceV2;
 import com.example.backend.service.v2.SystemUserServiceV2;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,7 +49,7 @@ public class ManageUserController extends BaseController {
     @Resource
     private SystemUserServiceV2 systemUserServiceV2;
     @Resource
-    private RoleServiceV2 roleServiceV2;
+    private SystemRoleServiceV2 systemRoleServiceV2;
 
     /**
      * 获取用户列表
@@ -88,7 +88,7 @@ public class ManageUserController extends BaseController {
         Page<SystemUser> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, systemUserDTO);
 
         // 查询 roleMap
-        HashMap<Integer, String> roleMap = roleServiceV2.getRoleMap();
+        HashMap<Integer, String> roleMap = systemRoleServiceV2.getRoleMap();
 
         // 用于 role 下拉框 mock 数据
         String roleListForMock = JSONArray.from(roleMap.keySet().stream().map(Object::toString).collect(Collectors.toList())).toString();

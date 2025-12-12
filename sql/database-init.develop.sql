@@ -83,10 +83,10 @@ COMMENT = '系统租户表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for role
+-- Table structure for system_role
 -- ----------------------------
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE `role` (
+DROP TABLE IF EXISTS `system_role`;
+CREATE TABLE `system_role` (
   `id` bigint NOT NULL COMMENT '雪花id',
   `parent_role_id` bigint NULL DEFAULT NULL COMMENT '父角色id',
   `level` int NOT NULL COMMENT '角色层级',
@@ -187,8 +187,8 @@ INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `tenant_name`, `tenant_in
 
 -- ########################################################
 
--- role 表测试数据（8条）
-INSERT INTO `role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`) VALUES
+-- system_role 表测试数据（8条）
+INSERT INTO `system_role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`) VALUES
 (2001, NULL, '超级管理员', '系统最高权限角色', 0),
 (2002, 2001, '系统管理员', '管理系统基础功能', 0),
 (2003, 2001, '租户管理员', '管理租户相关功能', 0),
@@ -199,7 +199,7 @@ INSERT INTO `role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`)
 (2008, 2006, '普通员工', '基础员工角色', 0);
 
 -- 添加一些额外的角色数据（5条）来展示角色层级
-INSERT INTO `role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`) VALUES
+INSERT INTO `system_role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`) VALUES
 (2009, 2007, '技术经理', '技术部门经理', 0),
 (2010, 2007, '销售经理', '销售部门经理', 0),
 (2011, 2008, '前端开发', '前端开发工程师', 0),
@@ -207,12 +207,12 @@ INSERT INTO `role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`)
 (2013, 2008, '测试工程师', '软件测试工程师', 0);
 
 -- 添加一些额外的角色用于测试（2条）
-INSERT INTO `role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`) VALUES
+INSERT INTO `system_role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`) VALUES
 (2014, NULL, '访客角色', '临时访客角色', 0),
 (2015, NULL, '审计员', '系统审计角色', 1);
 
 -- 添加一些具有层级关系的角色（5条）
-INSERT INTO `role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`) VALUES
+INSERT INTO `system_role` (`id`, `parent_role_id`, `role_name`, `comment`, `is_delete`) VALUES
 (2016, 2009, '高级技术经理', '高级技术管理', 0),
 (2017, 2011, '高级前端开发', '高级前端工程师', 0),
 (2018, 2012, '高级后端开发', '高级后端工程师', 0),
