@@ -55,9 +55,9 @@ public class SystemPrivilege implements Serializable {
     private LocalDateTime updateTime;
 
     @Schema(description = "逻辑删除")
-    @TableField("is_delete")
+    @TableField("delete_time")
     @TableLogic
-    private Integer isDelete;
+    private LocalDateTime deleteTime;
 
     @Schema(description = "版本号（乐观锁）")
     @TableField("version")
