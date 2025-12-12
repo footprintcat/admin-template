@@ -31,6 +31,15 @@ const routeList: Array<RouteRecordRaw> = [
     ],
   },
 
+  {
+    path: '/login',
+    name: 'Login',
+    meta: {
+      title: '登录',
+    },
+    component: () => import('@/views/global/login/login-wrapper.vue'),
+  },
+
   /*
   {
     path: '/403',
