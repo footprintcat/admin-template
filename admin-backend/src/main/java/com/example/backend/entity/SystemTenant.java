@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 系统租户表
  * </p>
  *
  * @author coder-xiaomo
@@ -23,9 +23,9 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemRole", description = "")
-@TableName("system_role")
-public class SystemRole implements Serializable {
+@Schema(name = "SystemTenant", description = "系统租户表")
+@TableName("system_tenant")
+public class SystemTenant implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,21 +33,25 @@ public class SystemRole implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "父角色id")
-    @TableField("parent_role_id")
-    private Long parentRoleId;
+    @Schema(description = "父租户id")
+    @TableField("parent_tenant_id")
+    private Long parentTenantId;
 
-    @Schema(description = "角色层级")
+    @Schema(description = "租户层级")
     @TableField("`level`")
     private Integer level;
 
-    @Schema(description = "角色名称")
-    @TableField("role_name")
-    private String roleName;
+    @Schema(description = "租户名称")
+    @TableField("tenant_name")
+    private String tenantName;
 
-    @Schema(description = "备注")
-    @TableField("comment")
-    private String comment;
+    @Schema(description = "租户简介")
+    @TableField("tenant_intro")
+    private String tenantIntro;
+
+    @Schema(description = "租户状态：NORMAL-正常（可用）, LOCKED-锁定（禁用）, DISABLED-停用, EXPIRED-过期")
+    @TableField("status")
+    private String status;
 
     @Schema(description = "创建人")
     @TableField("create_by")

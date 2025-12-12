@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,7 +17,7 @@ import java.util.Date;
  * </p>
  *
  * @author coder-xiaomo
- * @since 2023-08-13
+ * @since 2025-12-12
  */
 @Getter
 @Setter

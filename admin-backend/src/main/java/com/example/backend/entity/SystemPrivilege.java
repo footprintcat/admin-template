@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 系统租户表
  * </p>
  *
  * @author coder-xiaomo
@@ -23,31 +23,15 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemRole", description = "")
-@TableName("system_role")
-public class SystemRole implements Serializable {
+@Schema(name = "SystemPrivilege", description = "系统租户表")
+@TableName("system_privilege")
+public class SystemPrivilege implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "雪花id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
-
-    @Schema(description = "父角色id")
-    @TableField("parent_role_id")
-    private Long parentRoleId;
-
-    @Schema(description = "角色层级")
-    @TableField("`level`")
-    private Integer level;
-
-    @Schema(description = "角色名称")
-    @TableField("role_name")
-    private String roleName;
-
-    @Schema(description = "备注")
-    @TableField("comment")
-    private String comment;
 
     @Schema(description = "创建人")
     @TableField("create_by")

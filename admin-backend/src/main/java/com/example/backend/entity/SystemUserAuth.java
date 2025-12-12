@@ -23,9 +23,9 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemRole", description = "")
-@TableName("system_role")
-public class SystemRole implements Serializable {
+@Schema(name = "SystemUserAuth", description = "")
+@TableName("system_user_auth")
+public class SystemUserAuth implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,21 +33,17 @@ public class SystemRole implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "父角色id")
-    @TableField("parent_role_id")
-    private Long parentRoleId;
+    @Schema(description = "用户id")
+    @TableField("user_id")
+    private Long userId;
 
-    @Schema(description = "角色层级")
-    @TableField("`level`")
-    private Integer level;
+    @Schema(description = "授权类型：PASSWORD-账号密码登录, LOCKED-锁定（禁用）")
+    @TableField("auth_type")
+    private Long authType;
 
-    @Schema(description = "角色名称")
-    @TableField("role_name")
-    private String roleName;
-
-    @Schema(description = "备注")
-    @TableField("comment")
-    private String comment;
+    @Schema(description = "密码哈希")
+    @TableField("password_hash")
+    private String passwordHash;
 
     @Schema(description = "创建人")
     @TableField("create_by")
