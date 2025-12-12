@@ -82,7 +82,7 @@ public class MybatisPlusEntityGenerator {
                             .serviceImpl("repository")         // Service 实现类包名
                             .mapper("mapper")           // Mapper 包名 默认值:mapper
                             // .other("model") /* v3.5.9 没有这个函数了 */
-                            //.moduleName("xxx")        // 设置父包模块名 默认值:无
+                            // .moduleName("xxx")        // 设置父包模块名 默认值:无
                             // /* v3.5.1 -> */.pathInfo(Collections.singletonMap(OutputFile.mapperXml, System.getProperty("user.dir") + "/src/main/resources/mapper")); // 设置mapperXml生成路径
                             /* v3.5.2 -> */.pathInfo(Collections.singletonMap(OutputFile.xml, System.getProperty("user.dir") + "/src/main/resources/mapper")); // 设置mapperXml生成路径
                     // 默认存放在mapper的xml下
@@ -101,21 +101,21 @@ public class MybatisPlusEntityGenerator {
                     builder.addInclude(includeTables)
                             // .addTablePrefix("tb_", "gms_") // 设置过滤表前缀
 
-                            .serviceBuilder()// service策略配置
+                            .serviceBuilder() // service策略配置
                             // .formatServiceFileName("%sService")
                             // .formatServiceImplFileName("%sServiceImpl")
                             // /* v3.5.9 -> */.disable()
                             .disableService()
                             .formatServiceImplFileName("%sRepository")
 
-                            .entityBuilder()// 实体类策略配置
-                            .idType(IdType.ASSIGN_ID)// 主键策略  雪花算法自动生成的id
+                            .entityBuilder() // 实体类策略配置
+                            .idType(IdType.ASSIGN_ID) // 主键策略  雪花算法自动生成的id
                             .addTableFills(new Column("create_time", FieldFill.INSERT)) // 自动填充配置
                             .addTableFills(new Property("update_time", FieldFill.INSERT_UPDATE))
                             .enableLombok() // 开启lombok
                             /* v3.5.10 -> */.toString(false) // 不生成 lombok 的 @ToString, 默认值: true
                             /* v3.5.10 -> */.fieldUseJavaDoc(false) // 不启用字段文档注释, 默认值: true
-                            .logicDeleteColumnName("is_delete")// 说明逻辑删除是哪个字段
+                            .logicDeleteColumnName("is_delete") // 说明逻辑删除是哪个字段
                             .enableTableFieldAnnotation()
                             /* v3.5.2 -> */// .fileOverride()
                             /* v3.5.9 -> */.enableFileOverride()
@@ -131,10 +131,10 @@ public class MybatisPlusEntityGenerator {
                             // .enableRestStyle() // 开启RestController注解
                             /* v3.5.9 -> */.disable()
 
-                            .mapperBuilder()// mapper策略配置
+                            .mapperBuilder() // mapper策略配置
                             .formatMapperFileName("%sMapper")
-                            /* v3.5.2 -> *///.enableMapperAnnotation()// @mapper注解开启
-                            /* v3.5.9 -> */.mapperAnnotation(org.apache.ibatis.annotations.Mapper.class)//@mapper注解开启
+                            /* v3.5.2 -> *///.enableMapperAnnotation() // @mapper注解开启
+                            /* v3.5.9 -> */.mapperAnnotation(org.apache.ibatis.annotations.Mapper.class) // @mapper注解开启
                             .formatXmlFileName("%sMapper");
                 })
 
