@@ -212,11 +212,11 @@ public class PrivilegeController extends BaseController {
         if (Objects.equals(roleId, 1L)) {
             //  roleId = 1 的超级用户赋予全部菜单权限
             List<SystemMenu> systemMenuList = systemMenuService.getSystemMenuListWithoutRootLevel();
-            currentUserPrivilegeList = systemMenuList.stream().map(SystemMenu::getMenuId).toList();
+            currentUserPrivilegeList = systemMenuList.stream().map(SystemMenu::getMenuCode).toList();
         } else {
             // 查询level为0的菜单id
             List<SystemMenu> zeroLevelMenuList = systemMenuService.getZeroLevelMenuList();
-            List<String> zeroLevelMenuIdList = zeroLevelMenuList.stream().map(SystemMenu::getMenuId).toList();
+            List<String> zeroLevelMenuIdList = zeroLevelMenuList.stream().map(SystemMenu::getMenuCode).toList();
 
             // 当前角色有权访问的菜单
             List<Privilege> rolePrivilegeList = privilegeService.getGrantedPrivilegeListByRoleId(roleId);

@@ -116,6 +116,7 @@ public class MybatisPlusEntityGenerator {
                             /* v3.5.10 -> */.toString(false) // 不生成 lombok 的 @ToString, 默认值: true
                             /* v3.5.10 -> */.fieldUseJavaDoc(false) // 不启用字段文档注释, 默认值: true
                             .logicDeleteColumnName("is_delete") // 说明逻辑删除是哪个字段
+                            .versionColumnName("version") // 说明乐观锁版本号是哪个字段
                             .enableTableFieldAnnotation()
                             /* v3.5.2 -> */// .fileOverride()
                             /* v3.5.9 -> */.enableFileOverride()

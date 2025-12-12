@@ -42,7 +42,7 @@ public class SystemRoleService {
 
         // 查询出 SystemMenu 并绑定到 roleId = 1 的超级用户上
         List<SystemMenu> systemMenuList = systemMenuService.getSystemMenuListWithoutRootLevel();
-        List<String> systemMenuIdList = systemMenuList.stream().map(SystemMenu::getMenuId).collect(Collectors.toList());
+        List<String> systemMenuIdList = systemMenuList.stream().map(SystemMenu::getMenuCode).collect(Collectors.toList());
 
         systemRoleDTOS.forEach(roleDTO -> {
             if (roleDTO.getId() == 1) {

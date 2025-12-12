@@ -60,9 +60,9 @@ public class SystemMenuService {
         if (systemMenus == null) {
             systemMenus = getSystemMenuList(null);
         }
-        // 筛选出menuId在menuIdList中的SystemMenu对象
+        // 筛选出 menuId 在 menuIdList 中的 SystemMenu 对象
         List<SystemMenu> filteredMenus = systemMenus.stream()
-                .filter(menu -> menuIdList.contains(menu.getMenuId()))
+                .filter(menu -> menuIdList.contains(menu.getMenuCode()))
                 .toList();
 
         return getMenuChildrenList(null, filteredMenus, new LinkedList<>());
@@ -134,14 +134,14 @@ public class SystemMenuService {
         updateWrapper.setIncrBy(SystemMenu::getSequence, 1);
         systemMenuMapper.update(updateWrapper);
 
-        // 查询当前菜单项的父级菜单（如果存在）
-        if (systemMenu.getParentId() != null) {
-            SystemMenu parentSystemMenu = systemMenuRepository.getById(systemMenu.getParentId());
-            // 拼接菜单项全名
-            systemMenu.setMenuFullName(String.join("-", parentSystemMenu.getMenuFullName(), systemMenu.getMenuName()));
-        } else {
-            systemMenu.setMenuFullName(systemMenu.getMenuName());
-        }
+        // // 查询当前菜单项的父级菜单（如果存在）
+        // if (systemMenu.getParentId() != null) {
+        //     SystemMenu parentSystemMenu = systemMenuRepository.getById(systemMenu.getParentId());
+        //     // 拼接菜单项全名
+        //     systemMenu.setMenuFullName(String.join("-", parentSystemMenu.getMenuFullName(), systemMenu.getMenuName()));
+        // } else {
+        //     systemMenu.setMenuFullName(systemMenu.getMenuName());
+        // }
         // 保存插入的菜单项
         systemMenu.setUpdateTime(LocalDateTime.now());
         systemMenuMapper.insert(systemMenu);
@@ -153,7 +153,7 @@ public class SystemMenuService {
 
         LambdaUpdateWrapper<SystemMenu> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SystemMenu::getId, systemMenu.getId());
-        updateWrapper.set(SystemMenu::getMenuId, systemMenu.getMenuId());
+        updateWrapper.set(SystemMenu::getMenuCode, systemMenu.getMenuCode());
         updateWrapper.set(SystemMenu::getMenuName, systemMenu.getMenuName());
         updateWrapper.set(SystemMenu::getParentId, systemMenu.getParentId());
         updateWrapper.set(SystemMenu::getUpdateTime, new Date());
@@ -162,10 +162,10 @@ public class SystemMenuService {
         if (systemMenu.getParentId() != null) {
             // 如果存在父目录，重新拼接菜单项全名
             SystemMenu parentSystemMenu = systemMenuRepository.getById(systemMenu.getParentId());
-            updateWrapper.set(SystemMenu::getMenuFullName, String.join("-", parentSystemMenu.getMenuFullName(), systemMenu.getMenuName()));
+            // updateWrapper.set(SystemMenu::getMenuFullName, String.join("-", parentSystemMenu.getMenuFullName(), systemMenu.getMenuName()));
         } else {
-            // 一级目录则直接将menuFullName更新为menuName
-            updateWrapper.set(SystemMenu::getMenuFullName, systemMenu.getMenuName());
+            // 一级目录则直接将 menuFullName 更新为 menuName
+            // updateWrapper.set(SystemMenu::getMenuFullName, systemMenu.getMenuName());
         }
 
         systemMenuMapper.update(updateWrapper);
@@ -184,7 +184,7 @@ public class SystemMenuService {
         systemMenuMapper.deleteById(systemMenu.getId());
 
         // 删除该菜单相关权限
-        privilegeService.removePrivilegesByModule(systemMenu.getMenuId());
+        privilegeService.removePrivilegesByModule(systemMenu.getMenuCode());
     }
 
     public void exchangeSystemMenu(String fromMenuId, String movingMode) throws BusinessException {
@@ -291,7 +291,7 @@ public class SystemMenuService {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
         LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SystemMenu::getMenuId, menuId);
+        queryWrapper.eq(SystemMenu::getMenuCode, menuId);
         queryWrapper.last("LIMIT 1");
         SystemMenu systemMenu = systemMenuRepository.getOne(queryWrapper);
         return systemMenu;
@@ -352,13 +352,13 @@ public class SystemMenuService {
     public String exportJson() {
         LambdaQueryWrapper<SystemMenu> qw = new LambdaQueryWrapper<>();
         // 按照 menuId 排序，尽量保证相同菜单比对时前后顺序一致
-        qw.orderByAsc(SystemMenu::getMenuId);
+        qw.orderByAsc(SystemMenu::getMenuCode);
         List<SystemMenu> list = systemMenuRepository.list(qw);
 
         // 构造 id -> menuId 字典
         HashMap<Long, String> menuIdMap = new HashMap<>();
         for (SystemMenu menu : list) {
-            menuIdMap.put(menu.getId(), menu.getMenuId());
+            menuIdMap.put(menu.getId(), menu.getMenuCode());
         }
 
         // parentMenuId -> [ {sequence, childId}, {sequence, childId}, ... ]
@@ -369,18 +369,18 @@ public class SystemMenuService {
             @NotNull String parentMenuIdNotNull = parentMenuId == null ? "" : parentMenuId;
 
             JSONObject item = new JSONObject();
-            item.put("menuId", menu.getMenuId());
+            item.put("menuId", menu.getMenuCode());
             // item.put("parentMenuId", parentMenuId);
             item.put("parentMenuId", parentMenuIdNotNull);
             item.put("menuName", menu.getMenuName());
-            item.put("menuFullName", menu.getMenuFullName());
+            // item.put("menuFullName", menu.getMenuFullName());
             item.put("level", menu.getLevel());
             // item.put("sequence", menu.getSequence());
             item.put("isHide", menu.getIsHide());
             menuList.add(item);
 
             List<Pair<Integer, String>> childMenuIdList = menuSequencePairMap.getOrDefault(parentMenuIdNotNull, new ArrayList<>());
-            Pair<Integer, String> pair = Pair.of(menu.getSequence(), menu.getMenuId());
+            Pair<Integer, String> pair = Pair.of(menu.getSequence(), menu.getMenuCode());
             childMenuIdList.add(pair);
             menuSequencePairMap.put(parentMenuIdNotNull, childMenuIdList);
         }
