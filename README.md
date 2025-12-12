@@ -67,9 +67,13 @@ TODO
 
 ### 后端
 
+**开发工具**
+
+建议使用 IntelliJ IDEA 2025.3 或以上版本，以获得更好的 Spring Boot 4 支持
+
 **核心框架**
 
-- Spring Boot 3.5
+- Spring Boot 4.0
 - MyBatis-Plus 3.5
 
 **数据层**
@@ -89,22 +93,30 @@ TODO
 
 ### 前端
 
+**开发工具**
+
+Visual Studio Code
+
+扩展
+
+- Vue (Official)
+
 **框架基础**
 
 - Vue 3.5
-- Vite 7.0
-- TypeScript 5.8
+- Vite 7.2
+- TypeScript 5.9
 - ESLint 9
 
 **状态与路由管理**
 
-- Pinia 3.0 (Persistedstate 4.5)
-- Vue Router 4.5
+- Pinia 3.0 (Persistedstate 4.7)
+- Vue Router 4.6
 
 **项目**
 
-- Axios 1.12
-- Element Plus 2.10
+- Axios 1.13
+- Element Plus 2.12
 
 **业务 (可选)**
 
