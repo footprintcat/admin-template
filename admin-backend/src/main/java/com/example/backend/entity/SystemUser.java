@@ -37,9 +37,6 @@ public class SystemUser implements Serializable {
     @TableField("nickname")
     private String nickname;
 
-    @TableField("password_hash")
-    private String passwordHash;
-
     // TODO
     @TableField("role_id")
     private Integer roleId;

@@ -36,12 +36,14 @@ public class MybatisPlusEntityGenerator {
         /**
          * 请按字母顺序添加
          */
-        // includeTables.add("privilege");
-        // includeTables.add("role");
         // includeTables.add("system_config");
         // includeTables.add("system_log");
         // includeTables.add("system_menu");
-        // includeTables.add("user");
+        // includeTables.add("system_privilege");
+        // includeTables.add("system_role");
+        // includeTables.add("system_tenant");
+        // includeTables.add("system_user");
+        // includeTables.add("system_user_auth");
 
         if (includeTables.isEmpty()) {
             throw new RuntimeException("includeTables 为空，跳过代码生成");

@@ -36,7 +36,7 @@ public class SystemMenu implements Serializable {
     private Long parentId;
 
     @Schema(description = "菜单级别")
-    @TableField("level")
+    @TableField("`level`")
     private Integer level;
 
     @Schema(description = "菜单id")
@@ -61,5 +61,5 @@ public class SystemMenu implements Serializable {
 
     @Schema(description = "最后更新时间")
     @TableField("update_time")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 }
