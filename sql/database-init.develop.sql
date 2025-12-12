@@ -84,6 +84,40 @@ COMMENT = '系统租户表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for system_log
+-- ----------------------------
+DROP TABLE IF EXISTS `system_log`;
+CREATE TABLE `system_log` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `source` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志来源（BACKEND-后端日志；MANAGE-管理端前端上报日志；APP-移动端上报日志）',
+  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志类型（见后端 SystemLogTypeEnum 枚举类）',
+  `log_object` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志记录对象',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志标题',
+  `intro` varchar(1023) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '简单描述',
+  `detail_id` bigint NULL DEFAULT NULL COMMENT '日志正文',
+  `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '客户端IP地址',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统日志表'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for system_log_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `system_log_detail`;
+CREATE TABLE `system_log_detail` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `message_format` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'PLAIN' COMMENT '消息格式：PLAIN-纯文本，JSON-JSON，HTML-HTML',
+  `detail_message` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '日志详情内容',
+  PRIMARY KEY (`id`) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for system_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `system_menu`;

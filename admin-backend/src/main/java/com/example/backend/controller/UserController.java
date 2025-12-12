@@ -64,11 +64,12 @@ public class UserController extends BaseController {
 
         // 增加登录日志
         SystemLog systemLog = new SystemLog();
-        systemLog.setAction("login");
-        systemLog.setContent(isCorrect ? "登录成功" : "登录失败：密码错误");
-        systemLog.setIp(IPUtils.getIpAddr(httpServletRequest));
-        systemLog.setTitle("用户登录");
-        systemLog.setUserId(Objects.isNull(userByUsername) ? null : userByUsername.getId());
+        // TODO
+        // systemLog.setAction("login");
+        // systemLog.setContent(isCorrect ? "登录成功" : "登录失败：密码错误");
+        // systemLog.setIp(IPUtils.getIpAddr(httpServletRequest));
+        // systemLog.setTitle("用户登录");
+        // systemLog.setUserId(Objects.isNull(userByUsername) ? null : userByUsername.getId());
         systemLogService.add(systemLog);
 
         return CommonReturnType.success(systemUserDTO);
@@ -89,16 +90,17 @@ public class UserController extends BaseController {
 
         // 增加登录日志
         SystemLog systemLog = new SystemLog();
-        systemLog.setAction("logout");
-        systemLog.setContent("登出成功");
-        systemLog.setIp(IPUtils.getIpAddr(httpServletRequest));
-        systemLog.setTitle("用户登出");
-        if (Objects.nonNull(userInfoMap)) {
-            Object userId = userInfoMap.get("id");
-            if (Objects.nonNull(userId)) {
-                systemLog.setUserId((Long) userId);
-            }
-        }
+        // TODO
+        // systemLog.setAction("logout");
+        // systemLog.setContent("登出成功");
+        // systemLog.setIp(IPUtils.getIpAddr(httpServletRequest));
+        // systemLog.setTitle("用户登出");
+        // if (Objects.nonNull(userInfoMap)) {
+        //     Object userId = userInfoMap.get("id");
+        //     if (Objects.nonNull(userId)) {
+        //         systemLog.setUserId((Long) userId);
+        //     }
+        // }
         systemLogService.add(systemLog);
 
         session.invalidate();

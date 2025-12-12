@@ -2,7 +2,6 @@ package com.example.backend.service.System;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.backend.common.Utils.StringUtils;
 import com.example.backend.dto.SystemLogDTO;
 import com.example.backend.entity.SystemLog;
 import com.example.backend.mapper.SystemLogMapper;
@@ -20,16 +19,17 @@ public class SystemLogService {
     private SystemLogMapper systemLogMapper;
 
     private QueryWrapper<SystemLog> getSelectQueryWrapper(SystemLogDTO systemLogDTO) {
-        QueryWrapper<SystemLog> systemLogQueryWrapper = new QueryWrapper<>();
-        systemLogQueryWrapper.lambda()
-                .like(StringUtils.isNotEmpty(systemLogDTO.getAction()), SystemLog::getAction, systemLogDTO.getAction())
-                .eq(StringUtils.isNotEmpty(systemLogDTO.getUserId()), SystemLog::getUserId, systemLogDTO.getUserId())
-                .like(StringUtils.isNotEmpty(systemLogDTO.getIp()), SystemLog::getIp, systemLogDTO.getIp())
-                .like(StringUtils.isNotEmpty(systemLogDTO.getTitle()), SystemLog::getTitle, systemLogDTO.getTitle())
-                .like(StringUtils.isNotEmpty(systemLogDTO.getContent()), SystemLog::getContent, systemLogDTO.getContent());
-        systemLogQueryWrapper.orderByDesc("create_time");
-
-        return systemLogQueryWrapper;
+        throw new RuntimeException("暂未实现");
+        // QueryWrapper<SystemLog> systemLogQueryWrapper = new QueryWrapper<>();
+        // systemLogQueryWrapper.lambda()
+        //         .like(StringUtils.isNotEmpty(systemLogDTO.getAction()), SystemLog::getAction, systemLogDTO.getAction())
+        //         .eq(StringUtils.isNotEmpty(systemLogDTO.getUserId()), SystemLog::getUserId, systemLogDTO.getUserId())
+        //         .like(StringUtils.isNotEmpty(systemLogDTO.getIp()), SystemLog::getIp, systemLogDTO.getIp())
+        //         .like(StringUtils.isNotEmpty(systemLogDTO.getTitle()), SystemLog::getTitle, systemLogDTO.getTitle())
+        //         .like(StringUtils.isNotEmpty(systemLogDTO.getContent()), SystemLog::getContent, systemLogDTO.getContent());
+        // systemLogQueryWrapper.orderByDesc("create_time");
+        //
+        // return systemLogQueryWrapper;
     }
 
     public Page<SystemLog> getSystemLogPage(PageQuery pageQuery, @NotNull SystemLogDTO systemLogDTO) {

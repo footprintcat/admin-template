@@ -121,20 +121,20 @@ public class ManageSystemLogController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/add")
-    public CommonReturnType dataProcessAdd(@RequestBody JSONObject params, HttpServletRequest request) {
-        String ipAddr = IPUtils.getIpAddr(request);
-
-        SystemLog systemLog = new SystemLog();
-        systemLog.setAction(params.getString("action"));
-        systemLog.setContent(params.getString("content"));
-        systemLog.setIp(ipAddr);
-        systemLog.setTitle(params.getString("title"));
-        systemLog.setUserId(null);
-        systemLogService.add(systemLog);
-
-        return CommonReturnType.success();
-    }
+    // @PostMapping("/add")
+    // public CommonReturnType dataProcessAdd(@RequestBody JSONObject params, HttpServletRequest request) {
+    //     String ipAddr = IPUtils.getIpAddr(request);
+    //
+    //     SystemLog systemLog = new SystemLog();
+    //     systemLog.setAction(params.getString("action"));
+    //     systemLog.setContent(params.getString("content"));
+    //     systemLog.setIp(ipAddr);
+    //     systemLog.setTitle(params.getString("title"));
+    //     systemLog.setUserId(null);
+    //     systemLogService.add(systemLog);
+    //
+    //     return CommonReturnType.success();
+    // }
 
     /**
      * 导出列表

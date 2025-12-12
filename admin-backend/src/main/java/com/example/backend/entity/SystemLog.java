@@ -1,6 +1,6 @@
 package com.example.backend.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -10,20 +10,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- *
+ * 系统日志表
  * </p>
  *
  * @author coder-xiaomo
- * @since 2024-01-11
+ * @since 2025-12-12
  */
 @Getter
 @Setter
+@Schema(name = "SystemLog", description = "系统日志表")
 @TableName("system_log")
-@Schema(name = "SystemLog", description = "")
 public class SystemLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,64 +32,39 @@ public class SystemLog implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "事件产生时间")
-    @TableField(value = "log_time", insertStrategy = FieldStrategy.NOT_NULL)
-    private Date logTime;
+    @Schema(description = "日志来源（BACKEND-后端日志；MANAGE-管理端前端上报日志；APP-移动端上报日志）")
+    @TableField("source")
+    private String source;
 
-    @Schema(description = "会话唯一id")
-    @TableField("session_id")
-    private String sessionId;
+    @Schema(description = "日志类型（见后端 SystemLogTypeEnum 枚举类）")
+    @TableField("type")
+    private String type;
 
-    @Schema(description = "用户id")
-    @TableField("user_id")
-    private Long userId;
+    @Schema(description = "日志记录对象")
+    @TableField("log_object")
+    private String logObject;
 
-    @Schema(description = "角色id")
-    @TableField("role_id")
-    private String roleId;
-
-    @TableField("login_time")
-    private Date loginTime;
-
-    @Schema(description = "行为：登录、发短信、导出记录、删除、修改、触发预警等")
-    @TableField("action")
-    private String action;
-
-    @Schema(description = "事件标题（以登录为例）：	管理员用户登录系统成功；	用户尝试登录失败；	……")
+    @Schema(description = "日志标题")
     @TableField("title")
     private String title;
 
-    @Schema(description = "事件内容")
-    @TableField("content")
-    private String content;
+    @Schema(description = "简单描述")
+    @TableField("intro")
+    private String intro;
 
-    /**
-     * 参考格式
-     * {
-     *     "table": "数据表",
-     *     "field": "列名",
-     *     "old": "旧值",
-     *     "new": "新值",
-     *     ....
-     * }
-     */
-    @Schema(description = "数据变化前后的值（隐藏，不显示给用户）")
-    @TableField("detail")
-    private String detail;
+    @Schema(description = "日志正文")
+    @TableField("detail_id")
+    private Long detailId;
 
-    @Schema(description = "Api地址")
-    @TableField("api_path")
-    private String apiPath;
+    @Schema(description = "客户端IP地址")
+    @TableField("client_ip")
+    private String clientIp;
 
-    @Schema(description = "登录ip")
-    @TableField("ip")
-    private String ip;
+    @Schema(description = "租户id")
+    @TableField("tenant_id")
+    private Long tenantId;
 
-    @Schema(description = "备注")
-    @TableField("remark")
-    private String remark;
-
-    @Schema(description = "用户浏览器UA")
-    @TableField("user_agent")
-    private String userAgent;
+    @Schema(description = "创建时间")
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 }
