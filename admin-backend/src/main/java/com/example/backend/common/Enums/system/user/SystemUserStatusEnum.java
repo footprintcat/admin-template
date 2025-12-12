@@ -1,4 +1,4 @@
-package com.example.backend.common.Enums.system;
+package com.example.backend.common.Enums.system.user;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.AllArgsConstructor;
