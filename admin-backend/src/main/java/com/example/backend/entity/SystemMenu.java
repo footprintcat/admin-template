@@ -50,9 +50,17 @@ public class SystemMenu implements Serializable {
     @TableField("menu_name")
     private String menuName;
 
+    @Schema(description = "菜单URL路径（无页面的分组菜单项为NULL）")
+    @TableField("menu_path")
+    private String menuPath;
+
     @Schema(description = "菜单项顺序")
     @TableField("sequence")
     private Integer sequence;
+
+    @Schema(description = "是否允许编辑（系统菜单请置为0，避免误操作导致后台页面无法正常展示）")
+    @TableField("can_edit")
+    private Integer canEdit;
 
     @Schema(description = "是否隐藏菜单项（1：隐藏，0：不隐藏）")
     @TableField("is_hide")

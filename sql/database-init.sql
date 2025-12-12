@@ -26,7 +26,8 @@ CREATE TABLE `system_user` (
   `id` bigint NOT NULL COMMENT '雪花id',
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名',
   `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户昵称',
-  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NORMAL' COMMENT '用户状态：NORMAL-正常（可用）, LOCKED-锁定（禁用）, DISABLED-停用, EXPIRED-过期',
+  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'MEMBER' COMMENT '用户类型：SUPER_ADMIN-超级管理员；MEMBER-普通用户',
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'NORMAL' COMMENT '用户状态：NORMAL-正常（可用）, LOCKED-锁定（禁用）, DISABLED-停用, EXPIRED-过期',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
@@ -49,7 +50,7 @@ CREATE TABLE `system_tenant` (
   `level` int NOT NULL COMMENT '租户层级',
   `tenant_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '租户名称',
   `tenant_intro` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '租户简介',
-  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'NORMAL' COMMENT '租户状态：NORMAL-正常（可用）, LOCKED-锁定（禁用）, DISABLED-停用, EXPIRED-过期',
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'NORMAL' COMMENT '租户状态：NORMAL-正常（可用）, LOCKED-锁定（禁用）, DISABLED-停用, EXPIRED-过期',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -71,7 +72,9 @@ CREATE TABLE `system_menu` (
   `level` tinyint NOT NULL COMMENT '菜单级别',
   `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
+  `menu_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单URL路径（无页面的分组菜单项为NULL）',
   `sequence` int NOT NULL COMMENT '菜单项顺序',
+  `can_edit` tinyint NOT NULL DEFAULT 1 COMMENT '是否允许编辑（系统菜单请置为0，避免误操作导致后台页面无法正常展示）',
   `is_hide` tinyint NOT NULL DEFAULT 0 COMMENT '是否隐藏菜单项（1：隐藏，0：不隐藏）',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
@@ -151,9 +154,19 @@ ROW_FORMAT = Dynamic;
 -- 数据库初始数据
 -- ----------------------------
 
+-- system_menu
+INSERT INTO
+    `system_menu` (`id`, `parent_id`, `level`, `menu_code`, `menu_name`, `menu_path`, `sequence`, `can_edit`)
+VALUES
+    (10000, NULL, 1, 'global:dashboard', '仪表盘', '/dashboard', 1, 0 ),
+    (10001, NULL, 1, 'system:index', '系统管理', NULL, 1, 0 ),
+    (10002, 10001, 2, 'system:user:manage', '用户管理', '/system/user/manage', 1, 0 );
+
 -- system_user
-INSERT INTO `system_user` (`id`, `username`, `nickname`) VALUES
-(1, 'admin', '系统管理员');
+INSERT INTO
+    `system_user` (`id`, `username`, `nickname`)
+VALUES
+    (1, 'admin', '系统管理员');
 
 -- system_tenant
 -- TODO

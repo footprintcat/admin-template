@@ -5,19 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 用户状态枚举
- * system_user.status
+ * 用户类型
+ * system_user.type
  *
  * @since 2025-12-12
  */
 @Getter
 @AllArgsConstructor
-public enum SystemUserStatusEnum {
+public enum SystemUserTypeEnum {
 
-    NORMAL("NORMAL", "正常（可用）"),
-    LOCKED("LOCKED", "锁定（禁用）"),
-    DISABLED("DISABLED", "停用"),
-    EXPIRED("EXPIRED", "过期"),
+    SUPER_USER("SUPER_ADMIN", "超级管理员"),
+    MEMBER("MEMBER", "普通用户"),
     ;
 
     @EnumValue
