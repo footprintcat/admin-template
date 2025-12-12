@@ -28,7 +28,7 @@ public class SystemRoleServiceV2 {
         return systemRoleMapper.getSystemRoleList(systemRoleDTO);
     }
 
-    public SystemRole getRoleById(Integer id) {
+    public SystemRole getRoleById(Long id) {
         if (id == null) {
             return null;
         }
@@ -81,8 +81,7 @@ public class SystemRoleServiceV2 {
      * @return
      */
     public List<SystemRole> getRoleList() {
-        List<SystemRole> systemRoleList = systemRoleMapper.selectList(null);
-        return systemRoleList;
+        return systemRoleMapper.selectList(null);
     }
 
     /**
@@ -90,9 +89,9 @@ public class SystemRoleServiceV2 {
      *
      * @return
      */
-    public HashMap<Integer, String> getRoleMap() {
+    public HashMap<Long, String> getRoleMap() {
         List<SystemRole> systemRoles = systemRoleMapper.selectList(null);
-        HashMap<Integer, String> roleMap = new HashMap<>();
+        HashMap<Long, String> roleMap = new HashMap<>();
         systemRoles.forEach(role -> roleMap.put(role.getId(), role.getRoleName()));
         return roleMap;
     }

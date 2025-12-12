@@ -143,7 +143,7 @@ public class SystemMenuService {
             systemMenu.setMenuFullName(systemMenu.getMenuName());
         }
         // 保存插入的菜单项
-        systemMenu.setUpdateTime(new Date());
+        systemMenu.setUpdateTime(LocalDateTime.now());
         systemMenuMapper.insert(systemMenu);
 
     }

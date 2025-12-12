@@ -88,7 +88,7 @@ public class ManageUserController extends BaseController {
         Page<SystemUser> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, systemUserDTO);
 
         // 查询 roleMap
-        HashMap<Integer, String> roleMap = systemRoleServiceV2.getRoleMap();
+        HashMap<Long, String> roleMap = systemRoleServiceV2.getRoleMap();
 
         // 用于 role 下拉框 mock 数据
         String roleListForMock = JSONArray.from(roleMap.keySet().stream().map(Object::toString).collect(Collectors.toList())).toString();

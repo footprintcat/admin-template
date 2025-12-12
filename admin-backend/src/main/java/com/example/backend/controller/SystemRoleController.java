@@ -57,7 +57,7 @@ public class SystemRoleController extends BaseController {
     }
 
     @GetMapping("/findChildRoles")
-    public CommonReturnType findChildRoles(@RequestParam(value = "roleId", required = false) Integer roleId, HttpServletRequest request) {
+    public CommonReturnType findChildRoles(@RequestParam(value = "roleId", required = false) Long roleId, HttpServletRequest request) {
         Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
 
         List<SystemRole> systemRoleList = systemRoleService.getRoleList();
@@ -67,7 +67,7 @@ public class SystemRoleController extends BaseController {
     }
 
     @GetMapping("/findChildTreeById")
-    public CommonReturnType findChildTreeById(@RequestParam("roleId") Integer roleId) throws BusinessException {
+    public CommonReturnType findChildTreeById(@RequestParam("roleId") Long roleId) throws BusinessException {
         if (roleId == null) {
             return CommonReturnType.error("当前用户不允许修改角色层级");
         }
@@ -137,7 +137,7 @@ public class SystemRoleController extends BaseController {
     public CommonReturnType delete(@RequestBody JSONObject params, HttpServletRequest request) throws BusinessException {
         Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
 
-        Integer roleId = params.getInteger("roleId");
+        Long roleId = params.getLong("roleId");
         if (roleId == null) {
             return CommonReturnType.error("角色id不存在");
         }
@@ -163,7 +163,7 @@ public class SystemRoleController extends BaseController {
         // 删除角色时需同时删除角色所赋予的系统权限
         privilegeService.removePrivilegesByRoleId(roleId);
 
-        roleRepository.removeById(roleId);
+        systemRoleRepository.removeById(roleId);
         return CommonReturnType.success();
     }
 }

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class PrivilegeDTO {
 
     private String id;
-    private Integer roleId;
+    private Long roleId;
     private String userId;
     private String module;
     private String type;

@@ -43,7 +43,7 @@ public class SystemUser implements Serializable {
 
     // TODO
     @TableField("role_id")
-    private Integer roleId;
+    private Long roleId;
 
     // TODO
     @TableField("password_hash")

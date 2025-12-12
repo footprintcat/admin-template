@@ -13,7 +13,7 @@ public class SystemUserDTO {
     private Long id;
     private String username;
     private String nickname;
-    private Integer roleId;
+    private Long roleId;
     private String telephone;
     private String status;
 

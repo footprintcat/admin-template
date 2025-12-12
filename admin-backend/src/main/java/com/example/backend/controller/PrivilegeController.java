@@ -50,7 +50,7 @@ public class PrivilegeController extends BaseController {
     @PostMapping("/togglePrivilege")
     public CommonReturnType add(@RequestBody JSONObject param, HttpServletRequest httpServletRequest) throws BusinessException {
         String menuId = param.getString("menuId");
-        Integer roleId = param.getInteger("roleId");
+        Long roleId = param.getLong("roleId");
         Boolean value = param.getBoolean("value");
         if (menuId == null || roleId == null || value == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
@@ -59,7 +59,7 @@ public class PrivilegeController extends BaseController {
         boolean result = true;
         String message = "更新成功";
 
-        Integer currentRoleId = SessionUtils.getRoleId(httpServletRequest.getSession());
+        Long currentRoleId = SessionUtils.getRoleId(httpServletRequest.getSession());
         if (Objects.equals(currentRoleId, roleId)) {
             // throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "不可修改当前用户的权限");
             result = false;
@@ -109,7 +109,7 @@ public class PrivilegeController extends BaseController {
     @PostMapping("/togglePrivilegeType")
     public CommonReturnType togglePrivilegeType(@RequestBody JSONObject param, HttpServletRequest httpServletRequest) throws BusinessException {
         String menuId = param.getString("menuId");
-        Integer roleId = param.getInteger("roleId");
+        Long roleId = param.getLong("roleId");
         Boolean value = param.getBoolean("value");
         String type = param.getString("type"); // 权限类型
         if (menuId == null || roleId == null || value == null || type == null) {
@@ -119,7 +119,7 @@ public class PrivilegeController extends BaseController {
         String message = "更新成功";
 
         HttpSession session = httpServletRequest.getSession();
-        Integer currentRoleId = SessionUtils.getRoleId(session);
+        Long currentRoleId = SessionUtils.getRoleId(session);
         if (Objects.equals(currentRoleId, roleId)) {
             // throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "不可修改当前用户的权限");
             result = false;
@@ -134,7 +134,7 @@ public class PrivilegeController extends BaseController {
 
             // 判断被赋权用户是否是当前用户的子用户
             boolean canEmpowerTargetRole = systemRoleService.canEmpowerTargetRole(currentRoleId, roleId);
-            if (Objects.equals(currentRoleId, 1) || (Objects.nonNull(currentUserPrivilege) && PrivilegeTypeEnum.INHERITABLE.getCode().equals(currentUserPrivilege.getType()) && canEmpowerTargetRole)) {
+            if (Objects.equals(currentRoleId, 1L) || (Objects.nonNull(currentUserPrivilege) && PrivilegeTypeEnum.INHERITABLE.getCode().equals(currentUserPrivilege.getType()) && canEmpowerTargetRole)) {
                 // 查询旧的记录
                 LambdaQueryWrapper<Privilege> oldPrivilegeQueryWrapper = new LambdaQueryWrapper<Privilege>()
                         .eq(Privilege::getRoleId, roleId)
@@ -206,10 +206,10 @@ public class PrivilegeController extends BaseController {
     public CommonReturnType getCurrentUserPrivilegeList(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
         Long userId = SessionUtils.getUserId(session);
-        Integer roleId = SessionUtils.getRoleId(session);
+        Long roleId = SessionUtils.getRoleId(session);
 
         Collection<String> currentUserPrivilegeList;
-        if (Objects.equals(roleId, 1)) {
+        if (Objects.equals(roleId, 1L)) {
             //  roleId = 1 的超级用户赋予全部菜单权限
             List<SystemMenu> systemMenuList = systemMenuService.getSystemMenuListWithoutRootLevel();
             currentUserPrivilegeList = systemMenuList.stream().map(SystemMenu::getMenuId).toList();
@@ -234,7 +234,7 @@ public class PrivilegeController extends BaseController {
 
 
     @GetMapping("/getUserPrivilege")
-    public CommonReturnType getUserPrivilege(@RequestParam(value = "roleId") Integer roleId, @RequestParam(value = "userId") Long userId) throws BusinessException {
+    public CommonReturnType getUserPrivilege(@RequestParam(value = "roleId") Long roleId, @RequestParam(value = "userId") Long userId) throws BusinessException {
         if (roleId == null || userId == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
@@ -281,7 +281,7 @@ public class PrivilegeController extends BaseController {
      */
     @GetMapping("/exportJson")
     public CommonReturnType exportJson(HttpServletRequest request) {
-        Integer roleId = SessionUtils.getRoleId(request.getSession());
+        Long roleId = SessionUtils.getRoleId(request.getSession());
         if (roleId != 1) {
             return CommonReturnType.error("仅超级管理用户可导出权限表");
         }

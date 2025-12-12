@@ -31,7 +31,8 @@ import java.util.Objects;
 @RequestMapping("/v1/user")
 public class UserController extends BaseController {
 
-    private final Integer SUPER_ADMIN_ROLE_ID = 1;
+    // TODO
+    private final Long SUPER_ADMIN_ROLE_ID = 1L;
 
     @Resource
     private UserService userService;
@@ -132,7 +133,7 @@ public class UserController extends BaseController {
             return CommonReturnType.error("密码有误！请重输");
         }
         // 密码正确 校验是否为超管用户
-        Integer roleId = userByHttpServlet.getRoleId();
+        Long roleId = userByHttpServlet.getRoleId();
         if (!SUPER_ADMIN_ROLE_ID.equals(roleId)) {
             return CommonReturnType.error("该用户权限不足！");
         }

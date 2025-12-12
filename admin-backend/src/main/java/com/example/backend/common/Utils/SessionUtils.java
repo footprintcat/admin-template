@@ -15,7 +15,7 @@ public class SessionUtils {
      * @param userId
      * @param roleId
      */
-    public static void setSession(HttpSession session, String username, Integer userId, Integer roleId) {
+    public static void setSession(HttpSession session, String username, Integer userId, Long roleId) {
         session.setAttribute("username", username);
         session.setAttribute("user_id", userId);
         session.setAttribute("role_id", roleId);
@@ -61,7 +61,7 @@ public class SessionUtils {
     }
 
     public static Long getRoleId(HttpSession session) {
-        Integer roleId = getInteger(session, "role_id");
+        Long roleId = getLong(session, "role_id");
         return roleId;
     }
 

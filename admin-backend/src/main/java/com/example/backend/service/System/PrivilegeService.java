@@ -11,7 +11,7 @@ import com.example.backend.dto.PrivilegeDTO;
 import com.example.backend.entity.Privilege;
 import com.example.backend.entity.SystemRole;
 import com.example.backend.mapper.PrivilegeMapper;
-import com.example.backend.repository.RoleRepository;
+import com.example.backend.repository.SystemRoleRepository;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class PrivilegeService {
     @Resource
     private PrivilegeMapper privilegeMapper;
     @Resource
-    private RoleRepository roleRepository;
+    private SystemRoleRepository systemRoleRepository;
 
     /**
      * 获取指定roleId下的全部权限
@@ -94,7 +94,7 @@ public class PrivilegeService {
      * @param roleId 角色id
      * @return
      */
-    public List<Privilege> getGrantedPrivilegeListByRoleId(Integer roleId) {
+    public List<Privilege> getGrantedPrivilegeListByRoleId(Long roleId) {
         LambdaQueryWrapper<Privilege> qw = new LambdaQueryWrapper<>();
         qw.eq(Privilege::getRoleId, roleId)
                 .and(wq -> wq.eq(Privilege::getType, PrivilegeTypeEnum.GRANTED.getCode())
@@ -110,7 +110,7 @@ public class PrivilegeService {
      * @param roleId 角色id
      * @return
      */
-    public List<Privilege> getInheritablePrivilegeListByRoleId(Integer roleId) {
+    public List<Privilege> getInheritablePrivilegeListByRoleId(Long roleId) {
         LambdaQueryWrapper<Privilege> qw = new LambdaQueryWrapper<>();
         qw.eq(Privilege::getRoleId, roleId)
                 .and(wq -> wq.eq(Privilege::getType, PrivilegeTypeEnum.INHERITABLE.getCode()));
@@ -173,7 +173,7 @@ public class PrivilegeService {
      * @param userId
      * @return
      */
-    public Collection<String> getCurrentUserInheritablePrivilegeList(List<Privilege> rolePrivilegeList, List<Privilege> userPrivilegeList, Integer roleId, Long userId) {
+    public Collection<String> getCurrentUserInheritablePrivilegeList(List<Privilege> rolePrivilegeList, List<Privilege> userPrivilegeList, Long roleId, Long userId) {
         HashMap<String, String> map = new HashMap<>();
 
         // 当前角色有权继承的菜单
@@ -206,7 +206,7 @@ public class PrivilegeService {
      * @return
      * @throws BusinessException
      */
-    public HashMap<String, Object> getUserPrivilege(Integer roleId, Long userId) {
+    public HashMap<String, Object> getUserPrivilege(Long roleId, Long userId) {
         // 当前角色有权访问的菜单
         List<Privilege> rolePrivilegeList = getGrantedPrivilegeListByRoleId(roleId);
         List<String> privilegeList = rolePrivilegeList.stream().map(Privilege::getModule).toList();
@@ -286,7 +286,7 @@ public class PrivilegeService {
      *
      * @param roleId
      */
-    public void removePrivilegesByRoleId(Integer roleId) {
+    public void removePrivilegesByRoleId(Long roleId) {
         if (roleId == null) {
             return;
         }
@@ -315,7 +315,7 @@ public class PrivilegeService {
         //     },
         //     ...
         // ]
-        HashMap<Integer, ArrayList<JSONObject>> map = new HashMap<>();
+        HashMap<Long, ArrayList<JSONObject>> map = new HashMap<>();
         for (Privilege privilege : privileges) {
             if (!map.containsKey(privilege.getRoleId())) {
                 map.put(privilege.getRoleId(), new ArrayList<>());
@@ -339,7 +339,7 @@ public class PrivilegeService {
         // ]
         LambdaQueryWrapper<SystemRole> qw2 = new LambdaQueryWrapper<>();
         qw2.orderByAsc(SystemRole::getId);
-        List<SystemRole> list = roleRepository.list(qw2);
+        List<SystemRole> list = systemRoleRepository.list(qw2);
         List<JSONObject> roleList = list.stream().map(role -> {
             JSONObject object = new JSONObject();
             object.put("roleId", role.getId());
