@@ -39,13 +39,9 @@ public class SystemMenu implements Serializable {
     @TableField("`level`")
     private Integer level;
 
-    @Schema(description = "菜单id")
-    @TableField("menu_id")
-    private String menuId;
-
-    @Schema(description = "菜单全路径名称")
-    @TableField("menu_full_name")
-    private String menuFullName;
+    @Schema(description = "菜单code")
+    @TableField("menu_code")
+    private String menuCode;
 
     @Schema(description = "菜单名称")
     @TableField("menu_name")

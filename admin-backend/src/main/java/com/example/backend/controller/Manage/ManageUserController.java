@@ -172,7 +172,7 @@ public class ManageUserController extends BaseController {
         SystemUser currentLoginUser = systemUserServiceV2.getCurrentLoginUser(httpServletRequest);
         if (currentLoginUser == null) {
             return CommonReturnType.error("当前用户未登录");
-        } else if (Objects.equals(String.valueOf(currentLoginUser.getId()), systemUserDTO.getId())) {
+        } else if (Objects.equals(currentLoginUser.getId(), systemUserDTO.getId())) {
             return CommonReturnType.error("不可以修改当前登录账号，如需修改个人账号信息，请前往个人中心进行修改");
         }
 

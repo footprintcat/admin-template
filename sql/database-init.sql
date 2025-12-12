@@ -140,8 +140,8 @@ ROW_FORMAT = Dynamic;
 -- ----------------------------
 
 -- system_user
-INSERT INTO `system_user` (`id`, `username`, `nickname`, `password_hash`) VALUES
-(1, 'admin', '系统管理员', '');
+INSERT INTO `system_user` (`id`, `username`, `nickname`) VALUES
+(1, 'admin', '系统管理员');
 
 -- system_tenant
 -- TODO
