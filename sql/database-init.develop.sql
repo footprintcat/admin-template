@@ -35,7 +35,6 @@ CREATE TABLE `@table_template@` (
   PRIMARY KEY (`id`) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '系统租户表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -95,7 +94,6 @@ CREATE TABLE `system_menu` (
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
   `sequence` int NOT NULL COMMENT '菜单项顺序',
   `is_hide` tinyint NOT NULL DEFAULT 0 COMMENT '是否隐藏菜单项（1：隐藏，0：不隐藏）',
-  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -106,6 +104,7 @@ CREATE TABLE `system_menu` (
   UNIQUE INDEX `menu_code`(`menu_code` ASC) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统菜单表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -124,7 +123,7 @@ CREATE TABLE `system_privilege` (
   PRIMARY KEY (`id`) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '系统租户表'
+COMMENT = '系统权限表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -147,6 +146,7 @@ CREATE TABLE `system_role` (
   PRIMARY KEY (`id`) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统角色表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -168,6 +168,7 @@ CREATE TABLE `system_user_auth` (
   PRIMARY KEY (`id`) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统用户认证表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统租户表
+ * 系统权限表
  * </p>
  *
  * @author coder-xiaomo
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemPrivilege", description = "系统租户表")
+@Schema(name = "SystemPrivilege", description = "系统权限表")
 @TableName("system_privilege")
 public class SystemPrivilege implements Serializable {
 
@@ -32,6 +33,10 @@ public class SystemPrivilege implements Serializable {
     @Schema(description = "雪花id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
+
+    @Schema(description = "租户id")
+    @TableField("tenant_id")
+    private Long tenantId;
 
     @Schema(description = "创建人")
     @TableField("create_by")
@@ -45,7 +50,7 @@ public class SystemPrivilege implements Serializable {
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "最后更新时间")
     @TableField("update_time")
     private LocalDateTime updateTime;
 
@@ -56,5 +61,6 @@ public class SystemPrivilege implements Serializable {
 
     @Schema(description = "版本号（乐观锁）")
     @TableField("version")
+    @Version
     private Long version;
 }

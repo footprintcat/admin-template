@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import com.example.backend.common.Enums.system.SystemUserStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -59,6 +60,10 @@ public class SystemUser implements Serializable {
     @TableField("status")
     private SystemUserStatusEnum status;
 
+    @Schema(description = "租户id")
+    @TableField("tenant_id")
+    private Long tenantId;
+
     @Schema(description = "创建人")
     @TableField("create_by")
     private Long createBy;
@@ -71,7 +76,7 @@ public class SystemUser implements Serializable {
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "最后更新时间")
     @TableField("update_time")
     private LocalDateTime updateTime;
 
@@ -82,5 +87,6 @@ public class SystemUser implements Serializable {
 
     @Schema(description = "版本号（乐观锁）")
     @TableField("version")
+    @Version
     private Long version;
 }

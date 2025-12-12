@@ -1,9 +1,12 @@
 package com.example.backend.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- *
+ * 系统菜单表
  * </p>
  *
  * @author coder-xiaomo
@@ -21,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemMenu", description = "")
+@Schema(name = "SystemMenu", description = "系统菜单表")
 @TableName("system_menu")
 public class SystemMenu implements Serializable {
 
@@ -55,7 +58,29 @@ public class SystemMenu implements Serializable {
     @TableField("is_hide")
     private Integer isHide;
 
+    @Schema(description = "创建人")
+    @TableField("create_by")
+    private Long createBy;
+
+    @Schema(description = "更新人")
+    @TableField("update_by")
+    private Long updateBy;
+
+    @Schema(description = "创建时间")
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
     @Schema(description = "最后更新时间")
     @TableField("update_time")
     private LocalDateTime updateTime;
+
+    @Schema(description = "逻辑删除")
+    @TableField("is_delete")
+    @TableLogic
+    private Integer isDelete;
+
+    @Schema(description = "版本号（乐观锁）")
+    @TableField("version")
+    @Version
+    private Long version;
 }

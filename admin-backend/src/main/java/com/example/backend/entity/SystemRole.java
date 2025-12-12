@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 系统角色表
  * </p>
  *
  * @author coder-xiaomo
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemRole", description = "")
+@Schema(name = "SystemRole", description = "系统角色表")
 @TableName("system_role")
 public class SystemRole implements Serializable {
 
@@ -49,6 +50,10 @@ public class SystemRole implements Serializable {
     @TableField("comment")
     private String comment;
 
+    @Schema(description = "租户id")
+    @TableField("tenant_id")
+    private Long tenantId;
+
     @Schema(description = "创建人")
     @TableField("create_by")
     private Long createBy;
@@ -61,7 +66,7 @@ public class SystemRole implements Serializable {
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "最后更新时间")
     @TableField("update_time")
     private LocalDateTime updateTime;
 
@@ -72,5 +77,6 @@ public class SystemRole implements Serializable {
 
     @Schema(description = "版本号（乐观锁）")
     @TableField("version")
+    @Version
     private Long version;
 }
