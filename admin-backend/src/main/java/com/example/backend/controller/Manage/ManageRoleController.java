@@ -35,7 +35,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2/manage/role")
+@RequestMapping("/v2/manage/system/role")
 public class ManageRoleController extends BaseController {
 
     @Resource

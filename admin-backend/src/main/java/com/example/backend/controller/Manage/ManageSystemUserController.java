@@ -17,7 +17,7 @@ import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDTO;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.query.PageQuery;
-import com.example.backend.query.request.manage.system.user.ManageUserListRequest;
+import com.example.backend.query.request.manage.system.user.ManageUserListRequestIIBaseManage;
 import com.example.backend.query.response.manage.ManageListResponse;
 import com.example.backend.service.v2.SystemRoleServiceV2;
 import com.example.backend.service.v2.SystemUserServiceV2;
@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2/manage/user")
-public class ManageUserController extends BaseController {
+@RequestMapping("/v2/manage/system/user")
+public class ManageSystemUserController extends BaseController {
 
     @Resource
     private SystemUserServiceV2 systemUserServiceV2;
@@ -59,7 +59,7 @@ public class ManageUserController extends BaseController {
      */
     @PostMapping("/list")
     @ResponseBody
-    public CommonReturnType list(@RequestBody ManageUserListRequest queryRequest) {
+    public CommonReturnType list(@RequestBody ManageUserListRequestIIBaseManage queryRequest) {
         // 查询分页数据
         Page<SystemUser> page = systemUserServiceV2.getUserPage(queryRequest.getPageQuery(), queryRequest.getParams());
 

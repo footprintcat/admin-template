@@ -36,7 +36,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2/manage/system-log")
+@RequestMapping("/v2/manage/system/system-log")
 public class ManageSystemLogController extends BaseController {
 
     @Resource
