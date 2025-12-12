@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class RoleLinkedDTO {
-    public Integer id;
+    public Long id;
     public String roleName;
-    public Integer parentRoleId;
+    public Long parentRoleId;
     public RoleLinkedDTO parentRole;
 
     public static RoleLinkedDTO createRoleLinkedDTO(SystemRole systemRole) {

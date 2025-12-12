@@ -13,7 +13,7 @@ import com.example.backend.entity.Privilege;
 import com.example.backend.entity.SystemMenu;
 import com.example.backend.repository.PrivilegeRepository;
 import com.example.backend.service.System.PrivilegeService;
-import com.example.backend.service.System.RoleService;
+import com.example.backend.service.System.SystemRoleService;
 import com.example.backend.service.System.SystemMenuService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,7 +43,7 @@ public class PrivilegeController extends BaseController {
     @Resource
     private PrivilegeRepository privilegeRepository;
     @Resource
-    private RoleService roleService;
+    private SystemRoleService systemRoleService;
     @Resource
     private SystemMenuService systemMenuService;
 
@@ -133,7 +133,7 @@ public class PrivilegeController extends BaseController {
             Privilege currentUserPrivilege = privilegeRepository.getOne(privilegeQueryWrapper);
 
             // 判断被赋权用户是否是当前用户的子用户
-            boolean canEmpowerTargetRole = roleService.canEmpowerTargetRole(currentRoleId, roleId);
+            boolean canEmpowerTargetRole = systemRoleService.canEmpowerTargetRole(currentRoleId, roleId);
             if (Objects.equals(currentRoleId, 1) || (Objects.nonNull(currentUserPrivilege) && PrivilegeTypeEnum.INHERITABLE.getCode().equals(currentUserPrivilege.getType()) && canEmpowerTargetRole)) {
                 // 查询旧的记录
                 LambdaQueryWrapper<Privilege> oldPrivilegeQueryWrapper = new LambdaQueryWrapper<Privilege>()

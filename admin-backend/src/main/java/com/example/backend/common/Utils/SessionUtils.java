@@ -60,7 +60,7 @@ public class SessionUtils {
         return userId;
     }
 
-    public static Integer getRoleId(HttpSession session) {
+    public static Long getRoleId(HttpSession session) {
         Integer roleId = getInteger(session, "role_id");
         return roleId;
     }

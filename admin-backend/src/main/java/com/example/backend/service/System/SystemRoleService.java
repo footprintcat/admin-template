@@ -2,19 +2,18 @@ package com.example.backend.service.System;
 
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
-import com.example.backend.dto.SystemRoleDTO;
 import com.example.backend.dto.RoleLinkedDTO;
+import com.example.backend.dto.SystemRoleDTO;
 import com.example.backend.entity.Privilege;
-import com.example.backend.entity.SystemRole;
 import com.example.backend.entity.SystemMenu;
-import com.example.backend.mapper.PrivilegeMapper;
+import com.example.backend.entity.SystemRole;
 import com.example.backend.mapper.SystemRoleMapper;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +21,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class RoleService {
+public class SystemRoleService {
 
     @Resource
     private SystemRoleMapper systemRoleMapper;
-    @Resource
-    private PrivilegeMapper privilegeMapper;
     @Resource
     private PrivilegeService privilegeService;
     @Resource
@@ -75,13 +72,13 @@ public class RoleService {
 
     public Boolean addRole(SystemRoleDTO systemRoleDTO) {
         SystemRole systemRole = SystemRoleDTO.toEntity(systemRoleDTO);
-        systemRole.setUpdateTime(new Date());
+        systemRole.setUpdateTime(LocalDateTime.now());
         int affectRows = systemRoleMapper.insert(systemRole);
         return affectRows > 0;
     }
 
     // 递归检查当前角色是否可以赋予目标角色
-    public boolean canEmpowerTargetRole(@Nullable Integer currentUserRoleId, @Nullable Integer targetRoleId) {
+    public boolean canEmpowerTargetRole(@Nullable Long currentUserRoleId, @Nullable Long targetRoleId) {
         if (currentUserRoleId == null || targetRoleId == null) {
             return false;
         }
@@ -91,7 +88,7 @@ public class RoleService {
         List<RoleLinkedDTO> list = systemRoleList.stream().map(RoleLinkedDTO::createRoleLinkedDTO).toList();
 
         // 创建id->RoleLinkedDTO映射
-        Map<Integer, RoleLinkedDTO> roleLinkedMap = new HashMap<>();
+        Map<Long, RoleLinkedDTO> roleLinkedMap = new HashMap<>();
         for (RoleLinkedDTO dto : list) {
             roleLinkedMap.put(dto.getId(), dto);
         }
@@ -128,11 +125,11 @@ public class RoleService {
      * @param roleId
      */
 
-    public List<SystemRole> findChildRoles(Integer roleId, List<SystemRole> systemRoleList) {
+    public List<SystemRole> findChildRoles(Long roleId, List<SystemRole> systemRoleList) {
         List<SystemRole> result = new ArrayList<>();
-        Map<Integer, List<SystemRole>> childMap = new HashMap<>();
+        Map<Long, List<SystemRole>> childMap = new HashMap<>();
 
-        // 将角色列表转换为以parentRoleId为键的映射
+        // 将角色列表转换为以 parentRoleId 为键的映射
         for (SystemRole systemRole : systemRoleList) {
             childMap.computeIfAbsent(systemRole.getParentRoleId(), k -> new ArrayList<>()).add(systemRole);
         }
@@ -143,10 +140,10 @@ public class RoleService {
             toProcess.addAll(childMap.get(roleId));
         }
 
-        // 使用while循环迭代查找所有子角色
+        // 使用 while 循环迭代查找所有子角色
         while (!toProcess.isEmpty()) {
             // 取出当前待处理的角色
-            SystemRole currentSystemRole = toProcess.remove(0);
+            SystemRole currentSystemRole = toProcess.removeFirst();
             result.add(currentSystemRole);
             // 如果当前角色有子角色，将它们加入到待处理列表
             if (childMap.containsKey(currentSystemRole.getId())) {
@@ -158,13 +155,12 @@ public class RoleService {
     }
 
     public List<SystemRole> getRoleList() {
-        List<SystemRole> systemRoleList = systemRoleMapper.selectList(null);
-        return systemRoleList;
+        return systemRoleMapper.selectList(null);
     }
 
-    public List<SystemRoleDTO> getRoleDTOTree(Integer specifiedParentRoleId, List<SystemRole> systemRoleList) throws BusinessException {
-        // 用于存储角色ID和对应的RoleDTO的映射
-        Map<Integer, SystemRoleDTO> roleDTOMap = new HashMap<>();
+    public List<SystemRoleDTO> getRoleDTOTree(Long specifiedParentRoleId, List<SystemRole> systemRoleList) throws BusinessException {
+        // 用于存储角色ID和对应的 RoleDTO 的映射
+        Map<Long, SystemRoleDTO> roleDTOMap = new HashMap<>();
         // 最终的树形结构
         List<SystemRoleDTO> roleTree = new ArrayList<>();
 
@@ -181,7 +177,7 @@ public class RoleService {
             }
         }
 
-        // 将所有角色转换为RoleDTO并存储在映射中
+        // 将所有角色转换为 RoleDTO 并存储在映射中
         for (SystemRole systemRole : systemRoleList) {
             SystemRoleDTO systemRoleDTO = SystemRoleDTO.fromEntity(systemRole);
             roleDTOMap.put(systemRole.getId(), systemRoleDTO);

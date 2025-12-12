@@ -8,7 +8,7 @@ import com.example.backend.dto.SystemUserDTO;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.mapper.SystemUserMapper;
 import com.example.backend.query.PageQuery;
-import com.example.backend.service.System.RoleService;
+import com.example.backend.service.System.SystemRoleService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,7 +25,7 @@ public class SystemUserServiceV2 {
     @Resource
     private SystemUserMapper systemUserMapper;
     @Resource
-    private RoleService roleService;
+    private SystemRoleService systemRoleService;
 
     /**
      * 获取当前登录用户
@@ -154,7 +154,7 @@ public class SystemUserServiceV2 {
         Integer userToDeleteRoleId = userToDelete.getRoleId();
         if (userToDeleteRoleId == 1) {
             throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "不允许删除超级用户");
-        } else if (!roleService.canEmpowerTargetRole(loginUserRoleId, userToDeleteRoleId)) {
+        } else if (!systemRoleService.canEmpowerTargetRole(loginUserRoleId, userToDeleteRoleId)) {
             throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "无权删除该用户");
         }
 

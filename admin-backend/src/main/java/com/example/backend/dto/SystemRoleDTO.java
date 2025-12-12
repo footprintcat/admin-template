@@ -11,11 +11,12 @@ import java.util.stream.Collectors;
 @Data
 public class SystemRoleDTO {
 
-    private Integer id;
+    private Long id;
+    private Long parentRoleId;
+    private Integer level;
     private String roleName;
     private List<String> privileges;
     private List<String> inheritPrivileges;
-    private Integer parentRoleId;
     private List<SystemRoleDTO> children;
 
     public static SystemRoleDTO fromEntity(SystemRole systemRole) {

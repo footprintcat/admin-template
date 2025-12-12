@@ -9,10 +9,10 @@ import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemRoleDTO;
 import com.example.backend.entity.SystemRole;
 import com.example.backend.entity.SystemUser;
-import com.example.backend.repository.RoleRepository;
+import com.example.backend.repository.SystemRoleRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.System.PrivilegeService;
-import com.example.backend.service.System.RoleService;
+import com.example.backend.service.System.SystemRoleService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,19 +23,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v1/role")
-public class RoleController extends BaseController {
+@RequestMapping("/v1/system/role")
+public class SystemRoleController extends BaseController {
 
     @Resource
-    private RoleService roleService;
+    private SystemRoleService systemRoleService;
     @Resource
-    private RoleRepository roleRepository;
+    private SystemRoleRepository systemRoleRepository;
     @Resource
     private PrivilegeService privilegeService;
     @Resource
@@ -43,7 +43,7 @@ public class RoleController extends BaseController {
 
     @GetMapping("/list")
     public CommonReturnType list() {
-        List<SystemRoleDTO> roleList = roleService.getRoleDTOList();
+        List<SystemRoleDTO> roleList = systemRoleService.getRoleDTOList();
         return CommonReturnType.success(roleList);
     }
 
@@ -52,16 +52,16 @@ public class RoleController extends BaseController {
         if (systemRoleDTO == null) {
             return CommonReturnType.error();
         }
-        roleService.addRole(systemRoleDTO);
+        systemRoleService.addRole(systemRoleDTO);
         return CommonReturnType.success();
     }
 
     @GetMapping("/findChildRoles")
     public CommonReturnType findChildRoles(@RequestParam(value = "roleId", required = false) Integer roleId, HttpServletRequest request) {
-        Integer currentUserRoleId = SessionUtils.getRoleId(request.getSession());
+        Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
 
-        List<SystemRole> systemRoleList = roleService.getRoleList();
-        List<SystemRole> childSystemRoles = roleService.findChildRoles(roleId != null ? roleId : currentUserRoleId, systemRoleList);
+        List<SystemRole> systemRoleList = systemRoleService.getRoleList();
+        List<SystemRole> childSystemRoles = systemRoleService.findChildRoles(roleId != null ? roleId : currentUserRoleId, systemRoleList);
 
         return CommonReturnType.success(childSystemRoles);
     }
@@ -71,16 +71,16 @@ public class RoleController extends BaseController {
         if (roleId == null) {
             return CommonReturnType.error("当前用户不允许修改角色层级");
         }
-        List<SystemRole> systemRoleList = roleService.getRoleList();
-        List<SystemRoleDTO> roleTree = roleService.getRoleDTOTree(roleId, systemRoleList);
+        List<SystemRole> systemRoleList = systemRoleService.getRoleList();
+        List<SystemRoleDTO> roleTree = systemRoleService.getRoleDTOTree(roleId, systemRoleList);
 
         return CommonReturnType.success(roleTree);
     }
 
     @GetMapping("/getTree")
     public CommonReturnType getRoleTree() throws BusinessException {
-        List<SystemRole> systemRoleList = roleService.getRoleList();
-        List<SystemRoleDTO> roleTree = roleService.getRoleDTOTree(null, systemRoleList);
+        List<SystemRole> systemRoleList = systemRoleService.getRoleList();
+        List<SystemRoleDTO> roleTree = systemRoleService.getRoleDTOTree(null, systemRoleList);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("roleList", SystemRoleDTO.fromEntity(systemRoleList));
@@ -99,7 +99,7 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/update")
     public CommonReturnType update(@RequestBody SystemRoleDTO systemRoleDTO, HttpServletRequest request) throws BusinessException {
-        Integer currentUserRoleId = SessionUtils.getRoleId(request.getSession());
+        Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
 
         if (systemRoleDTO == null || systemRoleDTO.getId() == null || systemRoleDTO.getParentRoleId() == null) {
             return CommonReturnType.error("更新参数有误，请重输入");
@@ -108,34 +108,34 @@ public class RoleController extends BaseController {
         // 不允许将自己的parent改为自己/自己下级
         if (systemRoleDTO.getId().equals(systemRoleDTO.getParentRoleId())) {
             return CommonReturnType.error("无法选择自身作为父级角色");
-        } else if (roleService.canEmpowerTargetRole(systemRoleDTO.getId(), systemRoleDTO.getParentRoleId())) {
+        } else if (systemRoleService.canEmpowerTargetRole(systemRoleDTO.getId(), systemRoleDTO.getParentRoleId())) {
             return CommonReturnType.error("参数错误");
         }
 
         SystemRole systemRole = SystemRoleDTO.toEntity(systemRoleDTO);
-        SystemRole oldSystemRole = roleRepository.getById(systemRoleDTO.getId());
+        SystemRole oldSystemRole = systemRoleRepository.getById(systemRoleDTO.getId());
 
         // 编辑的角色的parent 编辑前 等于当前登录的角色/在当前登录的角色之下
         if (!currentUserRoleId.equals(oldSystemRole.getParentRoleId())
-            && !roleService.canEmpowerTargetRole(currentUserRoleId, oldSystemRole.getParentRoleId())) {
+            && !systemRoleService.canEmpowerTargetRole(currentUserRoleId, oldSystemRole.getParentRoleId())) {
             return CommonReturnType.error("无权操作");
         }
 
         // 编辑的角色的parent 编辑后 等于当前登录的角色/在当前登录的角色之下
         if (!currentUserRoleId.equals(systemRole.getParentRoleId())
-            && !roleService.canEmpowerTargetRole(currentUserRoleId, systemRole.getParentRoleId())) {
+            && !systemRoleService.canEmpowerTargetRole(currentUserRoleId, systemRole.getParentRoleId())) {
             return CommonReturnType.error("权限不足");
         }
 
-        systemRole.setUpdateTime(new Date());
-        roleRepository.updateById(systemRole);
+        systemRole.setUpdateTime(LocalDateTime.now());
+        systemRoleRepository.updateById(systemRole);
 
         return CommonReturnType.success();
     }
 
     @PostMapping("/delete")
     public CommonReturnType delete(@RequestBody JSONObject params, HttpServletRequest request) throws BusinessException {
-        Integer currentUserRoleId = SessionUtils.getRoleId(request.getSession());
+        Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
 
         Integer roleId = params.getInteger("roleId");
         if (roleId == null) {
@@ -144,12 +144,12 @@ public class RoleController extends BaseController {
 
         LambdaQueryWrapper<SystemRole> roleLambdaQueryWrapper = new LambdaQueryWrapper<>();
         roleLambdaQueryWrapper.eq(SystemRole::getParentRoleId, roleId);
-        long count = roleRepository.count(roleLambdaQueryWrapper);
+        long count = systemRoleRepository.count(roleLambdaQueryWrapper);
         if (count > 0) {
             return CommonReturnType.error("存在子角色，不允许删除");
         }
 
-        if (!roleService.canEmpowerTargetRole(currentUserRoleId, roleId)) {
+        if (!systemRoleService.canEmpowerTargetRole(currentUserRoleId, roleId)) {
             return CommonReturnType.error("权限不足");
         }
 

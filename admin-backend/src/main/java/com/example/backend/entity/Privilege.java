@@ -23,6 +23,7 @@ import java.util.Date;
 @Setter
 @Schema(name = "Privilege", description = "")
 @TableName("privilege")
+@Deprecated
 public class Privilege implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,7 +34,7 @@ public class Privilege implements Serializable {
 
     @Schema(description = "角色id")
     @TableField("role_id")
-    private Integer roleId;
+    private Long roleId;
 
     @Schema(description = "用户id")
     @TableField("user_id")
