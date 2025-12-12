@@ -2,8 +2,35 @@
   "json-comments": {
     "tips": "请安装JSONComments插件为JSON文件提供注释功能, 详见: https://github.com/zhangfisher/json_comments_extension",
     "admin-frontend/package.json": {
-      "dependencies.xlsx": "https://cdn.sheetjs.com/ | https://git.sheetjs.com/SheetJS/sheetjs",
-      "devDependencies.eslint-plugin-import": "import 自动排序"
+      "dependencies.@element-plus/icons-vue": "element-plus icon 图标 | docs: https://element-plus.org/zh-CN/component/icon",
+      "dependencies.axios": "Promise based HTTP client | 官网: https://axios-http.com/",
+      "dependencies.dayjs": "轻量的日期时间处理库 | 官网: https://day.js.org/zh-CN/",
+      "dependencies.echarts": "Apache ECharts | 一个基于 JavaScript 的开源可视化图表库 | 官网: https://echarts.apache.org/zh/index.html",
+      "dependencies.element-plus": "Element Plus | 基于 Vue 3，面向设计师和开发者的组件库 | 官网: https://element-plus.org/zh-CN/",
+      "dependencies.pinia": "Vue 框架依赖",
+      "dependencies.pinia-plugin-persistedstate": "可配置的 Pinia 存储持久化 | 官网: https://praz.codeberg.page/pinia-plugin-persistedstate/zh/",
+      "dependencies.vue": "Vue 框架依赖",
+      "dependencies.vue-router": "Vue 框架依赖",
+      "dependencies.xlsx": "前端导出 Excel 文件 | https://cdn.sheetjs.com/ | https://git.sheetjs.com/SheetJS/sheetjs",
+      "devDependencies.@tsconfig/node24": "Vue 框架依赖",
+      "devDependencies.@types/node": "Vue 框架依赖",
+      "devDependencies.@vitejs/plugin-vue": "Vue 框架依赖",
+      "devDependencies.@vue/eslint-config-prettier": "Vue 框架依赖",
+      "devDependencies.@vue/eslint-config-typescript": "Vue 框架依赖",
+      "devDependencies.@vue/tsconfig": "Vue 框架依赖",
+      "devDependencies.eslint": "Vue 框架依赖",
+      "devDependencies.eslint-plugin-import": "import 自动排序",
+      "devDependencies.eslint-plugin-vue": "Vue 框架依赖",
+      "devDependencies.jiti": "Vue 框架依赖",
+      "devDependencies.npm-run-all2": "Vue 框架依赖",
+      "devDependencies.prettier": "Vue 框架依赖",
+      "devDependencies.typescript": "Vue 框架依赖",
+      "devDependencies.unplugin-auto-import": "element-plus 自动按需导入插件 | docs: https://element-plus.org/zh-CN/guide/quickstart",
+      "devDependencies.unplugin-icons": "elemene-plus 图标自动导入 | docs: https://element-plus.org/zh-CN/component/icon#%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5",
+      "devDependencies.unplugin-vue-components": "element-plus 自动按需导入插件 | docs: https://element-plus.org/zh-CN/guide/quickstart",
+      "devDependencies.vite": "Vue 框架依赖",
+      "devDependencies.vite-plugin-vue-devtools": "Vue 框架依赖",
+      "devDependencies.vue-tsc": "Vue 框架依赖"
     }
   }
 }
