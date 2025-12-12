@@ -68,8 +68,9 @@ public class MybatisPlusEntityGenerator {
                         case Types.SMALLINT, Types.TINYINT -> DbColumnType.INTEGER;
                         case Types.DECIMAL -> DbColumnType.DOUBLE; // (mysql) decimal -> (java) Double
                         case Types.DATE -> DbColumnType.LOCAL_DATE;
-                        case Types.TIME -> DbColumnType.LOCAL_TIME;
-                        case Types.TIMESTAMP -> DbColumnType.LOCAL_DATE_TIME; // (mysql) DATETIME & TIMESTAMP -> (java) LocalDateTime
+                        case Types.TIME ->
+                                DbColumnType.LOCAL_TIME; // (mysql) DATETIME & TIMESTAMP -> (java) LocalDateTime
+                        case Types.TIMESTAMP -> DbColumnType.LOCAL_DATE_TIME;
                         default -> typeRegistry.getColumnType(metaInfo);
                     };
                 }))
@@ -137,7 +138,9 @@ public class MybatisPlusEntityGenerator {
                             .formatMapperFileName("%sMapper")
                             /* v3.5.2 -> *///.enableMapperAnnotation() // @mapper注解开启
                             /* v3.5.9 -> */.mapperAnnotation(org.apache.ibatis.annotations.Mapper.class) // @mapper注解开启
-                            .formatXmlFileName("%sMapper");
+                            .formatXmlFileName("%sMapper")
+                            // .enableFileOverride()
+                    ;
                 })
 
                 .templateConfig(builder -> {

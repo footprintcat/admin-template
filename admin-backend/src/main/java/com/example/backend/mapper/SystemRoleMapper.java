@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- * Mapper 接口
+ * 系统角色表 Mapper 接口
  * </p>
  *
  * @author coder-xiaomo

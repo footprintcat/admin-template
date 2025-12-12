@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * 系统日志表 Mapper 接口
  * </p>
  *
  * @author coder-xiaomo
