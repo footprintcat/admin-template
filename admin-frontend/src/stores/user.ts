@@ -2,37 +2,29 @@ import { computed } from 'vue'
 import { defineStore } from 'pinia'
 
 interface UserState {
-  isEmpty: boolean
   userId: string | undefined
-  roleId: string | undefined
   username: string | undefined
 }
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    isEmpty: true,
     userId: undefined,
-    roleId: undefined,
     username: undefined,
   }),
   actions: {
     isLogin() {
-      return !this.isEmpty
+      return !!this.userId && !!this.username
     },
     isSu() {
       // TODO
-      return computed(() => this.roleId === '1')
+      return computed(() => false)
     },
-    set(userId: string, roleId: string, username: string) {
-      this.isEmpty = false
+    set(userId: string, username: string) {
       this.userId = userId
-      this.roleId = roleId
       this.username = username
     },
     clear() {
-      this.isEmpty = true
       this.userId = undefined
-      this.roleId = undefined
       this.username = undefined
     },
   },

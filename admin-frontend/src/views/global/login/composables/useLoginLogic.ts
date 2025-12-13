@@ -93,9 +93,10 @@ export function useLoginLogic() {
         }
         ElMessage.success('登录成功')
 
-        userStore.set(data.id, data.roleId, data.username)
+        userStore.set(data.id, data.username)
 
-        await permissionStore.asyncUpdatePermissionList(data.roleId, false)
+        // TODO
+        // await permissionStore.asyncUpdatePermissionList(data.roleId, false)
 
         const fullPath = router.currentRoute?.value?.query?.redirectTo as string
         const path = fullPath?.split('?')[0]
