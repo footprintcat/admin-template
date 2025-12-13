@@ -21,6 +21,7 @@ const request: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // 允许携带 Cookie
 })
 
 // GET请求 - 直接返回Promise
