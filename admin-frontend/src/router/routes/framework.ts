@@ -6,7 +6,7 @@ import type { RouteRecordRaw } from 'vue-router'
 const frameworkRoute: Array<RouteRecordRaw> = [
   {
     path: 'dashboard',
-    name: 'dashboard',
+    name: 'Dashboard', // 请不要修改此 name
     meta: {
       title: '系统首页',
       permission: 'dashboard',

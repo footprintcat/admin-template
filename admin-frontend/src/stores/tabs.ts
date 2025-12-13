@@ -10,7 +10,7 @@ interface ListItem {
 
 // 总是添加 dashboard 标签
 const dashboardTab: ListItem = {
-  name: 'dashboard',
+  name: 'Dashboard',
   path: '/dashboard',
   title: '系统首页',
 }

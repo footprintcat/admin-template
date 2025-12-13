@@ -21,3 +21,14 @@ export function systemUserAuthLoginPost(params: ManageSystemUserAuthLoginRequest
   const url = getUrl('/login')
   return post<SystemUserDto>(url, params)
 }
+
+/**
+ * 退出登录接口
+ *
+ * @param params
+ * @returns
+ */
+export function systemUserAuthLogoutPost() {
+  const url = getUrl('/logout')
+  return post<SystemUserDto>(url)
+}

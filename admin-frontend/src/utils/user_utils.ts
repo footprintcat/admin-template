@@ -1,12 +1,12 @@
 import type { Router } from 'vue-router'
+import { systemUserAuthLogoutPost } from '@/api/system/user-auth'
 import { useTabsStore } from '@/stores/tabs'
 import useUserStore from '@/stores/user'
-import send_request from './send_request'
 // import { clearFrontendLocalStorage } from './local_storage_util'
 
 export function userLogout(router: Router) {
     // 发送退出登录请求
-    send_request('v1/user/logout', 'POST')
+    systemUserAuthLogoutPost()
 
     // 关闭全部标签 (销毁页面对象)
     const tabs = useTabsStore()
