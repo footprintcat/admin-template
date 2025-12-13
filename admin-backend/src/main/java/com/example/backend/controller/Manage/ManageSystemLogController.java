@@ -114,7 +114,7 @@ public class ManageSystemLogController extends BaseController {
      * 开放记录日志接口
      *
      * @param params
-     * @param request
+     * @param request 请求参数
      * @return
      */
     // @PostMapping("/add")

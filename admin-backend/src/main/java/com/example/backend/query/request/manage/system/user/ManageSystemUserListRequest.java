@@ -5,7 +5,7 @@ import com.example.backend.query.request.manage.BaseManagePaginationQueryRequest
 import lombok.Data;
 
 @Data
-public class ManageUserListRequestIIBaseManage extends BaseManagePaginationQueryRequest {
+public class ManageSystemUserListRequest extends BaseManagePaginationQueryRequest {
 
     private SystemUserDto params;
 

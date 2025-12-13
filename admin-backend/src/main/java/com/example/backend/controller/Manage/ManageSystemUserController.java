@@ -17,7 +17,7 @@ import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.query.PageQuery;
-import com.example.backend.query.request.manage.system.user.ManageUserListRequestIIBaseManage;
+import com.example.backend.query.request.manage.system.user.ManageSystemUserListRequest;
 import com.example.backend.query.response.manage.ManageListResponse;
 import com.example.backend.service.v2.SystemRoleServiceV2;
 import com.example.backend.service.v2.SystemUserServiceV2;
@@ -59,7 +59,7 @@ public class ManageSystemUserController extends BaseController {
      */
     @PostMapping("/list")
     @ResponseBody
-    public CommonReturn list(@RequestBody ManageUserListRequestIIBaseManage queryRequest) {
+    public CommonReturn list(@RequestBody ManageSystemUserListRequest queryRequest) {
         // 查询分页数据
         Page<SystemUser> page = systemUserServiceV2.getUserPage(queryRequest.getPageQuery(), queryRequest.getParams());
 

@@ -204,7 +204,7 @@ public class SystemPrivilegeService {
      * @param roleId
      * @param userId
      * @return
-     * @throws BusinessException
+     * @throws BusinessException 业务异常
      */
     public HashMap<String, Object> getUserPrivilege(Long roleId, Long userId) {
         // 当前角色有权访问的菜单

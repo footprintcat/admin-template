@@ -284,7 +284,7 @@ public class SystemMenuService {
      *
      * @param menuId
      * @return
-     * @throws BusinessException
+     * @throws BusinessException 业务异常
      */
     public SystemMenu getSystemMenuByMenuId(String menuId) throws BusinessException {
         if (StringUtils.isEmpty(menuId)) {

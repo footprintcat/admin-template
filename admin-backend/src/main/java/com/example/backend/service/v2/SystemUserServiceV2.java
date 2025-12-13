@@ -108,7 +108,7 @@ public class SystemUserServiceV2 {
      *
      * @param session
      * @param inputUserId
-     * @throws BusinessException
+     * @throws BusinessException 业务异常
      */
     public void deleteUserWithVerify(HttpSession session, Long inputUserId) throws BusinessException {
         // 未登录状态

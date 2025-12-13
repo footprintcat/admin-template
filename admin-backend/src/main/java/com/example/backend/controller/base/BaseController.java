@@ -33,7 +33,7 @@ public class BaseController {
     /**
      * 定义ExceptionHandler解决未被Controller层吸收的Exception
      *
-     * @param request
+     * @param request 请求参数
      * @param ex
      * @return
      */

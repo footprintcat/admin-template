@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturn;
-import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemRoleDto;
 import com.example.backend.entity.SystemRole;
@@ -94,9 +93,9 @@ public class SystemRoleController extends BaseController {
      * 更新角色
      *
      * @param systemRoleDTO
-     * @param request
+     * @param request       请求参数
      * @return
-     * @throws BusinessException
+     * @throws BusinessException 业务异常
      */
     @PostMapping("/update")
     public CommonReturn update(@RequestBody SystemRoleDto systemRoleDTO, HttpServletRequest request) {

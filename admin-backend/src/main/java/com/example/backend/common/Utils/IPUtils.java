@@ -6,7 +6,7 @@ public class IPUtils {
     /**
      * 获取ip地址
      *
-     * @param request
+     * @param request 请求对象
      * @return
      */
     public static String getIpAddr(HttpServletRequest request) {
