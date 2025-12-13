@@ -1,13 +1,9 @@
 package com.example.backend.controller.PublicApi;
 
-import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.controller.base.BaseController;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nullable;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,14 +30,14 @@ public class PublicModelController extends BaseController {
     //  * @return
     //  */
     // @GetMapping("/getDefaultPrimitivesUrl")
-    // public CommonReturnType getDefaultPrimitivesUrl() {
+    // public CommonReturn getDefaultPrimitivesUrl() {
     //     @Nullable ModelInfo modelInfo = modelInfoService.getScreenDefaultModelInfo();
     //     if (modelInfo == null) {
-    //         return CommonReturnType.success(null);
+    //         return CommonReturn.success(null);
     //     }
     //
     //     String url = "//" + modelHost + "/" + siteId + "/" + modelInfo.getPath() + "/tileset.json";
-    //     return CommonReturnType.success(url);
+    //     return CommonReturn.success(url);
     // }
 
 }

@@ -2,7 +2,7 @@ package com.example.backend.filter;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.example.backend.common.Error.BusinessErrorCode;
-import com.example.backend.common.Response.CommonReturnType;
+import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.common.Utils.SessionUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.Filter;
@@ -122,8 +122,8 @@ public class PrivilegeFilter implements Filter {
             HashMap<String, Object> map = new HashMap<>();
             map.put("errCode", BusinessErrorCode.USER_NOT_LOGIN.getErrCode());
             map.put("errMsg", BusinessErrorCode.USER_NOT_LOGIN.getErrMsg());
-            CommonReturnType commonReturnType = CommonReturnType.error(map, "用户未登录");
-            String jsonString = JSONObject.toJSONString(commonReturnType);
+            CommonReturn commonReturn = CommonReturn.error(map, "用户未登录");
+            String jsonString = JSONObject.toJSONString(commonReturn);
 
             servletResponse.resetBuffer();
             servletResponse.getWriter().print(jsonString);

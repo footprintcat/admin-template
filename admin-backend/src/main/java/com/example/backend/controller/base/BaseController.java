@@ -2,7 +2,7 @@ package com.example.backend.controller.base;
 
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
-import com.example.backend.common.Response.CommonReturnType;
+import com.example.backend.common.Response.CommonReturn;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
@@ -70,6 +69,6 @@ public class BaseController {
             responseData.put("exception", exceptionDetails);
         }
 
-        return CommonReturnType.error(responseData, Optional.ofNullable(errMessage).orElse("系统内部错误"));
+        return CommonReturn.error(responseData, Optional.ofNullable(errMessage).orElse("系统内部错误"));
     }
 }

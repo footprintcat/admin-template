@@ -12,7 +12,7 @@ import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
-import com.example.backend.common.Response.CommonReturnType;
+import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemRoleDto;
 import com.example.backend.entity.SystemRole;
@@ -50,7 +50,7 @@ public class ManageRoleController extends BaseController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public CommonReturnType list(PageQuery pageQuery, SystemRoleDto systemRoleDTO) {
+    public CommonReturn list(PageQuery pageQuery, SystemRoleDto systemRoleDTO) {
         // 查询分页数据
         Page<SystemRole> rolePage = systemRoleServiceV2.getRolePage(pageQuery, systemRoleDTO);
 
@@ -98,7 +98,7 @@ public class ManageRoleController extends BaseController {
         map.put("pageName", pageName);
 
         // 返回结果
-        return CommonReturnType.success(map);
+        return CommonReturn.success(map);
     }
 
     /**
@@ -108,7 +108,7 @@ public class ManageRoleController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public CommonReturnType edit(@ModelAttribute SystemRoleDto systemRoleDTO) {
+    public CommonReturn edit(@ModelAttribute SystemRoleDto systemRoleDTO) {
 
         // 传入参数 - 要修改的设备
         SystemRole systemRole = SystemRoleDto.toEntity(systemRoleDTO);
@@ -119,18 +119,18 @@ public class ManageRoleController extends BaseController {
         if (systemRole.getId() == null || systemRole.getId() < 1) {
             // 新增
             if (existSystemRole != null) {
-                return CommonReturnType.error("角色已存在，操作失败");
+                return CommonReturn.error("角色已存在，操作失败");
             }
             systemRole.setId(null);
             systemRoleServiceV2.addRole(systemRole);
         } else {
             // 修改
             if (existSystemRole == null) {
-                return CommonReturnType.error("角色不存在，操作失败");
+                return CommonReturn.error("角色不存在，操作失败");
             }
             systemRoleServiceV2.updateRole(systemRole);
         }
-        return CommonReturnType.success();
+        return CommonReturn.success();
     }
 
     /**
@@ -141,7 +141,7 @@ public class ManageRoleController extends BaseController {
      */
     @PostMapping("/delete")
     @ResponseBody
-    public CommonReturnType delete(Integer id) throws BusinessException {
+    public CommonReturn delete(Integer id) throws BusinessException {
         throw new BusinessException(BusinessErrorCode.NOT_SUPPORT, "不允许删除报警记录");
     }
 
@@ -152,7 +152,7 @@ public class ManageRoleController extends BaseController {
      */
     @GetMapping("/export")
     @ResponseBody
-    public CommonReturnType exportRoleList(SystemRoleDto systemRoleDTO) {
+    public CommonReturn exportRoleList(SystemRoleDto systemRoleDTO) {
         List<SystemRole> systemRoleList = systemRoleServiceV2.getRoleList(systemRoleDTO);
         List<SystemRoleDto> systemRoleDtoList = SystemRoleDto.fromEntity(systemRoleList);
 
@@ -166,7 +166,7 @@ public class ManageRoleController extends BaseController {
         map.put("sheetName", "角色表-" + System.currentTimeMillis());
         map.put("fileName", "角色表_导出时间_" + dateTime);
 
-        return CommonReturnType.success(map);
+        return CommonReturn.success(map);
     }
 
 }

@@ -10,20 +10,16 @@ import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
-import com.example.backend.common.Response.CommonReturnType;
-import com.example.backend.common.Utils.IPUtils;
+import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemLogDto;
 import com.example.backend.entity.SystemLog;
 import com.example.backend.query.PageQuery;
 import com.example.backend.service.System.SystemLogService;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +39,7 @@ public class ManageSystemLogController extends BaseController {
     private SystemLogService systemLogService;
 
     @GetMapping("/list")
-    public CommonReturnType list(@ModelAttribute PageQuery pageQuery, SystemLogDto systemLogDTO) {
+    public CommonReturn list(@ModelAttribute PageQuery pageQuery, SystemLogDto systemLogDTO) {
         // 查询分页数据
         Page<SystemLog> systemLogPage = systemLogService.getSystemLogPage(pageQuery, systemLogDTO);
 
@@ -111,7 +107,7 @@ public class ManageSystemLogController extends BaseController {
         map.put("pageName", pageName);
 
         // 返回结果
-        return CommonReturnType.success(map);
+        return CommonReturn.success(map);
     }
 
     /**
@@ -122,7 +118,7 @@ public class ManageSystemLogController extends BaseController {
      * @return
      */
     // @PostMapping("/add")
-    // public CommonReturnType dataProcessAdd(@RequestBody JSONObject params, HttpServletRequest request) {
+    // public CommonReturn dataProcessAdd(@RequestBody JSONObject params, HttpServletRequest request) {
     //     String ipAddr = IPUtils.getIpAddr(request);
     //
     //     SystemLog systemLog = new SystemLog();
@@ -133,7 +129,7 @@ public class ManageSystemLogController extends BaseController {
     //     systemLog.setUserId(null);
     //     systemLogService.add(systemLog);
     //
-    //     return CommonReturnType.success();
+    //     return CommonReturn.success();
     // }
 
     /**
@@ -143,7 +139,7 @@ public class ManageSystemLogController extends BaseController {
      */
     @GetMapping("/export")
     @ResponseBody
-    public CommonReturnType exportSystemLogList(SystemLogDto systemLogDTO) {
+    public CommonReturn exportSystemLogList(SystemLogDto systemLogDTO) {
         List<SystemLog> systemLogList = systemLogService.getSystemLogList(systemLogDTO);
         List<SystemLogDto> systemLogDtoList = SystemLogDto.fromEntity(systemLogList);
 
@@ -157,7 +153,7 @@ public class ManageSystemLogController extends BaseController {
         map.put("sheetName", "设备表-" + System.currentTimeMillis());
         map.put("fileName", "设备表_导出时间_" + dateTime);
 
-        return CommonReturnType.success(map);
+        return CommonReturn.success(map);
     }
 
 }

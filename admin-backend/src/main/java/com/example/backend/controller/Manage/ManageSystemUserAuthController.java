@@ -1,7 +1,7 @@
 package com.example.backend.controller.Manage;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.backend.common.Response.CommonReturnType;
+import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
@@ -34,7 +34,7 @@ public class ManageSystemUserAuthController extends BaseController {
      * @since 2025-12-12
      */
     @PostMapping("/login")
-    public CommonReturnType login(@RequestBody ManageSystemUserAuthLoginRequest request, HttpServletRequest httpServletRequest) {
+    public CommonReturn login(@RequestBody ManageSystemUserAuthLoginRequest request, HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
 
         // 获取用户输入
@@ -53,9 +53,9 @@ public class ManageSystemUserAuthController extends BaseController {
             // 密码正确，登录成功
             SystemUserDto dto = SystemUserDto.fromEntity(user);
             SystemLogServiceBak.loginSetSession(session, user);
-            return CommonReturnType.success(dto);
+            return CommonReturn.success(dto);
         } else {
-            return CommonReturnType.error("登录失败，请检查用户名密码是否正确");
+            return CommonReturn.error("登录失败，请检查用户名密码是否正确");
         }
 
     }

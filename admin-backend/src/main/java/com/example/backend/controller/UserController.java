@@ -1,8 +1,7 @@
 package com.example.backend.controller;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.example.backend.common.Response.CommonReturnType;
-import com.example.backend.common.Utils.IPUtils;
+import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.common.Utils.StringUtils;
 import com.example.backend.controller.base.BaseController;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 // TODO
 @Deprecated
@@ -42,7 +40,7 @@ public class UserController extends BaseController {
     private SystemLogService systemLogService;
 
     @PostMapping("/login")
-    public CommonReturnType login(@RequestBody JSONObject params, HttpServletRequest httpServletRequest) {
+    public CommonReturn login(@RequestBody JSONObject params, HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
 
         // 获取用户输入
@@ -72,19 +70,19 @@ public class UserController extends BaseController {
         // systemLog.setUserId(Objects.isNull(userByUsername) ? null : userByUsername.getId());
         systemLogService.add(systemLog);
 
-        return CommonReturnType.success(systemUserDTO);
+        return CommonReturn.success(systemUserDTO);
     }
 
     @PostMapping("/getInfo")
-    public CommonReturnType getUserInfo(HttpServletRequest httpServletRequest) {
+    public CommonReturn getUserInfo(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
         // 未登录状态 map 为 null
         HashMap<String, Object> userInfoMap = SessionUtils.getUserInfoMap(session);
-        return CommonReturnType.success(userInfoMap);
+        return CommonReturn.success(userInfoMap);
     }
 
     @PostMapping("/logout")
-    public CommonReturnType logout(HttpServletRequest httpServletRequest) {
+    public CommonReturn logout(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
         HashMap<String, Object> userInfoMap = SessionUtils.getUserInfoMap(session);
 
@@ -104,25 +102,25 @@ public class UserController extends BaseController {
         systemLogService.add(systemLog);
 
         session.invalidate();
-        return CommonReturnType.success();
+        return CommonReturn.success();
     }
 
     @PostMapping("/alterPassword")
-    public CommonReturnType alterPassword(@RequestBody JSONObject params) {
+    public CommonReturn alterPassword(@RequestBody JSONObject params) {
         Long userId = params.getLong("userId");
         String oldPassword = params.getString("oldPassword");
         String newPassword = params.getString("newPassword");
 
         userService.alterPassword(userId, oldPassword, newPassword);
-        return CommonReturnType.success();
+        return CommonReturn.success();
     }
 
     @PostMapping("/authenticate")
-    public CommonReturnType authenticate(@RequestBody JSONObject params, HttpServletRequest httpServletRequest) {
+    public CommonReturn authenticate(@RequestBody JSONObject params, HttpServletRequest httpServletRequest) {
         // 获取输入的密码
         String inputPassword = params.getString("password");
         if (StringUtils.isEmpty(inputPassword)) {
-            return CommonReturnType.error("密码不能为空！");
+            return CommonReturn.error("密码不能为空！");
         }
 
         // 获取当前用户username
@@ -132,14 +130,14 @@ public class UserController extends BaseController {
         boolean isCorrect = systemUserServiceV2.checkPasswordIsCorrect(userByHttpServlet, inputPassword);
 
         if (!isCorrect) {
-            return CommonReturnType.error("密码有误！请重输");
+            return CommonReturn.error("密码有误！请重输");
         }
         // 密码正确 校验是否为超管用户
         Long roleId = userByHttpServlet.getRoleId();
         if (!SUPER_ADMIN_ROLE_ID.equals(roleId)) {
-            return CommonReturnType.error("该用户权限不足！");
+            return CommonReturn.error("该用户权限不足！");
         }
 
-        return CommonReturnType.success(true);
+        return CommonReturn.success(true);
     }
 }

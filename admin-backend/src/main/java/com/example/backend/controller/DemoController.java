@@ -2,7 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
-import com.example.backend.common.Response.CommonReturnType;
+import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
@@ -20,19 +20,19 @@ public class DemoController extends BaseController {
     private UserServiceImpl userServiceImpl;
 
     @RequestMapping("/test")
-    public CommonReturnType test() {
+    public CommonReturn test() {
         List<SystemUser> userList = userServiceImpl.getUserList();
         List<SystemUserDto> collect = SystemUserDto.fromEntity(userList);
-        return CommonReturnType.success(collect);
+        return CommonReturn.success(collect);
     }
 
     @RequestMapping("/testError")
-    public CommonReturnType testError() {
-        return CommonReturnType.success(0 / 0);
+    public CommonReturn testError() {
+        return CommonReturn.success(0 / 0);
     }
 
     @RequestMapping("/testBusinessError")
-    public CommonReturnType testBusinessError() throws BusinessException {
+    public CommonReturn testBusinessError() throws BusinessException {
         throw new BusinessException(BusinessErrorCode.UNKNOWN_ERROR, "error");
     }
 }

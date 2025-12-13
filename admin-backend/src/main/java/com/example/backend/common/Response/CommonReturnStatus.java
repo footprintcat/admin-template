@@ -1,12 +1,12 @@
 package com.example.backend.common.Response;
 
-public enum CommonReturnTypeStatus {
+public enum CommonReturnStatus {
     SUCCESS("success"),
     FAILED("fail");
 
     private final String str;
 
-    CommonReturnTypeStatus(String str) {
+    CommonReturnStatus(String str) {
         this.str = str;
     }
 

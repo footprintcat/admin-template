@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.backend.common.Enums.PrivilegeTypeEnum;
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
-import com.example.backend.common.Response.CommonReturnType;
+import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemPrivilegeDto;
@@ -48,7 +48,7 @@ public class SystemPrivilegeController extends BaseController {
     private SystemMenuService systemMenuService;
 
     @PostMapping("/togglePrivilege")
-    public CommonReturnType add(@RequestBody JSONObject param, HttpServletRequest httpServletRequest) throws BusinessException {
+    public CommonReturn add(@RequestBody JSONObject param, HttpServletRequest httpServletRequest) throws BusinessException {
         String menuId = param.getString("menuId");
         Long roleId = param.getLong("roleId");
         Boolean value = param.getBoolean("value");
@@ -103,11 +103,11 @@ public class SystemPrivilegeController extends BaseController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", result);
         jsonObject.put("message", message);
-        return CommonReturnType.success(jsonObject);
+        return CommonReturn.success(jsonObject);
     }
 
     @PostMapping("/togglePrivilegeType")
-    public CommonReturnType togglePrivilegeType(@RequestBody JSONObject param, HttpServletRequest httpServletRequest) throws BusinessException {
+    public CommonReturn togglePrivilegeType(@RequestBody JSONObject param, HttpServletRequest httpServletRequest) throws BusinessException {
         String menuId = param.getString("menuId");
         Long roleId = param.getLong("roleId");
         Boolean value = param.getBoolean("value");
@@ -199,11 +199,11 @@ public class SystemPrivilegeController extends BaseController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", result);
         jsonObject.put("message", message);
-        return CommonReturnType.success(jsonObject);
+        return CommonReturn.success(jsonObject);
     }
 
     @GetMapping("/getCurrentUserPrivilegeList")
-    public CommonReturnType getCurrentUserPrivilegeList(HttpServletRequest httpServletRequest) {
+    public CommonReturn getCurrentUserPrivilegeList(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
         Long userId = SessionUtils.getUserId(session);
         Long roleId = SessionUtils.getRoleId(session);
@@ -229,21 +229,21 @@ public class SystemPrivilegeController extends BaseController {
             currentUserPrivilegeList.addAll(currentUserGrantedMenuIdList);
         }
 
-        return CommonReturnType.success(currentUserPrivilegeList);
+        return CommonReturn.success(currentUserPrivilegeList);
     }
 
 
     @GetMapping("/getUserPrivilege")
-    public CommonReturnType getUserPrivilege(@RequestParam(value = "roleId") Long roleId, @RequestParam(value = "userId") Long userId) throws BusinessException {
+    public CommonReturn getUserPrivilege(@RequestParam(value = "roleId") Long roleId, @RequestParam(value = "userId") Long userId) throws BusinessException {
         if (roleId == null || userId == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
         HashMap<String, Object> result = systemPrivilegeService.getUserPrivilege(roleId, userId);
-        return CommonReturnType.success(result);
+        return CommonReturn.success(result);
     }
 
     @PostMapping("/saveOrUpdateUserPrivilege")
-    public CommonReturnType saveOrUpdateUserPrivilege(@RequestBody SystemPrivilegeDto systemPrivilegeDTO) throws BusinessException {
+    public CommonReturn saveOrUpdateUserPrivilege(@RequestBody SystemPrivilegeDto systemPrivilegeDTO) throws BusinessException {
         if (systemPrivilegeDTO.getModule() == null || systemPrivilegeDTO.getUserId() == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
@@ -261,17 +261,17 @@ public class SystemPrivilegeController extends BaseController {
                 systemPrivilegeService.updateByModuleAndUserId(privilege);
             }
         }
-        return CommonReturnType.success();
+        return CommonReturn.success();
     }
 
     @PostMapping("/removePrivilegesByUserId")
-    public CommonReturnType removePrivilegesByUserId(@RequestBody SystemPrivilegeDto systemPrivilegeDTO) throws BusinessException {
+    public CommonReturn removePrivilegesByUserId(@RequestBody SystemPrivilegeDto systemPrivilegeDTO) throws BusinessException {
         if (Objects.isNull(systemPrivilegeDTO) || systemPrivilegeDTO.getUserId() == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
         Privilege privilege = SystemPrivilegeDto.toEntity(systemPrivilegeDTO);
         systemPrivilegeService.removePrivilegesByUserId(privilege.getUserId());
-        return CommonReturnType.success();
+        return CommonReturn.success();
     }
 
     /**
@@ -280,13 +280,13 @@ public class SystemPrivilegeController extends BaseController {
      * @return
      */
     @GetMapping("/exportJson")
-    public CommonReturnType exportJson(HttpServletRequest request) {
+    public CommonReturn exportJson(HttpServletRequest request) {
         Long roleId = SessionUtils.getRoleId(request.getSession());
         if (roleId != 1) {
-            return CommonReturnType.error("仅超级管理用户可导出权限表");
+            return CommonReturn.error("仅超级管理用户可导出权限表");
         }
         String jsonStr = systemPrivilegeService.exportJson();
-        return CommonReturnType.success(jsonStr);
+        return CommonReturn.success(jsonStr);
     }
 
 }
