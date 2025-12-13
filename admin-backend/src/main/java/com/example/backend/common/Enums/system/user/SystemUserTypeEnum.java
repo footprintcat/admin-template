@@ -14,8 +14,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SystemUserTypeEnum {
 
-    SUPER_USER("SUPER_ADMIN", "超级管理员"),
-    MEMBER("MEMBER", "普通用户"),
+    SUPER_USER("super_admin", "超级管理员"),
+    MEMBER("member", "普通用户"),
     ;
 
     @EnumValue

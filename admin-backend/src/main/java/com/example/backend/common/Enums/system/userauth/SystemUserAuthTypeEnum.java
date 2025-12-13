@@ -14,8 +14,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SystemUserAuthTypeEnum {
 
-    PASSWORD("PASSWORD", "账号密码登录"),
-    OAUTH2("OAUTH2", "OAuth 2.0 三方登录"),
+    PASSWORD("password", "账号密码登录"),
+    OAUTH2("oauth2", "OAuth 2.0 三方登录"),
     ;
 
     @EnumValue

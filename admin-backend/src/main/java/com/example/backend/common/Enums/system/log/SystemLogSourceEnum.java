@@ -14,9 +14,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SystemLogSourceEnum {
 
-    BACKEND("BACKEND", "后端日志"),
-    MANAGE("MANAGE", "管理端前端上报日志"),
-    APP("APP", "移动端上报日志"),
+    BACKEND("backend", "后端日志"),
+    MANAGE("manage", "管理端前端上报日志"),
+    APP("app", "移动端上报日志"),
     ;
 
     @EnumValue

@@ -15,51 +15,51 @@ import lombok.Getter;
 public enum SystemLogTypeEnum {
 
     // 操作类日志
-    OPERATION("OPERATION", "操作日志"),
-    LOGIN("LOGIN", "登录日志"),
-    LOGOUT("LOGOUT", "登出日志"),
-    CREATE("CREATE", "新增日志"),
-    UPDATE("UPDATE", "更新日志"),
-    DELETE("DELETE", "删除日志"),
-    IMPORT("IMPORT", "导入日志"),
-    EXPORT("EXPORT", "导出日志"),
-    DOWNLOAD("DOWNLOAD", "下载日志"),
-    UPLOAD("UPLOAD", "上传日志"),
+    OPERATION("operation", "操作日志"),
+    LOGIN("login", "登录日志"),
+    LOGOUT("logout", "登出日志"),
+    CREATE("create", "新增日志"),
+    UPDATE("update", "更新日志"),
+    DELETE("delete", "删除日志"),
+    IMPORT("import", "导入日志"),
+    EXPORT("export", "导出日志"),
+    DOWNLOAD("download", "下载日志"),
+    UPLOAD("upload", "上传日志"),
 
     // 系统类日志
-    SYSTEM("SYSTEM", "系统日志"),
-    STARTUP("STARTUP", "启动日志"),
-    SHUTDOWN("SHUTDOWN", "关闭日志"),
-    CONFIG_CHANGE("CONFIG_CHANGE", "配置变更日志"),
+    SYSTEM("system", "系统日志"),
+    STARTUP("startup", "启动日志"),
+    SHUTDOWN("shutdown", "关闭日志"),
+    CONFIG_CHANGE("configChange", "配置变更日志"),
 
     // 安全类日志
-    SECURITY("SECURITY", "安全日志"),
-    AUTH("AUTH", "认证日志"),
-    PERMISSION("PERMISSION", "权限日志"),
-    ACCESS("ACCESS", "访问日志"),
+    SECURITY("security", "安全日志"),
+    AUTH("auth", "认证日志"),
+    PERMISSION("permission", "权限日志"),
+    ACCESS("access", "访问日志"),
 
     // 业务类日志
-    // BUSINESS("BUSINESS", "业务日志"),
-    // ORDER("ORDER", "订单日志"),
-    // PAYMENT("PAYMENT", "支付日志"),
-    // REFUND("REFUND", "退款日志"),
+    // BUSINESS("business", "业务日志"),
+    // ORDER("order", "订单日志"),
+    // PAYMENT("payment", "支付日志"),
+    // REFUND("refund", "退款日志"),
 
     // 错误与监控
-    ERROR("ERROR", "错误日志"),
-    WARN("WARN", "警告日志"),
-    DEBUG("DEBUG", "调试日志"),
-    INFO("INFO", "信息日志"),
-    TRACE("TRACE", "跟踪日志"),
-    PERFORMANCE("PERFORMANCE", "性能日志"),
+    ERROR("error", "错误日志"),
+    WARN("warn", "警告日志"),
+    DEBUG("debug", "调试日志"),
+    INFO("info", "信息日志"),
+    TRACE("trace", "跟踪日志"),
+    PERFORMANCE("performance", "性能日志"),
 
     // 其他
-    AUDIT("AUDIT", "审计日志"),
-    BACKUP("BACKUP", "备份日志"),
-    SYNC("SYNC", "同步日志"),
-    NOTIFICATION("NOTIFICATION", "通知日志"),
+    AUDIT("audit", "审计日志"),
+    BACKUP("backup", "备份日志"),
+    SYNC("sync", "同步日志"),
+    NOTIFICATION("notification", "通知日志"),
 
     // 默认
-    UNKNOWN("UNKNOWN", "未知类型");
+    UNKNOWN("unknown", "未知类型");
 
     ;
 

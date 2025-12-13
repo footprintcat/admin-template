@@ -14,10 +14,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SystemUserStatusEnum {
 
-    NORMAL("NORMAL", "正常（可用）"),
-    LOCKED("LOCKED", "锁定（禁用）"),
-    DISABLED("DISABLED", "停用"),
-    EXPIRED("EXPIRED", "过期"),
+    NORMAL("normal", "正常（可用）"),
+    LOCKED("locked", "锁定（禁用）"),
+    DISABLED("disabled", "停用"),
+    EXPIRED("expired", "过期"),
     ;
 
     @EnumValue
