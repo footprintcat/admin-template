@@ -28,6 +28,15 @@ mybatis:
   type-aliases-package: com.example.backend.entity
   mapper-locations: classpath:mapper/*.xml
 
+mybatis-plus:
+  global-config:
+    db-config:
+      # 逻辑删除配置
+      # docs: https://baomidou.com/guides/logic-delete/
+      logic-delete-field: deleteTime # 全局逻辑删除字段名(为实体类属性名称)
+      logic-delete-value: 'now()' # 逻辑未删除值
+      logic-not-delete-value: 'null' # 逻辑未删除值
+
 project-config:
   env: production
   config-name: application.yml
