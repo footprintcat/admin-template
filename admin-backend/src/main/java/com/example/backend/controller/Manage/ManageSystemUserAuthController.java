@@ -36,7 +36,7 @@ public class ManageSystemUserAuthController extends BaseController {
      * @since 2025-12-12
      */
     @PostMapping("/login")
-    public CommonReturn login(@RequestBody ManageSystemUserAuthLoginRequest request, HttpServletRequest httpServletRequest) {
+    public CommonReturn login(@RequestBody ManageSystemUserAuthLoginRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
 
         // 获取用户输入

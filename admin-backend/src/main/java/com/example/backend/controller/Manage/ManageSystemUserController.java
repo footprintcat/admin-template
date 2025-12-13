@@ -191,7 +191,8 @@ public class ManageSystemUserController extends BaseController {
                 return CommonReturn.error("密码不能为空");
             }
             String passwordHash = DigestUtils.sha512Hex(password);
-            systemUser.setPasswordHash(passwordHash);
+            // TODO
+            // systemUser.setPasswordHash(passwordHash);
             systemUser.setId(null);
             systemUserServiceV2.addUser(systemUser);
         } else {
@@ -202,12 +203,13 @@ public class ManageSystemUserController extends BaseController {
             if (existUser == null) {
                 return CommonReturn.error("用户不存在，操作失败");
             }
-            if (password == null || password.isEmpty()) {
-                systemUser.setPasswordHash(null);
-            } else {
-                String passwordHash = DigestUtils.sha512Hex(password);
-                systemUser.setPasswordHash(passwordHash);
-            }
+            // TODO
+            // if (password == null || password.isEmpty()) {
+            //     systemUser.setPasswordHash(null);
+            // } else {
+            //     String passwordHash = DigestUtils.sha512Hex(password);
+            //     systemUser.setPasswordHash(passwordHash);
+            // }
             systemUserServiceV2.updateUser(systemUser);
         }
         return CommonReturn.success();

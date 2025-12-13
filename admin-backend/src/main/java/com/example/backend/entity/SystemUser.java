@@ -45,14 +45,7 @@ public class SystemUser implements Serializable {
     private String nickname;
 
     // TODO
-    @TableField("role_id")
-    private Long roleId;
-
-    // TODO
-    @TableField("password_hash")
-    private String passwordHash;
-
-    // TODO
+    @Deprecated
     @Schema(description = "电话")
     @TableField("telephone")
     private String telephone;

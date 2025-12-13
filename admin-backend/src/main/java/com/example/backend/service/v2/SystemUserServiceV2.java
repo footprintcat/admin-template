@@ -75,22 +75,6 @@ public class SystemUserServiceV2 {
     }
 
     /**
-     * 判断用户密码是否正确，并且登录
-     *
-     * @param systemUser
-     * @param password
-     * @return
-     */
-    public boolean checkPasswordIsCorrect(SystemUser systemUser, String password) {
-        if (systemUser == null) {
-            return false;
-        }
-        String inputPasswordHash = DigestUtils.sha512Hex(password);
-        String userPasswordHash = systemUser.getPasswordHash();
-        return Objects.equals(inputPasswordHash, userPasswordHash);
-    }
-
-    /**
      * 新增用户
      *
      * @param user
@@ -134,7 +118,8 @@ public class SystemUserServiceV2 {
 
         // TODO
         // 该用户角色没有权限删除用户
-        Long loginUserRoleId = SessionUtils.getRoleId(session);
+        // TODO
+        Long loginUserRoleId = null; // SessionUtils.getRoleId(session);
         if (loginUserRoleId != 1 && loginUserRoleId != 2) {
             throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED);
         }
@@ -152,12 +137,13 @@ public class SystemUserServiceV2 {
         }
 
         // 要删除用户是管理员身份 不允许删除
-        Long userToDeleteRoleId = userToDelete.getRoleId();
-        if (userToDeleteRoleId == 1) {
-            throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "不允许删除超级用户");
-        } else if (!systemRoleService.canEmpowerTargetRole(loginUserRoleId, userToDeleteRoleId)) {
-            throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "无权删除该用户");
-        }
+        // TODO
+        // Long userToDeleteRoleId = userToDelete.getRoleId();
+        // if (userToDeleteRoleId == 1) {
+        //     throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "不允许删除超级用户");
+        // } else if (!systemRoleService.canEmpowerTargetRole(loginUserRoleId, userToDeleteRoleId)) {
+        //     throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "无权删除该用户");
+        // }
 
         // 执行删除
         systemUserMapper.deleteById(userToDeleteId);

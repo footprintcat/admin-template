@@ -59,7 +59,8 @@ public class SystemPrivilegeController extends BaseController {
         boolean result = true;
         String message = "更新成功";
 
-        Long currentRoleId = SessionUtils.getRoleId(httpServletRequest.getSession());
+        // TODO
+        Long currentRoleId = null; // SessionUtils.getRoleId(httpServletRequest.getSession());
         if (Objects.equals(currentRoleId, roleId)) {
             // throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "不可修改当前用户的权限");
             result = false;
@@ -119,7 +120,8 @@ public class SystemPrivilegeController extends BaseController {
         String message = "更新成功";
 
         HttpSession session = httpServletRequest.getSession();
-        Long currentRoleId = SessionUtils.getRoleId(session);
+        // TODO
+        Long currentRoleId = null; // SessionUtils.getRoleId(session);
         if (Objects.equals(currentRoleId, roleId)) {
             // throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED, "不可修改当前用户的权限");
             result = false;
@@ -206,7 +208,8 @@ public class SystemPrivilegeController extends BaseController {
     public CommonReturn getCurrentUserPrivilegeList(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
         Long userId = SessionUtils.getUserId(session);
-        Long roleId = SessionUtils.getRoleId(session);
+        // TODO
+        Long roleId = null; // SessionUtils.getRoleId(session);
 
         Collection<String> currentUserPrivilegeList;
         if (Objects.equals(roleId, 1L)) {
@@ -281,7 +284,8 @@ public class SystemPrivilegeController extends BaseController {
      */
     @GetMapping("/exportJson")
     public CommonReturn exportJson(HttpServletRequest request) {
-        Long roleId = SessionUtils.getRoleId(request.getSession());
+        // TODO
+        Long roleId = null; // SessionUtils.getRoleId(request.getSession());
         if (roleId != 1) {
             return CommonReturn.error("仅超级管理用户可导出权限表");
         }

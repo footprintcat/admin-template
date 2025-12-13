@@ -17,10 +17,9 @@ public class SessionUtils {
      * @param userId
      * @param roleId
      */
-    public static void setSession(@NotNull HttpSession session, @NotNull String username, @NotNull Long userId, @NotNull Long roleId) {
+    public static void setSession(@NotNull HttpSession session, @NotNull String username, @NotNull Long userId) {
         session.setAttribute("username", username);
         session.setAttribute("user_id", userId);
-        session.setAttribute("role_id", roleId);
     }
 
     /**
@@ -33,7 +32,6 @@ public class SessionUtils {
     public static void setSession(@NotNull HttpSession session, @NotNull SystemUser systemUser) {
         session.setAttribute("username", systemUser.getUsername());
         session.setAttribute("user_id", systemUser.getId());
-        session.setAttribute("role_id", systemUser.getRoleId());
     }
 
     public static void logout(HttpSession session) {
@@ -58,10 +56,6 @@ public class SessionUtils {
             throw new BusinessException(BusinessErrorCode.USER_NOT_LOGIN);
         }
         return userId;
-    }
-
-    public static @Nullable Long getRoleId(HttpSession session) {
-        return getLong(session, "role_id");
     }
 
     private static @Nullable Integer getInteger(HttpSession session, String attrName) {

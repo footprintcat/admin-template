@@ -58,7 +58,8 @@ public class SystemRoleController extends BaseController {
 
     @GetMapping("/findChildRoles")
     public CommonReturn findChildRoles(@RequestParam(value = "roleId", required = false) Long roleId, HttpServletRequest request) {
-        Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
+        // TODO
+        Long currentUserRoleId = null; // SessionUtils.getRoleId(request.getSession());
 
         List<SystemRole> systemRoleList = systemRoleService.getRoleList();
         List<SystemRole> childSystemRoles = systemRoleService.findChildRoles(roleId != null ? roleId : currentUserRoleId, systemRoleList);
@@ -98,8 +99,9 @@ public class SystemRoleController extends BaseController {
      * @throws BusinessException
      */
     @PostMapping("/update")
-    public CommonReturn update(@RequestBody SystemRoleDto systemRoleDTO, HttpServletRequest request) throws BusinessException {
-        Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
+    public CommonReturn update(@RequestBody SystemRoleDto systemRoleDTO, HttpServletRequest request) {
+        // TODO
+        Long currentUserRoleId = null; // SessionUtils.getRoleId(request.getSession());
 
         if (systemRoleDTO == null || systemRoleDTO.getId() == null || systemRoleDTO.getParentRoleId() == null) {
             return CommonReturn.error("更新参数有误，请重输入");
@@ -135,7 +137,8 @@ public class SystemRoleController extends BaseController {
 
     @PostMapping("/delete")
     public CommonReturn delete(@RequestBody JSONObject params, HttpServletRequest request) throws BusinessException {
-        Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
+        // TODO
+        Long currentUserRoleId = null; // SessionUtils.getRoleId(request.getSession());
 
         Long roleId = params.getLong("roleId");
         if (roleId == null) {
@@ -155,7 +158,8 @@ public class SystemRoleController extends BaseController {
 
         // 如果角色存在关联用户，则不允许删除
         LambdaQueryWrapper<SystemUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SystemUser::getRoleId, roleId);
+        //  TODO
+        // queryWrapper.eq(SystemUser::getRoleId, roleId);
         if (userRepository.exists(queryWrapper)) {
             return CommonReturn.error("角色下还存在用户，请先修改用户关联角色，再尝试删除");
         }

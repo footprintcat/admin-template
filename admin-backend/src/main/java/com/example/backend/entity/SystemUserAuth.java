@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.example.backend.common.Enums.system.userauth.SystemUserAuthTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,7 +41,7 @@ public class SystemUserAuth implements Serializable {
 
     @Schema(description = "授权类型：PASSWORD-账号密码登录, LOCKED-锁定（禁用）")
     @TableField("auth_type")
-    private Long authType;
+    private SystemUserAuthTypeEnum authType;
 
     @Schema(description = "密码哈希")
     @TableField("password_hash")

@@ -6,19 +6,24 @@ import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
+import com.example.backend.entity.SystemUserAuth;
 import com.example.backend.mapper.SystemUserMapper;
+import com.example.backend.repository.SystemUserAuthRepository;
 import com.example.backend.repository.SystemUserRepository;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser> {
 
     @Resource
     private SystemUserRepository systemUserRepository;
+    @Resource
+    private SystemUserAuthRepository systemUserAuthRepository;
 
     /**
      * 用户登录接口
@@ -29,7 +34,7 @@ public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser>
      * @since 2025-12-13
      */
     @Nullable
-    public SystemUserDto userLogin(@NotNull HttpSession session, @NotNull String username, @NotNull String password) {
+    public SystemUserDto userLogin(@NotNull HttpSession session, @NotNull String username, @NotNull String password) throws BusinessException {
         // 通过用户名查出用户信息
         // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
         @Nullable
@@ -38,8 +43,14 @@ public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser>
             return null;
         }
 
+        // 查出用户密码哈希
+        SystemUserAuth passwordAuthObject = systemUserAuthRepository.getUserPasswordAuthObject(systemUser.getId());
+        if (passwordAuthObject == null) { // 用户没有设置密码
+            throw new BusinessException(BusinessErrorCode.USER_LOGIN_FAILED, "您没有设置密码，无法通过密码登录");
+        }
+
         // 判断密码是否正确
-        if (systemUserRepository.verifyPassword(systemUser, password)) {
+        if (systemUserAuthRepository.verifyPassword(passwordAuthObject.getPasswordHash(), password)) {
             // 密码正确，登录成功
             SessionUtils.setSession(session, systemUser);
             return SystemUserDto.fromEntity(systemUser);
@@ -55,25 +66,25 @@ public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser>
      * @param newPassword 新密码
      * @since 2025-12-13
      */
+    @Transactional
     public void changePassword(@NotNull Long userId, @NotNull String oldPassword, @NotNull String newPassword) throws BusinessException {
-        // 通过用户名查出用户信息
-        // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
-        @Nullable
-        SystemUser systemUser = systemUserRepository.getById(userId);
-        if (systemUser == null) {
-            throw new BusinessException(BusinessErrorCode.USER_NOT_EXIST, "用户不存在");
+        // 查出用户密码哈希
+        SystemUserAuth passwordAuthObject = systemUserAuthRepository.getUserPasswordAuthObject(userId);
+        if (passwordAuthObject == null) {
+            // 用户没有设置密码
+            throw new BusinessException(BusinessErrorCode.USER_LOGIN_FAILED, "您没有设置密码，请前往设置密码");
         }
 
         // 校验旧密码是否正确
-        if (!systemUserRepository.verifyPassword(systemUser, oldPassword)) {
-            throw new BusinessException(BusinessErrorCode.USER_LOGIN_FAILED, "用户还未登录");
+        if (!systemUserAuthRepository.verifyPassword(passwordAuthObject.getPasswordHash(), oldPassword)) {
+            throw new BusinessException(BusinessErrorCode.USER_LOGIN_FAILED, "旧密码不正确");
         }
 
         // TODO 校验新密码是否符合要求
         // 比如：不少于多少位，必须包含特殊字符等等
 
         // 更新用户密码
-        systemUserRepository.updatePassword(systemUser, newPassword);
+        systemUserAuthRepository.updatePassword(userId, newPassword);
 
         // TODO 记录系统日志
     }
