@@ -88,9 +88,6 @@ export function useLoginLogic() {
         if (!raw.isSuccess) {
           return // 后端返回异常已弹出错误提示
         }
-        if (!data) {
-          return // 账号密码错误
-        }
         ElMessage.success('登录成功')
 
         userStore.set(data.id, data.username)

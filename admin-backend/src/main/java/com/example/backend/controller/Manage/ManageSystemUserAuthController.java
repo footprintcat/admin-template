@@ -52,8 +52,8 @@ public class ManageSystemUserAuthController extends BaseController {
         if (isLoginSuccess) {
             return CommonReturn.success(systemUserDto);
         }
+        // 登录失败，请检查用户名和密码是否正确
         return CommonReturn.error("用户名或密码错误，登录失败");
-        // return CommonReturn.error("登录失败，请检查用户名和密码是否正确");
     }
 
     /**

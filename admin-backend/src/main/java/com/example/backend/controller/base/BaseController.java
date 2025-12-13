@@ -41,7 +41,6 @@ public class BaseController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Object handlerException(HttpServletRequest request, Exception ex) {
-        log.error("全局捕获异常：", ex);
         HashMap<Object, Object> responseData = new HashMap<>();
 
         int errCode;
@@ -50,6 +49,7 @@ public class BaseController {
             errCode = businessException.getErrCode();
             errMessage = businessException.getErrMsg();
         } else {
+            log.error("全局捕获异常：", ex);
             // 生产环境输出格式化信息
             errCode = BusinessErrorCode.UNKNOWN_ERROR.getErrCode();
             errMessage = BusinessErrorCode.UNKNOWN_ERROR.getErrMsg();

@@ -1,6 +1,7 @@
 package com.example.backend.service.System;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.backend.common.Enums.system.user.SystemUserStatusEnum;
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Utils.SessionUtils;
@@ -40,7 +41,8 @@ public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser>
         @Nullable
         SystemUser systemUser = systemUserRepository.findByUsername(username);
         if (systemUser == null) {
-            return null;
+            // 用户不存在
+            throw new BusinessException(BusinessErrorCode.USER_LOGIN_FAILED);
         }
 
         // 查出用户密码哈希
@@ -51,12 +53,23 @@ public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser>
         }
 
         // 判断密码是否正确
-        if (systemUserAuthRepository.verifyPassword(passwordAuthObject.getPasswordHash(), password)) {
-            // 密码正确，登录成功
-            SessionUtils.setSession(session, systemUser);
-            return SystemUserDto.fromEntity(systemUser);
+        if (!systemUserAuthRepository.verifyPassword(passwordAuthObject.getPasswordHash(), password)) {
+            // 用户密码错误
+            throw new BusinessException(BusinessErrorCode.USER_LOGIN_FAILED);
         }
-        return null;
+
+        // 判断用户是否可以登录
+        @Nullable
+        SystemUserStatusEnum status = systemUser.getStatus();
+        if (status == null) {
+            throw new BusinessException(BusinessErrorCode.USER_NOT_ALLOWED_LOGIN, "当前用户状态异常，请联系管理员处理");
+        } else if (!SystemUserStatusEnum.NORMAL.equals(status)) {
+            throw new BusinessException(BusinessErrorCode.USER_NOT_ALLOWED_LOGIN, status.getFailedMessage());
+        }
+
+        // 登录成功
+        SessionUtils.setSession(session, systemUser);
+        return SystemUserDto.fromEntity(systemUser);
     }
 
     /**

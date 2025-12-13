@@ -13,10 +13,11 @@ public enum BusinessErrorCode implements ICommonError {
 
     // 20000 用户信息相关错误定义
     USER_NOT_EXIST(20001, "用户不存在"),
-    USER_LOGIN_FAILED(20002, "用户手机号或密码不正确"),
+    USER_LOGIN_FAILED(20002, "用户账号或密码不正确"),
     USER_NOT_LOGIN(20003, "用户还未登录"),
     USER_TOKEN_EXPIRED(20004, "用户令牌过期"),
     USER_ALREADY_EXIST(20005, "用户已存在"),
+    USER_NOT_ALLOWED_LOGIN(20006, "当前用户状态不允许登录"),
 
     // 30000 权限相关错误定义
     OPERATION_NOT_ALLOWED(30001, "用户没有此操作的权限"),
