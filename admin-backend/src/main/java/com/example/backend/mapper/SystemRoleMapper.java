@@ -2,7 +2,7 @@ package com.example.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.backend.dto.SystemRoleDTO;
+import com.example.backend.dto.SystemRoleDto;
 import com.example.backend.entity.SystemRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,8 +20,8 @@ import java.util.List;
 @Mapper
 public interface SystemRoleMapper extends BaseMapper<SystemRole> {
 
-    Page<SystemRole> getSystemRolePage(Page<?> page, @Param("query") SystemRoleDTO systemRoleDTO);
+    Page<SystemRole> getSystemRolePage(Page<?> page, @Param("query") SystemRoleDto systemRoleDTO);
 
-    List<SystemRole> getSystemRoleList(@Param("query") SystemRoleDTO systemRoleDTO);
+    List<SystemRole> getSystemRoleList(@Param("query") SystemRoleDto systemRoleDTO);
 
 }

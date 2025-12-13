@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class SystemMenuDTO implements Serializable {
+public class SystemMenuDto implements Serializable {
 
     private String id;
     private String parentId;
@@ -21,24 +21,24 @@ public class SystemMenuDTO implements Serializable {
     private String menuName;
     private Integer sequence;
     private Integer isHide;
-    private List<SystemMenuDTO> children;
+    private List<SystemMenuDto> children;
 
-    public static SystemMenuDTO fromEntity(SystemMenu systemMenu) {
+    public static SystemMenuDto fromEntity(SystemMenu systemMenu) {
         if (systemMenu == null) {
             return null;
         }
-        SystemMenuDTO systemMenuDTO = new SystemMenuDTO();
+        SystemMenuDto systemMenuDTO = new SystemMenuDto();
         BeanUtils.copyProperties(systemMenu, systemMenuDTO);
         systemMenuDTO.setId(StringUtils.toNullableString(systemMenu.getId()));
         systemMenuDTO.setParentId(StringUtils.toNullableString(systemMenu.getParentId()));
         return systemMenuDTO;
     }
 
-    public static List<SystemMenuDTO> fromEntity(List<SystemMenu> systemMenuList) {
-        return systemMenuList.stream().map(SystemMenuDTO::fromEntity).collect(Collectors.toList());
+    public static List<SystemMenuDto> fromEntity(List<SystemMenu> systemMenuList) {
+        return systemMenuList.stream().map(SystemMenuDto::fromEntity).collect(Collectors.toList());
     }
 
-    public static SystemMenu toEntity(SystemMenuDTO systemMenuDTO) {
+    public static SystemMenu toEntity(SystemMenuDto systemMenuDTO) {
         if (systemMenuDTO == null) {
             return null;
         }

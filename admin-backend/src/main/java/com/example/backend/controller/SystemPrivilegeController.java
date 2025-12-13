@@ -8,11 +8,11 @@ import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.PrivilegeDTO;
+import com.example.backend.dto.SystemPrivilegeDto;
 import com.example.backend.entity.Privilege;
 import com.example.backend.entity.SystemMenu;
 import com.example.backend.repository.PrivilegeRepository;
-import com.example.backend.service.System.PrivilegeService;
+import com.example.backend.service.System.SystemPrivilegeService;
 import com.example.backend.service.System.SystemRoleService;
 import com.example.backend.service.System.SystemMenuService;
 import jakarta.annotation.Resource;
@@ -36,10 +36,10 @@ import java.util.Objects;
 @CrossOrigin
 @RestController
 @RequestMapping("/v1/privilege")
-public class PrivilegeController extends BaseController {
+public class SystemPrivilegeController extends BaseController {
 
     @Resource
-    private PrivilegeService privilegeService;
+    private SystemPrivilegeService systemPrivilegeService;
     @Resource
     private PrivilegeRepository privilegeRepository;
     @Resource
@@ -219,10 +219,10 @@ public class PrivilegeController extends BaseController {
             List<String> zeroLevelMenuIdList = zeroLevelMenuList.stream().map(SystemMenu::getMenuCode).toList();
 
             // 当前角色有权访问的菜单
-            List<Privilege> rolePrivilegeList = privilegeService.getGrantedPrivilegeListByRoleId(roleId);
+            List<Privilege> rolePrivilegeList = systemPrivilegeService.getGrantedPrivilegeListByRoleId(roleId);
             // 当前用户
-            List<Privilege> userPrivilegeList = privilegeService.getListByUserId(userId);
-            Collection<String> currentUserGrantedMenuIdList = privilegeService.getCurrentUserPrivilegeList(rolePrivilegeList, userPrivilegeList);
+            List<Privilege> userPrivilegeList = systemPrivilegeService.getListByUserId(userId);
+            Collection<String> currentUserGrantedMenuIdList = systemPrivilegeService.getCurrentUserPrivilegeList(rolePrivilegeList, userPrivilegeList);
 
             currentUserPrivilegeList = new ArrayList<>();
             currentUserPrivilegeList.addAll(zeroLevelMenuIdList);
@@ -238,39 +238,39 @@ public class PrivilegeController extends BaseController {
         if (roleId == null || userId == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
-        HashMap<String, Object> result = privilegeService.getUserPrivilege(roleId, userId);
+        HashMap<String, Object> result = systemPrivilegeService.getUserPrivilege(roleId, userId);
         return CommonReturnType.success(result);
     }
 
     @PostMapping("/saveOrUpdateUserPrivilege")
-    public CommonReturnType saveOrUpdateUserPrivilege(@RequestBody PrivilegeDTO privilegeDTO) throws BusinessException {
-        if (privilegeDTO.getModule() == null || privilegeDTO.getUserId() == null) {
+    public CommonReturnType saveOrUpdateUserPrivilege(@RequestBody SystemPrivilegeDto systemPrivilegeDTO) throws BusinessException {
+        if (systemPrivilegeDTO.getModule() == null || systemPrivilegeDTO.getUserId() == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
-        Privilege privilege = PrivilegeDTO.toEntity(privilegeDTO);
+        Privilege privilege = SystemPrivilegeDto.toEntity(systemPrivilegeDTO);
         privilege.setUpdateTime(new Date()); // 设置权限更新时间
-        Privilege oldPrivilege = privilegeService.getPrivilegeByModuleAndUserId(privilege.getModule(), privilege.getUserId());
+        Privilege oldPrivilege = systemPrivilegeService.getPrivilegeByModuleAndUserId(privilege.getModule(), privilege.getUserId());
 
         if (Objects.isNull(oldPrivilege)) {
             privilegeRepository.save(privilege);
         } else {
             if ("default".equals(privilege.getType())) {
                 // 默认跟随角色 直接移除相应用户权限
-                privilegeService.removeByModuleAndUserId(privilege);
+                systemPrivilegeService.removeByModuleAndUserId(privilege);
             } else {
-                privilegeService.updateByModuleAndUserId(privilege);
+                systemPrivilegeService.updateByModuleAndUserId(privilege);
             }
         }
         return CommonReturnType.success();
     }
 
     @PostMapping("/removePrivilegesByUserId")
-    public CommonReturnType removePrivilegesByUserId(@RequestBody PrivilegeDTO privilegeDTO) throws BusinessException {
-        if (Objects.isNull(privilegeDTO) || privilegeDTO.getUserId() == null) {
+    public CommonReturnType removePrivilegesByUserId(@RequestBody SystemPrivilegeDto systemPrivilegeDTO) throws BusinessException {
+        if (Objects.isNull(systemPrivilegeDTO) || systemPrivilegeDTO.getUserId() == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
-        Privilege privilege = PrivilegeDTO.toEntity(privilegeDTO);
-        privilegeService.removePrivilegesByUserId(privilege.getUserId());
+        Privilege privilege = SystemPrivilegeDto.toEntity(systemPrivilegeDTO);
+        systemPrivilegeService.removePrivilegesByUserId(privilege.getUserId());
         return CommonReturnType.success();
     }
 
@@ -285,7 +285,7 @@ public class PrivilegeController extends BaseController {
         if (roleId != 1) {
             return CommonReturnType.error("仅超级管理用户可导出权限表");
         }
-        String jsonStr = privilegeService.exportJson();
+        String jsonStr = systemPrivilegeService.exportJson();
         return CommonReturnType.success(jsonStr);
     }
 

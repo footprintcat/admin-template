@@ -9,7 +9,7 @@ import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Utils.NumberUtils;
 import com.example.backend.common.Utils.StringUtils;
-import com.example.backend.dto.SystemMenuDTO;
+import com.example.backend.dto.SystemMenuDto;
 import com.example.backend.entity.SystemMenu;
 import com.example.backend.mapper.SystemMenuMapper;
 import com.example.backend.repository.SystemMenuRepository;
@@ -47,7 +47,7 @@ public class SystemMenuService {
     @Resource
     private SystemMenuRepository systemMenuRepository;
     @Resource
-    private PrivilegeService privilegeService;
+    private SystemPrivilegeService systemPrivilegeService;
 
     /**
      * 获取 当前用户的 SystemMenu 树
@@ -56,7 +56,7 @@ public class SystemMenuService {
      * @param menuIdList
      * @return
      */
-    public List<SystemMenuDTO> getCurrentUserMenuDTOTree(List<SystemMenu> systemMenus, Set<String> menuIdList) {
+    public List<SystemMenuDto> getCurrentUserMenuDTOTree(List<SystemMenu> systemMenus, Set<String> menuIdList) {
         if (systemMenus == null) {
             systemMenus = getSystemMenuList(null);
         }
@@ -85,7 +85,7 @@ public class SystemMenuService {
     }
 
     @SneakyThrows
-    private List<SystemMenuDTO> getMenuChildrenList(Long parentId, List<SystemMenu> systemMenus, List<Long> foundParent) {
+    private List<SystemMenuDto> getMenuChildrenList(Long parentId, List<SystemMenu> systemMenus, List<Long> foundParent) {
         if (foundParent.contains(parentId)) {
             log.error("数据库菜单配置错误，递归死循环 parentId: {}, foundParent: {}", parentId, foundParent);
             throw new BusinessException(BusinessErrorCode.FAULT_ERROR, "数据库菜单配置错误，递归死循环！" +
@@ -98,9 +98,9 @@ public class SystemMenuService {
                     // 测试死循环检测 测试用
                     // foundParent.add(systemMenu.getIdWithOrder());
                     // 获取这一项的 children
-                    List<SystemMenuDTO> children = getMenuChildrenList(systemMenu.getId(), systemMenus, foundParent);
+                    List<SystemMenuDto> children = getMenuChildrenList(systemMenu.getId(), systemMenus, foundParent);
                     // 转 DTO
-                    SystemMenuDTO systemMenuDTO = SystemMenuDTO.fromEntity(systemMenu);
+                    SystemMenuDto systemMenuDTO = SystemMenuDto.fromEntity(systemMenu);
                     systemMenuDTO.setChildren(children);
                     return systemMenuDTO;
                 })
@@ -148,8 +148,8 @@ public class SystemMenuService {
 
     }
 
-    public void updateSystemMenu(SystemMenuDTO systemMenuDTO) {
-        SystemMenu systemMenu = SystemMenuDTO.toEntity(systemMenuDTO);
+    public void updateSystemMenu(SystemMenuDto systemMenuDTO) {
+        SystemMenu systemMenu = SystemMenuDto.toEntity(systemMenuDTO);
 
         LambdaUpdateWrapper<SystemMenu> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SystemMenu::getId, systemMenu.getId());
@@ -184,7 +184,7 @@ public class SystemMenuService {
         systemMenuMapper.deleteById(systemMenu.getId());
 
         // 删除该菜单相关权限
-        privilegeService.removePrivilegesByModule(systemMenu.getMenuCode());
+        systemPrivilegeService.removePrivilegesByModule(systemMenu.getMenuCode());
     }
 
     public void exchangeSystemMenu(String fromMenuId, String movingMode) throws BusinessException {

@@ -13,7 +13,7 @@ import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.common.Utils.IPUtils;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.SystemLogDTO;
+import com.example.backend.dto.SystemLogDto;
 import com.example.backend.entity.SystemLog;
 import com.example.backend.query.PageQuery;
 import com.example.backend.service.System.SystemLogService;
@@ -43,13 +43,13 @@ public class ManageSystemLogController extends BaseController {
     private SystemLogService systemLogService;
 
     @GetMapping("/list")
-    public CommonReturnType list(@ModelAttribute PageQuery pageQuery, SystemLogDTO systemLogDTO) {
+    public CommonReturnType list(@ModelAttribute PageQuery pageQuery, SystemLogDto systemLogDTO) {
         // 查询分页数据
         Page<SystemLog> systemLogPage = systemLogService.getSystemLogPage(pageQuery, systemLogDTO);
 
         // 分页数据转为 DTO
         List<SystemLog> systemLogList = systemLogPage.getRecords();
-        List<SystemLogDTO> systemLogDTOList = SystemLogDTO.fromEntity(systemLogList);
+        List<SystemLogDto> systemLogDtoList = SystemLogDto.fromEntity(systemLogList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -104,7 +104,7 @@ public class ManageSystemLogController extends BaseController {
         // 拼装返回结果
         JSONObject map = new JSONObject();
         map.put("total", systemLogPage.getTotal());
-        map.put("list", systemLogDTOList);
+        map.put("list", systemLogDtoList);
         map.put("columns", columns);
         map.put("fieldMapper", fieldMapper);
         map.put("idFieldName", idFieldName);
@@ -143,9 +143,9 @@ public class ManageSystemLogController extends BaseController {
      */
     @GetMapping("/export")
     @ResponseBody
-    public CommonReturnType exportSystemLogList(SystemLogDTO systemLogDTO) {
+    public CommonReturnType exportSystemLogList(SystemLogDto systemLogDTO) {
         List<SystemLog> systemLogList = systemLogService.getSystemLogList(systemLogDTO);
-        List<SystemLogDTO> systemLogDTOList = SystemLogDTO.fromEntity(systemLogList);
+        List<SystemLogDto> systemLogDtoList = SystemLogDto.fromEntity(systemLogList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();
@@ -153,7 +153,7 @@ public class ManageSystemLogController extends BaseController {
         String dateTime = format.format(now);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("list", systemLogDTOList);
+        map.put("list", systemLogDtoList);
         map.put("sheetName", "设备表-" + System.currentTimeMillis());
         map.put("fileName", "设备表_导出时间_" + dateTime);
 

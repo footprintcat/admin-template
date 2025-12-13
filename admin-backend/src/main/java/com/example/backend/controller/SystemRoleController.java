@@ -6,12 +6,12 @@ import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.SystemRoleDTO;
+import com.example.backend.dto.SystemRoleDto;
 import com.example.backend.entity.SystemRole;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.repository.SystemRoleRepository;
 import com.example.backend.repository.UserRepository;
-import com.example.backend.service.System.PrivilegeService;
+import com.example.backend.service.System.SystemPrivilegeService;
 import com.example.backend.service.System.SystemRoleService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,18 +37,18 @@ public class SystemRoleController extends BaseController {
     @Resource
     private SystemRoleRepository systemRoleRepository;
     @Resource
-    private PrivilegeService privilegeService;
+    private SystemPrivilegeService systemPrivilegeService;
     @Resource
     private UserRepository userRepository;
 
     @GetMapping("/list")
     public CommonReturnType list() {
-        List<SystemRoleDTO> roleList = systemRoleService.getRoleDTOList();
+        List<SystemRoleDto> roleList = systemRoleService.getRoleDTOList();
         return CommonReturnType.success(roleList);
     }
 
     @PostMapping("/add")
-    public CommonReturnType add(@RequestBody SystemRoleDTO systemRoleDTO) {
+    public CommonReturnType add(@RequestBody SystemRoleDto systemRoleDTO) {
         if (systemRoleDTO == null) {
             return CommonReturnType.error();
         }
@@ -72,7 +72,7 @@ public class SystemRoleController extends BaseController {
             return CommonReturnType.error("当前用户不允许修改角色层级");
         }
         List<SystemRole> systemRoleList = systemRoleService.getRoleList();
-        List<SystemRoleDTO> roleTree = systemRoleService.getRoleDTOTree(roleId, systemRoleList);
+        List<SystemRoleDto> roleTree = systemRoleService.getRoleDTOTree(roleId, systemRoleList);
 
         return CommonReturnType.success(roleTree);
     }
@@ -80,10 +80,10 @@ public class SystemRoleController extends BaseController {
     @GetMapping("/getTree")
     public CommonReturnType getRoleTree() throws BusinessException {
         List<SystemRole> systemRoleList = systemRoleService.getRoleList();
-        List<SystemRoleDTO> roleTree = systemRoleService.getRoleDTOTree(null, systemRoleList);
+        List<SystemRoleDto> roleTree = systemRoleService.getRoleDTOTree(null, systemRoleList);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("roleList", SystemRoleDTO.fromEntity(systemRoleList));
+        map.put("roleList", SystemRoleDto.fromEntity(systemRoleList));
         map.put("roleTree", roleTree);
 
         return CommonReturnType.success(map);
@@ -98,7 +98,7 @@ public class SystemRoleController extends BaseController {
      * @throws BusinessException
      */
     @PostMapping("/update")
-    public CommonReturnType update(@RequestBody SystemRoleDTO systemRoleDTO, HttpServletRequest request) throws BusinessException {
+    public CommonReturnType update(@RequestBody SystemRoleDto systemRoleDTO, HttpServletRequest request) throws BusinessException {
         Long currentUserRoleId = SessionUtils.getRoleId(request.getSession());
 
         if (systemRoleDTO == null || systemRoleDTO.getId() == null || systemRoleDTO.getParentRoleId() == null) {
@@ -112,7 +112,7 @@ public class SystemRoleController extends BaseController {
             return CommonReturnType.error("参数错误");
         }
 
-        SystemRole systemRole = SystemRoleDTO.toEntity(systemRoleDTO);
+        SystemRole systemRole = SystemRoleDto.toEntity(systemRoleDTO);
         SystemRole oldSystemRole = systemRoleRepository.getById(systemRoleDTO.getId());
 
         // 编辑的角色的parent 编辑前 等于当前登录的角色/在当前登录的角色之下
@@ -161,7 +161,7 @@ public class SystemRoleController extends BaseController {
         }
 
         // 删除角色时需同时删除角色所赋予的系统权限
-        privilegeService.removePrivilegesByRoleId(roleId);
+        systemPrivilegeService.removePrivilegesByRoleId(roleId);
 
         systemRoleRepository.removeById(roleId);
         return CommonReturnType.success();

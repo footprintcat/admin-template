@@ -6,7 +6,7 @@ import com.example.backend.common.Utils.IPUtils;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.common.Utils.StringUtils;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemLog;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.service.System.SystemLogService;
@@ -52,13 +52,13 @@ public class UserController extends BaseController {
         // 通过用户名查出用户信息
         // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
         SystemUser userByUsername = systemUserServiceV2.getUserByUsername(inputUsername);
-        SystemUserDTO systemUserDTO = null;
+        SystemUserDto systemUserDTO = null;
 
         // 判断密码是否正确
         boolean isCorrect = systemUserServiceV2.checkPasswordIsCorrect(userByUsername, inputPassword);
         if (isCorrect) {
             // 密码正确，登录成功
-            systemUserDTO = SystemUserDTO.fromEntity(userByUsername);
+            systemUserDTO = SystemUserDto.fromEntity(userByUsername);
             SessionUtils.setSession(session, userByUsername);
         }
 

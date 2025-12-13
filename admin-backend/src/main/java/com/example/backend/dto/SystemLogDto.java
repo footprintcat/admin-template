@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class SystemLogDTO {
+public class SystemLogDto {
 
     private String id;
     private Long createTimestamp;
@@ -21,11 +21,11 @@ public class SystemLogDTO {
     private String title;
     private String content;
 
-    public static SystemLogDTO fromEntity(SystemLog systemLog) {
+    public static SystemLogDto fromEntity(SystemLog systemLog) {
         if (systemLog == null) {
             return null;
         }
-        SystemLogDTO systemLogDTO = new SystemLogDTO();
+        SystemLogDto systemLogDTO = new SystemLogDto();
         BeanUtils.copyProperties(systemLog, systemLogDTO);
         // if (systemLog.getLogTime() != null) {
         //     systemLogDTO.setCreateTimestamp(systemLog.getLogTime().getTime());
@@ -35,11 +35,11 @@ public class SystemLogDTO {
         return systemLogDTO;
     }
 
-    public static List<SystemLogDTO> fromEntity(List<SystemLog> systemLogList) {
-        return systemLogList.stream().map(SystemLogDTO::fromEntity).collect(Collectors.toList());
+    public static List<SystemLogDto> fromEntity(List<SystemLog> systemLogList) {
+        return systemLogList.stream().map(SystemLogDto::fromEntity).collect(Collectors.toList());
     }
 
-    public static SystemLog toEntity(SystemLogDTO systemLogDTO) {
+    public static SystemLog toEntity(SystemLogDto systemLogDTO) {
         if (systemLogDTO == null) {
             return null;
         }

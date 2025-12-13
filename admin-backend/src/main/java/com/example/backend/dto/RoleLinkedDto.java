@@ -4,17 +4,17 @@ import com.example.backend.entity.SystemRole;
 import lombok.Data;
 
 @Data
-public class RoleLinkedDTO {
+public class RoleLinkedDto {
     public Long id;
     public String roleName;
     public Long parentRoleId;
-    public RoleLinkedDTO parentRole;
+    public RoleLinkedDto parentRole;
 
-    public static RoleLinkedDTO createRoleLinkedDTO(SystemRole systemRole) {
+    public static RoleLinkedDto createRoleLinkedDTO(SystemRole systemRole) {
         if (systemRole == null) {
             return null;
         }
-        RoleLinkedDTO dto = new RoleLinkedDTO();
+        RoleLinkedDto dto = new RoleLinkedDto();
         dto.id = systemRole.getId();
         dto.roleName = systemRole.getRoleName();
         dto.parentRoleId = systemRole.getParentRoleId();

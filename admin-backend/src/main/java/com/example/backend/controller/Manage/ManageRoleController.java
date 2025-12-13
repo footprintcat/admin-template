@@ -14,7 +14,7 @@ import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.SystemRoleDTO;
+import com.example.backend.dto.SystemRoleDto;
 import com.example.backend.entity.SystemRole;
 import com.example.backend.query.PageQuery;
 import com.example.backend.service.v2.SystemRoleServiceV2;
@@ -50,13 +50,13 @@ public class ManageRoleController extends BaseController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public CommonReturnType list(PageQuery pageQuery, SystemRoleDTO systemRoleDTO) {
+    public CommonReturnType list(PageQuery pageQuery, SystemRoleDto systemRoleDTO) {
         // 查询分页数据
         Page<SystemRole> rolePage = systemRoleServiceV2.getRolePage(pageQuery, systemRoleDTO);
 
         // 分页数据转为 DTO
         List<SystemRole> systemRoleList = rolePage.getRecords();
-        List<SystemRoleDTO> systemRoleDTOList = SystemRoleDTO.fromEntity(systemRoleList);
+        List<SystemRoleDto> systemRoleDtoList = SystemRoleDto.fromEntity(systemRoleList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -91,7 +91,7 @@ public class ManageRoleController extends BaseController {
         // 拼装返回结果
         JSONObject map = new JSONObject();
         map.put("total", rolePage.getTotal());
-        map.put("list", systemRoleDTOList);
+        map.put("list", systemRoleDtoList);
         map.put("columns", columns);
         map.put("fieldMapper", fieldMapper);
         map.put("idFieldName", idFieldName);
@@ -108,10 +108,10 @@ public class ManageRoleController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public CommonReturnType edit(@ModelAttribute SystemRoleDTO systemRoleDTO) {
+    public CommonReturnType edit(@ModelAttribute SystemRoleDto systemRoleDTO) {
 
         // 传入参数 - 要修改的设备
-        SystemRole systemRole = SystemRoleDTO.toEntity(systemRoleDTO);
+        SystemRole systemRole = SystemRoleDto.toEntity(systemRoleDTO);
 
         // 通过 staffId 查询系统中是否存在该设备
         SystemRole existSystemRole = systemRoleServiceV2.getRoleById(systemRole.getId());
@@ -152,9 +152,9 @@ public class ManageRoleController extends BaseController {
      */
     @GetMapping("/export")
     @ResponseBody
-    public CommonReturnType exportRoleList(SystemRoleDTO systemRoleDTO) {
+    public CommonReturnType exportRoleList(SystemRoleDto systemRoleDTO) {
         List<SystemRole> systemRoleList = systemRoleServiceV2.getRoleList(systemRoleDTO);
-        List<SystemRoleDTO> systemRoleDTOList = SystemRoleDTO.fromEntity(systemRoleList);
+        List<SystemRoleDto> systemRoleDtoList = SystemRoleDto.fromEntity(systemRoleList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();
@@ -162,7 +162,7 @@ public class ManageRoleController extends BaseController {
         String dateTime = format.format(now);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("list", systemRoleDTOList);
+        map.put("list", systemRoleDtoList);
         map.put("sheetName", "角色表-" + System.currentTimeMillis());
         map.put("fileName", "角色表_导出时间_" + dateTime);
 

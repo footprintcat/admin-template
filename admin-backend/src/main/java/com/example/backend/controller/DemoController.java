@@ -4,7 +4,7 @@ import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.service.impl.UserServiceImpl;
 import jakarta.annotation.Resource;
@@ -22,7 +22,7 @@ public class DemoController extends BaseController {
     @RequestMapping("/test")
     public CommonReturnType test() {
         List<SystemUser> userList = userServiceImpl.getUserList();
-        List<SystemUserDTO> collect = SystemUserDTO.fromEntity(userList);
+        List<SystemUserDto> collect = SystemUserDto.fromEntity(userList);
         return CommonReturnType.success(collect);
     }
 

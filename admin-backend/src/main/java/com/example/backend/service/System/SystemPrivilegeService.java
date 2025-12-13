@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.backend.common.Enums.PrivilegeTypeEnum;
 import com.example.backend.common.Error.BusinessException;
-import com.example.backend.dto.PrivilegeDTO;
+import com.example.backend.dto.SystemPrivilegeDto;
 import com.example.backend.entity.Privilege;
 import com.example.backend.entity.SystemRole;
 import com.example.backend.mapper.PrivilegeMapper;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class PrivilegeService {
+public class SystemPrivilegeService {
 
     @Value("${project-config.site-id}")
     private String siteId;
@@ -222,7 +222,7 @@ public class PrivilegeService {
         HashMap<String, Object> map = new HashMap<>();
         map.put("privilegeList", privilegeList); // granted + inheritable
         map.put("inheritPrivilegeList", inheritPrivilegeList); // inheritable
-        map.put("userPrivilegeList", PrivilegeDTO.fromEntity(userPrivilegeList));
+        map.put("userPrivilegeList", SystemPrivilegeDto.fromEntity(userPrivilegeList));
         return map;
     }
 

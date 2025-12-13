@@ -2,8 +2,8 @@ package com.example.backend.service.System;
 
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
-import com.example.backend.dto.RoleLinkedDTO;
-import com.example.backend.dto.SystemRoleDTO;
+import com.example.backend.dto.RoleLinkedDto;
+import com.example.backend.dto.SystemRoleDto;
 import com.example.backend.entity.Privilege;
 import com.example.backend.entity.SystemMenu;
 import com.example.backend.entity.SystemRole;
@@ -26,25 +26,25 @@ public class SystemRoleService {
     @Resource
     private SystemRoleMapper systemRoleMapper;
     @Resource
-    private PrivilegeService privilegeService;
+    private SystemPrivilegeService systemPrivilegeService;
     @Resource
     private SystemMenuService systemMenuService;
 
-    public List<SystemRoleDTO> getRoleDTOList() {
+    public List<SystemRoleDto> getRoleDTOList() {
         List<SystemRole> systemRoles = systemRoleMapper.selectList(null);
-        List<SystemRoleDTO> systemRoleDTOS = SystemRoleDTO.fromEntity(systemRoles);
+        List<SystemRoleDto> systemRoleDtoList = SystemRoleDto.fromEntity(systemRoles);
 
         // 查询出 有权&有权继承 类型的Privilege 并绑定到 RoleDTO 上
-        List<Privilege> privilegeList = privilegeService.getGrantedPrivilegeList();
+        List<Privilege> privilegeList = systemPrivilegeService.getGrantedPrivilegeList();
 
         // 查询 有权继承 类型的Privilege 并绑定到 RoleDTO 上
-        List<Privilege> inheritPrivilegeList = privilegeService.getInheritablePrivilegeList();
+        List<Privilege> inheritPrivilegeList = systemPrivilegeService.getInheritablePrivilegeList();
 
         // 查询出 SystemMenu 并绑定到 roleId = 1 的超级用户上
         List<SystemMenu> systemMenuList = systemMenuService.getSystemMenuListWithoutRootLevel();
         List<String> systemMenuIdList = systemMenuList.stream().map(SystemMenu::getMenuCode).collect(Collectors.toList());
 
-        systemRoleDTOS.forEach(roleDTO -> {
+        systemRoleDtoList.forEach(roleDTO -> {
             if (roleDTO.getId() == 1) {
                 roleDTO.setPrivileges(systemMenuIdList);
                 roleDTO.setInheritPrivileges(systemMenuIdList);
@@ -67,11 +67,11 @@ public class SystemRoleService {
             }
         });
 
-        return systemRoleDTOS;
+        return systemRoleDtoList;
     }
 
-    public Boolean addRole(SystemRoleDTO systemRoleDTO) {
-        SystemRole systemRole = SystemRoleDTO.toEntity(systemRoleDTO);
+    public Boolean addRole(SystemRoleDto systemRoleDTO) {
+        SystemRole systemRole = SystemRoleDto.toEntity(systemRoleDTO);
         systemRole.setUpdateTime(LocalDateTime.now());
         int affectRows = systemRoleMapper.insert(systemRole);
         return affectRows > 0;
@@ -85,21 +85,21 @@ public class SystemRoleService {
 
         // 查询角色列表
         List<SystemRole> systemRoleList = systemRoleMapper.selectList(null);
-        List<RoleLinkedDTO> list = systemRoleList.stream().map(RoleLinkedDTO::createRoleLinkedDTO).toList();
+        List<RoleLinkedDto> list = systemRoleList.stream().map(RoleLinkedDto::createRoleLinkedDTO).toList();
 
         // 创建id->RoleLinkedDTO映射
-        Map<Long, RoleLinkedDTO> roleLinkedMap = new HashMap<>();
-        for (RoleLinkedDTO dto : list) {
+        Map<Long, RoleLinkedDto> roleLinkedMap = new HashMap<>();
+        for (RoleLinkedDto dto : list) {
             roleLinkedMap.put(dto.getId(), dto);
         }
 
-        for (RoleLinkedDTO role : list) {
+        for (RoleLinkedDto role : list) {
             if (role.getParentRoleId() != null) {
                 role.setParentRole(roleLinkedMap.get(role.getParentRoleId()));
             }
         }
 
-        RoleLinkedDTO targetRole = roleLinkedMap.get(targetRoleId);
+        RoleLinkedDto targetRole = roleLinkedMap.get(targetRoleId);
         if (targetRole == null) {
             return false;
         }
@@ -158,11 +158,11 @@ public class SystemRoleService {
         return systemRoleMapper.selectList(null);
     }
 
-    public List<SystemRoleDTO> getRoleDTOTree(Long specifiedParentRoleId, List<SystemRole> systemRoleList) throws BusinessException {
+    public List<SystemRoleDto> getRoleDTOTree(Long specifiedParentRoleId, List<SystemRole> systemRoleList) throws BusinessException {
         // 用于存储角色ID和对应的 RoleDTO 的映射
-        Map<Long, SystemRoleDTO> roleDTOMap = new HashMap<>();
+        Map<Long, SystemRoleDto> roleDTOMap = new HashMap<>();
         // 最终的树形结构
-        List<SystemRoleDTO> roleTree = new ArrayList<>();
+        List<SystemRoleDto> roleTree = new ArrayList<>();
 
         // 检测互为父子节点的情况
         for (SystemRole systemRole : systemRoleList) {
@@ -179,18 +179,18 @@ public class SystemRoleService {
 
         // 将所有角色转换为 RoleDTO 并存储在映射中
         for (SystemRole systemRole : systemRoleList) {
-            SystemRoleDTO systemRoleDTO = SystemRoleDTO.fromEntity(systemRole);
+            SystemRoleDto systemRoleDTO = SystemRoleDto.fromEntity(systemRole);
             roleDTOMap.put(systemRole.getId(), systemRoleDTO);
         }
 
         // 构建树结构
-        for (SystemRoleDTO systemRoleDTO : roleDTOMap.values()) {
+        for (SystemRoleDto systemRoleDTO : roleDTOMap.values()) {
             if (systemRoleDTO.getParentRoleId() == null) {
                 // 如果是顶级节点，直接添加到树中
                 roleTree.add(systemRoleDTO);
             } else {
                 // 否则，将其添加到父节点的子节点列表中
-                SystemRoleDTO parentDTO = roleDTOMap.get(systemRoleDTO.getParentRoleId());
+                SystemRoleDto parentDTO = roleDTOMap.get(systemRoleDTO.getParentRoleId());
                 if (parentDTO != null) {
                     parentDTO.getChildren().add(systemRoleDTO);
                 }
@@ -199,10 +199,10 @@ public class SystemRoleService {
 
         // 如果指定了parentRoleId，则只返回该ID下的子角色
         if (specifiedParentRoleId != null) {
-            SystemRoleDTO specifiedSystemRoleDTO = roleDTOMap.get(specifiedParentRoleId);
-            if (specifiedSystemRoleDTO != null) {
+            SystemRoleDto specifiedSystemRoleDto = roleDTOMap.get(specifiedParentRoleId);
+            if (specifiedSystemRoleDto != null) {
                 // 返回指定角色的子节点列表
-                return specifiedSystemRoleDTO.getChildren();
+                return specifiedSystemRoleDto.getChildren();
             } else {
                 // 如果指定的roleId不存在，抛出异常或返回空列表
                 throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR, "指定的角色不存在");

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Utils.SessionUtils;
-import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.mapper.SystemUserMapper;
 import com.example.backend.query.PageQuery;
@@ -169,7 +169,7 @@ public class SystemUserServiceV2 {
      * @param pageQuery
      * @return
      */
-    public Page<SystemUser> getUserPage(@NotNull PageQuery pageQuery, @NotNull SystemUserDTO systemUserDTO) {
+    public Page<SystemUser> getUserPage(@NotNull PageQuery pageQuery, @NotNull SystemUserDto systemUserDTO) {
         Page<SystemUser> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
         return systemUserMapper.getUserPage(page, systemUserDTO);
     }
@@ -179,7 +179,7 @@ public class SystemUserServiceV2 {
      *
      * @return
      */
-    public List<SystemUser> getUserList(@NotNull SystemUserDTO systemUserDTO) {
+    public List<SystemUser> getUserList(@NotNull SystemUserDto systemUserDTO) {
         return systemUserMapper.getUserList(systemUserDTO);
     }
 }

@@ -2,7 +2,7 @@ package com.example.backend.service.System;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.backend.dto.SystemLogDTO;
+import com.example.backend.dto.SystemLogDto;
 import com.example.backend.entity.SystemLog;
 import com.example.backend.mapper.SystemLogMapper;
 import com.example.backend.query.PageQuery;
@@ -18,7 +18,7 @@ public class SystemLogService {
     @Resource
     private SystemLogMapper systemLogMapper;
 
-    private QueryWrapper<SystemLog> getSelectQueryWrapper(SystemLogDTO systemLogDTO) {
+    private QueryWrapper<SystemLog> getSelectQueryWrapper(SystemLogDto systemLogDTO) {
         throw new RuntimeException("暂未实现");
         // QueryWrapper<SystemLog> systemLogQueryWrapper = new QueryWrapper<>();
         // systemLogQueryWrapper.lambda()
@@ -32,13 +32,13 @@ public class SystemLogService {
         // return systemLogQueryWrapper;
     }
 
-    public Page<SystemLog> getSystemLogPage(PageQuery pageQuery, @NotNull SystemLogDTO systemLogDTO) {
+    public Page<SystemLog> getSystemLogPage(PageQuery pageQuery, @NotNull SystemLogDto systemLogDTO) {
         Page<SystemLog> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
         QueryWrapper<SystemLog> selectQueryWrapper = getSelectQueryWrapper(systemLogDTO);
         return systemLogMapper.selectPage(page, selectQueryWrapper);
     }
 
-    public List<SystemLog> getSystemLogList(@NotNull SystemLogDTO systemLogDTO) {
+    public List<SystemLog> getSystemLogList(@NotNull SystemLogDto systemLogDTO) {
         QueryWrapper<SystemLog> selectQueryWrapper = getSelectQueryWrapper(systemLogDTO);
         return systemLogMapper.selectList(selectQueryWrapper);
     }

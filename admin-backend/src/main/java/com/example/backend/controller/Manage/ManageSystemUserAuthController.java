@@ -3,7 +3,7 @@ package com.example.backend.controller.Manage;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.query.request.manage.system.userauth.ManageSystemUserAuthLoginRequest;
 import com.example.backend.service.SystemLogServiceBak;
@@ -51,7 +51,7 @@ public class ManageSystemUserAuthController extends BaseController {
         // 判断密码是否正确
         if (systemUserService.checkPasswordIsCorrect(user, inputPassword)) {
             // 密码正确，登录成功
-            SystemUserDTO dto = SystemUserDTO.fromEntity(user);
+            SystemUserDto dto = SystemUserDto.fromEntity(user);
             SystemLogServiceBak.loginSetSession(session, user);
             return CommonReturnType.success(dto);
         } else {

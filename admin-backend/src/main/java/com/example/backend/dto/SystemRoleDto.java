@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class SystemRoleDTO {
+public class SystemRoleDto {
 
     private Long id;
     private Long parentRoleId;
@@ -17,13 +17,13 @@ public class SystemRoleDTO {
     private String roleName;
     private List<String> privileges;
     private List<String> inheritPrivileges;
-    private List<SystemRoleDTO> children;
+    private List<SystemRoleDto> children;
 
-    public static SystemRoleDTO fromEntity(SystemRole systemRole) {
+    public static SystemRoleDto fromEntity(SystemRole systemRole) {
         if (systemRole == null) {
             return null;
         }
-        SystemRoleDTO systemRoleDTO = new SystemRoleDTO();
+        SystemRoleDto systemRoleDTO = new SystemRoleDto();
         BeanUtils.copyProperties(systemRole, systemRoleDTO);
         systemRoleDTO.setPrivileges(new ArrayList<>());
         systemRoleDTO.setInheritPrivileges(new ArrayList<>());
@@ -31,11 +31,11 @@ public class SystemRoleDTO {
         return systemRoleDTO;
     }
 
-    public static List<SystemRoleDTO> fromEntity(List<SystemRole> systemRoleList) {
-        return systemRoleList.stream().map(SystemRoleDTO::fromEntity).collect(Collectors.toList());
+    public static List<SystemRoleDto> fromEntity(List<SystemRole> systemRoleList) {
+        return systemRoleList.stream().map(SystemRoleDto::fromEntity).collect(Collectors.toList());
     }
 
-    public static SystemRole toEntity(SystemRoleDTO systemRoleDTO) {
+    public static SystemRole toEntity(SystemRoleDto systemRoleDTO) {
         if (systemRoleDTO == null) {
             return null;
         }

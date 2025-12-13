@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class SystemUserDTO {
+public class SystemUserDto {
 
     private Long id;
     private String username;
@@ -17,20 +17,20 @@ public class SystemUserDTO {
     private String telephone;
     private String status;
 
-    public static SystemUserDTO fromEntity(SystemUser entity) {
+    public static SystemUserDto fromEntity(SystemUser entity) {
         if (entity == null) {
             return null;
         }
-        SystemUserDTO dto = new SystemUserDTO();
+        SystemUserDto dto = new SystemUserDto();
         BeanUtils.copyProperties(entity, dto);
         return dto;
     }
 
-    public static List<SystemUserDTO> fromEntity(List<SystemUser> entityList) {
-        return entityList.stream().map(SystemUserDTO::fromEntity).collect(Collectors.toList());
+    public static List<SystemUserDto> fromEntity(List<SystemUser> entityList) {
+        return entityList.stream().map(SystemUserDto::fromEntity).collect(Collectors.toList());
     }
 
-    public static SystemUser toEntity(SystemUserDTO dto) {
+    public static SystemUser toEntity(SystemUserDto dto) {
         if (dto == null) {
             return null;
         }

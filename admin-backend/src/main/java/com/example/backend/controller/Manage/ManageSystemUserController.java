@@ -14,7 +14,7 @@ import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.Response.CommonReturnType;
 import com.example.backend.controller.base.BaseController;
-import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.query.PageQuery;
 import com.example.backend.query.request.manage.system.user.ManageUserListRequestIIBaseManage;
@@ -65,9 +65,9 @@ public class ManageSystemUserController extends BaseController {
 
         // 分页数据转为 DTO
         List<SystemUser> list = page.getRecords();
-        List<SystemUserDTO> dtoList = SystemUserDTO.fromEntity(list);
+        List<SystemUserDto> dtoList = SystemUserDto.fromEntity(list);
 
-        ManageListResponse<SystemUserDTO> response = ManageListResponse.<SystemUserDTO>create()
+        ManageListResponse<SystemUserDto> response = ManageListResponse.<SystemUserDto>create()
                 .setTotal(page.getTotal())
                 .setList(dtoList);
 
@@ -83,7 +83,7 @@ public class ManageSystemUserController extends BaseController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public CommonReturnType list(PageQuery pageQuery, SystemUserDTO systemUserDTO) {
+    public CommonReturnType list(PageQuery pageQuery, SystemUserDto systemUserDTO) {
         // 查询分页数据
         Page<SystemUser> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, systemUserDTO);
 
@@ -95,7 +95,7 @@ public class ManageSystemUserController extends BaseController {
 
         // 分页数据转为 DTO
         List<SystemUser> userList = systemUserPage.getRecords();
-        List<SystemUserDTO> systemUserDTOList = SystemUserDTO.fromEntity(userList);
+        List<SystemUserDto> systemUserDtoList = SystemUserDto.fromEntity(userList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -150,7 +150,7 @@ public class ManageSystemUserController extends BaseController {
         // 拼装返回结果
         JSONObject map = new JSONObject();
         map.put("total", systemUserPage.getTotal());
-        map.put("list", systemUserDTOList);
+        map.put("list", systemUserDtoList);
         map.put("columns", columns);
         map.put("fieldMapper", fieldMapper);
         map.put("idFieldName", idFieldName);
@@ -167,7 +167,7 @@ public class ManageSystemUserController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public CommonReturnType edit(HttpServletRequest httpServletRequest, @ModelAttribute SystemUserDTO systemUserDTO, String password) {
+    public CommonReturnType edit(HttpServletRequest httpServletRequest, @ModelAttribute SystemUserDto systemUserDTO, String password) {
         // 查询当前登录用户
         SystemUser currentLoginUser = systemUserServiceV2.getCurrentLoginUser(httpServletRequest);
         if (currentLoginUser == null) {
@@ -177,7 +177,7 @@ public class ManageSystemUserController extends BaseController {
         }
 
         // 传入参数 - 要修改的用户
-        SystemUser systemUser = SystemUserDTO.toEntity(systemUserDTO);
+        SystemUser systemUser = SystemUserDto.toEntity(systemUserDTO);
 
         if (systemUser.getId() == null || systemUser.getId() < 1) {
             // 通过 username 查询系统中是否存在该用户
@@ -243,9 +243,9 @@ public class ManageSystemUserController extends BaseController {
      */
     @GetMapping("/export")
     @ResponseBody
-    public CommonReturnType exportUserList(SystemUserDTO systemUserDTO) {
+    public CommonReturnType exportUserList(SystemUserDto systemUserDTO) {
         List<SystemUser> userList = systemUserServiceV2.getUserList(systemUserDTO);
-        List<SystemUserDTO> systemUserDTOList = SystemUserDTO.fromEntity(userList);
+        List<SystemUserDto> systemUserDtoList = SystemUserDto.fromEntity(userList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();
@@ -253,7 +253,7 @@ public class ManageSystemUserController extends BaseController {
         String dateTime = format.format(now);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("list", systemUserDTOList);
+        map.put("list", systemUserDtoList);
         map.put("sheetName", "用户表-" + System.currentTimeMillis());
         map.put("fileName", "用户表_导出时间_" + dateTime);
 

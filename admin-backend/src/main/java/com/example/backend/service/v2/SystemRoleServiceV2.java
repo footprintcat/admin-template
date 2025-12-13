@@ -1,7 +1,7 @@
 package com.example.backend.service.v2;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.backend.dto.SystemRoleDTO;
+import com.example.backend.dto.SystemRoleDto;
 import com.example.backend.entity.SystemRole;
 import com.example.backend.mapper.SystemRoleMapper;
 import com.example.backend.query.PageQuery;
@@ -19,12 +19,12 @@ public class SystemRoleServiceV2 {
     @Resource
     private SystemRoleMapper systemRoleMapper;
 
-    public Page<SystemRole> getRolePage(PageQuery pageQuery, @NotNull SystemRoleDTO systemRoleDTO) {
+    public Page<SystemRole> getRolePage(PageQuery pageQuery, @NotNull SystemRoleDto systemRoleDTO) {
         Page<SystemRole> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
         return systemRoleMapper.getSystemRolePage(page, systemRoleDTO);
     }
 
-    public List<SystemRole> getRoleList(@NotNull SystemRoleDTO systemRoleDTO) {
+    public List<SystemRole> getRoleList(@NotNull SystemRoleDto systemRoleDTO) {
         return systemRoleMapper.getSystemRoleList(systemRoleDTO);
     }
 

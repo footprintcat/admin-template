@@ -2,7 +2,7 @@ package com.example.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.backend.dto.SystemUserDTO;
+import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -32,7 +32,7 @@ public interface SystemUserMapper extends BaseMapper<SystemUser> {
 
     Boolean alterPassword(Long userId, @Param("newPasswordHash") String newPasswordHash);
 
-    Page<SystemUser> getUserPage(Page<?> page, @Param("query") SystemUserDTO systemUserDTO);
+    Page<SystemUser> getUserPage(Page<?> page, @Param("query") SystemUserDto systemUserDTO);
 
-    List<SystemUser> getUserList(@Param("query") SystemUserDTO systemUserDTO);
+    List<SystemUser> getUserList(@Param("query") SystemUserDto systemUserDTO);
 }
