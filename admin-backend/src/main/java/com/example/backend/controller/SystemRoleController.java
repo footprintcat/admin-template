@@ -118,14 +118,14 @@ public class SystemRoleController extends BaseController {
         SystemRole oldSystemRole = systemRoleRepository.getById(systemRoleDTO.getId());
 
         // 编辑的角色的parent 编辑前 等于当前登录的角色/在当前登录的角色之下
-        if (!currentUserRoleId.equals(oldSystemRole.getParentRoleId())
-            && !systemRoleService.canEmpowerTargetRole(currentUserRoleId, oldSystemRole.getParentRoleId())) {
+        if (!currentUserRoleId.equals(oldSystemRole.getParentId())
+            && !systemRoleService.canEmpowerTargetRole(currentUserRoleId, oldSystemRole.getParentId())) {
             return CommonReturn.error("无权操作");
         }
 
         // 编辑的角色的parent 编辑后 等于当前登录的角色/在当前登录的角色之下
-        if (!currentUserRoleId.equals(systemRole.getParentRoleId())
-            && !systemRoleService.canEmpowerTargetRole(currentUserRoleId, systemRole.getParentRoleId())) {
+        if (!currentUserRoleId.equals(systemRole.getParentId())
+            && !systemRoleService.canEmpowerTargetRole(currentUserRoleId, systemRole.getParentId())) {
             return CommonReturn.error("权限不足");
         }
 
@@ -146,7 +146,7 @@ public class SystemRoleController extends BaseController {
         }
 
         LambdaQueryWrapper<SystemRole> roleLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        roleLambdaQueryWrapper.eq(SystemRole::getParentRoleId, roleId);
+        roleLambdaQueryWrapper.eq(SystemRole::getParentId, roleId);
         long count = systemRoleRepository.count(roleLambdaQueryWrapper);
         if (count > 0) {
             return CommonReturn.error("存在子角色，不允许删除");

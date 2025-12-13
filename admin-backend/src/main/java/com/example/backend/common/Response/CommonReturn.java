@@ -6,6 +6,9 @@ import org.jetbrains.annotations.Nullable;
 @Data
 public class CommonReturn {
 
+    private CommonReturn() {
+    }
+
     // 表明对应请求的返回处理结果 "success" 或 "fail"
     private String status;
 

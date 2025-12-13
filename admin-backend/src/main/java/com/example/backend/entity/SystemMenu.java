@@ -34,7 +34,7 @@ public class SystemMenu implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "父级菜单项id")
+    @Schema(description = "父菜单id")
     @TableField("parent_id")
     private Long parentId;
 
@@ -42,7 +42,11 @@ public class SystemMenu implements Serializable {
     @TableField("`level`")
     private Integer level;
 
-    @Schema(description = "菜单code")
+    @Schema(description = "菜单所属模块")
+    @TableField("module")
+    private String module;
+
+    @Schema(description = "菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）")
     @TableField("menu_code")
     private String menuCode;
 

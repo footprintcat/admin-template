@@ -3,6 +3,7 @@ package com.example.backend.common.Enums.system.log;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 系统日志来源枚举
@@ -20,7 +21,10 @@ public enum SystemLogSourceEnum {
     ;
 
     @EnumValue
+    @NotNull
     final String code;
+
+    @NotNull
     final String name;
 
 }

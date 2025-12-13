@@ -84,6 +84,29 @@ COMMENT = '系统租户表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for system_department
+-- ----------------------------
+DROP TABLE IF EXISTS `system_department`;
+CREATE TABLE `system_department` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `parent_id` bigint NULL DEFAULT NULL COMMENT '父部门id',
+  `level` tinyint NOT NULL COMMENT '部门级别',
+  `dept_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '部门编码',
+  `dept_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '部门名称',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统部门表'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for system_log
 -- ----------------------------
 DROP TABLE IF EXISTS `system_log`;
@@ -123,7 +146,7 @@ ROW_FORMAT = Dynamic;
 DROP TABLE IF EXISTS `system_menu`;
 CREATE TABLE `system_menu` (
   `id` bigint NOT NULL COMMENT '主键id',
-  `parent_id` bigint NULL DEFAULT NULL COMMENT '父级菜单项id',
+  `parent_id` bigint NULL DEFAULT NULL COMMENT '父菜单id',
   `level` tinyint NOT NULL COMMENT '菜单级别',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单所属模块',
   `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
@@ -151,7 +174,7 @@ ROW_FORMAT = Dynamic;
 DROP TABLE IF EXISTS `system_privilege`;
 CREATE TABLE `system_privilege` (
   `id` bigint NOT NULL COMMENT '雪花id',
-  `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（User-用户；Role-角色）',
+  `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（user-用户；role-角色）',
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
   `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
@@ -175,8 +198,8 @@ ROW_FORMAT = Dynamic;
 DROP TABLE IF EXISTS `system_role`;
 CREATE TABLE `system_role` (
   `id` bigint NOT NULL COMMENT '雪花id',
-  `parent_role_id` bigint NULL DEFAULT NULL COMMENT '父角色id',
-  `level` int NOT NULL COMMENT '角色层级',
+  `parent_id` bigint NULL DEFAULT NULL COMMENT '父角色id',
+  `level` tinyint NOT NULL COMMENT '角色层级',
   `role_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色名称',
   `comment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
@@ -212,6 +235,48 @@ CREATE TABLE `system_user_auth` (
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 COMMENT = '系统用户认证表'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for system_user_department_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `system_user_department_relation`;
+CREATE TABLE `system_user_department_relation` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `user_id` bigint NOT NULL COMMENT '用户id',
+  `department_id` bigint NOT NULL COMMENT '角色id',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统用户-部门关联表'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for system_user_role_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `system_user_role_relation`;
+CREATE TABLE `system_user_role_relation` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `user_id` bigint NOT NULL COMMENT '用户id',
+  `role_id` bigint NOT NULL COMMENT '角色id',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统用户-角色关联表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------

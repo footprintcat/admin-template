@@ -94,8 +94,8 @@ public class SystemRoleService {
         }
 
         for (RoleLinkedDto role : list) {
-            if (role.getParentRoleId() != null) {
-                role.setParentRole(roleLinkedMap.get(role.getParentRoleId()));
+            if (role.getParentId() != null) {
+                role.setParentRole(roleLinkedMap.get(role.getParentId()));
             }
         }
 
@@ -131,7 +131,7 @@ public class SystemRoleService {
 
         // 将角色列表转换为以 parentRoleId 为键的映射
         for (SystemRole systemRole : systemRoleList) {
-            childMap.computeIfAbsent(systemRole.getParentRoleId(), k -> new ArrayList<>()).add(systemRole);
+            childMap.computeIfAbsent(systemRole.getParentId(), k -> new ArrayList<>()).add(systemRole);
         }
 
         // 初始化待处理的角色列表
@@ -166,10 +166,10 @@ public class SystemRoleService {
 
         // 检测互为父子节点的情况
         for (SystemRole systemRole : systemRoleList) {
-            if (systemRole.getParentRoleId() != null) {
+            if (systemRole.getParentId() != null) {
                 for (SystemRole otherSystemRole : systemRoleList) {
-                    if (systemRole.getId().equals(otherSystemRole.getParentRoleId()) &&
-                        otherSystemRole.getId().equals(systemRole.getParentRoleId())) {
+                    if (systemRole.getId().equals(otherSystemRole.getParentId()) &&
+                        otherSystemRole.getId().equals(systemRole.getParentId())) {
                         // 发现互为父子节点，抛出异常
                         throw new BusinessException(BusinessErrorCode.FAULT_ERROR, "角色层级关系配置有误，存在循环引用");
                     }

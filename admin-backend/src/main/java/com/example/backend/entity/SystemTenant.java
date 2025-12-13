@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author coder-xiaomo
- * @since 2025-12-12
+ * @since 2025-12-14
  */
 @Getter
 @Setter
@@ -50,7 +50,7 @@ public class SystemTenant implements Serializable {
     @TableField("tenant_intro")
     private String tenantIntro;
 
-    @Schema(description = "租户状态：NORMAL-正常（可用）, LOCKED-锁定（禁用）, DISABLED-停用, EXPIRED-过期")
+    @Schema(description = "租户状态：normal-正常（可用）, locked-锁定（禁用）, disabled-停用, expired-过期")
     @TableField("status")
     private String status;
 

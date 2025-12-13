@@ -3,6 +3,7 @@ package com.example.backend.common.Enums.system.user;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 用户类型
@@ -19,7 +20,10 @@ public enum SystemUserTypeEnum {
     ;
 
     @EnumValue
+    @NotNull
     final String code;
+
+    @NotNull
     final String name;
 
 }

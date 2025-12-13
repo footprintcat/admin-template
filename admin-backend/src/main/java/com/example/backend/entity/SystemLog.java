@@ -34,7 +34,7 @@ public class SystemLog implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "日志来源（BACKEND-后端日志；MANAGE-管理端前端上报日志；APP-移动端上报日志）")
+    @Schema(description = "日志来源（backend-后端日志；manage-管理端前端上报日志；app-移动端上报日志）")
     @TableField("source")
     private SystemLogSourceEnum source;
 

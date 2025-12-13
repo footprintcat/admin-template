@@ -35,8 +35,8 @@ public class SystemRole implements Serializable {
     private Long id;
 
     @Schema(description = "父角色id")
-    @TableField("parent_role_id")
-    private Long parentRoleId;
+    @TableField("parent_id")
+    private Long parentId;
 
     @Schema(description = "角色层级")
     @TableField("`level`")

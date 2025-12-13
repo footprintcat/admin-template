@@ -39,7 +39,7 @@ public class SystemUserAuth implements Serializable {
     @TableField("user_id")
     private Long userId;
 
-    @Schema(description = "授权类型：PASSWORD-账号密码登录, LOCKED-锁定（禁用）")
+    @Schema(description = "授权类型：password-账号密码登录, oauth2-OAuth 2.0 三方登录")
     @TableField("auth_type")
     private SystemUserAuthTypeEnum authType;
 

@@ -37,13 +37,17 @@ public class MybatisPlusEntityGenerator {
          * 请按字母顺序添加
          */
         // includeTables.add("system_config");
+        // includeTables.add("system_department");
         // includeTables.add("system_log");
+        // // includeTables.add("system_log_detail");
         // includeTables.add("system_menu");
         // includeTables.add("system_privilege");
         // includeTables.add("system_role");
         // includeTables.add("system_tenant");
         // includeTables.add("system_user");
         // includeTables.add("system_user_auth");
+        // includeTables.add("system_user_department_relation");
+        // includeTables.add("system_user_role_relation");
 
         if (includeTables.isEmpty()) {
             throw new RuntimeException("includeTables 为空，跳过代码生成");
@@ -108,6 +112,7 @@ public class MybatisPlusEntityGenerator {
                             // /* v3.5.9 -> */.disable()
                             .disableService()
                             .formatServiceImplFileName("%sRepository")
+                            // .enableFileOverride()
 
                             .entityBuilder() // 实体类策略配置
                             .idType(IdType.ASSIGN_ID) // 主键策略  雪花算法自动生成的id

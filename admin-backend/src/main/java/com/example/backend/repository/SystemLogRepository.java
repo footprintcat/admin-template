@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 系统日志表 服务实现类
  * </p>
  *
  * @author coder-xiaomo

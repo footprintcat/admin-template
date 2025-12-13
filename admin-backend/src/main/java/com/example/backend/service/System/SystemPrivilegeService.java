@@ -344,7 +344,7 @@ public class SystemPrivilegeService {
             JSONObject object = new JSONObject();
             object.put("roleId", role.getId());
             object.put("roleName", role.getRoleName());
-            object.put("parentRoleId", role.getParentRoleId());
+            object.put("parentRoleId", role.getParentId());
             object.put("comment", role.getComment());
             return object;
         }).toList();
