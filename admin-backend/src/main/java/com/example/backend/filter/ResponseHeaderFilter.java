@@ -1,14 +1,11 @@
 package com.example.backend.filter;
 
-import com.example.backend.service.SystemLogServiceBak;
-import jakarta.annotation.Resource;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 
 import java.io.IOException;
 
@@ -17,10 +14,6 @@ import java.io.IOException;
 public class ResponseHeaderFilter implements Filter {
 
     private static final String filterName = "ResponseHeaderFilter";
-
-    @Lazy
-    @Resource
-    SystemLogServiceBak systemLogService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -52,7 +45,8 @@ public class ResponseHeaderFilter implements Filter {
 
         // 记录日志
         if (!"OPTIONS".equals(method)) {
-            systemLogService.log(session, "Call Api", "[" + method + "] " + requestURI, userAgent, "");
+            // TODO 记录日志
+            // systemLogService.log(session, "Call Api", "[" + method + "] " + requestURI, userAgent, "");
         }
     }
 

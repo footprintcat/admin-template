@@ -1,16 +1,18 @@
 package com.example.backend.controller.Manage;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturn;
+import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDto;
 import com.example.backend.entity.SystemUser;
 import com.example.backend.query.request.manage.system.userauth.ManageSystemUserAuthLoginRequest;
-import com.example.backend.service.SystemLogServiceBak;
-import com.example.backend.service.SystemUserService;
+import com.example.backend.query.request.manage.system.userauth.ManageSystemUserChangePasswordRequest;
+import com.example.backend.service.System.SystemUserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,9 +30,9 @@ public class ManageSystemUserAuthController extends BaseController {
     /**
      * 后台管理登录接口
      *
-     * @param request
-     * @param httpServletRequest
-     * @return
+     * @param request            请求参数
+     * @param httpServletRequest 请求对象
+     * @return 登录成功返回用户信息，登录失败返回 null
      * @since 2025-12-12
      */
     @PostMapping("/login")
@@ -41,22 +43,70 @@ public class ManageSystemUserAuthController extends BaseController {
         String inputUsername = request.getUsername();
         String inputPassword = request.getPassword();
 
-        // 通过用户名查出用户信息
-        // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
-        LambdaQueryWrapper<SystemUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SystemUser::getUsername, inputUsername);
-        queryWrapper.last("LIMIT 1");
-        SystemUser user = systemUserService.getOne(queryWrapper);
+        SystemUserDto systemUserDto = systemUserService.userLogin(session, inputUsername, inputPassword);
+        boolean isLoginSuccess = systemUserDto != null;
 
-        // 判断密码是否正确
-        if (systemUserService.checkPasswordIsCorrect(user, inputPassword)) {
-            // 密码正确，登录成功
-            SystemUserDto dto = SystemUserDto.fromEntity(user);
-            SystemLogServiceBak.loginSetSession(session, user);
-            return CommonReturn.success(dto);
-        } else {
-            return CommonReturn.error("登录失败，请检查用户名密码是否正确");
+        // TODO
+        // 记录登录日志
+
+        if (isLoginSuccess) {
+            return CommonReturn.success(systemUserDto);
         }
-
+        return CommonReturn.error("登录失败，请检查用户名和密码是否正确");
     }
+
+    /**
+     * 获取用户信息
+     *
+     * @param httpServletRequest 请求对象
+     * @return 用户信息
+     * @since 2025-12-13
+     */
+    @PostMapping("/getInfo")
+    public CommonReturn getUserInfo(HttpServletRequest httpServletRequest) throws BusinessException {
+        HttpSession session = httpServletRequest.getSession();
+        SystemUser currentUserInfo = systemUserService.getCurrentUserInfo(session);
+        SystemUserDto systemUserDto = SystemUserDto.fromEntity(currentUserInfo);
+        return CommonReturn.success(systemUserDto);
+    }
+
+    /**
+     * 用户退出登录
+     *
+     * @param httpServletRequest 请求对象
+     * @return success
+     * @since 2025-12-13
+     */
+    @PostMapping("/logout")
+    public CommonReturn logout(HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession();
+        if (SessionUtils.isLogin(session)) {
+            SessionUtils.logout(session);
+            // TODO
+            // 增加登录日志
+            return CommonReturn.success("已成功退出登录");
+        } else {
+            return CommonReturn.success("用户未登录，无需退出");
+        }
+    }
+
+    /**
+     * 用户修改密码
+     *
+     * @param httpServletRequest 请求对象
+     * @return success
+     * @since 2025-12-13
+     */
+    @PostMapping("/changePassword")
+    public CommonReturn changePassword(@RequestBody ManageSystemUserChangePasswordRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
+        HttpSession session = httpServletRequest.getSession();
+        @NotNull Long userId = SessionUtils.getUserIdOrThrow(session);
+
+        String oldPassword = request.getOldPassword();
+        String newPassword = request.getNewPassword();
+
+        systemUserService.changePassword(userId, oldPassword, newPassword);
+        return CommonReturn.success();
+    }
+
 }

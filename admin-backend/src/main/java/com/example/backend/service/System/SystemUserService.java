@@ -1,0 +1,96 @@
+package com.example.backend.service.System;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.backend.common.Error.BusinessErrorCode;
+import com.example.backend.common.Error.BusinessException;
+import com.example.backend.common.Utils.SessionUtils;
+import com.example.backend.dto.SystemUserDto;
+import com.example.backend.entity.SystemUser;
+import com.example.backend.mapper.SystemUserMapper;
+import com.example.backend.repository.SystemUserRepository;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpSession;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser> {
+
+    @Resource
+    private SystemUserRepository systemUserRepository;
+
+    /**
+     * 用户登录接口
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 登陆成功返回用户信息，登陆失败返回 null
+     * @since 2025-12-13
+     */
+    @Nullable
+    public SystemUserDto userLogin(@NotNull HttpSession session, @NotNull String username, @NotNull String password) {
+        // 通过用户名查出用户信息
+        // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
+        @Nullable
+        SystemUser systemUser = systemUserRepository.findByUsername(username);
+        if (systemUser == null) {
+            return null;
+        }
+
+        // 判断密码是否正确
+        if (systemUserRepository.verifyPassword(systemUser, password)) {
+            // 密码正确，登录成功
+            SessionUtils.setSession(session, systemUser);
+            return SystemUserDto.fromEntity(systemUser);
+        }
+        return null;
+    }
+
+    /**
+     * 用户修改密码
+     *
+     * @param userId      从 session 中拿出的用户id
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @since 2025-12-13
+     */
+    public void changePassword(@NotNull Long userId, @NotNull String oldPassword, @NotNull String newPassword) throws BusinessException {
+        // 通过用户名查出用户信息
+        // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
+        @Nullable
+        SystemUser systemUser = systemUserRepository.getById(userId);
+        if (systemUser == null) {
+            throw new BusinessException(BusinessErrorCode.USER_NOT_EXIST, "用户不存在");
+        }
+
+        // 校验旧密码是否正确
+        if (!systemUserRepository.verifyPassword(systemUser, oldPassword)) {
+            throw new BusinessException(BusinessErrorCode.USER_LOGIN_FAILED, "用户还未登录");
+        }
+
+        // TODO 校验新密码是否符合要求
+        // 比如：不少于多少位，必须包含特殊字符等等
+
+        // 更新用户密码
+        systemUserRepository.updatePassword(systemUser, newPassword);
+
+        // TODO 记录系统日志
+    }
+
+    /**
+     * 获取当前登录的用户信息
+     *
+     * @param session session 会话
+     * @return 用户信息
+     * @since 2025-12-13
+     */
+    public SystemUser getCurrentUserInfo(@NotNull HttpSession session) throws BusinessException {
+        Long userId = SessionUtils.getUserId(session);
+        if (userId == null) {
+            throw new BusinessException(BusinessErrorCode.USER_NOT_LOGIN);
+        }
+        return systemUserRepository.getById(userId);
+    }
+
+}

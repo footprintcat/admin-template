@@ -1,9 +1,11 @@
 package com.example.backend.common.Utils;
 
+import com.example.backend.common.Error.BusinessErrorCode;
+import com.example.backend.common.Error.BusinessException;
 import com.example.backend.entity.SystemUser;
 import jakarta.servlet.http.HttpSession;
-
-import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SessionUtils {
 
@@ -15,7 +17,7 @@ public class SessionUtils {
      * @param userId
      * @param roleId
      */
-    public static void setSession(HttpSession session, String username, Integer userId, Long roleId) {
+    public static void setSession(@NotNull HttpSession session, @NotNull String username, @NotNull Long userId, @NotNull Long roleId) {
         session.setAttribute("username", username);
         session.setAttribute("user_id", userId);
         session.setAttribute("role_id", roleId);
@@ -28,44 +30,41 @@ public class SessionUtils {
      * @param session
      * @param systemUser
      */
-    public static void setSession(HttpSession session, SystemUser systemUser) {
+    public static void setSession(@NotNull HttpSession session, @NotNull SystemUser systemUser) {
         session.setAttribute("username", systemUser.getUsername());
         session.setAttribute("user_id", systemUser.getId());
         session.setAttribute("role_id", systemUser.getRoleId());
+    }
+
+    public static void logout(HttpSession session) {
+        session.invalidate();
     }
 
     public static boolean isLogin(HttpSession session) {
         return session.getAttribute("username") != null;
     }
 
-    public static HashMap<String, Object> getUserInfoMap(HttpSession session) {
-        if (!isLogin(session)) {
-            return null;
+    public static @Nullable String getUsername(HttpSession session) {
+        return session.getAttribute("username").toString();
+    }
+
+    public static @Nullable Long getUserId(HttpSession session) {
+        return getLong(session, "user_id");
+    }
+
+    public static @NotNull Long getUserIdOrThrow(HttpSession session) throws BusinessException {
+        @Nullable Long userId = getLong(session, "user_id");
+        if (userId == null) {
+            throw new BusinessException(BusinessErrorCode.USER_NOT_LOGIN);
         }
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("username", getUsername(session));
-        map.put("id", getUserId(session));
-        map.put("idStr", String.valueOf(getUserId(session)));
-        map.put("roleId", getRoleId(session));
-        return map;
-    }
-
-    public static String getUsername(HttpSession session) {
-        String username = session.getAttribute("username").toString();
-        return username;
-    }
-
-    public static Long getUserId(HttpSession session) {
-        Long userId = getLong(session, "user_id");
         return userId;
     }
 
-    public static Long getRoleId(HttpSession session) {
-        Long roleId = getLong(session, "role_id");
-        return roleId;
+    public static @Nullable Long getRoleId(HttpSession session) {
+        return getLong(session, "role_id");
     }
 
-    private static Integer getInteger(HttpSession session, String attrName) {
+    private static @Nullable Integer getInteger(HttpSession session, String attrName) {
         try {
             String str = session.getAttribute(attrName).toString();
             if (str == null) {
@@ -77,7 +76,7 @@ public class SessionUtils {
         }
     }
 
-    private static Long getLong(HttpSession session, String attrName) {
+    private static @Nullable Long getLong(HttpSession session, String attrName) {
         try {
             String str = session.getAttribute(attrName).toString();
             if (str == null) {

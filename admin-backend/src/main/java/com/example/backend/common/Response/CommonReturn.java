@@ -1,9 +1,11 @@
 package com.example.backend.common.Response;
 
 import lombok.Data;
+import org.jetbrains.annotations.Nullable;
 
 @Data
 public class CommonReturn {
+
     // 表明对应请求的返回处理结果 "success" 或 "fail"
     private String status;
 
@@ -27,11 +29,11 @@ public class CommonReturn {
         return type;
     }
 
-    public static CommonReturn success(Object result, String message) {
+    public static CommonReturn success(@Nullable Object result, @Nullable String message) {
         return CommonReturn.create(result, message, CommonReturnStatus.SUCCESS);
     }
 
-    public static CommonReturn success(Object result) {
+    public static CommonReturn success(@Nullable Object result) {
         return CommonReturn.create(result, null, CommonReturnStatus.SUCCESS);
     }
 
@@ -39,11 +41,11 @@ public class CommonReturn {
         return CommonReturn.create(null, null, CommonReturnStatus.SUCCESS);
     }
 
-    public static CommonReturn error(Object result, String message) {
+    public static CommonReturn error(@Nullable Object result, @Nullable String message) {
         return CommonReturn.create(result, message, CommonReturnStatus.FAILED);
     }
 
-    public static CommonReturn error(String message) {
+    public static CommonReturn error(@Nullable String message) {
         return CommonReturn.create(null, message, CommonReturnStatus.FAILED);
     }
 
