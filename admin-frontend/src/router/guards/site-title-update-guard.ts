@@ -6,10 +6,13 @@ import settings from '@/utils/settings'
  */
 export function createSiteTitleUpdateGuardGuard(router: Router) {
   router.beforeEach((to) => {
+    let title: string
     if (to.meta.title) {
-      document.title = `${to.meta.title} - ${settings.siteTitle}`
+      title = `${to.meta.title} - ${settings.siteTitle}`
     } else {
-      document.title = settings.siteTitle
+      title = settings.siteTitle
     }
+
+    document.title = settings.isLAN ? '[DEV] ' + title : title
   })
 }
