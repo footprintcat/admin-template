@@ -2,8 +2,9 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
+import settings from '@/utils/settings'
+import { systemUserAuthLoginPost } from '@/api/system/user-auth'
 import { usePermissionStore } from '@/stores/permission'
-import { useSidebarStore } from '@/stores/sidebar'
 import { useTabsStore } from '@/stores/tabs'
 import useUserStore from '@/stores/user'
 import type { ValidateError, ValidateFieldsError } from 'async-validator'
@@ -12,22 +13,6 @@ import type { ValidateError, ValidateFieldsError } from 'async-validator'
 export interface LoginInfo {
   username: string
   password: string
-}
-
-// 用户信息接口
-export interface UserInfo {
-  username: string
-  id: string
-  roleId: number
-  telephone: string | null
-}
-
-// 权限信息接口
-export interface PrivilegeInfo {
-  id: number
-  roleId: number
-  privilegeName: string
-  module: string
 }
 
 /**
@@ -39,7 +24,6 @@ export function useLoginLogic() {
   const tabs = useTabsStore()
 
   const permissionStore = usePermissionStore()
-  const sidebarStore = useSidebarStore()
   const userStore = useUserStore()
 
   const loading = ref<boolean>(false)
@@ -49,6 +33,11 @@ export function useLoginLogic() {
     username: '',
     password: '',
   })
+
+  if (settings.debugMode) {
+    param.username = 'admin'
+    param.password = '123456'
+  }
 
   // 表单验证规则
   const rules: FormRules = {
@@ -68,23 +57,19 @@ export function useLoginLogic() {
     ],
   }
 
-  // 表单引用
-  const loginFormRef = ref<FormInstance>()
-
   /**
    * 提交登录表单
    * @param formEl - 表单实例
    */
-  const submitForm = (formEl: FormInstance | undefined) => {
+  const submitForm = (formEl: FormInstance | null) => {
     if (!formEl) return
 
     formEl.validate(async (isValid: boolean, invalidFields?: ValidateFieldsError) => {
-      if (!isValid) {
-        // ElMessage.error('请填写用户名或密码')
-
+      if (!isValid) { // isValid = false 时, invalidFields 一定存在
         console.log('invalidFields', invalidFields)
+
         // 对表单中的每一个不合法输入框进行遍历
-        Object.values(invalidFields).forEach((input: ValidateError[]) => {
+        Object.values(invalidFields!).forEach((input: ValidateError[]) => {
           // console.log("input", input)
           // 对该不合法输入框的提示信息进行遍历
           input.forEach((element: ValidateError) => {
@@ -96,42 +81,30 @@ export function useLoginLogic() {
       }
 
       loading.value = true
-      // await send_request_without_loading('v1/user/login', 'POST', {
-      //   userName: param.username,
-      //   passWord: param.password,
-      // }, async (data: UserInfo) => {
-      //   // 判断用户是否登录成功
-      //   if (!data) {
-      //     ElMessage.error('用户名或密码错误')
-      //     return
-      //   }
-      //   ElMessage.success('登录成功')
+      systemUserAuthLoginPost({
+        username: param.username,
+        password: param.password,
+      }).then(async ({ data, raw }) => {
+        if (!raw.isSuccess) {
+          return // 后端返回异常已弹出错误提示
+        }
+        if (!data) {
+          return // 账号密码错误
+        }
+        ElMessage.success('登录成功')
 
-      //   userStore.set(data.id, data.roleId, data.username)
+        userStore.set(data.id, data.roleId, data.username)
 
-      //   await permiss.asyncUpdatePermissList(data.roleId, false)
+        await permissionStore.asyncUpdatePermissionList(data.roleId, false)
 
-      //   const fullPath = router.currentRoute?.value?.query?.redirectTo as string
-      //   const path = fullPath?.split('?')[0]
-      //   if (path && !path.includes('/login')) {
-      //     router.push(fullPath)
-      //   } else {
-      //     router.push({ name: 'dashboard' })
-      //   }
-
-      //   try {
-      //     // 如果是大屏
-      //     const isBigScreen = data.username == 'screen'
-      //     if (isBigScreen) {
-      //       // 默认折叠 Sidebar
-      //       sidebarStore.collapse = true
-      //       // 跳转到 模型总览
-      //       router.push({ name: '3dmodel-general' })
-      //     }
-      //   } catch (err) {
-      //     console.error(err)
-      //   }
-      // })
+        const fullPath = router.currentRoute?.value?.query?.redirectTo as string
+        const path = fullPath?.split('?')[0]
+        if (path && !path.includes('/login')) {
+          router.push(fullPath)
+        } else {
+          router.push({ name: 'Dashboard' })
+        }
+      })
       loading.value = false
     })
   }
@@ -142,7 +115,6 @@ export function useLoginLogic() {
   return {
     param,
     rules,
-    loginFormRef,
     submitForm,
     loading,
   }

@@ -33,6 +33,7 @@ const routeList: Array<RouteRecordRaw> = [
 
   {
     path: '/login',
+    // guards 中通过此 name 判断当前是否是登录页面，如果不需要调整登录逻辑，请不要修改这个 name
     name: 'Login',
     meta: {
       title: '登录',

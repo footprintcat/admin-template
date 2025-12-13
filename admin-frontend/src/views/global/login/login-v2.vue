@@ -113,8 +113,10 @@ import { useLoginLogic } from './composables/useLoginLogic'
 
 const baseUrl = import.meta.env.BASE_URL
 
+const loginFormRef = useTemplateRef('loginFormRef')
+
 // 使用抽离的登录逻辑
-const { param, rules, loginFormRef, submitForm, loading } = useLoginLogic()
+const { param, rules, submitForm, loading } = useLoginLogic()
 
 // 本地状态
 const showPassword = ref(false)

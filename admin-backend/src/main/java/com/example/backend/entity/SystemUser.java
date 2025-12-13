@@ -44,12 +44,6 @@ public class SystemUser implements Serializable {
     @TableField("nickname")
     private String nickname;
 
-    // TODO
-    @Deprecated
-    @Schema(description = "电话")
-    @TableField("telephone")
-    private String telephone;
-
     @Schema(description = "用户类型：SUPER_ADMIN-超级管理员；MEMBER-普通用户")
     @TableField("type")
     private SystemUserTypeEnum type;

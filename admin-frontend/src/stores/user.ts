@@ -3,15 +3,15 @@ import { defineStore } from 'pinia'
 
 interface UserState {
   isEmpty: boolean
-  userIdStr: string | undefined
-  roleId: number | undefined
+  userId: string | undefined
+  roleId: string | undefined
   username: string | undefined
 }
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
     isEmpty: true,
-    userIdStr: undefined,
+    userId: undefined,
     roleId: undefined,
     username: undefined,
   }),
@@ -20,17 +20,18 @@ const useUserStore = defineStore('user', {
       return !this.isEmpty
     },
     isSu() {
-      return computed(() => this.roleId === 1)
+      // TODO
+      return computed(() => this.roleId === '1')
     },
-    set(userIdStr: string, roleId: number, username: string) {
+    set(userId: string, roleId: string, username: string) {
       this.isEmpty = false
-      this.userIdStr = userIdStr
+      this.userId = userId
       this.roleId = roleId
       this.username = username
     },
     clear() {
       this.isEmpty = true
-      this.userIdStr = undefined
+      this.userId = undefined
       this.roleId = undefined
       this.username = undefined
     },

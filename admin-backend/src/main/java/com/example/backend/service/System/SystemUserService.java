@@ -44,6 +44,7 @@ public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser>
         }
 
         // 查出用户密码哈希
+        @Nullable
         SystemUserAuth passwordAuthObject = systemUserAuthRepository.getUserPasswordAuthObject(systemUser.getId());
         if (passwordAuthObject == null) { // 用户没有设置密码
             throw new BusinessException(BusinessErrorCode.USER_LOGIN_FAILED, "您没有设置密码，无法通过密码登录");
@@ -69,6 +70,7 @@ public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser>
     @Transactional
     public void changePassword(@NotNull Long userId, @NotNull String oldPassword, @NotNull String newPassword) throws BusinessException {
         // 查出用户密码哈希
+        @Nullable
         SystemUserAuth passwordAuthObject = systemUserAuthRepository.getUserPasswordAuthObject(userId);
         if (passwordAuthObject == null) {
             // 用户没有设置密码
@@ -97,10 +99,8 @@ public class SystemUserService extends ServiceImpl<SystemUserMapper, SystemUser>
      * @since 2025-12-13
      */
     public SystemUser getCurrentUserInfo(@NotNull HttpSession session) throws BusinessException {
-        Long userId = SessionUtils.getUserId(session);
-        if (userId == null) {
-            throw new BusinessException(BusinessErrorCode.USER_NOT_LOGIN);
-        }
+        @NotNull
+        Long userId = SessionUtils.getUserIdOrThrow(session);
         return systemUserRepository.getById(userId);
     }
 

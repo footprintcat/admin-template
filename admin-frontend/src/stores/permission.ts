@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia'
-import { send_request_without_loading } from '@/utils/send_request'
 import useUserStore from './user'
 
 interface UserInfo {
-  id: number
-  idStr: string
-  roleId: number
+  id: string
+  roleId: string
   username: string
 }
 
@@ -22,13 +20,13 @@ export const usePermissionStore = defineStore('permission', {
      * @param roleId 用户RoleId，Number类型
      * @param refreshPageWhenPermissionMismatch 在本地保存的 PermissionList 和最新拉取的 PermissionList 不一致时，是否刷新页面
      */
-    async asyncUpdatePermissionList(roleId: number | null = null, refreshPageWhenPermissionMismatch: boolean = false) {
+    async asyncUpdatePermissionList(roleId: string | null = null, refreshPageWhenPermissionMismatch: boolean = false) {
       const userStore = useUserStore()
 
       // 获取当前登录用户信息 (如果为空则会跳转登录页面)
       await send_request_without_loading('v1/user/getInfo', 'POST', {}, (userInfo: UserInfo) => {
         console.log('userInfo', userInfo)
-        userStore.set(userInfo.idStr, userInfo.roleId, userInfo.username)
+        userStore.set(userInfo.id, userInfo.roleId, userInfo.username)
       })
 
       // 获取新的页面权限集

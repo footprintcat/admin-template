@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Date: 13/12/2025 13:02:08
+ Date: 13/12/2025 22:56:38
 */
 
 SET NAMES utf8mb4;
@@ -164,7 +164,7 @@ DROP TABLE IF EXISTS `system_user_auth`;
 CREATE TABLE `system_user_auth`  (
   `id` bigint NOT NULL COMMENT '雪花id',
   `user_id` bigint NULL DEFAULT NULL COMMENT '用户id',
-  `auth_type` bigint NULL DEFAULT NULL COMMENT '授权类型：PASSWORD-账号密码登录, LOCKED-锁定（禁用）',
+  `auth_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '授权类型：PASSWORD-账号密码登录, OAUTH2-OAuth 2.0 三方登录',
   `password_hash` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码哈希',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',

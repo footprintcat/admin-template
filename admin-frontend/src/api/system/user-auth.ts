@@ -1,6 +1,5 @@
-import type { CommonReturn } from '@/types/backend/common-return'
-import type { SystemUserDto } from '@/types/backend/dto/SystemUserDto'
 import { post } from '@/utils/api'
+import type { SystemUserDto } from '@/types/backend/dto/SystemUserDto'
 
 const API_PREFIX = '/v2/manage/system/user-auth'
 const getUrl = (url: string) => API_PREFIX + url
@@ -20,5 +19,5 @@ export interface ManageSystemUserAuthLoginRequest {
  */
 export function systemUserAuthLoginPost(params: ManageSystemUserAuthLoginRequest) {
   const url = getUrl('/login')
-  return post<CommonReturn<SystemUserDto>>(url, params)
+  return post<SystemUserDto>(url, params)
 }

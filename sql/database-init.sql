@@ -172,7 +172,7 @@ ROW_FORMAT = Dynamic;
 CREATE TABLE `system_user_auth` (
   `id` bigint NOT NULL COMMENT '雪花id',
   `user_id` bigint NULL DEFAULT NULL COMMENT '用户id',
-  `auth_type` bigint NULL DEFAULT NULL COMMENT '授权类型：PASSWORD-账号密码登录, LOCKED-锁定（禁用）',
+  `auth_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '授权类型：PASSWORD-账号密码登录, OAUTH2-OAuth 2.0 三方登录',
   `password_hash` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码哈希',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
@@ -204,6 +204,13 @@ INSERT INTO
     `system_user` (`id`, `username`, `nickname`)
 VALUES
     (1, 'admin', '系统管理员');
+
+-- system_user_auth
+INSERT INTO
+    `system_user_auth` (`id`, `user_id`, `auth_type`, `password_hash`)
+VALUES
+     -- 密码 123456
+    (1, 1, 'PASSWORD', '$2a$10$UDqPefhUZmO9MNHBRIH4Vu5Kxjogjy3UzKxdxSxQDQPtOtr/SB1Ne');
 
 -- system_tenant
 -- TODO

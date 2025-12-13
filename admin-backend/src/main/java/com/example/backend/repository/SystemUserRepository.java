@@ -27,7 +27,7 @@ public class SystemUserRepository extends ServiceImpl<SystemUserMapper, SystemUs
      * @since 2025-12-13
      */
     public @Nullable SystemUser findByUsername(@NotNull String username) {
-        LambdaQueryWrapper<SystemUser> queryWrapper = new LambdaQueryWrapper<SystemUser>();
+        LambdaQueryWrapper<SystemUser> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SystemUser::getUsername, username);
         return baseMapper.selectOne(queryWrapper);
     }

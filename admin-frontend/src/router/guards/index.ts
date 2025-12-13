@@ -1,4 +1,5 @@
 import type { Router } from 'vue-router'
+import { createCheckLoginGuard } from './check-login'
 import { createFooBarGuard } from './foo-bar'
 import { createSiteTitleUpdateGuardGuard } from './site-title-update-guard'
 
@@ -10,6 +11,7 @@ import { createSiteTitleUpdateGuardGuard } from './site-title-update-guard'
 export function setupRouterGuards(router: Router) {
 
   createSiteTitleUpdateGuardGuard(router)
+  createCheckLoginGuard(router)
   createFooBarGuard(router)
 
 }

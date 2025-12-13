@@ -16,6 +16,13 @@ INSERT INTO
 VALUES
     (1, 'admin', '系统管理员');
 
+-- system_user_auth
+INSERT INTO
+    `system_user_auth` (`id`, `user_id`, `auth_type`, `password_hash`)
+VALUES
+     -- 密码 123456
+    (1, 1, 'PASSWORD', '$2a$10$UDqPefhUZmO9MNHBRIH4Vu5Kxjogjy3UzKxdxSxQDQPtOtr/SB1Ne');
+
 -- system_tenant
 -- TODO
 -- INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `is_delete`) VALUES (1, NULL, '默认租户', '系统初始化创建的默认租户', 'NORMAL', 1, 1, 0);
