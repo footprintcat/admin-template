@@ -4,11 +4,11 @@
 
 -- system_menu
 INSERT INTO
-    `system_menu` (`id`, `parent_id`, `level`, `menu_code`, `menu_name`, `menu_path`, `sequence`, `can_edit`)
+    `system_menu` (`id`, `parent_id`, `level`, `module`, `menu_code`, `menu_name`, `menu_path`, `sequence`, `can_edit`)
 VALUES
-    (10000, NULL, 1, 'global:dashboard', '仪表盘', '/dashboard', 1, 0 ),
-    (10001, NULL, 1, 'system:index', '系统管理', NULL, 1, 0 ),
-    (10002, 10001, 2, 'system:user:manage', '用户管理', '/system/user/manage', 1, 0 );
+    (10000, NULL, 1, 'global', 'dashboard', '仪表盘', '/dashboard', 1, 0),
+    (10001, NULL, 1, 'system', 'index', '系统管理', NULL, 1, 0),
+    (10002, 10001, 2, 'system', 'user:manage', '用户管理', '/system/user/manage', 1, 0);
 
 -- system_user
 INSERT INTO
