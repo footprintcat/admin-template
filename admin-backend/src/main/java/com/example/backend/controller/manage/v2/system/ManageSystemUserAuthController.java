@@ -5,7 +5,7 @@ import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.modules.system.model.dto.SystemUserDto;
-import com.example.backend.modules.system.model.entity.SystemUser;
+import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.controller.manage.v2.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;
 import com.example.backend.controller.manage.v2.system.dto.request.userauth.ManageSystemUserChangePasswordRequest;
 import com.example.backend.modules.system.service.SystemUserService;
@@ -66,7 +66,7 @@ public class ManageSystemUserAuthController extends BaseController {
     @PostMapping("/getInfo")
     public CommonReturn getUserInfo(HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
-        SystemUser currentUserInfo = systemUserService.getCurrentUserInfo(session);
+        User currentUserInfo = systemUserService.getCurrentUserInfo(session);
         SystemUserDto systemUserDto = SystemUserDto.fromEntity(currentUserInfo);
         return CommonReturn.success(systemUserDto);
     }

@@ -5,8 +5,8 @@ import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.modules.system.model.dto.SystemUserDto;
-import com.example.backend.modules.system.model.entity.SystemUser;
-import com.example.backend.modules.system.mapper.SystemUserMapper;
+import com.example.backend.modules.system.model.entity.User;
+import com.example.backend.modules.system.mapper.UserMapper;
 import com.example.backend.common.baseobject.request.PageQuery;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,26 +21,26 @@ import java.util.Objects;
 public class SystemUserServiceV2 {
 
     @Resource
-    private SystemUserMapper systemUserMapper;
+    private UserMapper userMapper;
 
     /**
      * 获取当前登录用户
      *
      * @return User
      */
-    public SystemUser getCurrentLoginUser(HttpSession session) {
+    public User getCurrentLoginUser(HttpSession session) {
         try {
             Long userId = SessionUtils.getUserId(session);
             if (userId == null) {
                 return null;
             }
-            return systemUserMapper.selectById(userId);
+            return userMapper.selectById(userId);
         } catch (Exception e) {
             return null;
         }
     }
 
-    public SystemUser getCurrentLoginUser(HttpServletRequest httpServletRequest) {
+    public User getCurrentLoginUser(HttpServletRequest httpServletRequest) {
         return getCurrentLoginUser(httpServletRequest.getSession());
     }
 
@@ -50,11 +50,11 @@ public class SystemUserServiceV2 {
      * @param username
      * @return
      */
-    public SystemUser getUserByUsername(String username) {
+    public User getUserByUsername(String username) {
         if (username == null) {
             return null;
         }
-        return systemUserMapper.selectByUsername(username);
+        return userMapper.selectByUsername(username);
     }
 
     /**
@@ -63,11 +63,11 @@ public class SystemUserServiceV2 {
      * @param userId
      * @return
      */
-    public SystemUser getUserById(Long userId) {
+    public User getUserById(Long userId) {
         if (userId == null || userId <= 0) {
             return null;
         }
-        return systemUserMapper.selectById(userId);
+        return userMapper.selectById(userId);
     }
 
     /**
@@ -76,11 +76,11 @@ public class SystemUserServiceV2 {
      * @param user
      * @return
      */
-    public void addUser(SystemUser user) {
+    public void addUser(User user) {
         if (user == null) {
             return;
         }
-        systemUserMapper.insert(user);
+        userMapper.insert(user);
     }
 
     /**
@@ -89,11 +89,11 @@ public class SystemUserServiceV2 {
      * @param user
      * @return
      */
-    public void updateUser(SystemUser user) {
+    public void updateUser(User user) {
         if (user == null) {
             return;
         }
-        systemUserMapper.updateUserInfoByPrimaryKey(user);
+        userMapper.updateUserInfoByPrimaryKey(user);
     }
 
     /**
@@ -120,7 +120,7 @@ public class SystemUserServiceV2 {
             throw new BusinessException(BusinessErrorCode.OPERATION_NOT_ALLOWED);
         }
 
-        SystemUser userToDelete = systemUserMapper.selectById(inputUserId);
+        User userToDelete = userMapper.selectById(inputUserId);
         if (userToDelete == null) {
             throw new BusinessException(BusinessErrorCode.USER_NOT_EXIST, "要删除的用户不存在");
         }
@@ -142,7 +142,7 @@ public class SystemUserServiceV2 {
         // }
 
         // 执行删除
-        systemUserMapper.deleteById(userToDeleteId);
+        userMapper.deleteById(userToDeleteId);
     }
 
     /**
@@ -151,9 +151,9 @@ public class SystemUserServiceV2 {
      * @param pageQuery
      * @return
      */
-    public Page<SystemUser> getUserPage(@NotNull PageQuery pageQuery, @NotNull SystemUserDto systemUserDTO) {
-        Page<SystemUser> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
-        return systemUserMapper.getUserPage(page, systemUserDTO);
+    public Page<User> getUserPage(@NotNull PageQuery pageQuery, @NotNull SystemUserDto systemUserDTO) {
+        Page<User> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
+        return userMapper.getUserPage(page, systemUserDTO);
     }
 
     /**
@@ -161,7 +161,7 @@ public class SystemUserServiceV2 {
      *
      * @return
      */
-    public List<SystemUser> getUserList(@NotNull SystemUserDto systemUserDTO) {
-        return systemUserMapper.getUserList(systemUserDTO);
+    public List<User> getUserList(@NotNull SystemUserDto systemUserDTO) {
+        return userMapper.getUserList(systemUserDTO);
     }
 }

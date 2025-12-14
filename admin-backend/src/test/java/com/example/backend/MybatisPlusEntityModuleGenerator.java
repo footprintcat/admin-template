@@ -78,7 +78,7 @@ public class MybatisPlusEntityModuleGenerator {
 
         // 为模块设置特定的路径
         String modulePath = "/modules/" + moduleName;
-        pathInfo.put(OutputFile.entity, javaBasePath + "/com/example/backend" + modulePath + "/entity");
+        pathInfo.put(OutputFile.entity, javaBasePath + "/com/example/backend" + modulePath + "/model/entity");
         pathInfo.put(OutputFile.mapper, javaBasePath + "/com/example/backend" + modulePath + "/mapper");
         pathInfo.put(OutputFile.xml, resourcesBasePath + "/mapper" + modulePath);
         pathInfo.put(OutputFile.serviceImpl, javaBasePath + "/com/example/backend" + modulePath + "/repository");

@@ -13,7 +13,7 @@ import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.modules.system.model.dto.SystemLogDto;
-import com.example.backend.modules.system.model.entity.SystemLog;
+import com.example.backend.modules.system.model.entity.Log;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.modules.system.service.needrefactor.SystemLogService;
 import jakarta.annotation.Resource;
@@ -41,11 +41,11 @@ public class ManageSystemLogController extends BaseController {
     @GetMapping("/list")
     public CommonReturn list(@ModelAttribute PageQuery pageQuery, SystemLogDto systemLogDTO) {
         // 查询分页数据
-        Page<SystemLog> systemLogPage = systemLogService.getSystemLogPage(pageQuery, systemLogDTO);
+        Page<Log> systemLogPage = systemLogService.getSystemLogPage(pageQuery, systemLogDTO);
 
         // 分页数据转为 DTO
-        List<SystemLog> systemLogList = systemLogPage.getRecords();
-        List<SystemLogDto> systemLogDtoList = SystemLogDto.fromEntity(systemLogList);
+        List<Log> logList = systemLogPage.getRecords();
+        List<SystemLogDto> systemLogDtoList = SystemLogDto.fromEntity(logList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -140,8 +140,8 @@ public class ManageSystemLogController extends BaseController {
     @GetMapping("/export")
     @ResponseBody
     public CommonReturn exportSystemLogList(SystemLogDto systemLogDTO) {
-        List<SystemLog> systemLogList = systemLogService.getSystemLogList(systemLogDTO);
-        List<SystemLogDto> systemLogDtoList = SystemLogDto.fromEntity(systemLogList);
+        List<Log> logList = systemLogService.getSystemLogList(systemLogDTO);
+        List<SystemLogDto> systemLogDtoList = SystemLogDto.fromEntity(logList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();

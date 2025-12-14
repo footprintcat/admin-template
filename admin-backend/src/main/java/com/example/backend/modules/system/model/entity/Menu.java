@@ -16,33 +16,33 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统权限表
+ * 系统菜单表
  * </p>
  *
  * @author coder-xiaomo
- * @since 2025-12-14
+ * @since 2025-12-12
  */
 @Getter
 @Setter
-@Schema(name = "Privilege", description = "系统权限表")
-@TableName("system_privilege")
-public class Privilege implements Serializable {
+@Schema(name = "SystemMenu", description = "系统菜单表")
+@TableName("system_menu")
+public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "雪花id")
+    @Schema(description = "主键id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "对象类型（user-用户；role-角色）")
-    @TableField("entity_type")
-    private String entityType;
+    @Schema(description = "父菜单id")
+    @TableField("parent_id")
+    private Long parentId;
 
-    @Schema(description = "对象id")
-    @TableField("entity_id")
-    private Long entityId;
+    @Schema(description = "菜单级别")
+    @TableField("`level`")
+    private Integer level;
 
-    @Schema(description = "所属模块")
+    @Schema(description = "菜单所属模块")
     @TableField("module")
     private String module;
 
@@ -50,17 +50,25 @@ public class Privilege implements Serializable {
     @TableField("menu_code")
     private String menuCode;
 
-    @Schema(description = "权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）")
-    @TableField("privilege_code")
-    private String privilegeCode;
+    @Schema(description = "菜单名称")
+    @TableField("menu_name")
+    private String menuName;
 
-    @Schema(description = "权限授予类型（granted-有权；denied-无权；inheritable-有权继承）")
-    @TableField("grant_type")
-    private String grantType;
+    @Schema(description = "菜单URL路径（无页面的分组菜单项为NULL）")
+    @TableField("menu_path")
+    private String menuPath;
 
-    @Schema(description = "租户id")
-    @TableField("tenant_id")
-    private Long tenantId;
+    @Schema(description = "菜单项顺序")
+    @TableField("sort_order")
+    private Integer sortOrder;
+
+    @Schema(description = "是否允许编辑（系统菜单请置为0，避免误操作导致后台页面无法正常展示）")
+    @TableField("can_edit")
+    private Integer canEdit;
+
+    @Schema(description = "是否隐藏菜单项（1：隐藏，0：不隐藏）")
+    @TableField("is_hide")
+    private Integer isHide;
 
     @Schema(description = "创建人")
     @TableField("create_by")

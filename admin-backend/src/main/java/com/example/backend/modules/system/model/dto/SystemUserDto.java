@@ -1,6 +1,6 @@
 package com.example.backend.modules.system.model.dto;
 
-import com.example.backend.modules.system.model.entity.SystemUser;
+import com.example.backend.modules.system.model.entity.User;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -17,7 +17,7 @@ public class SystemUserDto {
     private String telephone;
     private String status;
 
-    public static SystemUserDto fromEntity(SystemUser entity) {
+    public static SystemUserDto fromEntity(User entity) {
         if (entity == null) {
             return null;
         }
@@ -26,15 +26,15 @@ public class SystemUserDto {
         return dto;
     }
 
-    public static List<SystemUserDto> fromEntity(List<SystemUser> entityList) {
+    public static List<SystemUserDto> fromEntity(List<User> entityList) {
         return entityList.stream().map(SystemUserDto::fromEntity).collect(Collectors.toList());
     }
 
-    public static SystemUser toEntity(SystemUserDto dto) {
+    public static User toEntity(SystemUserDto dto) {
         if (dto == null) {
             return null;
         }
-        SystemUser entity = new SystemUser();
+        User entity = new User();
         BeanUtils.copyProperties(dto, entity);
         return entity;
     }

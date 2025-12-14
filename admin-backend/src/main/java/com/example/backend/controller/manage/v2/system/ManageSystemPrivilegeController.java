@@ -4,9 +4,9 @@ import com.example.backend.modules.system.enums.privilege.SystemPrivilegeEntityT
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.utils.SessionUtils;
-import com.example.backend.modules.system.model.entity.SystemPrivilege;
-import com.example.backend.modules.system.repository.SystemPrivilegeRepository;
-import com.example.backend.modules.system.repository.SystemUserRoleRelationRepository;
+import com.example.backend.modules.system.model.entity.Privilege;
+import com.example.backend.modules.system.repository.PrivilegeRepository;
+import com.example.backend.modules.system.repository.UserRoleRelationRepository;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,9 +25,9 @@ import java.util.List;
 public class ManageSystemPrivilegeController {
 
     @Resource
-    private SystemUserRoleRelationRepository systemUserRoleRelationRepository;
+    private UserRoleRelationRepository userRoleRelationRepository;
     @Resource
-    private SystemPrivilegeRepository systemPrivilegeRepository;
+    private PrivilegeRepository privilegeRepository;
 
     // TODO 接口尚未完工
 
@@ -46,12 +46,12 @@ public class ManageSystemPrivilegeController {
         @NotNull
         Long userId = SessionUtils.getUserIdOrThrow(session);
 
-        List<Long> roleIdList = systemUserRoleRelationRepository.getRoleIdListByUserId(userId);
+        List<Long> roleIdList = userRoleRelationRepository.getRoleIdListByUserId(userId);
 
         // TODO 角色权限能继承
 
-        List<SystemPrivilege> userPrivilege = systemPrivilegeRepository.getListByEntityId(SystemPrivilegeEntityTypeEnum.USER, userId);
-        List<SystemPrivilege> rolePrivilege = systemPrivilegeRepository.getListByEntityIdList(SystemPrivilegeEntityTypeEnum.USER, roleIdList);
+        List<Privilege> userPrivilege = privilegeRepository.getListByEntityId(SystemPrivilegeEntityTypeEnum.USER, userId);
+        List<Privilege> rolePrivilege = privilegeRepository.getListByEntityIdList(SystemPrivilegeEntityTypeEnum.USER, roleIdList);
 
         return CommonReturn.success();
     }

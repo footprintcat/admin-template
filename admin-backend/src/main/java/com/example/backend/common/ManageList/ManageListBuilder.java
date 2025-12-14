@@ -11,7 +11,7 @@ import com.example.backend.common.ManageList.pojo.ManageListColumn;
 import com.example.backend.common.ManageList.pojo.ManageListInfo;
 import com.example.backend.common.ManageList.pojo.ManageListQuery;
 import com.example.backend.common.ManageList.pojo.queryconfig.StringQueryConfig;
-import com.example.backend.modules.system.model.entity.SystemUser;
+import com.example.backend.modules.system.model.entity.User;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -258,16 +258,16 @@ public class ManageListBuilder<T> {
         fastjsonInitializer.run(null);
 
         // 准备测试数据
-        SystemUser user1 = new SystemUser();
+        User user1 = new User();
         user1.setUsername("张三");
-        SystemUser user2 = new SystemUser();
+        User user2 = new User();
         user2.setUsername("李四");
-        SystemUser user3 = new SystemUser();
+        User user3 = new User();
         user3.setUsername("王五");
-        SystemUser user4 = new SystemUser();
+        User user4 = new User();
         user4.setUsername("赵六");
         // 示例数据列表
-        List<SystemUser> userList = Arrays.asList(user1, user2, user3, user4);
+        List<User> userList = Arrays.asList(user1, user2, user3, user4);
 
         StopWatch stopWatch = new StopWatch();
         // 方式1：传统方式，直接传入 ManageListInfo 对象
@@ -291,7 +291,7 @@ public class ManageListBuilder<T> {
                 .setDefaultSortOrder("descend")
                 .setCheckable(true);
 
-        ManageListBuilder<SystemUser> builder1 = ManageListBuilder.create(SystemUser.class)
+        ManageListBuilder<User> builder1 = ManageListBuilder.create(User.class)
                 .setInfo(info)
                 .setList(userList)
                 .setTableQuery(manageListQuery)
@@ -320,7 +320,7 @@ public class ManageListBuilder<T> {
         fieldMapper.put("1", "是");
         fieldMapper.put("0", "否");
 
-        ManageListBuilder<SystemUser> builder2 = ManageListBuilder.create(SystemUser.class)
+        ManageListBuilder<User> builder2 = ManageListBuilder.create(User.class)
                 .setInfo((infoObj) -> infoObj.setPageName("用户管理页面"))
                 .setList(userList)
                 .setTableQuery((queryObj) -> queryObj

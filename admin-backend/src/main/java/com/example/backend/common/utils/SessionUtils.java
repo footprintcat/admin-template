@@ -2,7 +2,7 @@ package com.example.backend.common.utils;
 
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
-import com.example.backend.modules.system.model.entity.SystemUser;
+import com.example.backend.modules.system.model.entity.User;
 import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,11 +27,11 @@ public class SessionUtils {
      * 调用前请确保 user != null
      *
      * @param session
-     * @param systemUser
+     * @param user
      */
-    public static void setSession(@NotNull HttpSession session, @NotNull SystemUser systemUser) {
-        session.setAttribute("username", systemUser.getUsername());
-        session.setAttribute("user_id", systemUser.getId());
+    public static void setSession(@NotNull HttpSession session, @NotNull User user) {
+        session.setAttribute("username", user.getUsername());
+        session.setAttribute("user_id", user.getId());
     }
 
     public static void logout(HttpSession session) {

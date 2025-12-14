@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统权限表
+ * 系统部门表
  * </p>
  *
  * @author coder-xiaomo
@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "Privilege", description = "系统权限表")
-@TableName("system_privilege")
-public class Privilege implements Serializable {
+@Schema(name = "SystemDepartment", description = "系统部门表")
+@TableName("system_department")
+public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,29 +34,21 @@ public class Privilege implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "对象类型（user-用户；role-角色）")
-    @TableField("entity_type")
-    private String entityType;
+    @Schema(description = "父部门id")
+    @TableField("parent_id")
+    private Long parentId;
 
-    @Schema(description = "对象id")
-    @TableField("entity_id")
-    private Long entityId;
+    @Schema(description = "部门级别")
+    @TableField("`level`")
+    private Integer level;
 
-    @Schema(description = "所属模块")
-    @TableField("module")
-    private String module;
+    @Schema(description = "部门编码")
+    @TableField("department_code")
+    private String departmentCode;
 
-    @Schema(description = "菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）")
-    @TableField("menu_code")
-    private String menuCode;
-
-    @Schema(description = "权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）")
-    @TableField("privilege_code")
-    private String privilegeCode;
-
-    @Schema(description = "权限授予类型（granted-有权；denied-无权；inheritable-有权继承）")
-    @TableField("grant_type")
-    private String grantType;
+    @Schema(description = "部门名称")
+    @TableField("department_name")
+    private String departmentName;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

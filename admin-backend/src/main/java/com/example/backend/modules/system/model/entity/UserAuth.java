@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.example.backend.modules.system.enums.userauth.SystemUserAuthTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,17 +17,17 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统权限表
+ * 系统用户认证表
  * </p>
  *
  * @author coder-xiaomo
- * @since 2025-12-14
+ * @since 2025-12-12
  */
 @Getter
 @Setter
-@Schema(name = "Privilege", description = "系统权限表")
-@TableName("system_privilege")
-public class Privilege implements Serializable {
+@Schema(name = "SystemUserAuth", description = "系统用户认证表")
+@TableName("system_user_auth")
+public class UserAuth implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,29 +35,17 @@ public class Privilege implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "对象类型（user-用户；role-角色）")
-    @TableField("entity_type")
-    private String entityType;
+    @Schema(description = "用户id")
+    @TableField("user_id")
+    private Long userId;
 
-    @Schema(description = "对象id")
-    @TableField("entity_id")
-    private Long entityId;
+    @Schema(description = "授权类型：password-账号密码登录, oauth2-OAuth 2.0 三方登录")
+    @TableField("auth_type")
+    private SystemUserAuthTypeEnum authType;
 
-    @Schema(description = "所属模块")
-    @TableField("module")
-    private String module;
-
-    @Schema(description = "菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）")
-    @TableField("menu_code")
-    private String menuCode;
-
-    @Schema(description = "权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）")
-    @TableField("privilege_code")
-    private String privilegeCode;
-
-    @Schema(description = "权限授予类型（granted-有权；denied-无权；inheritable-有权继承）")
-    @TableField("grant_type")
-    private String grantType;
+    @Schema(description = "密码哈希")
+    @TableField("password_hash")
+    private String passwordHash;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

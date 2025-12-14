@@ -3,9 +3,9 @@ package com.example.backend.modules.system.service.needrefactor;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.backend.common.utils.StringUtils;
-import com.example.backend.modules.system.model.entity.SystemConfig;
-import com.example.backend.modules.system.mapper.SystemConfigMapper;
-import com.example.backend.modules.system.repository.SystemConfigRepository;
+import com.example.backend.modules.system.model.entity.Config;
+import com.example.backend.modules.system.mapper.ConfigMapper;
+import com.example.backend.modules.system.repository.ConfigRepository;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,12 +17,12 @@ public class SystemConfigService {
     private static final String defaultOwner = "backend";
 
     @Resource
-    private SystemConfigRepository systemConfigRepository;
+    private ConfigRepository configRepository;
     @Resource
-    private SystemConfigMapper systemConfigMapper;
+    private ConfigMapper configMapper;
 
     public String getConfigValue(String config) {
-        SystemConfig systemConfig = getConfig(config);
+        Config systemConfig = getConfig(config);
         return systemConfig == null ? null : systemConfig.getValue();
     }
 
@@ -47,28 +47,28 @@ public class SystemConfigService {
     }
 
     public String[] getConfigValues(String config) {
-        SystemConfig systemConfig = getConfig(config);
+        Config systemConfig = getConfig(config);
         if (systemConfig == null || systemConfig.getValue() == null) {
             return new String[0];
         }
         return systemConfig.getValue().split(",");
     }
 
-    public SystemConfig getConfig(String config) {
+    public Config getConfig(String config) {
         return getConfig(defaultOwner, config);
     }
 
-    public SystemConfig getConfig(String owner, String config) {
-        SystemConfig systemConfig = systemConfigRepository.lambdaQuery()
-                .eq(SystemConfig::getOwner, owner)
-                .eq(SystemConfig::getConfig, config)
+    public Config getConfig(String owner, String config) {
+        Config systemConfig = configRepository.lambdaQuery()
+                .eq(Config::getOwner, owner)
+                .eq(Config::getConfig, config)
                 .one();
         if (systemConfig == null) {
             return null;
         }
         if (systemConfig.getExpireTimestamp() != null && systemConfig.getExpireTimestamp() < System.currentTimeMillis()) {
             // 配置已过期
-            systemConfigMapper.deleteById(systemConfig);
+            configMapper.deleteById(systemConfig);
             return null;
         }
         return systemConfig;
@@ -113,7 +113,7 @@ public class SystemConfigService {
      * @param expireTimestamp
      */
     public void setConfig(@NotNull String owner, @NotNull String config, String value, @Nullable Long expireTimestamp) {
-        SystemConfig systemConfig = new SystemConfig();
+        Config systemConfig = new Config();
         systemConfig.setConfig(config);
         systemConfig.setOwner(owner);
         systemConfig.setValue(value);
@@ -123,7 +123,7 @@ public class SystemConfigService {
         removeConfig(owner, config);
 
         // 保存新配置
-        systemConfigRepository.save(systemConfig);
+        configRepository.save(systemConfig);
     }
 
     public void updateConfigValue(@NotNull String config, @NotNull String newValue) {
@@ -149,21 +149,21 @@ public class SystemConfigService {
      * @param expireTimestamp
      */
     public void updateConfigValue(@NotNull String owner, @NotNull String config, @NotNull String newValue, @Nullable Long expireTimestamp) {
-        LambdaQueryWrapper<SystemConfig> qw = new LambdaQueryWrapper<SystemConfig>()
-                .eq(SystemConfig::getConfig, config)
-                .eq(SystemConfig::getOwner, owner)
+        LambdaQueryWrapper<Config> qw = new LambdaQueryWrapper<Config>()
+                .eq(Config::getConfig, config)
+                .eq(Config::getOwner, owner)
                 .last("LIMIT 1");
-        SystemConfig systemConfig = systemConfigRepository.getOne(qw);
+        Config systemConfig = configRepository.getOne(qw);
         if (systemConfig == null) {
             setConfig(config, newValue);
         } else {
-            LambdaUpdateWrapper<SystemConfig> uw = new LambdaUpdateWrapper<SystemConfig>()
-                    .set(SystemConfig::getValue, newValue)
-                    .set(SystemConfig::getExpireTimestamp, expireTimestamp)
-                    .eq(SystemConfig::getConfig, config)
-                    .eq(SystemConfig::getOwner, owner)
+            LambdaUpdateWrapper<Config> uw = new LambdaUpdateWrapper<Config>()
+                    .set(Config::getValue, newValue)
+                    .set(Config::getExpireTimestamp, expireTimestamp)
+                    .eq(Config::getConfig, config)
+                    .eq(Config::getOwner, owner)
                     .last("LIMIT 1");
-            systemConfigMapper.update(uw);
+            configMapper.update(uw);
         }
     }
 
@@ -174,10 +174,10 @@ public class SystemConfigService {
      * @param config
      */
     public void removeConfig(@NotNull String owner, @NotNull String config) {
-        LambdaQueryWrapper<SystemConfig> qw = new LambdaQueryWrapper<>();
-        qw.eq(SystemConfig::getConfig, config);
-        qw.eq(SystemConfig::getOwner, owner);
-        systemConfigMapper.delete(qw);
+        LambdaQueryWrapper<Config> qw = new LambdaQueryWrapper<>();
+        qw.eq(Config::getConfig, config);
+        qw.eq(Config::getOwner, owner);
+        configMapper.delete(qw);
     }
 
     public void removeConfig(@NotNull String config) {

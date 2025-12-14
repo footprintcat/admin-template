@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.example.backend.modules.system.enums.user.SystemUserStatusEnum;
+import com.example.backend.modules.system.enums.user.SystemUserTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,17 +18,17 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统权限表
+ * 系统用户表
  * </p>
  *
  * @author coder-xiaomo
- * @since 2025-12-14
+ * @since 2025-12-12
  */
 @Getter
 @Setter
-@Schema(name = "Privilege", description = "系统权限表")
-@TableName("system_privilege")
-public class Privilege implements Serializable {
+@Schema(name = "SystemUser", description = "系统用户表")
+@TableName("system_user")
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,29 +36,21 @@ public class Privilege implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "对象类型（user-用户；role-角色）")
-    @TableField("entity_type")
-    private String entityType;
+    @Schema(description = "用户名")
+    @TableField("username")
+    private String username;
 
-    @Schema(description = "对象id")
-    @TableField("entity_id")
-    private Long entityId;
+    @Schema(description = "用户昵称")
+    @TableField("nickname")
+    private String nickname;
 
-    @Schema(description = "所属模块")
-    @TableField("module")
-    private String module;
+    @Schema(description = "用户类型：super_admin-超级管理员；member-普通用户")
+    @TableField("type")
+    private SystemUserTypeEnum type;
 
-    @Schema(description = "菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）")
-    @TableField("menu_code")
-    private String menuCode;
-
-    @Schema(description = "权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）")
-    @TableField("privilege_code")
-    private String privilegeCode;
-
-    @Schema(description = "权限授予类型（granted-有权；denied-无权；inheritable-有权继承）")
-    @TableField("grant_type")
-    private String grantType;
+    @Schema(description = "用户状态：normal-正常（可用）, locked-锁定（禁用）, disabled-停用, expired-过期")
+    @TableField("status")
+    private SystemUserStatusEnum status;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

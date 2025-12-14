@@ -2,8 +2,8 @@ package com.example.backend.modules.system.service.needrefactor;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.modules.system.model.dto.SystemRoleDto;
-import com.example.backend.modules.system.model.entity.SystemRole;
-import com.example.backend.modules.system.mapper.SystemRoleMapper;
+import com.example.backend.modules.system.model.entity.Role;
+import com.example.backend.modules.system.mapper.RoleMapper;
 import com.example.backend.common.baseobject.request.PageQuery;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -17,48 +17,48 @@ import java.util.Map;
 public class SystemRoleServiceV2 {
 
     @Resource
-    private SystemRoleMapper systemRoleMapper;
+    private RoleMapper roleMapper;
 
-    public Page<SystemRole> getRolePage(PageQuery pageQuery, @NotNull SystemRoleDto systemRoleDTO) {
-        Page<SystemRole> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
-        return systemRoleMapper.getSystemRolePage(page, systemRoleDTO);
+    public Page<Role> getRolePage(PageQuery pageQuery, @NotNull SystemRoleDto systemRoleDTO) {
+        Page<Role> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
+        return roleMapper.getSystemRolePage(page, systemRoleDTO);
     }
 
-    public List<SystemRole> getRoleList(@NotNull SystemRoleDto systemRoleDTO) {
-        return systemRoleMapper.getSystemRoleList(systemRoleDTO);
+    public List<Role> getRoleList(@NotNull SystemRoleDto systemRoleDTO) {
+        return roleMapper.getSystemRoleList(systemRoleDTO);
     }
 
-    public SystemRole getRoleById(Long id) {
+    public Role getRoleById(Long id) {
         if (id == null) {
             return null;
         }
-        return systemRoleMapper.selectById(id);
+        return roleMapper.selectById(id);
     }
 
     /**
      * 新增
      *
-     * @param systemRole
+     * @param role
      * @return
      */
-    public void addRole(SystemRole systemRole) {
-        if (systemRole == null) {
+    public void addRole(Role role) {
+        if (role == null) {
             return;
         }
-        systemRoleMapper.insert(systemRole);
+        roleMapper.insert(role);
     }
 
     /**
      * 修改
      *
-     * @param systemRole
+     * @param role
      * @return
      */
-    public void updateRole(SystemRole systemRole) {
-        if (systemRole == null) {
+    public void updateRole(Role role) {
+        if (role == null) {
             return;
         }
-        systemRoleMapper.updateById(systemRole);
+        roleMapper.updateById(role);
     }
 
     /**
@@ -71,7 +71,7 @@ public class SystemRoleServiceV2 {
         if (id == null) {
             return;
         }
-        systemRoleMapper.deleteById(id);
+        roleMapper.deleteById(id);
     }
 
 
@@ -80,8 +80,8 @@ public class SystemRoleServiceV2 {
      *
      * @return
      */
-    public List<SystemRole> getRoleList() {
-        return systemRoleMapper.selectList(null);
+    public List<Role> getRoleList() {
+        return roleMapper.selectList(null);
     }
 
     /**
@@ -90,9 +90,9 @@ public class SystemRoleServiceV2 {
      * @return
      */
     public HashMap<Long, String> getRoleMap() {
-        List<SystemRole> systemRoles = systemRoleMapper.selectList(null);
+        List<Role> roles = roleMapper.selectList(null);
         HashMap<Long, String> roleMap = new HashMap<>();
-        systemRoles.forEach(role -> roleMap.put(role.getId(), role.getRoleName()));
+        roles.forEach(role -> roleMap.put(role.getId(), role.getRoleName()));
         return roleMap;
     }
 

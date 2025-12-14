@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统权限表
+ * 系统职位信息表
  * </p>
  *
  * @author coder-xiaomo
@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "Privilege", description = "系统权限表")
-@TableName("system_privilege")
-public class Privilege implements Serializable {
+@Schema(name = "SystemJobPosition", description = "系统职位信息表")
+@TableName("system_job_position")
+public class JobPosition implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,29 +34,49 @@ public class Privilege implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "对象类型（user-用户；role-角色）")
-    @TableField("entity_type")
-    private String entityType;
+    @Schema(description = "职位编号，如HR-001")
+    @TableField("position_code")
+    private String positionCode;
 
-    @Schema(description = "对象id")
-    @TableField("entity_id")
-    private Long entityId;
+    @Schema(description = "职位名称")
+    @TableField("position_name")
+    private String positionName;
 
-    @Schema(description = "所属模块")
-    @TableField("module")
-    private String module;
+    @Schema(description = "所属部门ID")
+    @TableField("department_id")
+    private Long departmentId;
 
-    @Schema(description = "菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）")
-    @TableField("menu_code")
-    private String menuCode;
+    @Schema(description = "职位类别：TECH-技术类, MARKET-市场类, SALES-销售类, HR-人力类, FINANCE-财务类, ADMIN-行政类")
+    @TableField("position_category")
+    private String positionCategory;
 
-    @Schema(description = "权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）")
-    @TableField("privilege_code")
-    private String privilegeCode;
+    @Schema(description = "职位层级：INTERN-实习, JUNIOR-初级, MIDDLE-中级, SENIOR-高级, LEADER-主管, MANAGER-经理, DIRECTOR-总监, VP-副总裁, PRESIDENT-总裁")
+    @TableField("position_level")
+    private String positionLevel;
 
-    @Schema(description = "权限授予类型（granted-有权；denied-无权；inheritable-有权继承）")
-    @TableField("grant_type")
-    private String grantType;
+    @Schema(description = "直接上级职位ID")
+    @TableField("parent_id")
+    private Long parentId;
+
+    @Schema(description = "状态：ACTIVE-启用, INACTIVE-停用, PLANNING-编制中")
+    @TableField("status")
+    private String status;
+
+    @Schema(description = "工作地点")
+    @TableField("work_location")
+    private String workLocation;
+
+    @Schema(description = "排序号")
+    @TableField("sort_order")
+    private Integer sortOrder;
+
+    @Schema(description = "职位简介")
+    @TableField("description")
+    private String description;
+
+    @Schema(description = "备注")
+    @TableField("comment")
+    private String comment;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

@@ -10,9 +10,9 @@ import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.NumberUtils;
 import com.example.backend.common.utils.StringUtils;
 import com.example.backend.modules.system.model.dto.SystemMenuDto;
-import com.example.backend.modules.system.model.entity.SystemMenu;
-import com.example.backend.modules.system.mapper.SystemMenuMapper;
-import com.example.backend.modules.system.repository.SystemMenuRepository;
+import com.example.backend.modules.system.model.entity.Menu;
+import com.example.backend.modules.system.mapper.MenuMapper;
+import com.example.backend.modules.system.repository.MenuRepository;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -43,64 +43,64 @@ public class SystemMenuService {
     private String siteId;
 
     @Resource
-    private SystemMenuMapper systemMenuMapper;
+    private MenuMapper menuMapper;
     @Resource
-    private SystemMenuRepository systemMenuRepository;
+    private MenuRepository systemMenuRepository;
     // @Resource
     // private SystemPrivilegeService systemPrivilegeService;
 
     /**
      * 获取 当前用户的 SystemMenu 树
      *
-     * @param systemMenus
+     * @param menus
      * @param menuIdList
      * @return
      */
-    public List<SystemMenuDto> getCurrentUserMenuDTOTree(List<SystemMenu> systemMenus, Set<String> menuIdList) {
-        if (systemMenus == null) {
-            systemMenus = getSystemMenuList(null);
+    public List<SystemMenuDto> getCurrentUserMenuDTOTree(List<Menu> menus, Set<String> menuIdList) {
+        if (menus == null) {
+            menus = getSystemMenuList(null);
         }
         // 筛选出 menuId 在 menuIdList 中的 SystemMenu 对象
-        List<SystemMenu> filteredMenus = systemMenus.stream()
+        List<Menu> filteredMenus = menus.stream()
                 .filter(menu -> menuIdList.contains(menu.getMenuCode()))
                 .toList();
 
         return getMenuChildrenList(null, filteredMenus, new LinkedList<>());
     }
 
-    public List<SystemMenu> getSystemMenuList(@Nullable Integer currentUserRoleId) {
-        LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.ne(SystemMenu::getLevel, 0);
+    public List<Menu> getSystemMenuList(@Nullable Integer currentUserRoleId) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ne(Menu::getLevel, 0);
         if (currentUserRoleId != null && currentUserRoleId != 1) {
-            queryWrapper.eq(SystemMenu::getIsHide, 0);
+            queryWrapper.eq(Menu::getIsHide, 0);
         }
-        queryWrapper.orderByAsc(SystemMenu::getSortOrder);
-        return systemMenuMapper.selectList(queryWrapper);
+        queryWrapper.orderByAsc(Menu::getSortOrder);
+        return menuMapper.selectList(queryWrapper);
     }
 
-    public List<SystemMenu> getSystemMenuListWithoutRootLevel() {
-        LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByAsc(SystemMenu::getSortOrder);
-        return systemMenuMapper.selectList(queryWrapper);
+    public List<Menu> getSystemMenuListWithoutRootLevel() {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByAsc(Menu::getSortOrder);
+        return menuMapper.selectList(queryWrapper);
     }
 
     @SneakyThrows
-    private List<SystemMenuDto> getMenuChildrenList(Long parentId, List<SystemMenu> systemMenus, List<Long> foundParent) {
+    private List<SystemMenuDto> getMenuChildrenList(Long parentId, List<Menu> menus, List<Long> foundParent) {
         if (foundParent.contains(parentId)) {
             log.error("数据库菜单配置错误，递归死循环 parentId: {}, foundParent: {}", parentId, foundParent);
             throw new BusinessException(BusinessErrorCode.FAULT_ERROR, "数据库菜单配置错误，递归死循环！" +
                     "infinite loop will lead to java.lang.StackOverflowError");
         }
         foundParent.add(parentId);
-        return systemMenus.stream()
-                .filter(systemMenu -> Objects.equals(systemMenu.getParentId(), parentId))
-                .map(systemMenu -> {
+        return menus.stream()
+                .filter(menu -> Objects.equals(menu.getParentId(), parentId))
+                .map(menu -> {
                     // 测试死循环检测 测试用
                     // foundParent.add(systemMenu.getIdWithOrder());
                     // 获取这一项的 children
-                    List<SystemMenuDto> children = getMenuChildrenList(systemMenu.getId(), systemMenus, foundParent);
+                    List<SystemMenuDto> children = getMenuChildrenList(menu.getId(), menus, foundParent);
                     // 转 DTO
-                    SystemMenuDto systemMenuDTO = SystemMenuDto.fromEntity(systemMenu);
+                    SystemMenuDto systemMenuDTO = SystemMenuDto.fromEntity(menu);
                     systemMenuDTO.setChildren(children);
                     return systemMenuDTO;
                 })
@@ -113,26 +113,26 @@ public class SystemMenuService {
      * @param menuName
      * @return
      */
-    public SystemMenu getSystemMenuByName(String menuName) {
-        LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(SystemMenu::getMenuName, menuName);
+    public Menu getSystemMenuByName(String menuName) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(Menu::getMenuName, menuName);
         queryWrapper.last("limit 1");
-        SystemMenu systemMenu = systemMenuMapper.selectOne(queryWrapper);
-        return systemMenu;
+        Menu menu = menuMapper.selectOne(queryWrapper);
+        return menu;
     }
 
     /**
      * 添加菜单项
      *
-     * @param systemMenu
+     * @param menu
      */
-    public void addSystemMenu(SystemMenu systemMenu) {
+    public void addSystemMenu(Menu menu) {
         // 将该菜单项的后续菜单次序+1
-        Integer sequence = systemMenu.getSortOrder();
-        LambdaUpdateWrapper<SystemMenu> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.ge(SystemMenu::getSortOrder, sequence);
-        updateWrapper.setIncrBy(SystemMenu::getSortOrder, 1);
-        systemMenuMapper.update(updateWrapper);
+        Integer sequence = menu.getSortOrder();
+        LambdaUpdateWrapper<Menu> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.ge(Menu::getSortOrder, sequence);
+        updateWrapper.setIncrBy(Menu::getSortOrder, 1);
+        menuMapper.update(updateWrapper);
 
         // // 查询当前菜单项的父级菜单（如果存在）
         // if (systemMenu.getParentId() != null) {
@@ -143,45 +143,45 @@ public class SystemMenuService {
         //     systemMenu.setMenuFullName(systemMenu.getMenuName());
         // }
         // 保存插入的菜单项
-        systemMenu.setUpdateTime(LocalDateTime.now());
-        systemMenuMapper.insert(systemMenu);
+        menu.setUpdateTime(LocalDateTime.now());
+        menuMapper.insert(menu);
 
     }
 
     public void updateSystemMenu(SystemMenuDto systemMenuDTO) {
-        SystemMenu systemMenu = SystemMenuDto.toEntity(systemMenuDTO);
+        Menu menu = SystemMenuDto.toEntity(systemMenuDTO);
 
-        LambdaUpdateWrapper<SystemMenu> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SystemMenu::getId, systemMenu.getId());
-        updateWrapper.set(SystemMenu::getMenuCode, systemMenu.getMenuCode());
-        updateWrapper.set(SystemMenu::getMenuName, systemMenu.getMenuName());
-        updateWrapper.set(SystemMenu::getParentId, systemMenu.getParentId());
-        updateWrapper.set(SystemMenu::getUpdateTime, new Date());
-        updateWrapper.set(Objects.nonNull(systemMenu.getIsHide()), SystemMenu::getIsHide, systemMenu.getIsHide());
+        LambdaUpdateWrapper<Menu> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Menu::getId, menu.getId());
+        updateWrapper.set(Menu::getMenuCode, menu.getMenuCode());
+        updateWrapper.set(Menu::getMenuName, menu.getMenuName());
+        updateWrapper.set(Menu::getParentId, menu.getParentId());
+        updateWrapper.set(Menu::getUpdateTime, new Date());
+        updateWrapper.set(Objects.nonNull(menu.getIsHide()), Menu::getIsHide, menu.getIsHide());
 
-        if (systemMenu.getParentId() != null) {
+        if (menu.getParentId() != null) {
             // 如果存在父目录，重新拼接菜单项全名
-            SystemMenu parentSystemMenu = systemMenuRepository.getById(systemMenu.getParentId());
+            Menu parentMenu = systemMenuRepository.getById(menu.getParentId());
             // updateWrapper.set(SystemMenu::getMenuFullName, String.join("-", parentSystemMenu.getMenuFullName(), systemMenu.getMenuName()));
         } else {
             // 一级目录则直接将 menuFullName 更新为 menuName
             // updateWrapper.set(SystemMenu::getMenuFullName, systemMenu.getMenuName());
         }
 
-        systemMenuMapper.update(updateWrapper);
+        menuMapper.update(updateWrapper);
     }
 
     @Transactional
-    public void removeSystemMenu(SystemMenu systemMenu) {
+    public void removeSystemMenu(Menu menu) {
         // 移除菜单项前更新后续菜单项的次序 次序-1
-        Integer sequence = systemMenu.getSortOrder();
-        LambdaUpdateWrapper<SystemMenu> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.gt(SystemMenu::getSortOrder, sequence);
-        updateWrapper.setDecrBy(SystemMenu::getSortOrder, 1);
-        systemMenuMapper.update(updateWrapper);
+        Integer sequence = menu.getSortOrder();
+        LambdaUpdateWrapper<Menu> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.gt(Menu::getSortOrder, sequence);
+        updateWrapper.setDecrBy(Menu::getSortOrder, 1);
+        menuMapper.update(updateWrapper);
 
         // 删除菜单
-        systemMenuMapper.deleteById(systemMenu.getId());
+        menuMapper.deleteById(menu.getId());
 
         // 删除该菜单相关权限
         // TODO
@@ -189,52 +189,52 @@ public class SystemMenuService {
     }
 
     public void exchangeSystemMenu(String fromMenuId, String movingMode) throws BusinessException {
-        List<SystemMenu> systemMenuList = findExchangedMenu(fromMenuId, movingMode);
-        if (systemMenuList.size() != 2) {
+        List<Menu> menuList = findExchangedMenu(fromMenuId, movingMode);
+        if (menuList.size() != 2) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR, "无效id");
         }
-        SystemMenu systemMenu1 = systemMenuList.get(0);
-        SystemMenu systemMenu2 = systemMenuList.get(1);
+        Menu menu1 = menuList.get(0);
+        Menu menu2 = menuList.get(1);
 
-        if (!Objects.equals(systemMenu1.getParentId(), systemMenu2.getParentId())) {
+        if (!Objects.equals(menu1.getParentId(), menu2.getParentId())) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR, "两个菜单不在同一层级");
         }
 
-        LambdaUpdateWrapper<SystemMenu> updateWrapper1 = new LambdaUpdateWrapper<>();
-        updateWrapper1.set(SystemMenu::getSortOrder, systemMenu2.getSortOrder());
-        updateWrapper1.eq(SystemMenu::getId, systemMenu1.getId());
-        systemMenuMapper.update(updateWrapper1);
+        LambdaUpdateWrapper<Menu> updateWrapper1 = new LambdaUpdateWrapper<>();
+        updateWrapper1.set(Menu::getSortOrder, menu2.getSortOrder());
+        updateWrapper1.eq(Menu::getId, menu1.getId());
+        menuMapper.update(updateWrapper1);
 
-        LambdaUpdateWrapper<SystemMenu> updateWrapper2 = new LambdaUpdateWrapper<>();
-        updateWrapper2.set(SystemMenu::getSortOrder, systemMenu1.getSortOrder());
-        updateWrapper2.eq(SystemMenu::getId, systemMenu2.getId());
-        systemMenuMapper.update(updateWrapper2);
+        LambdaUpdateWrapper<Menu> updateWrapper2 = new LambdaUpdateWrapper<>();
+        updateWrapper2.set(Menu::getSortOrder, menu1.getSortOrder());
+        updateWrapper2.eq(Menu::getId, menu2.getId());
+        menuMapper.update(updateWrapper2);
     }
 
-    private List<SystemMenu> findExchangedMenu(@NotNull String fromMenuId, @NotNull String movingMode) {
-        List<SystemMenu> resultMenus = new ArrayList<>();
-        SystemMenu currentSystemMenu = systemMenuRepository.getById(fromMenuId);
-        resultMenus.add(currentSystemMenu);
+    private List<Menu> findExchangedMenu(@NotNull String fromMenuId, @NotNull String movingMode) {
+        List<Menu> resultMenus = new ArrayList<>();
+        Menu currentMenu = systemMenuRepository.getById(fromMenuId);
+        resultMenus.add(currentMenu);
 
-        List<SystemMenu> systemMenus;
-        if (currentSystemMenu.getParentId() != null) {
+        List<Menu> menus;
+        if (currentMenu.getParentId() != null) {
             // 查询父目录菜单列表
-            Long parentId = currentSystemMenu.getParentId();
-            LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(SystemMenu::getParentId, parentId);
-            queryWrapper.orderByAsc(SystemMenu::getSortOrder);
-            systemMenus = systemMenuMapper.selectList(queryWrapper);
+            Long parentId = currentMenu.getParentId();
+            LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Menu::getParentId, parentId);
+            queryWrapper.orderByAsc(Menu::getSortOrder);
+            menus = menuMapper.selectList(queryWrapper);
         } else {
-            LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(SystemMenu::getLevel, 1);
-            queryWrapper.orderByAsc(SystemMenu::getSortOrder);
-            systemMenus = systemMenuMapper.selectList(queryWrapper);
+            LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Menu::getLevel, 1);
+            queryWrapper.orderByAsc(Menu::getSortOrder);
+            menus = menuMapper.selectList(queryWrapper);
         }
 
         if ("up".equals(movingMode)) {
             // 菜单上移
-            SystemMenu previousMenu = null;
-            for (SystemMenu menu : systemMenus) {
+            Menu previousMenu = null;
+            for (Menu menu : menus) {
                 if (menu.getId().equals(NumberUtils.parseLong(fromMenuId))) {
                     break;
                 }
@@ -243,9 +243,9 @@ public class SystemMenuService {
             resultMenus.add(previousMenu);
         } else if ("down".equals(movingMode)) {
             // 菜单下移
-            SystemMenu nextMenu = null;
+            Menu nextMenu = null;
             boolean foundCurrent = false;
-            for (SystemMenu menu : systemMenus) {
+            for (Menu menu : menus) {
                 if (foundCurrent) {
                     nextMenu = menu;
                     break;
@@ -265,18 +265,18 @@ public class SystemMenuService {
      *
      * @param id
      */
-    public List<SystemMenu> getUpLevelSystemMenuList(String id) throws BusinessException {
-        SystemMenu systemMenu = systemMenuRepository.getById(id);
-        if (systemMenu == null || systemMenu.getLevel() - 1 == 0) {
+    public List<Menu> getUpLevelSystemMenuList(String id) throws BusinessException {
+        Menu menu = systemMenuRepository.getById(id);
+        if (menu == null || menu.getLevel() - 1 == 0) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
 
-        LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SystemMenu::getLevel, systemMenu.getLevel() - 1);
-        queryWrapper.orderByAsc(SystemMenu::getSortOrder);
-        List<SystemMenu> systemMenuList = systemMenuMapper.selectList(queryWrapper);
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getLevel, menu.getLevel() - 1);
+        queryWrapper.orderByAsc(Menu::getSortOrder);
+        List<Menu> menuList = menuMapper.selectList(queryWrapper);
 
-        return systemMenuList;
+        return menuList;
 
     }
 
@@ -287,15 +287,15 @@ public class SystemMenuService {
      * @return
      * @throws BusinessException 业务异常
      */
-    public SystemMenu getSystemMenuByMenuId(String menuId) throws BusinessException {
+    public Menu getSystemMenuByMenuId(String menuId) throws BusinessException {
         if (StringUtils.isEmpty(menuId)) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
-        LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SystemMenu::getMenuCode, menuId);
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getMenuCode, menuId);
         queryWrapper.last("LIMIT 1");
-        SystemMenu systemMenu = systemMenuRepository.getOne(queryWrapper);
-        return systemMenu;
+        Menu menu = systemMenuRepository.getOne(queryWrapper);
+        return menu;
     }
 
     /**
@@ -303,12 +303,12 @@ public class SystemMenuService {
      *
      * @return
      */
-    public List<SystemMenu> getZeroLevelMenuList() {
-        LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SystemMenu::getLevel, 0);
-        queryWrapper.orderByAsc(SystemMenu::getSortOrder);
-        List<SystemMenu> systemMenus = systemMenuMapper.selectList(queryWrapper);
-        return systemMenus;
+    public List<Menu> getZeroLevelMenuList() {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getLevel, 0);
+        queryWrapper.orderByAsc(Menu::getSortOrder);
+        List<Menu> menus = menuMapper.selectList(queryWrapper);
+        return menus;
     }
 
     /**
@@ -318,8 +318,8 @@ public class SystemMenuService {
      * @return
      */
     public Boolean hasChildren(@NotNull Long id) {
-        LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SystemMenu::getParentId, id);
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getParentId, id);
         long count = systemMenuRepository.count(queryWrapper);
         return count > 0;
     }
@@ -330,17 +330,17 @@ public class SystemMenuService {
      * @param id
      * @return
      */
-    public SystemMenu getLastChild(@Nullable Long id) {
-        LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
+    public Menu getLastChild(@Nullable Long id) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
         if (id == null) {
-            queryWrapper.isNull(SystemMenu::getParentId);
+            queryWrapper.isNull(Menu::getParentId);
         } else {
-            queryWrapper.eq(SystemMenu::getParentId, id);
+            queryWrapper.eq(Menu::getParentId, id);
         }
-        queryWrapper.orderByDesc(SystemMenu::getSortOrder);
+        queryWrapper.orderByDesc(Menu::getSortOrder);
         queryWrapper.last("LIMIT 1");
-        SystemMenu systemMenu = systemMenuRepository.getOne(queryWrapper);
-        return systemMenu;
+        Menu menu = systemMenuRepository.getOne(queryWrapper);
+        return menu;
     }
 
     /**
@@ -351,21 +351,21 @@ public class SystemMenuService {
      * @return
      */
     public String exportJson() {
-        LambdaQueryWrapper<SystemMenu> qw = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Menu> qw = new LambdaQueryWrapper<>();
         // 按照 menuId 排序，尽量保证相同菜单比对时前后顺序一致
-        qw.orderByAsc(SystemMenu::getMenuCode);
-        List<SystemMenu> list = systemMenuRepository.list(qw);
+        qw.orderByAsc(Menu::getMenuCode);
+        List<Menu> list = systemMenuRepository.list(qw);
 
         // 构造 id -> menuId 字典
         HashMap<Long, String> menuIdMap = new HashMap<>();
-        for (SystemMenu menu : list) {
+        for (Menu menu : list) {
             menuIdMap.put(menu.getId(), menu.getMenuCode());
         }
 
         // parentMenuId -> [ {sequence, childId}, {sequence, childId}, ... ]
         HashMap<String, List<Pair<Integer, String>>> menuSequencePairMap = new HashMap<>();
         List<JSONObject> menuList = new ArrayList<>(list.size());
-        for (SystemMenu menu : list) {
+        for (Menu menu : list) {
             @Nullable String parentMenuId = menuIdMap.get(menu.getParentId());
             @NotNull String parentMenuIdNotNull = parentMenuId == null ? "" : parentMenuId;
 

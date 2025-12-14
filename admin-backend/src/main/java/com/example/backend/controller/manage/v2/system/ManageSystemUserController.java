@@ -15,7 +15,7 @@ import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.modules.system.model.dto.SystemUserDto;
-import com.example.backend.modules.system.model.entity.SystemUser;
+import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.controller.manage.v2.system.dto.request.user.ManageSystemUserListRequest;
 import com.example.backend.common.baseobject.response.ManageListResponse;
@@ -61,10 +61,10 @@ public class ManageSystemUserController extends BaseController {
     @ResponseBody
     public CommonReturn list(@RequestBody ManageSystemUserListRequest queryRequest) {
         // 查询分页数据
-        Page<SystemUser> page = systemUserServiceV2.getUserPage(queryRequest.getPageQuery(), queryRequest.getParams());
+        Page<User> page = systemUserServiceV2.getUserPage(queryRequest.getPageQuery(), queryRequest.getParams());
 
         // 分页数据转为 DTO
-        List<SystemUser> list = page.getRecords();
+        List<User> list = page.getRecords();
         List<SystemUserDto> dtoList = SystemUserDto.fromEntity(list);
 
         ManageListResponse<SystemUserDto> response = ManageListResponse.<SystemUserDto>create()
@@ -85,7 +85,7 @@ public class ManageSystemUserController extends BaseController {
     @ResponseBody
     public CommonReturn list(PageQuery pageQuery, SystemUserDto systemUserDTO) {
         // 查询分页数据
-        Page<SystemUser> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, systemUserDTO);
+        Page<User> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, systemUserDTO);
 
         // 查询 roleMap
         HashMap<Long, String> roleMap = systemRoleServiceV2.getRoleMap();
@@ -94,7 +94,7 @@ public class ManageSystemUserController extends BaseController {
         String roleListForMock = JSONArray.from(roleMap.keySet().stream().map(Object::toString).collect(Collectors.toList())).toString();
 
         // 分页数据转为 DTO
-        List<SystemUser> userList = systemUserPage.getRecords();
+        List<User> userList = systemUserPage.getRecords();
         List<SystemUserDto> systemUserDtoList = SystemUserDto.fromEntity(userList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
@@ -169,7 +169,7 @@ public class ManageSystemUserController extends BaseController {
     @ResponseBody
     public CommonReturn edit(HttpServletRequest httpServletRequest, @ModelAttribute SystemUserDto systemUserDTO, String password) {
         // 查询当前登录用户
-        SystemUser currentLoginUser = systemUserServiceV2.getCurrentLoginUser(httpServletRequest);
+        User currentLoginUser = systemUserServiceV2.getCurrentLoginUser(httpServletRequest);
         if (currentLoginUser == null) {
             return CommonReturn.error("当前用户未登录");
         } else if (Objects.equals(currentLoginUser.getId(), systemUserDTO.getId())) {
@@ -177,11 +177,11 @@ public class ManageSystemUserController extends BaseController {
         }
 
         // 传入参数 - 要修改的用户
-        SystemUser systemUser = SystemUserDto.toEntity(systemUserDTO);
+        User user = SystemUserDto.toEntity(systemUserDTO);
 
-        if (systemUser.getId() == null || systemUser.getId() < 1) {
+        if (user.getId() == null || user.getId() < 1) {
             // 通过 username 查询系统中是否存在该用户
-            SystemUser existUser = systemUserServiceV2.getUserByUsername(systemUser.getUsername());
+            User existUser = systemUserServiceV2.getUserByUsername(user.getUsername());
 
             // 新增用户
             if (existUser != null) {
@@ -193,11 +193,11 @@ public class ManageSystemUserController extends BaseController {
             String passwordHash = DigestUtils.sha512Hex(password);
             // TODO
             // systemUser.setPasswordHash(passwordHash);
-            systemUser.setId(null);
-            systemUserServiceV2.addUser(systemUser);
+            user.setId(null);
+            systemUserServiceV2.addUser(user);
         } else {
             // 查询系统中是否存在该用户
-            SystemUser existUser = systemUserServiceV2.getUserById(systemUser.getId());
+            User existUser = systemUserServiceV2.getUserById(user.getId());
 
             // 修改用户
             if (existUser == null) {
@@ -210,7 +210,7 @@ public class ManageSystemUserController extends BaseController {
             //     String passwordHash = DigestUtils.sha512Hex(password);
             //     systemUser.setPasswordHash(passwordHash);
             // }
-            systemUserServiceV2.updateUser(systemUser);
+            systemUserServiceV2.updateUser(user);
         }
         return CommonReturn.success();
     }
@@ -225,7 +225,7 @@ public class ManageSystemUserController extends BaseController {
     @ResponseBody
     public CommonReturn delete(HttpServletRequest httpServletRequest, Long id) {
         // 先查询用户名是否存在
-        SystemUser existUser = systemUserServiceV2.getUserById(id);
+        User existUser = systemUserServiceV2.getUserById(id);
         if (existUser == null) {
             return CommonReturn.error("用户不存在，删除失败");
         }
@@ -246,7 +246,7 @@ public class ManageSystemUserController extends BaseController {
     @GetMapping("/export")
     @ResponseBody
     public CommonReturn exportUserList(SystemUserDto systemUserDTO) {
-        List<SystemUser> userList = systemUserServiceV2.getUserList(systemUserDTO);
+        List<User> userList = systemUserServiceV2.getUserList(systemUserDTO);
         List<SystemUserDto> systemUserDtoList = SystemUserDto.fromEntity(userList);
 
         // 当前时间

@@ -3,8 +3,8 @@ package com.example.backend.modules.system.service.needrefactor;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.modules.system.model.dto.SystemLogDto;
-import com.example.backend.modules.system.model.entity.SystemLog;
-import com.example.backend.modules.system.mapper.SystemLogMapper;
+import com.example.backend.modules.system.model.entity.Log;
+import com.example.backend.modules.system.mapper.LogMapper;
 import com.example.backend.common.baseobject.request.PageQuery;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -16,9 +16,9 @@ import java.util.List;
 public class SystemLogService {
 
     @Resource
-    private SystemLogMapper systemLogMapper;
+    private LogMapper logMapper;
 
-    private QueryWrapper<SystemLog> getSelectQueryWrapper(SystemLogDto systemLogDTO) {
+    private QueryWrapper<Log> getSelectQueryWrapper(SystemLogDto systemLogDTO) {
         throw new RuntimeException("暂未实现");
         // QueryWrapper<SystemLog> systemLogQueryWrapper = new QueryWrapper<>();
         // systemLogQueryWrapper.lambda()
@@ -32,28 +32,28 @@ public class SystemLogService {
         // return systemLogQueryWrapper;
     }
 
-    public Page<SystemLog> getSystemLogPage(PageQuery pageQuery, @NotNull SystemLogDto systemLogDTO) {
-        Page<SystemLog> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
-        QueryWrapper<SystemLog> selectQueryWrapper = getSelectQueryWrapper(systemLogDTO);
-        return systemLogMapper.selectPage(page, selectQueryWrapper);
+    public Page<Log> getSystemLogPage(PageQuery pageQuery, @NotNull SystemLogDto systemLogDTO) {
+        Page<Log> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
+        QueryWrapper<Log> selectQueryWrapper = getSelectQueryWrapper(systemLogDTO);
+        return logMapper.selectPage(page, selectQueryWrapper);
     }
 
-    public List<SystemLog> getSystemLogList(@NotNull SystemLogDto systemLogDTO) {
-        QueryWrapper<SystemLog> selectQueryWrapper = getSelectQueryWrapper(systemLogDTO);
-        return systemLogMapper.selectList(selectQueryWrapper);
+    public List<Log> getSystemLogList(@NotNull SystemLogDto systemLogDTO) {
+        QueryWrapper<Log> selectQueryWrapper = getSelectQueryWrapper(systemLogDTO);
+        return logMapper.selectList(selectQueryWrapper);
     }
 
     /**
      * 记录日志
      * systemLog.getEventType() 不可为空
      *
-     * @param systemLog
+     * @param log
      */
-    public void add(SystemLog systemLog) {
-        if (systemLog == null) {
+    public void add(Log log) {
+        if (log == null) {
             return;
         }
-        systemLog.setId(null);
-        systemLogMapper.insert(systemLog);
+        log.setId(null);
+        logMapper.insert(log);
     }
 }

@@ -15,7 +15,7 @@ import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.modules.system.model.dto.SystemRoleDto;
-import com.example.backend.modules.system.model.entity.SystemRole;
+import com.example.backend.modules.system.model.entity.Role;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleServiceV2;
 import jakarta.annotation.Resource;
@@ -52,11 +52,11 @@ public class ManageSystemRoleController extends BaseController {
     @ResponseBody
     public CommonReturn list(PageQuery pageQuery, SystemRoleDto systemRoleDTO) {
         // 查询分页数据
-        Page<SystemRole> rolePage = systemRoleServiceV2.getRolePage(pageQuery, systemRoleDTO);
+        Page<Role> rolePage = systemRoleServiceV2.getRolePage(pageQuery, systemRoleDTO);
 
         // 分页数据转为 DTO
-        List<SystemRole> systemRoleList = rolePage.getRecords();
-        List<SystemRoleDto> systemRoleDtoList = SystemRoleDto.fromEntity(systemRoleList);
+        List<Role> roleList = rolePage.getRecords();
+        List<SystemRoleDto> systemRoleDtoList = SystemRoleDto.fromEntity(roleList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -111,24 +111,24 @@ public class ManageSystemRoleController extends BaseController {
     public CommonReturn edit(@ModelAttribute SystemRoleDto systemRoleDTO) {
 
         // 传入参数 - 要修改的设备
-        SystemRole systemRole = SystemRoleDto.toEntity(systemRoleDTO);
+        Role role = SystemRoleDto.toEntity(systemRoleDTO);
 
         // 通过 staffId 查询系统中是否存在该设备
-        SystemRole existSystemRole = systemRoleServiceV2.getRoleById(systemRole.getId());
+        Role existRole = systemRoleServiceV2.getRoleById(role.getId());
 
-        if (systemRole.getId() == null || systemRole.getId() < 1) {
+        if (role.getId() == null || role.getId() < 1) {
             // 新增
-            if (existSystemRole != null) {
+            if (existRole != null) {
                 return CommonReturn.error("角色已存在，操作失败");
             }
-            systemRole.setId(null);
-            systemRoleServiceV2.addRole(systemRole);
+            role.setId(null);
+            systemRoleServiceV2.addRole(role);
         } else {
             // 修改
-            if (existSystemRole == null) {
+            if (existRole == null) {
                 return CommonReturn.error("角色不存在，操作失败");
             }
-            systemRoleServiceV2.updateRole(systemRole);
+            systemRoleServiceV2.updateRole(role);
         }
         return CommonReturn.success();
     }
@@ -153,8 +153,8 @@ public class ManageSystemRoleController extends BaseController {
     @GetMapping("/export")
     @ResponseBody
     public CommonReturn exportRoleList(SystemRoleDto systemRoleDTO) {
-        List<SystemRole> systemRoleList = systemRoleServiceV2.getRoleList(systemRoleDTO);
-        List<SystemRoleDto> systemRoleDtoList = SystemRoleDto.fromEntity(systemRoleList);
+        List<Role> roleList = systemRoleServiceV2.getRoleList(systemRoleDTO);
+        List<SystemRoleDto> systemRoleDtoList = SystemRoleDto.fromEntity(roleList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();
