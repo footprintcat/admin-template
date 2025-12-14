@@ -1,5 +1,5 @@
-export interface RequestParam {
-  params: Record<string, unknown>
+export interface RequestParam<Param = Record<string, unknown>> {
+  params: Param
   sort?: Array<SortItem>
   pageQuery: {
     pageIndex: number,

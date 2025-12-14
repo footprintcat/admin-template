@@ -1,7 +1,7 @@
 import { post } from '@/utils/api'
 import type { SystemUserDto } from '@/types/backend/dto/SystemUserDto'
 
-const API_PREFIX = '/v2/manage/system/user-auth'
+const API_PREFIX = '/manage/v1/system/user-auth'
 const getUrl = (url: string) => API_PREFIX + url
 
 

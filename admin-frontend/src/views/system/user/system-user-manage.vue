@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { User, UserFilled } from '@element-plus/icons-vue'
-import { post } from '@/utils/api'
+import { systemUserPage } from '@/api/system/user'
 import ManageList from '@/components/core/manage-list/manage-list.vue'
 import type { RequestParam } from '@/components/core/manage-list/types/request-param'
 import type { SearchInputList } from '@/components/core/manage-list/types/search-input'
@@ -149,7 +149,8 @@ const tableColumnList: TableColumnList = [
 // 模拟没有筛选条件的情况
 // tableColumnList.forEach(i => i.sortable = false)
 
-function fetchData(requestParam: RequestParam): Promise<Array<unknown>> {
-  return post('/v2/manage/user/list', requestParam)
+function fetchData(requestParam: RequestParam<Record<string, unknown>>): Promise<Array<unknown>> {
+  return systemUserPage(requestParam)
+    .then(({ data }) => data)
 }
 </script>
