@@ -1,6 +1,6 @@
 package com.example.backend;
 
-import com.example.backend.common.Utils.MD5Utils;
+import com.example.backend.common.utils.MD5Utils;
 
 
 public class MD5Test {

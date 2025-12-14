@@ -10,7 +10,8 @@ import org.springframework.core.env.Environment;
 import javax.sql.DataSource;
 
 @SpringBootApplication
-@MapperScan("com.example.backend.mapper")
+// @MapperScan("com.example.backend.mapper")
+@MapperScan("com.example.backend.modules.*.mapper")
 @ServletComponentScan
 public class BackendApplication {
 

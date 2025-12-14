@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.baomidou.mybatisplus.generator.fill.Property;
 import com.baomidou.mybatisplus.generator.model.AnnotationAttributes;
-import com.example.backend.common.Utils.StringUtils;
+import com.example.backend.common.utils.StringUtils;
 
 import java.sql.Types;
 import java.util.ArrayList;
@@ -47,9 +47,9 @@ public class MybatisPlusEntityModuleGenerator {
                 // // "system_log_detail",
                 // "system_menu",
                 // "system_privilege",
-                "system_role",
-                "system_tenant",
-                "system_user",
+                // "system_role",
+                // "system_tenant",
+                // "system_user",
                 // "system_user_auth",
                 // "system_user_department_relation",
                 // "system_user_role_relation",
@@ -78,10 +78,12 @@ public class MybatisPlusEntityModuleGenerator {
 
         // 为模块设置特定的路径
         String modulePath = "/modules/" + moduleName;
-        pathInfo.put(OutputFile.entity, javaBasePath + "/com/example/backend" + modulePath + "/entity");
+        pathInfo.put(OutputFile.entity, javaBasePath + "/com/example/backend" + modulePath + "/model/entity");
         pathInfo.put(OutputFile.mapper, javaBasePath + "/com/example/backend" + modulePath + "/mapper");
         pathInfo.put(OutputFile.xml, resourcesBasePath + "/mapper" + modulePath);
         pathInfo.put(OutputFile.serviceImpl, javaBasePath + "/com/example/backend" + modulePath + "/repository");
+
+        String modulePackageName = "modules." + moduleName;
 
         // 数据源配置
         FastAutoGenerator.create("jdbc:mysql://localhost:3306/admin_template?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8", "root", "123456")
@@ -113,10 +115,10 @@ public class MybatisPlusEntityModuleGenerator {
                 .packageConfig(builder -> {
                     builder.parent("com.example.backend") // 父包模块名
                             // .controller("controller")   // Controller 包名 默认值:controller
-                            .entity("entity")           // Entity 包名 默认值:entity
+                            .entity(modulePackageName + ".model.entity")     // Entity 包名 默认值:entity
                             // .service("service")         // Service 包名 默认值:service
-                            .serviceImpl("repository")         // Service 实现类包名
-                            .mapper("mapper")           // Mapper 包名 默认值:mapper
+                            .serviceImpl(modulePackageName + ".repository")  // Service 实现类包名
+                            .mapper(modulePackageName + ".mapper")           // Mapper 包名 默认值:mapper
                             // .other("model") /* v3.5.9 没有这个函数了 */
                             // .moduleName("xxx")        // 设置父包模块名 默认值:无
                             // /* v3.5.1 -> */.pathInfo(Collections.singletonMap(OutputFile.mapperXml, resourcesBasePath + "/mapper")); // 设置mapperXml生成路径

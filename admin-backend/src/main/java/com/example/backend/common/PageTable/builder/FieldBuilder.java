@@ -6,7 +6,7 @@ import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
-import com.example.backend.common.Utils.StringUtils;
+import com.example.backend.common.utils.StringUtils;
 
 import java.util.Map;
 import java.util.Objects;
