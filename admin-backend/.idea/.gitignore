@@ -10,3 +10,9 @@
 /dataSources.local.xml
 
 misc.xml
+
+
+# 忽略其他的配置文件
+data_source_mapping.xml
+dataSources.xml
+sqldialects.xml
