@@ -77,7 +77,8 @@ CREATE TABLE `system_tenant` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE COMMENT '上级租户索引'
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 COMMENT = '系统租户表'
@@ -100,7 +101,8 @@ CREATE TABLE `system_department` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE COMMENT '上级部门索引'
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 COMMENT = '系统部门表'
@@ -133,9 +135,9 @@ CREATE TABLE `system_job_position` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_position_code_tenant`(`tenant_id` ASC, `position_code` ASC) USING BTREE COMMENT '职位编号租户唯一',
   INDEX `idx_department_id`(`department_id` ASC) USING BTREE COMMENT '部门索引',
-  INDEX `idx_parent_position`(`parent_id` ASC) USING BTREE COMMENT '上级职位索引',
   INDEX `idx_status`(`status` ASC) USING BTREE COMMENT '状态索引',
-  INDEX `idx_position_name`(`position_name` ASC) USING BTREE COMMENT '职位名称索引'
+  INDEX `idx_position_name`(`position_name` ASC) USING BTREE COMMENT '职位名称索引',
+  INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE COMMENT '上级职位索引'
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 COMMENT = '职位基础信息表'
@@ -244,7 +246,8 @@ CREATE TABLE `system_role` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE COMMENT '上级角色索引'
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 COMMENT = '系统角色表'
