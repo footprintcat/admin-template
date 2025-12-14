@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemUserRoleRelation", description = "系统用户-角色关联表")
+@Schema(name = "UserRoleRelation", description = "系统用户-角色关联表")
 @TableName("system_user_role_relation")
 public class UserRoleRelation implements Serializable {
 

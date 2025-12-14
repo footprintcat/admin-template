@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemUser", description = "系统用户表")
+@Schema(name = "User", description = "系统用户表")
 @TableName("system_user")
 public class User implements Serializable {
 

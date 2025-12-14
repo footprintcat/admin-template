@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemLog", description = "系统日志表")
+@Schema(name = "Log", description = "系统日志表")
 @TableName("system_log")
 public class Log implements Serializable {
 

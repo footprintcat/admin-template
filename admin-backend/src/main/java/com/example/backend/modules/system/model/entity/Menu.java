@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemMenu", description = "系统菜单表")
+@Schema(name = "Menu", description = "系统菜单表")
 @TableName("system_menu")
 public class Menu implements Serializable {
 

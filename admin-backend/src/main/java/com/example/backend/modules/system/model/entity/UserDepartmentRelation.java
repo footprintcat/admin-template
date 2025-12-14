@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemUserDepartmentRelation", description = "系统用户-部门关联表")
+@Schema(name = "UserDepartmentRelation", description = "系统用户-部门关联表")
 @TableName("system_user_department_relation")
 public class UserDepartmentRelation implements Serializable {
 

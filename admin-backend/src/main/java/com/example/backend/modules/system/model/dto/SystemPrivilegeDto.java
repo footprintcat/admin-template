@@ -14,7 +14,6 @@ public class SystemPrivilegeDto {
 
     private String id;
     private Long roleId;
-    private String userId;
     private String module;
     private String type;
 
@@ -25,7 +24,6 @@ public class SystemPrivilegeDto {
         SystemPrivilegeDto systemPrivilegeDTO = new SystemPrivilegeDto();
         BeanUtils.copyProperties(privilege, systemPrivilegeDTO);
         systemPrivilegeDTO.setId(StringUtils.toNullableString(privilege.getId()));
-        systemPrivilegeDTO.setUserId(StringUtils.toNullableString(privilege.getUserId()));
         return systemPrivilegeDTO;
     }
 
@@ -40,7 +38,6 @@ public class SystemPrivilegeDto {
         Privilege privilege = new Privilege();
         BeanUtils.copyProperties(systemPrivilegeDTO, privilege);
         privilege.setId(NumberUtils.parseLong(systemPrivilegeDTO.getId()));
-        privilege.setUserId(NumberUtils.parseLong(systemPrivilegeDTO.getUserId()));
         return privilege;
     }
 }

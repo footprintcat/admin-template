@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemDepartment", description = "系统部门表")
+@Schema(name = "Department", description = "系统部门表")
 @TableName("system_department")
 public class Department implements Serializable {
 

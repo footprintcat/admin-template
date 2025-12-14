@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemUserAuth", description = "系统用户认证表")
+@Schema(name = "UserAuth", description = "系统用户认证表")
 @TableName("system_user_auth")
 public class UserAuth implements Serializable {
 
