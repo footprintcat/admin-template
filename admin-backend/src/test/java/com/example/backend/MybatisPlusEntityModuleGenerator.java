@@ -13,41 +13,56 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.baomidou.mybatisplus.generator.fill.Property;
 import com.baomidou.mybatisplus.generator.model.AnnotationAttributes;
+import com.example.backend.common.Utils.StringUtils;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MybatisPlusEntityGenerator {
+public class MybatisPlusEntityModuleGenerator {
 
     // 数据库关键字（生成 entity 时，这些字段自动添加反引号 ``）
     private static final List<String> autoDelimitKeywords = Arrays.asList(
             "order", "group", "level", "timestamp", "key"
     );
 
+    record ModuleTables(String moduleName, String tablePrefix, List<String> tableList) {
+    }
+
     public static void main(String[] args) {
 
-        LinkedList<String> includeTables = new LinkedList<>();
-        /**
-         * 请按字母顺序添加
-         */
-        // includeTables.add("system_config");
-        // includeTables.add("system_department");
-        // includeTables.add("system_job_position");
-        // includeTables.add("system_log");
-        // // includeTables.add("system_log_detail");
-        // includeTables.add("system_menu");
-        // includeTables.add("system_privilege");
-        // includeTables.add("system_role");
-        // includeTables.add("system_tenant");
-        // includeTables.add("system_user");
-        // includeTables.add("system_user_auth");
-        // includeTables.add("system_user_department_relation");
-        // includeTables.add("system_user_role_relation");
+        List<ModuleTables> moduleTables = new ArrayList<>();
+
+        /* 请按字母顺序添加 */
+        moduleTables.add(new ModuleTables("system", "system_", Arrays.asList(
+                // "system_config",
+                // "system_department",
+                // "system_job_position",
+                // "system_log",
+                // // "system_log_detail",
+                // "system_menu",
+                // "system_privilege",
+                "system_role",
+                "system_tenant",
+                "system_user",
+                // "system_user_auth",
+                // "system_user_department_relation",
+                // "system_user_role_relation",
+                null
+        )));
+
+        for (ModuleTables moduleTable : moduleTables) {
+            List<String> includeTables = moduleTable.tableList.stream().filter(StringUtils::isNotEmpty).toList();
+            generateForTables(includeTables, moduleTable.moduleName, moduleTable.tablePrefix);
+        }
+    }
+
+    private static void generateForTables(List<String> includeTables, String moduleName, String tablePrefix) {
 
         if (includeTables.isEmpty()) {
             throw new RuntimeException("includeTables 为空，跳过代码生成");
@@ -58,6 +73,16 @@ public class MybatisPlusEntityGenerator {
         String javaBasePath = projectPath + "/src/main/java";
         String resourcesBasePath = projectPath + "/src/main/resources";
 
+        // 构建动态路径映射
+        Map<OutputFile, String> pathInfo = new HashMap<>();
+
+        // 为模块设置特定的路径
+        String modulePath = "/modules/" + moduleName;
+        pathInfo.put(OutputFile.entity, javaBasePath + "/com/example/backend" + modulePath + "/entity");
+        pathInfo.put(OutputFile.mapper, javaBasePath + "/com/example/backend" + modulePath + "/mapper");
+        pathInfo.put(OutputFile.xml, resourcesBasePath + "/mapper" + modulePath);
+        pathInfo.put(OutputFile.serviceImpl, javaBasePath + "/com/example/backend" + modulePath + "/repository");
+
         // 数据源配置
         FastAutoGenerator.create("jdbc:mysql://localhost:3306/admin_template?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8", "root", "123456")
                 .globalConfig(builder -> {
@@ -67,6 +92,7 @@ public class MybatisPlusEntityGenerator {
                             .disableOpenDir()       // 禁止打开输出目录 默认值:true
                             .commentDate("yyyy-MM-dd") // 注释日期
                             .dateType(DateType.ONLY_DATE)   // 定义生成的实体类中日期类型 DateType.ONLY_DATE 默认值: DateType.TIME_PACK
+                            // .outputDir(System.getProperty("user.dir") + "/src/main/java"); // 指定输出目录
                             .outputDir(javaBasePath); // 指定输出目录
                 })
 
@@ -94,7 +120,8 @@ public class MybatisPlusEntityGenerator {
                             // .other("model") /* v3.5.9 没有这个函数了 */
                             // .moduleName("xxx")        // 设置父包模块名 默认值:无
                             // /* v3.5.1 -> */.pathInfo(Collections.singletonMap(OutputFile.mapperXml, resourcesBasePath + "/mapper")); // 设置mapperXml生成路径
-                            /* v3.5.2 -> */.pathInfo(Collections.singletonMap(OutputFile.xml, resourcesBasePath + "/mapper")); // 设置mapperXml生成路径
+                            // /* v3.5.2 -> */.pathInfo(Collections.singletonMap(OutputFile.xml, resourcesBasePath + "/mapper")); // 设置mapperXml生成路径
+                            .pathInfo(pathInfo); // 使用动态路径配置
                     // 默认存放在mapper的xml下
                 })
 
@@ -110,6 +137,7 @@ public class MybatisPlusEntityGenerator {
                 .strategyConfig(builder -> {
                     builder.addInclude(includeTables)
                             // .addTablePrefix("tb_", "gms_") // 设置过滤表前缀
+                            .addTablePrefix(tablePrefix) // 设置表前缀（根据映射关系自动去除）
 
                             .serviceBuilder() // service策略配置
                             // .enableFileOverride()
@@ -136,7 +164,8 @@ public class MybatisPlusEntityGenerator {
                             /* v3.5.10 */.tableFieldAnnotationHandler(new CustomTableFieldAnnotationHandler())
                             // entity 类注解 & 字段注解排序
                             // related issue: https://github.com/baomidou/mybatis-plus/issues/6685
-                            /* v3.5.11 */.annotationAttributesFunction(annotationAttributes -> annotationAttributes.stream()
+                            // /* v3.5.11 */.annotationAttributesFunction(annotationAttributes -> annotationAttributes.stream()
+                            .annotationAttributesFunction(annotationAttributes -> annotationAttributes.stream()
                                     .sorted(Comparator.comparingInt((AnnotationAttributes c) -> c.getDisplayName().charAt(1))).collect(Collectors.toList()))
 
                             .controllerBuilder() // controller 策略配置
