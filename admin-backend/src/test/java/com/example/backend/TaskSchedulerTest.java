@@ -1,6 +1,6 @@
 package com.example.backend;
 
-import com.example.backend.common.ScheduleTask.TaskSchedulerDemo;
+import com.example.backend.common.scheduletask.TaskSchedulerDemo;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

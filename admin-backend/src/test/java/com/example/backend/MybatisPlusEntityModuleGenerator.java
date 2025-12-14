@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.baomidou.mybatisplus.generator.fill.Property;
 import com.baomidou.mybatisplus.generator.model.AnnotationAttributes;
-import com.example.backend.common.Utils.StringUtils;
+import com.example.backend.common.utils.StringUtils;
 
 import java.sql.Types;
 import java.util.ArrayList;

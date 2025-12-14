@@ -1,9 +1,9 @@
 package com.example.backend.filter;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.example.backend.common.Error.BusinessErrorCode;
-import com.example.backend.common.Response.CommonReturn;
-import com.example.backend.common.Utils.SessionUtils;
+import com.example.backend.common.error.BusinessErrorCode;
+import com.example.backend.common.baseobject.response.CommonReturn;
+import com.example.backend.common.utils.SessionUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

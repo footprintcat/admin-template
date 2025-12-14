@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.example.backend.common.Response.CommonReturn;
+import com.example.backend.common.baseobject.response.CommonReturn;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

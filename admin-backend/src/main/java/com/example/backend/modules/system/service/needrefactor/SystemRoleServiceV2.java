@@ -1,0 +1,112 @@
+package com.example.backend.modules.system.service.needrefactor;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.backend.modules.system.model.dto.SystemRoleDto;
+import com.example.backend.modules.system.model.entity.SystemRole;
+import com.example.backend.modules.system.mapper.SystemRoleMapper;
+import com.example.backend.common.baseobject.request.PageQuery;
+import jakarta.annotation.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class SystemRoleServiceV2 {
+
+    @Resource
+    private SystemRoleMapper systemRoleMapper;
+
+    public Page<SystemRole> getRolePage(PageQuery pageQuery, @NotNull SystemRoleDto systemRoleDTO) {
+        Page<SystemRole> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
+        return systemRoleMapper.getSystemRolePage(page, systemRoleDTO);
+    }
+
+    public List<SystemRole> getRoleList(@NotNull SystemRoleDto systemRoleDTO) {
+        return systemRoleMapper.getSystemRoleList(systemRoleDTO);
+    }
+
+    public SystemRole getRoleById(Long id) {
+        if (id == null) {
+            return null;
+        }
+        return systemRoleMapper.selectById(id);
+    }
+
+    /**
+     * 新增
+     *
+     * @param systemRole
+     * @return
+     */
+    public void addRole(SystemRole systemRole) {
+        if (systemRole == null) {
+            return;
+        }
+        systemRoleMapper.insert(systemRole);
+    }
+
+    /**
+     * 修改
+     *
+     * @param systemRole
+     * @return
+     */
+    public void updateRole(SystemRole systemRole) {
+        if (systemRole == null) {
+            return;
+        }
+        systemRoleMapper.updateById(systemRole);
+    }
+
+    /**
+     * 删除
+     *
+     * @param id
+     * @return
+     */
+    public void deleteRole(Integer id) {
+        if (id == null) {
+            return;
+        }
+        systemRoleMapper.deleteById(id);
+    }
+
+
+    /**
+     * 查询 roleList
+     *
+     * @return
+     */
+    public List<SystemRole> getRoleList() {
+        return systemRoleMapper.selectList(null);
+    }
+
+    /**
+     * 查询 roleMap
+     *
+     * @return
+     */
+    public HashMap<Long, String> getRoleMap() {
+        List<SystemRole> systemRoles = systemRoleMapper.selectList(null);
+        HashMap<Long, String> roleMap = new HashMap<>();
+        systemRoles.forEach(role -> roleMap.put(role.getId(), role.getRoleName()));
+        return roleMap;
+    }
+
+    /**
+     * 传入 roleMap，通过 roleId 获取 roleName
+     *
+     * @param roleMap
+     * @param id
+     * @return
+     */
+    public static String getRoleNameByRoleId(Map<Integer, String> roleMap, Integer id) {
+        if (id == null || roleMap == null) {
+            return "未知";
+        }
+        return roleMap.getOrDefault(id, "未知");
+    }
+}

@@ -1,6 +1,6 @@
 package com.example.backend.common.ManageList.pojo;
 
-import com.example.backend.common.Utils.StringUtils;
+import com.example.backend.common.utils.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

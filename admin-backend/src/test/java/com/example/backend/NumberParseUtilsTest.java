@@ -1,6 +1,6 @@
 package com.example.backend;
 
-import com.example.backend.common.Utils.NumberUtils;
+import com.example.backend.common.utils.NumberUtils;
 
 public class NumberParseUtilsTest {
     public static void main(String[] args) {

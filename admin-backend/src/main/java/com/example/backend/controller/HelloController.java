@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.controller.base.BaseController;
+import com.example.backend.common.baseobject.controller.BaseController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,6 +1,6 @@
 package com.example.backend.controller.publicapi.v1;
 
-import com.example.backend.controller.base.BaseController;
+import com.example.backend.common.baseobject.controller.BaseController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
