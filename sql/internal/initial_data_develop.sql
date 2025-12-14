@@ -154,34 +154,34 @@ INSERT INTO `system_job_position` (`id`, `position_code`, `position_name`, `depa
 -- ########################################################
 
 -- system_privilege 表测试数据（20条）
-INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `menu_code`, `privilege_code`, `tenant_id`, `create_by`, `update_by`) VALUES
+INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `menu_code`, `privilege_code`, `grant_type`, `tenant_id`, `create_by`, `update_by`) VALUES
 -- 为超级管理员角色添加所有权限
-(5001, 'role', 2001, 'global', 'dashboard', 'view_tab', NULL, 1, 1),
-(5002, 'role', 2001, 'global', 'dashboard', 'read', NULL, 1, 1),
-(5003, 'role', 2001, 'system', 'user:manage', 'view_tab', NULL, 1, 1),
-(5004, 'role', 2001, 'system', 'user:manage', 'read', NULL, 1, 1),
-(5005, 'role', 2001, 'system', 'user:manage', 'add', NULL, 1, 1),
-(5006, 'role', 2001, 'system', 'user:manage', 'edit', NULL, 1, 1),
-(5007, 'role', 2001, 'system', 'user:manage', 'delete', NULL, 1, 1),
-(5008, 'role', 2001, 'system', 'user:manage', 'export', NULL, 1, 1),
+(5001, 'role', 2001, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
+(5002, 'role', 2001, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
+(5003, 'role', 2001, 'system', 'user:manage', 'view_tab', 'granted', NULL, 1, 1),
+(5004, 'role', 2001, 'system', 'user:manage', 'read', 'granted', NULL, 1, 1),
+(5005, 'role', 2001, 'system', 'user:manage', 'add', 'granted', NULL, 1, 1),
+(5006, 'role', 2001, 'system', 'user:manage', 'edit', 'granted', NULL, 1, 1),
+(5007, 'role', 2001, 'system', 'user:manage', 'delete', 'granted', NULL, 1, 1),
+(5008, 'role', 2001, 'system', 'user:manage', 'export', 'granted', NULL, 1, 1),
 
 -- 为系统管理员角色添加部分权限
-(5009, 'role', 2002, 'global', 'dashboard', 'view_tab', NULL, 1, 1),
-(5010, 'role', 2002, 'global', 'dashboard', 'read', NULL, 1, 1),
-(5011, 'role', 2002, 'system', 'user:manage', 'view_tab', NULL, 1, 1),
-(5012, 'role', 2002, 'system', 'user:manage', 'read', NULL, 1, 1),
-(5013, 'role', 2002, 'system', 'user:manage', 'add', NULL, 1, 1),
-(5014, 'role', 2002, 'system', 'user:manage', 'edit', NULL, 1, 1),
+(5009, 'role', 2002, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
+(5010, 'role', 2002, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
+(5011, 'role', 2002, 'system', 'user:manage', 'view_tab', 'granted', NULL, 1, 1),
+(5012, 'role', 2002, 'system', 'user:manage', 'read', 'granted', NULL, 1, 1),
+(5013, 'role', 2002, 'system', 'user:manage', 'add', 'granted', NULL, 1, 1),
+(5014, 'role', 2002, 'system', 'user:manage', 'edit', 'granted', NULL, 1, 1),
 
 -- 为普通用户角色添加基本权限
-(5015, 'role', 2006, 'global', 'dashboard', 'view_tab', NULL, 1, 1),
-(5016, 'role', 2006, 'global', 'dashboard', 'read', NULL, 1, 1),
+(5015, 'role', 2006, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
+(5016, 'role', 2006, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
 
 -- 为特定用户添加额外权限
-(5017, 'user', 1, 'system', 'user:manage', 'delete', NULL, 1, 1),
-(5018, 'user', 1, 'system', 'user:manage', 'export', NULL, 1, 1),
-(5019, 'user', 12, 'global', 'dashboard', 'view_tab', NULL, 1, 1),
-(5020, 'user', 12, 'global', 'dashboard', 'read', NULL, 1, 1);
+(5017, 'user', 1, 'system', 'user:manage', 'delete', 'granted', NULL, 1, 1),
+(5018, 'user', 1, 'system', 'user:manage', 'export', 'granted', NULL, 1, 1),
+(5019, 'user', 12, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
+(5020, 'user', 12, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1);
 
 -- ########################################################
 
