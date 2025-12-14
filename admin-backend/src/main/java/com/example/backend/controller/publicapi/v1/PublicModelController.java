@@ -3,7 +3,6 @@ package com.example.backend.controller.publicapi.v1;
 import com.example.backend.common.baseobject.controller.BaseController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
  * 模型公开接口
  */
 @Tag(name = "模型公开接口")
-@CrossOrigin
 @RestController
 @RequestMapping("/v3/public/model")
 public class PublicModelController extends BaseController {

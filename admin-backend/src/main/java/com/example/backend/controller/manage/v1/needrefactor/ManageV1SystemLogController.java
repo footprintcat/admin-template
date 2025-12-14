@@ -17,7 +17,6 @@ import com.example.backend.modules.system.model.entity.Log;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.modules.system.service.needrefactor.SystemLogService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/manage/v1/system/system-log")
 public class ManageV1SystemLogController extends BaseController {

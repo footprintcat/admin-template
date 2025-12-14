@@ -24,7 +24,6 @@ import com.example.backend.modules.system.service.needrefactor.SystemUserService
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +40,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/manage/v1/system/user")
 public class ManageV1SystemUserController extends BaseController {

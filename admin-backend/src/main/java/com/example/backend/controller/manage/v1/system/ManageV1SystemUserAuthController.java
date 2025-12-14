@@ -1,25 +1,24 @@
 package com.example.backend.controller.manage.v1.system;
 
-import com.example.backend.common.error.BusinessException;
-import com.example.backend.common.baseobject.response.CommonReturn;
-import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.common.baseobject.controller.BaseController;
-import com.example.backend.modules.system.model.dto.SystemUserDto;
-import com.example.backend.modules.system.model.entity.User;
+import com.example.backend.common.baseobject.response.CommonReturn;
+import com.example.backend.common.checklogin.PublicAccess;
+import com.example.backend.common.error.BusinessException;
+import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserChangePasswordRequest;
+import com.example.backend.modules.system.model.dto.SystemUserDto;
+import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.service.SystemUserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/manage/v1/system/user-auth")
 public class ManageV1SystemUserAuthController extends BaseController {
@@ -35,6 +34,7 @@ public class ManageV1SystemUserAuthController extends BaseController {
      * @return 登录成功返回用户信息，登录失败返回 null
      * @since 2025-12-12
      */
+    @PublicAccess
     @PostMapping("/login")
     public CommonReturn login(@RequestBody ManageSystemUserAuthLoginRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
@@ -78,6 +78,7 @@ public class ManageV1SystemUserAuthController extends BaseController {
      * @return success
      * @since 2025-12-13
      */
+    @PublicAccess
     @PostMapping("/logout")
     public CommonReturn logout(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();

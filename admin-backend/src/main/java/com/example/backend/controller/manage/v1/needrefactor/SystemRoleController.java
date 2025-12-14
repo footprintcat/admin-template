@@ -12,7 +12,6 @@ import com.example.backend.modules.system.model.entity.SystemUser;
 import com.example.backend.modules.system.repository.SystemRoleRepository;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/v1/system/role")
 public class SystemRoleController extends BaseController {
