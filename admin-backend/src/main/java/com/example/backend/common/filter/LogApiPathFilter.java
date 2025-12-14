@@ -1,4 +1,4 @@
-package com.example.backend.filter;
+package com.example.backend.common.filter;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

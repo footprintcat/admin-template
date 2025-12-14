@@ -2,7 +2,7 @@ package com.example.backend.controller.manage.v1.system;
 
 import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.common.baseobject.response.CommonReturn;
-import com.example.backend.common.checklogin.PublicAccess;
+import com.example.backend.common.interceptor.checklogin.PublicAccess;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;

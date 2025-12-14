@@ -1,4 +1,4 @@
-package com.example.backend.common.checklogin;
+package com.example.backend.common.interceptor.checklogin;
 
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.example.backend.common.checklogin;
+package com.example.backend.common.interceptor.checklogin;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.example.backend.common.baseobject.response.CommonReturn;
