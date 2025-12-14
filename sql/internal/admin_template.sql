@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Date: 14/12/2025 14:05:39
+ Date: 14/12/2025 14:16:55
 */
 
 SET NAMES utf8mb4;
@@ -74,7 +74,7 @@ CREATE TABLE `system_job_position`  (
   INDEX `idx_status`(`status` ASC) USING BTREE COMMENT '状态索引',
   INDEX `idx_position_name`(`position_name` ASC) USING BTREE COMMENT '职位名称索引',
   INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE COMMENT '上级职位索引'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '职位基础信息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统职位信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for system_log
@@ -103,7 +103,7 @@ CREATE TABLE `system_log_detail`  (
   `message_format` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'plain' COMMENT '消息格式：plain-纯文本，json-JSON，html-HTML',
   `detail_message` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '日志详情内容',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志详情表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for system_menu

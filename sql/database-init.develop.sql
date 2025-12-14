@@ -140,7 +140,7 @@ CREATE TABLE `system_job_position` (
   INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE COMMENT '上级职位索引'
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '职位基础信息表'
+COMMENT = '系统职位信息表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -175,6 +175,7 @@ CREATE TABLE `system_log_detail` (
   PRIMARY KEY (`id`) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统日志详情表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -418,6 +419,29 @@ INSERT INTO `system_tenant` (`id`, `parent_id`, `level`, `tenant_name`, `tenant_
 
 -- ########################################################
 
+-- system_department 表测试数据（10条）
+INSERT INTO `system_department` (`id`, `parent_id`, `level`, `department_code`, `department_name`, `tenant_id`, `create_by`, `update_by`, `delete_time`) VALUES
+(3001, NULL, 1, 'DEPT001', '总公司', NULL, 1, 1, NULL),
+(3002, 3001, 2, 'DEPT002', '技术部', NULL, 1, 1, NULL),
+(3003, 3001, 2, 'DEPT003', '市场部', NULL, 1, 1, NULL),
+(3004, 3001, 2, 'DEPT004', '销售部', NULL, 1, 1, NULL),
+(3005, 3001, 2, 'DEPT005', '人力资源部', NULL, 1, 1, NULL),
+(3006, 3002, 3, 'DEPT006', '前端开发组', NULL, 1, 1, NULL),
+(3007, 3002, 3, 'DEPT007', '后端开发组', NULL, 1, 1, NULL),
+(3008, 3002, 3, 'DEPT008', '测试组', NULL, 1, 1, NULL),
+(3009, 3003, 3, 'DEPT009', '品牌推广组', NULL, 1, 1, NULL),
+(3010, 3004, 3, 'DEPT010', '华北销售组', NULL, 1, 1, NULL);
+
+-- 添加更多部门数据（5条）
+INSERT INTO `system_department` (`id`, `parent_id`, `level`, `department_code`, `department_name`, `tenant_id`, `create_by`, `update_by`, `delete_time`) VALUES
+(3011, 3004, 3, 'DEPT011', '华东销售组', NULL, 1, 1, NULL),
+(3012, 3004, 3, 'DEPT012', '华南销售组', NULL, 1, 1, NULL),
+(3013, 3005, 3, 'DEPT013', '招聘组', NULL, 1, 1, NULL),
+(3014, 3005, 3, 'DEPT014', '培训组', NULL, 1, 1, NULL),
+(3015, NULL, 1, 'DEPT015', '分公司', NULL, 1, 1, now());
+
+-- ########################################################
+
 -- system_role 表测试数据（8条）
 INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
 (2001, NULL, 1, '超级管理员', '系统最高权限角色', NULL),
@@ -449,5 +473,170 @@ INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `
 (2018, 2012, 4, '高级后端开发', '高级后端工程师', NULL),
 (2019, 2013, 4, '测试主管', '测试部门主管', NULL),
 (2020, NULL, 1, '项目经理', '项目负责人角色', NULL);
+
+-- ########################################################
+
+-- system_job_position 表测试数据（10条）
+INSERT INTO `system_job_position` (`id`, `position_code`, `position_name`, `department_id`, `position_category`, `position_level`, `parent_id`, `status`, `work_location`, `sort_order`, `description`) VALUES
+(4001, 'HR-001', '人力资源总监', 3005, 'HR', 'DIRECTOR', NULL, 'ACTIVE', '北京', 1, '负责公司人力资源战略规划'),
+(4002, 'HR-002', '招聘经理', 3005, 'HR', 'MANAGER', 4001, 'ACTIVE', '北京', 2, '负责公司招聘工作'),
+(4003, 'TECH-001', '技术总监', 3002, 'TECH', 'DIRECTOR', NULL, 'ACTIVE', '北京', 1, '负责公司技术战略规划'),
+(4004, 'TECH-002', '前端开发经理', 3002, 'TECH', 'MANAGER', 4003, 'ACTIVE', '北京', 2, '负责前端开发团队管理'),
+(4005, 'TECH-003', '后端开发经理', 3002, 'TECH', 'MANAGER', 4003, 'ACTIVE', '北京', 3, '负责后端开发团队管理'),
+(4006, 'TECH-004', '高级前端开发工程师', 3002, 'TECH', 'SENIOR', 4004, 'ACTIVE', '北京', 1, '负责前端核心功能开发'),
+(4007, 'TECH-005', '前端开发工程师', 3002, 'TECH', 'MIDDLE', 4006, 'ACTIVE', '北京', 2, '负责前端功能开发'),
+(4008, 'TECH-006', '高级后端开发工程师', 3002, 'TECH', 'SENIOR', 4005, 'ACTIVE', '北京', 1, '负责后端核心功能开发'),
+(4009, 'MARKET-001', '市场总监', 3003, 'MARKET', 'DIRECTOR', NULL, 'ACTIVE', '北京', 1, '负责公司市场战略规划'),
+(4010, 'SALES-001', '销售总监', 3004, 'SALES', 'DIRECTOR', NULL, 'ACTIVE', '北京', 1, '负责公司销售战略规划');
+
+-- 添加更多职位数据（8条）
+INSERT INTO `system_job_position` (`id`, `position_code`, `position_name`, `department_id`, `position_category`, `position_level`, `parent_id`, `status`, `work_location`, `sort_order`, `description`) VALUES
+(4011, 'SALES-002', '华北销售经理', 3004, 'SALES', 'MANAGER', 4010, 'ACTIVE', '北京', 2, '负责华北区域销售管理'),
+(4012, 'SALES-003', '华东销售经理', 3004, 'SALES', 'MANAGER', 4010, 'ACTIVE', '上海', 3, '负责华东区域销售管理'),
+(4013, 'SALES-004', '销售代表', 3004, 'SALES', 'JUNIOR', 4011, 'ACTIVE', '北京', 1, '负责客户开发和维护'),
+(4014, 'TECH-007', '测试经理', 3002, 'TECH', 'MANAGER', 4003, 'ACTIVE', '北京', 4, '负责测试团队管理'),
+(4015, 'TECH-008', '测试工程师', 3002, 'TECH', 'MIDDLE', 4014, 'ACTIVE', '北京', 1, '负责软件测试工作'),
+(4016, 'MARKET-002', '品牌经理', 3003, 'MARKET', 'MANAGER', 4009, 'ACTIVE', '北京', 2, '负责品牌推广工作'),
+(4017, 'ADMIN-001', '行政总监', 3001, 'ADMIN', 'DIRECTOR', NULL, 'ACTIVE', '北京', 1, '负责公司行政事务管理'),
+(4018, 'FINANCE-001', '财务总监', 3001, 'FINANCE', 'DIRECTOR', NULL, 'ACTIVE', '北京', 1, '负责公司财务管理工作');
+
+-- ########################################################
+
+-- system_privilege 表测试数据（20条）
+INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `menu_code`, `privilege_code`, `tenant_id`, `create_by`, `update_by`) VALUES
+-- 为超级管理员角色添加所有权限
+(5001, 'role', 2001, 'global', 'dashboard', 'view_tab', NULL, 1, 1),
+(5002, 'role', 2001, 'global', 'dashboard', 'read', NULL, 1, 1),
+(5003, 'role', 2001, 'system', 'user:manage', 'view_tab', NULL, 1, 1),
+(5004, 'role', 2001, 'system', 'user:manage', 'read', NULL, 1, 1),
+(5005, 'role', 2001, 'system', 'user:manage', 'add', NULL, 1, 1),
+(5006, 'role', 2001, 'system', 'user:manage', 'edit', NULL, 1, 1),
+(5007, 'role', 2001, 'system', 'user:manage', 'delete', NULL, 1, 1),
+(5008, 'role', 2001, 'system', 'user:manage', 'export', NULL, 1, 1),
+
+-- 为系统管理员角色添加部分权限
+(5009, 'role', 2002, 'global', 'dashboard', 'view_tab', NULL, 1, 1),
+(5010, 'role', 2002, 'global', 'dashboard', 'read', NULL, 1, 1),
+(5011, 'role', 2002, 'system', 'user:manage', 'view_tab', NULL, 1, 1),
+(5012, 'role', 2002, 'system', 'user:manage', 'read', NULL, 1, 1),
+(5013, 'role', 2002, 'system', 'user:manage', 'add', NULL, 1, 1),
+(5014, 'role', 2002, 'system', 'user:manage', 'edit', NULL, 1, 1),
+
+-- 为普通用户角色添加基本权限
+(5015, 'role', 2006, 'global', 'dashboard', 'view_tab', NULL, 1, 1),
+(5016, 'role', 2006, 'global', 'dashboard', 'read', NULL, 1, 1),
+
+-- 为特定用户添加额外权限
+(5017, 'user', 1, 'system', 'user:manage', 'delete', NULL, 1, 1),
+(5018, 'user', 1, 'system', 'user:manage', 'export', NULL, 1, 1),
+(5019, 'user', 12, 'global', 'dashboard', 'view_tab', NULL, 1, 1),
+(5020, 'user', 12, 'global', 'dashboard', 'read', NULL, 1, 1);
+
+-- ########################################################
+
+-- system_user_department_relation 表测试数据（20条）
+INSERT INTO `system_user_department_relation` (`id`, `user_id`, `department_id`, `tenant_id`, `create_by`, `update_by`) VALUES
+-- 总公司
+(6001, 1, 3001, NULL, 1, 1),
+(6002, 11, 3001, NULL, 1, 1),
+
+-- 技术部
+(6003, 12, 3002, NULL, 1, 1),
+(6004, 21, 3002, NULL, 1, 1),
+(6005, 22, 3002, NULL, 1, 1),
+(6006, 23, 3002, NULL, 1, 1),
+(6007, 33, 3002, NULL, 1, 1),
+
+-- 前端开发组
+(6008, 12, 3006, NULL, 1, 1),
+(6009, 21, 3006, NULL, 1, 1),
+
+-- 后端开发组
+(6010, 22, 3007, NULL, 1, 1),
+
+-- 测试组
+(6011, 23, 3008, NULL, 1, 1),
+
+-- 市场部
+(6012, 13, 3003, NULL, 1, 1),
+(6013, 26, 3003, NULL, 1, 1),
+
+-- 品牌推广组
+(6014, 13, 3009, NULL, 1, 1),
+(6015, 26, 3009, NULL, 1, 1),
+
+-- 销售部
+(6016, 14, 3004, NULL, 1, 1),
+(6017, 27, 3004, NULL, 1, 1),
+(6018, 28, 3004, NULL, 1, 1),
+
+-- 人力资源部
+(6019, 15, 3005, NULL, 1, 1),
+(6020, 30, 3005, NULL, 1, 1);
+
+-- ########################################################
+
+-- system_user_role_relation 表测试数据（20条）
+INSERT INTO `system_user_role_relation` (`id`, `user_id`, `role_id`, `tenant_id`, `create_by`, `update_by`) VALUES
+-- 超级管理员角色关联
+(7001, 1, 2001, NULL, 1, 1),
+(7002, 11, 2001, NULL, 1, 1),
+(7003, 33, 2001, NULL, 1, 1),
+
+-- 系统管理员角色关联
+(7004, 12, 2002, NULL, 1, 1),
+(7005, 13, 2002, NULL, 1, 1),
+(7006, 14, 2002, NULL, 1, 1),
+
+-- 租户管理员角色关联
+(7007, 15, 2003, NULL, 1, 1),
+(7008, 16, 2003, NULL, 1, 1),
+
+-- 用户管理员角色关联
+(7009, 17, 2004, NULL, 1, 1),
+(7010, 18, 2004, NULL, 1, 1),
+
+-- 角色管理员角色关联
+(7011, 19, 2005, NULL, 1, 1),
+
+-- 普通用户角色关联
+(7012, 20, 2006, NULL, 1, 1),
+(7013, 24, 2006, NULL, 1, 1),
+(7014, 25, 2006, NULL, 1, 1),
+
+-- 部门经理角色关联
+(7015, 27, 2007, NULL, 1, 1),
+(7016, 28, 2007, NULL, 1, 1),
+
+-- 普通员工角色关联
+(7017, 21, 2008, NULL, 1, 1),
+(7018, 22, 2008, NULL, 1, 1),
+(7019, 23, 2008, NULL, 1, 1),
+(7020, 26, 2008, NULL, 1, 1);
+
+-- ########################################################
+
+-- system_log 表测试数据（10条）
+INSERT INTO `system_log` (`id`, `source`, `type`, `object_name`, `title`, `intro`, `detail_id`, `client_ip`) VALUES
+(8001, 'backend', 'LOGIN', 'system_user', '用户登录', '用户admin登录系统', 9001, '127.0.0.1'),
+(8002, 'backend', 'LOGOUT', 'system_user', '用户登出', '用户admin登出系统', NULL, '127.0.0.1'),
+(8003, 'backend', 'CREATE', 'system_user', '用户创建', '创建新用户zhangsan', 9002, '127.0.0.1'),
+(8004, 'backend', 'UPDATE', 'system_user', '用户更新', '更新用户lisi信息', 9003, '127.0.0.1'),
+(8005, 'backend', 'DELETE', 'system_user', '用户删除', '删除用户wangwu', 9004, '127.0.0.1'),
+(8006, 'backend', 'CREATE', 'system_role', '角色创建', '创建新角色部门经理', 9005, '127.0.0.1'),
+(8007, 'backend', 'UPDATE', 'system_role', '角色更新', '更新角色权限配置', 9006, '127.0.0.1'),
+(8008, 'backend', 'CREATE', 'system_department', '部门创建', '创建新部门前端开发组', 9007, '127.0.0.1'),
+(8009, 'backend', 'LOGIN', 'system_user', '用户登录', '用户zhangsan登录系统', NULL, '192.168.1.100'),
+(8010, 'backend', 'LOGIN_FAIL', 'system_user', '登录失败', '用户test_user登录失败', NULL, '192.168.1.101');
+
+-- system_log_detail 表测试数据（7条）
+INSERT INTO `system_log_detail` (`id`, `message_format`, `detail_message`) VALUES
+(9001, 'json', '{"username":"admin","login_time":"2025-12-14 09:00:00","login_method":"PASSWORD"}'),
+(9002, 'json', '{"user_id":12,"username":"zhangsan","nickname":"张三","create_time":"2025-12-14 10:00:00","create_by":1}'),
+(9003, 'json', '{"user_id":13,"username":"lisi","nickname":"李四","update_field":"status","old_value":"normal","new_value":"locked","update_time":"2025-12-14 11:00:00","update_by":1}'),
+(9004, 'json', '{"user_id":14,"username":"wangwu","nickname":"王五","delete_time":"2025-12-14 12:00:00","delete_by":1}'),
+(9005, 'json', '{"role_id":2007,"role_name":"部门经理","level":2,"parent_id":2006,"create_time":"2025-12-14 13:00:00","create_by":1}'),
+(9006, 'json', '{"role_id":2001,"role_name":"超级管理员","update_field":"comment","old_value":"系统最高权限角色","new_value":"系统管理员角色","update_time":"2025-12-14 14:00:00","update_by":1}'),
+(9007, 'json', '{"department_id":3006,"department_name":"前端开发组","parent_id":3002,"level":3,"create_time":"2025-12-14 15:00:00","create_by":1}');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 职位基础信息表
+ * 系统职位信息表
  * </p>
  *
  * @author coder-xiaomo
@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemJobPosition", description = "职位基础信息表")
+@Schema(name = "SystemJobPosition", description = "系统职位信息表")
 @TableName("system_job_position")
 public class SystemJobPosition implements Serializable {
 

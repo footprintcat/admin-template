@@ -118,7 +118,7 @@ CREATE TABLE `system_job_position` (
   INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE COMMENT '上级职位索引'
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '职位基础信息表'
+COMMENT = '系统职位信息表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -151,6 +151,7 @@ CREATE TABLE `system_log_detail` (
   PRIMARY KEY (`id`) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统日志详情表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
