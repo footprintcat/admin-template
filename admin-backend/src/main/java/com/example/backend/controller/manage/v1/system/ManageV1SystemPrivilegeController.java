@@ -1,4 +1,4 @@
-package com.example.backend.controller.manage.v2.system;
+package com.example.backend.controller.manage.v1.system;
 
 import com.example.backend.modules.system.enums.privilege.SystemPrivilegeEntityTypeEnum;
 import com.example.backend.common.error.BusinessException;
@@ -21,8 +21,8 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2/manage/system/privilege")
-public class ManageSystemPrivilegeController {
+@RequestMapping("/manage/v1/system/privilege")
+public class ManageV1SystemPrivilegeController {
 
     @Resource
     private UserRoleRelationRepository userRoleRelationRepository;

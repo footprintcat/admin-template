@@ -1,4 +1,4 @@
-package com.example.backend.controller.manage.v1;
+package com.example.backend.controller.manage.v1.needrefactor;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -32,8 +32,8 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2/manage/system/system-log")
-public class ManageSystemLogController extends BaseController {
+@RequestMapping("/manage/v1/system/system-log")
+public class ManageV1SystemLogController extends BaseController {
 
     @Resource
     private SystemLogService systemLogService;

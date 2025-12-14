@@ -1,4 +1,4 @@
-package com.example.backend.controller.manage.v2.system.dto.request.user;
+package com.example.backend.controller.manage.v1.system.dto.request.user;
 
 import com.example.backend.modules.system.model.dto.SystemUserDto;
 import com.example.backend.common.baseobject.request.BaseManagePaginationQueryRequest;

@@ -1,9 +1,8 @@
-package com.example.backend.controller.manage.v2.system;
+package com.example.backend.controller.manage.v1.system;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.PageTable.builder.FieldBuilder;
 import com.example.backend.common.PageTable.builder.FieldMapperBuilder;
 import com.example.backend.common.PageTable.builder.FieldRuleBuilder;
@@ -12,13 +11,14 @@ import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
-import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.controller.BaseController;
+import com.example.backend.common.baseobject.request.PageQuery;
+import com.example.backend.common.baseobject.response.CommonReturn;
+import com.example.backend.common.baseobject.response.ManageListResponse;
+import com.example.backend.common.error.BusinessException;
+import com.example.backend.controller.manage.v1.system.dto.request.user.ManageSystemUserListRequest;
 import com.example.backend.modules.system.model.dto.SystemUserDto;
 import com.example.backend.modules.system.model.entity.User;
-import com.example.backend.common.baseobject.request.PageQuery;
-import com.example.backend.controller.manage.v2.system.dto.request.user.ManageSystemUserListRequest;
-import com.example.backend.common.baseobject.response.ManageListResponse;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleServiceV2;
 import com.example.backend.modules.system.service.needrefactor.SystemUserServiceV2;
 import jakarta.annotation.Resource;
@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2/manage/system/user")
-public class ManageSystemUserController extends BaseController {
+@RequestMapping("/manage/v1/system/user")
+public class ManageV1SystemUserController extends BaseController {
 
     @Resource
     private SystemUserServiceV2 systemUserServiceV2;

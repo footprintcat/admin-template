@@ -1,4 +1,4 @@
-package com.example.backend.controller.manage.v2.system;
+package com.example.backend.controller.manage.v1.system;
 
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.baseobject.response.CommonReturn;
@@ -6,8 +6,8 @@ import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.modules.system.model.dto.SystemUserDto;
 import com.example.backend.modules.system.model.entity.User;
-import com.example.backend.controller.manage.v2.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;
-import com.example.backend.controller.manage.v2.system.dto.request.userauth.ManageSystemUserChangePasswordRequest;
+import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;
+import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserChangePasswordRequest;
 import com.example.backend.modules.system.service.SystemUserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2/manage/system/user-auth")
-public class ManageSystemUserAuthController extends BaseController {
+@RequestMapping("/manage/v1/system/user-auth")
+public class ManageV1SystemUserAuthController extends BaseController {
 
     @Resource
     SystemUserService systemUserService;

@@ -1,4 +1,4 @@
-package com.example.backend.controller.manage.v1;
+package com.example.backend.controller.manage.v1.needrefactor;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -35,8 +35,8 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2/manage/system/role")
-public class ManageSystemRoleController extends BaseController {
+@RequestMapping("/manage/v1/system/role")
+public class ManageV1SystemRoleController extends BaseController {
 
     @Resource
     private SystemRoleServiceV2 systemRoleServiceV2;
