@@ -5,14 +5,13 @@ import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.dto.SystemUserDto;
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 import com.example.backend.mapper.SystemUserMapper;
 import com.example.backend.query.PageQuery;
 import com.example.backend.service.System.SystemRoleService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 

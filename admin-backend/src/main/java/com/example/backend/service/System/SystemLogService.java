@@ -3,7 +3,7 @@ package com.example.backend.service.System;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.dto.SystemLogDto;
-import com.example.backend.entity.SystemLog;
+import com.example.backend.modules.system.entity.SystemLog;
 import com.example.backend.mapper.SystemLogMapper;
 import com.example.backend.query.PageQuery;
 import jakarta.annotation.Resource;

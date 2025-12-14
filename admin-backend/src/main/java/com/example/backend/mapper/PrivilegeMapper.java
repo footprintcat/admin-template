@@ -1,7 +1,7 @@
 package com.example.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.backend.entity.Privilege;
+import com.example.backend.modules.system.entity.Privilege;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

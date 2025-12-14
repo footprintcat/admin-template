@@ -1,4 +1,4 @@
-package com.example.backend.entity;
+package com.example.backend.modules.system.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -16,35 +16,59 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统用户-角色关联表
+ * 系统菜单表
  * </p>
  *
  * @author coder-xiaomo
- * @since 2025-12-14
+ * @since 2025-12-12
  */
 @Getter
 @Setter
-@Schema(name = "SystemUserRoleRelation", description = "系统用户-角色关联表")
-@TableName("system_user_role_relation")
-public class SystemUserRoleRelation implements Serializable {
+@Schema(name = "SystemMenu", description = "系统菜单表")
+@TableName("system_menu")
+public class SystemMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "雪花id")
+    @Schema(description = "主键id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "用户id")
-    @TableField("user_id")
-    private Long userId;
+    @Schema(description = "父菜单id")
+    @TableField("parent_id")
+    private Long parentId;
 
-    @Schema(description = "角色id")
-    @TableField("role_id")
-    private Long roleId;
+    @Schema(description = "菜单级别")
+    @TableField("`level`")
+    private Integer level;
 
-    @Schema(description = "租户id")
-    @TableField("tenant_id")
-    private Long tenantId;
+    @Schema(description = "菜单所属模块")
+    @TableField("module")
+    private String module;
+
+    @Schema(description = "菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）")
+    @TableField("menu_code")
+    private String menuCode;
+
+    @Schema(description = "菜单名称")
+    @TableField("menu_name")
+    private String menuName;
+
+    @Schema(description = "菜单URL路径（无页面的分组菜单项为NULL）")
+    @TableField("menu_path")
+    private String menuPath;
+
+    @Schema(description = "菜单项顺序")
+    @TableField("sort_order")
+    private Integer sortOrder;
+
+    @Schema(description = "是否允许编辑（系统菜单请置为0，避免误操作导致后台页面无法正常展示）")
+    @TableField("can_edit")
+    private Integer canEdit;
+
+    @Schema(description = "是否隐藏菜单项（1：隐藏，0：不隐藏）")
+    @TableField("is_hide")
+    private Integer isHide;
 
     @Schema(description = "创建人")
     @TableField("create_by")

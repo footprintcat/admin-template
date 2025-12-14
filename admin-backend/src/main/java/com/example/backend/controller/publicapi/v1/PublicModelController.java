@@ -1,4 +1,4 @@
-package com.example.backend.controller.PublicApi;
+package com.example.backend.controller.publicapi.v1;
 
 import com.example.backend.controller.base.BaseController;
 import io.swagger.v3.oas.annotations.tags.Tag;

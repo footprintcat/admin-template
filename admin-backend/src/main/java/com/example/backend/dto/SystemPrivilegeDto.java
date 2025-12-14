@@ -2,7 +2,7 @@ package com.example.backend.dto;
 
 import com.example.backend.common.Utils.NumberUtils;
 import com.example.backend.common.Utils.StringUtils;
-import com.example.backend.entity.Privilege;
+import com.example.backend.modules.system.entity.Privilege;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

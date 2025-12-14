@@ -1,6 +1,6 @@
 package com.example.backend.dto;
 
-import com.example.backend.entity.SystemRole;
+import com.example.backend.modules.system.entity.SystemRole;
 import lombok.Data;
 
 @Data

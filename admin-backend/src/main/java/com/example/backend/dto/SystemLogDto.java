@@ -2,7 +2,7 @@ package com.example.backend.dto;
 
 import com.example.backend.common.Utils.NumberUtils;
 import com.example.backend.common.Utils.StringUtils;
-import com.example.backend.entity.SystemLog;
+import com.example.backend.modules.system.entity.SystemLog;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

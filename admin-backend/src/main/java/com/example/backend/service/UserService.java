@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 
 import java.util.List;
 

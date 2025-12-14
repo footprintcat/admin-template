@@ -1,4 +1,4 @@
-package com.example.backend.controller.Manage;
+package com.example.backend.controller.manage.v2;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -15,7 +15,7 @@ import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDto;
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 import com.example.backend.query.PageQuery;
 import com.example.backend.query.request.manage.system.user.ManageSystemUserListRequest;
 import com.example.backend.query.response.manage.ManageListResponse;

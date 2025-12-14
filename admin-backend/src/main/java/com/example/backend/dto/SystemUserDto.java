@@ -1,6 +1,6 @@
 package com.example.backend.dto;
 
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

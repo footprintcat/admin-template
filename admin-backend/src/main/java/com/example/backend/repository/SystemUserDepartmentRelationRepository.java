@@ -1,6 +1,6 @@
 package com.example.backend.repository;
 
-import com.example.backend.entity.SystemUserDepartmentRelation;
+import com.example.backend.modules.system.entity.SystemUserDepartmentRelation;
 import com.example.backend.mapper.SystemUserDepartmentRelationMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

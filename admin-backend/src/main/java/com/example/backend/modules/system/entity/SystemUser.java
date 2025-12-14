@@ -1,4 +1,4 @@
-package com.example.backend.entity;
+package com.example.backend.modules.system.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.example.backend.common.Enums.system.user.SystemUserStatusEnum;
+import com.example.backend.common.Enums.system.user.SystemUserTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,17 +18,17 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统部门表
+ * 系统用户表
  * </p>
  *
  * @author coder-xiaomo
- * @since 2025-12-14
+ * @since 2025-12-12
  */
 @Getter
 @Setter
-@Schema(name = "SystemDepartment", description = "系统部门表")
-@TableName("system_department")
-public class SystemDepartment implements Serializable {
+@Schema(name = "SystemUser", description = "系统用户表")
+@TableName("system_user")
+public class SystemUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,21 +36,21 @@ public class SystemDepartment implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "父部门id")
-    @TableField("parent_id")
-    private Long parentId;
+    @Schema(description = "用户名")
+    @TableField("username")
+    private String username;
 
-    @Schema(description = "部门级别")
-    @TableField("`level`")
-    private Integer level;
+    @Schema(description = "用户昵称")
+    @TableField("nickname")
+    private String nickname;
 
-    @Schema(description = "部门编码")
-    @TableField("department_code")
-    private String departmentCode;
+    @Schema(description = "用户类型：super_admin-超级管理员；member-普通用户")
+    @TableField("type")
+    private SystemUserTypeEnum type;
 
-    @Schema(description = "部门名称")
-    @TableField("department_name")
-    private String departmentName;
+    @Schema(description = "用户状态：normal-正常（可用）, locked-锁定（禁用）, disabled-停用, expired-过期")
+    @TableField("status")
+    private SystemUserStatusEnum status;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

@@ -11,7 +11,7 @@ import com.example.backend.common.ManageList.pojo.ManageListColumn;
 import com.example.backend.common.ManageList.pojo.ManageListInfo;
 import com.example.backend.common.ManageList.pojo.ManageListQuery;
 import com.example.backend.common.ManageList.pojo.queryconfig.StringQueryConfig;
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

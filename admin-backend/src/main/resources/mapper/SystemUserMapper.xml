@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.backend.mapper.SystemUserMapper">
 
-    <select id="selectByUsername" resultType="com.example.backend.entity.SystemUser">
+    <select id="selectByUsername" resultType="com.example.backend.modules.system.entity.SystemUser">
         select id, username, password_hash, role_id
         from system_user
         where username = #{username}
     </select>
 
-    <update id="updateUserInfoByPrimaryKey" parameterType="com.example.backend.entity.SystemUser">
+    <update id="updateUserInfoByPrimaryKey" parameterType="com.example.backend.modules.system.entity.SystemUser">
         update system_user
         set username  = #{username,jdbcType=VARCHAR},
             role_id   = #{roleId,jdbcType=INTEGER},
@@ -22,10 +22,10 @@
         where id = #{userId} LIMIT 1
     </update>
 
-    <select id="getUserPage" resultType="com.example.backend.entity.SystemUser">
+    <select id="getUserPage" resultType="com.example.backend.modules.system.entity.SystemUser">
         <include refid="getUserList" />
     </select>
-    <select id="getUserList" resultType="com.example.backend.entity.SystemUser">
+    <select id="getUserList" resultType="com.example.backend.modules.system.entity.SystemUser">
         <include refid="getUserList" />
     </select>
     <sql id="getUserList">

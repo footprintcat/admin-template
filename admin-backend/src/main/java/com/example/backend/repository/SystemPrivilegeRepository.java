@@ -3,7 +3,7 @@ package com.example.backend.repository;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.backend.common.Enums.system.privilege.SystemPrivilegeEntityTypeEnum;
-import com.example.backend.entity.SystemPrivilege;
+import com.example.backend.modules.system.entity.SystemPrivilege;
 import com.example.backend.mapper.SystemPrivilegeMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

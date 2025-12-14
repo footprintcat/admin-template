@@ -2,7 +2,7 @@ package com.example.backend.service.v2;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.dto.SystemRoleDto;
-import com.example.backend.entity.SystemRole;
+import com.example.backend.modules.system.entity.SystemRole;
 import com.example.backend.mapper.SystemRoleMapper;
 import com.example.backend.query.PageQuery;
 import jakarta.annotation.Resource;

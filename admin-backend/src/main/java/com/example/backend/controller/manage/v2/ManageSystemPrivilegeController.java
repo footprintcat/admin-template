@@ -1,10 +1,10 @@
-package com.example.backend.controller.Manage;
+package com.example.backend.controller.manage.v2;
 
 import com.example.backend.common.Enums.system.privilege.SystemPrivilegeEntityTypeEnum;
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.common.Utils.SessionUtils;
-import com.example.backend.entity.SystemPrivilege;
+import com.example.backend.modules.system.entity.SystemPrivilege;
 import com.example.backend.repository.SystemPrivilegeRepository;
 import com.example.backend.repository.SystemUserRoleRelationRepository;
 import jakarta.annotation.Resource;

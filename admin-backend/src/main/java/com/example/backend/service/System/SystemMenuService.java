@@ -10,7 +10,7 @@ import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Utils.NumberUtils;
 import com.example.backend.common.Utils.StringUtils;
 import com.example.backend.dto.SystemMenuDto;
-import com.example.backend.entity.SystemMenu;
+import com.example.backend.modules.system.entity.SystemMenu;
 import com.example.backend.mapper.SystemMenuMapper;
 import com.example.backend.repository.SystemMenuRepository;
 import jakarta.annotation.Resource;

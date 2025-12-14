@@ -1,4 +1,4 @@
-package com.example.backend.controller;
+package com.example.backend.controller.manage.v1;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -9,8 +9,8 @@ import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemPrivilegeDto;
-import com.example.backend.entity.Privilege;
-import com.example.backend.entity.SystemMenu;
+import com.example.backend.modules.system.entity.Privilege;
+import com.example.backend.modules.system.entity.SystemMenu;
 import com.example.backend.repository.PrivilegeRepository;
 import com.example.backend.service.System.SystemPrivilegeService;
 import com.example.backend.service.System.SystemRoleService;

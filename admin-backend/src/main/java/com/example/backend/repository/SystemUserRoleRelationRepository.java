@@ -2,7 +2,7 @@ package com.example.backend.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.backend.entity.SystemUserRoleRelation;
+import com.example.backend.modules.system.entity.SystemUserRoleRelation;
 import com.example.backend.mapper.SystemUserRoleRelationMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package com.example.backend.service.System;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.backend.common.Utils.StringUtils;
-import com.example.backend.entity.SystemConfig;
+import com.example.backend.modules.system.entity.SystemConfig;
 import com.example.backend.mapper.SystemConfigMapper;
 import com.example.backend.repository.SystemConfigRepository;
 import jakarta.annotation.Resource;

@@ -2,7 +2,7 @@ package com.example.backend.common.Utils;
 
 import com.example.backend.common.Error.BusinessErrorCode;
 import com.example.backend.common.Error.BusinessException;
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

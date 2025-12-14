@@ -1,11 +1,11 @@
-package com.example.backend.controller.Manage;
+package com.example.backend.controller.manage.v2;
 
 import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.common.Utils.SessionUtils;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDto;
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 import com.example.backend.query.request.manage.system.userauth.ManageSystemUserAuthLoginRequest;
 import com.example.backend.query.request.manage.system.userauth.ManageSystemUserChangePasswordRequest;
 import com.example.backend.service.System.SystemUserService;

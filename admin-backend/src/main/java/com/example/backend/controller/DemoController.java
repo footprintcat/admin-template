@@ -5,7 +5,7 @@ import com.example.backend.common.Error.BusinessException;
 import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemUserDto;
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 import com.example.backend.service.impl.UserServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;

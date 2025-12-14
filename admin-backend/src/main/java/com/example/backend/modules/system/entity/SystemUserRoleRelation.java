@@ -1,4 +1,4 @@
-package com.example.backend.entity;
+package com.example.backend.modules.system.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -16,17 +16,17 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统角色表
+ * 系统用户-角色关联表
  * </p>
  *
  * @author coder-xiaomo
- * @since 2025-12-12
+ * @since 2025-12-14
  */
 @Getter
 @Setter
-@Schema(name = "SystemRole", description = "系统角色表")
-@TableName("system_role")
-public class SystemRole implements Serializable {
+@Schema(name = "SystemUserRoleRelation", description = "系统用户-角色关联表")
+@TableName("system_user_role_relation")
+public class SystemUserRoleRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,21 +34,13 @@ public class SystemRole implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "父角色id")
-    @TableField("parent_id")
-    private Long parentId;
+    @Schema(description = "用户id")
+    @TableField("user_id")
+    private Long userId;
 
-    @Schema(description = "角色层级")
-    @TableField("`level`")
-    private Integer level;
-
-    @Schema(description = "角色名称")
-    @TableField("role_name")
-    private String roleName;
-
-    @Schema(description = "备注")
-    @TableField("comment")
-    private String comment;
+    @Schema(description = "角色id")
+    @TableField("role_id")
+    private Long roleId;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

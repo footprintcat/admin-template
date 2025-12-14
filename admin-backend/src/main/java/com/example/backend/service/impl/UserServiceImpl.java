@@ -1,7 +1,7 @@
 package com.example.backend.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.backend.entity.SystemUser;
+import com.example.backend.modules.system.entity.SystemUser;
 import com.example.backend.mapper.SystemUserMapper;
 import com.example.backend.service.UserService;
 import jakarta.annotation.Resource;

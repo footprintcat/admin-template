@@ -1,6 +1,6 @@
 package com.example.backend.repository;
 
-import com.example.backend.entity.SystemJobPosition;
+import com.example.backend.modules.system.entity.SystemJobPosition;
 import com.example.backend.mapper.SystemJobPositionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

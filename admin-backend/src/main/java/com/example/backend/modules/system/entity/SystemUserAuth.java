@@ -1,4 +1,4 @@
-package com.example.backend.entity;
+package com.example.backend.modules.system.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.example.backend.common.Enums.system.userauth.SystemUserAuthTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,17 +17,17 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统用户-部门关联表
+ * 系统用户认证表
  * </p>
  *
  * @author coder-xiaomo
- * @since 2025-12-14
+ * @since 2025-12-12
  */
 @Getter
 @Setter
-@Schema(name = "SystemUserDepartmentRelation", description = "系统用户-部门关联表")
-@TableName("system_user_department_relation")
-public class SystemUserDepartmentRelation implements Serializable {
+@Schema(name = "SystemUserAuth", description = "系统用户认证表")
+@TableName("system_user_auth")
+public class SystemUserAuth implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,9 +39,13 @@ public class SystemUserDepartmentRelation implements Serializable {
     @TableField("user_id")
     private Long userId;
 
-    @Schema(description = "角色id")
-    @TableField("department_id")
-    private Long departmentId;
+    @Schema(description = "授权类型：password-账号密码登录, oauth2-OAuth 2.0 三方登录")
+    @TableField("auth_type")
+    private SystemUserAuthTypeEnum authType;
+
+    @Schema(description = "密码哈希")
+    @TableField("password_hash")
+    private String passwordHash;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

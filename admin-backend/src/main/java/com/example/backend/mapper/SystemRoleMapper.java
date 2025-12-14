@@ -3,7 +3,7 @@ package com.example.backend.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.dto.SystemRoleDto;
-import com.example.backend.entity.SystemRole;
+import com.example.backend.modules.system.entity.SystemRole;
 import com.example.backend.entity.dbresult.DbResultAncestorRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

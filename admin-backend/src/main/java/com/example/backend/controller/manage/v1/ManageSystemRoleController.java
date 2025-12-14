@@ -1,4 +1,4 @@
-package com.example.backend.controller.Manage;
+package com.example.backend.controller.manage.v1;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -15,7 +15,7 @@ import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.Response.CommonReturn;
 import com.example.backend.controller.base.BaseController;
 import com.example.backend.dto.SystemRoleDto;
-import com.example.backend.entity.SystemRole;
+import com.example.backend.modules.system.entity.SystemRole;
 import com.example.backend.query.PageQuery;
 import com.example.backend.service.v2.SystemRoleServiceV2;
 import jakarta.annotation.Resource;
