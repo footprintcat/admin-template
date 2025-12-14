@@ -39,7 +39,7 @@ INSERT INTO `system_user` (`id`, `username`, `nickname`, `status`, `delete_time`
 -- ########################################################
 
 -- system_tenant 表测试数据（8条）
-INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `level`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `delete_time`) VALUES
+INSERT INTO `system_tenant` (`id`, `parent_id`, `level`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `delete_time`) VALUES
 (1001, NULL, 1, '集团公司总部', '', 'normal', 11, 11, NULL),
 (1002, 1001, 2, '华北分公司', '负责华北地区业务', 'normal', 11, 11, NULL),
 (1003, 1001, 2, '华东分公司', '负责华东地区业务', 'normal', 11, 11, NULL),
@@ -50,7 +50,7 @@ INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `level`, `tenant_name`, `
 (1008, NULL, 1, '合作伙伴A', '外部合作伙伴', 'normal', 11, 11, NULL);
 
 -- 为了演示父子关系，添加一些额外的租户数据（5条）
-INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `level`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `delete_time`) VALUES
+INSERT INTO `system_tenant` (`id`, `parent_id`, `level`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `delete_time`) VALUES
 (1009, 1004, 4, '海淀区办事处', '北京海淀区办事处', 'normal', 14, 14, NULL),
 (1010, 1004, 4, '朝阳区办事处', '北京朝阳区办事处', 'normal', 14, 14, NULL),
 (1011, 1006, 4, '浦东新区分部', '上海浦东新区', 'normal', 15, 15, NULL),
@@ -58,11 +58,11 @@ INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `level`, `tenant_name`, `
 (1013, 1008, 2, '合作伙伴A-分部1', '合作伙伴分部1', 'normal', 11, 11, NULL);
 
 -- 添加一个被逻辑删除的租户用于测试
-INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `level`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `delete_time`) VALUES
+INSERT INTO `system_tenant` (`id`, `parent_id`, `level`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `delete_time`) VALUES
 (1014, NULL, 1, '已删除租户', '这是一个逻辑删除的租户', 'disabled', 11, 11, now());
 
 -- 添加一些具有不同状态的租户（4条）
-INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `level`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `delete_time`) VALUES
+INSERT INTO `system_tenant` (`id`, `parent_id`, `level`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `delete_time`) VALUES
 (1015, NULL, 1, '试用租户', '30天试用期租户', 'normal', 11, 11, NULL),
 (1016, NULL, 1, '锁定租户', '因违规被锁定', 'locked', 11, 11, NULL),
 (1017, NULL, 1, '停用租户', '已停用服务', 'disabled', 11, 11, NULL),
@@ -71,7 +71,7 @@ INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `level`, `tenant_name`, `
 -- ########################################################
 
 -- system_role 表测试数据（8条）
-INSERT INTO `system_role` (`id`, `parent_role_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
+INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
 (2001, NULL, 1, '超级管理员', '系统最高权限角色', NULL),
 (2002, 2001, 2, '系统管理员', '管理系统基础功能', NULL),
 (2003, 2001, 2, '租户管理员', '管理租户相关功能', NULL),
@@ -82,7 +82,7 @@ INSERT INTO `system_role` (`id`, `parent_role_id`, `level`, `role_name`, `commen
 (2008, 2006, 2, '普通员工', '基础员工角色', NULL);
 
 -- 添加一些额外的角色数据（5条）来展示角色层级
-INSERT INTO `system_role` (`id`, `parent_role_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
+INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
 (2009, 2007, 3, '技术经理', '技术部门经理', NULL),
 (2010, 2007, 3, '销售经理', '销售部门经理', NULL),
 (2011, 2008, 3, '前端开发', '前端开发工程师', NULL),
@@ -90,12 +90,12 @@ INSERT INTO `system_role` (`id`, `parent_role_id`, `level`, `role_name`, `commen
 (2013, 2008, 3, '测试工程师', '软件测试工程师', NULL);
 
 -- 添加一些额外的角色用于测试（2条）
-INSERT INTO `system_role` (`id`, `parent_role_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
+INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
 (2014, NULL, 1, '访客角色', '临时访客角色', NULL),
 (2015, NULL, 1, '审计员', '系统审计角色', now());
 
 -- 添加一些具有层级关系的角色（5条）
-INSERT INTO `system_role` (`id`, `parent_role_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
+INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `delete_time`) VALUES
 (2016, 2009, 4, '高级技术经理', '高级技术管理', NULL),
 (2017, 2011, 4, '高级前端开发', '高级前端工程师', NULL),
 (2018, 2012, 4, '高级后端开发', '高级后端工程师', NULL),

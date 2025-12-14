@@ -46,7 +46,7 @@ ROW_FORMAT = Dynamic;
 -- ----------------------------
 CREATE TABLE `system_tenant` (
   `id` bigint NOT NULL COMMENT '雪花id',
-  `parent_tenant_id` bigint NULL DEFAULT NULL COMMENT '父租户id',
+  `parent_id` bigint NULL DEFAULT NULL COMMENT '父租户id',
   `level` int NOT NULL COMMENT '租户层级',
   `tenant_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '租户名称',
   `tenant_intro` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '租户简介',
@@ -70,8 +70,8 @@ CREATE TABLE `system_department` (
   `id` bigint NOT NULL COMMENT '雪花id',
   `parent_id` bigint NULL DEFAULT NULL COMMENT '父部门id',
   `level` tinyint NOT NULL COMMENT '部门级别',
-  `dept_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '部门编码',
-  `dept_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '部门名称',
+  `department_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '部门编码',
+  `department_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '部门名称',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
@@ -86,13 +86,47 @@ COMMENT = '系统部门表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for system_job_position
+-- ----------------------------
+CREATE TABLE `system_job_position` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `position_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '职位编号，如HR-001',
+  `position_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '职位名称',
+  `department_id` bigint NOT NULL COMMENT '所属部门ID',
+  `position_category` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '职位类别：TECH-技术类, MARKET-市场类, SALES-销售类, HR-人力类, FINANCE-财务类, ADMIN-行政类',
+  `position_level` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '职位层级：INTERN-实习, JUNIOR-初级, MIDDLE-中级, SENIOR-高级, LEADER-主管, MANAGER-经理, DIRECTOR-总监, VP-副总裁, PRESIDENT-总裁',
+  `parent_id` bigint NULL DEFAULT NULL COMMENT '直接上级职位ID',
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'ACTIVE' COMMENT '状态：ACTIVE-启用, INACTIVE-停用, PLANNING-编制中',
+  `work_location` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '工作地点',
+  `sort_order` int NULL DEFAULT 0 COMMENT '排序号',
+  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '职位简介',
+  `comment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_position_code_tenant`(`tenant_id` ASC, `position_code` ASC) USING BTREE COMMENT '职位编号租户唯一',
+  INDEX `idx_department_id`(`department_id` ASC) USING BTREE COMMENT '部门索引',
+  INDEX `idx_parent_position`(`parent_id` ASC) USING BTREE COMMENT '上级职位索引',
+  INDEX `idx_status`(`status` ASC) USING BTREE COMMENT '状态索引',
+  INDEX `idx_position_name`(`position_name` ASC) USING BTREE COMMENT '职位名称索引'
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '职位基础信息表'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for system_log
 -- ----------------------------
 CREATE TABLE `system_log` (
   `id` bigint NOT NULL COMMENT '雪花id',
   `source` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志来源（backend-后端日志；manage-管理端前端上报日志；app-移动端上报日志）',
   `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志类型（见后端 SystemLogTypeEnum 枚举类）',
-  `log_object` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志记录对象',
+  `object_name` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志记录对象',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日志标题',
   `intro` varchar(1023) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '简单描述',
   `detail_id` bigint NULL DEFAULT NULL COMMENT '日志正文',
@@ -128,7 +162,7 @@ CREATE TABLE `system_menu` (
   `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
   `menu_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单URL路径（无页面的分组菜单项为NULL）',
-  `sequence` int NOT NULL COMMENT '菜单项顺序',
+  `sort_order` int NOT NULL COMMENT '菜单项顺序',
   `can_edit` tinyint NOT NULL DEFAULT 1 COMMENT '是否允许编辑（系统菜单请置为0，避免误操作导致后台页面无法正常展示）',
   `is_hide` tinyint NOT NULL DEFAULT 0 COMMENT '是否隐藏菜单项（1：隐藏，0：不隐藏）',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
@@ -153,7 +187,7 @@ CREATE TABLE `system_privilege` (
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
   `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
-  `privilege` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）',
+  `privilege_code` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
@@ -256,7 +290,7 @@ ROW_FORMAT = Dynamic;
 
 -- system_menu
 INSERT INTO
-    `system_menu` (`id`, `parent_id`, `level`, `module`, `menu_code`, `menu_name`, `menu_path`, `sequence`, `can_edit`)
+    `system_menu` (`id`, `parent_id`, `level`, `module`, `menu_code`, `menu_name`, `menu_path`, `sort_order`, `can_edit`)
 VALUES
     (10000, NULL, 1, 'global', 'dashboard', '仪表盘', '/dashboard', 1, 0),
     (10001, NULL, 1, 'system', 'index', '系统管理', NULL, 1, 0),
@@ -277,6 +311,6 @@ VALUES
 
 -- system_tenant
 -- TODO
--- INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `is_delete`) VALUES (1, NULL, '默认租户', '系统初始化创建的默认租户', 'NORMAL', 1, 1, 0);
+-- INSERT INTO `system_tenant` (`id`, `parent_id`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `is_delete`) VALUES (1, NULL, '默认租户', '系统初始化创建的默认租户', 'NORMAL', 1, 1, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

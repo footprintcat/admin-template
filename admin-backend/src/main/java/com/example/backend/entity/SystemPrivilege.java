@@ -52,8 +52,8 @@ public class SystemPrivilege implements Serializable {
     private String menuCode;
 
     @Schema(description = "权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）")
-    @TableField("privilege")
-    private String privilege;
+    @TableField("privilege_code")
+    private String privilegeCode;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

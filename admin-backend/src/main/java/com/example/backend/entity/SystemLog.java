@@ -43,8 +43,8 @@ public class SystemLog implements Serializable {
     private SystemLogTypeEnum type;
 
     @Schema(description = "日志记录对象")
-    @TableField("log_object")
-    private String logObject;
+    @TableField("object_name")
+    private String objectName;
 
     @Schema(description = "日志标题")
     @TableField("title")

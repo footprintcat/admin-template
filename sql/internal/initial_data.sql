@@ -4,7 +4,7 @@
 
 -- system_menu
 INSERT INTO
-    `system_menu` (`id`, `parent_id`, `level`, `module`, `menu_code`, `menu_name`, `menu_path`, `sequence`, `can_edit`)
+    `system_menu` (`id`, `parent_id`, `level`, `module`, `menu_code`, `menu_name`, `menu_path`, `sort_order`, `can_edit`)
 VALUES
     (10000, NULL, 1, 'global', 'dashboard', '仪表盘', '/dashboard', 1, 0),
     (10001, NULL, 1, 'system', 'index', '系统管理', NULL, 1, 0),
@@ -25,4 +25,4 @@ VALUES
 
 -- system_tenant
 -- TODO
--- INSERT INTO `system_tenant` (`id`, `parent_tenant_id`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `is_delete`) VALUES (1, NULL, '默认租户', '系统初始化创建的默认租户', 'NORMAL', 1, 1, 0);
+-- INSERT INTO `system_tenant` (`id`, `parent_id`, `tenant_name`, `tenant_intro`, `status`, `create_by`, `update_by`, `is_delete`) VALUES (1, NULL, '默认租户', '系统初始化创建的默认租户', 'NORMAL', 1, 1, 0);

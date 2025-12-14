@@ -35,8 +35,8 @@ public class SystemTenant implements Serializable {
     private Long id;
 
     @Schema(description = "父租户id")
-    @TableField("parent_tenant_id")
-    private Long parentTenantId;
+    @TableField("parent_id")
+    private Long parentId;
 
     @Schema(description = "租户层级")
     @TableField("`level`")

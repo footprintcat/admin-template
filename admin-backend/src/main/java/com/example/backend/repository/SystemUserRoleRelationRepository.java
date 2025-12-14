@@ -1,9 +1,13 @@
 package com.example.backend.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.backend.entity.SystemUserRoleRelation;
 import com.example.backend.mapper.SystemUserRoleRelationMapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,5 +19,20 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SystemUserRoleRelationRepository extends ServiceImpl<SystemUserRoleRelationMapper, SystemUserRoleRelation> {
+
+    /**
+     * 查询用户关联的所有角色id
+     *
+     * @param userId 用户id
+     * @return roleIdList: 角色id列表
+     * @since 2025-12-14
+     */
+    public @NotNull List<Long> getRoleIdListByUserId(@NotNull Long userId) {
+        LambdaQueryWrapper<SystemUserRoleRelation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SystemUserRoleRelation::getUserId, userId);
+        List<SystemUserRoleRelation> list = this.list(queryWrapper);
+        List<Long> roleIdList = list.stream().map(SystemUserRoleRelation::getRoleId).toList();
+        return roleIdList;
+    }
 
 }

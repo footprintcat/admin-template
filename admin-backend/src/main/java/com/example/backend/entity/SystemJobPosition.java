@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 系统部门表
+ * 职位基础信息表
  * </p>
  *
  * @author coder-xiaomo
@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@Schema(name = "SystemDepartment", description = "系统部门表")
-@TableName("system_department")
-public class SystemDepartment implements Serializable {
+@Schema(name = "SystemJobPosition", description = "职位基础信息表")
+@TableName("system_job_position")
+public class SystemJobPosition implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,21 +34,49 @@ public class SystemDepartment implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "父部门id")
+    @Schema(description = "职位编号，如HR-001")
+    @TableField("position_code")
+    private String positionCode;
+
+    @Schema(description = "职位名称")
+    @TableField("position_name")
+    private String positionName;
+
+    @Schema(description = "所属部门ID")
+    @TableField("department_id")
+    private Long departmentId;
+
+    @Schema(description = "职位类别：TECH-技术类, MARKET-市场类, SALES-销售类, HR-人力类, FINANCE-财务类, ADMIN-行政类")
+    @TableField("position_category")
+    private String positionCategory;
+
+    @Schema(description = "职位层级：INTERN-实习, JUNIOR-初级, MIDDLE-中级, SENIOR-高级, LEADER-主管, MANAGER-经理, DIRECTOR-总监, VP-副总裁, PRESIDENT-总裁")
+    @TableField("position_level")
+    private String positionLevel;
+
+    @Schema(description = "直接上级职位ID")
     @TableField("parent_id")
     private Long parentId;
 
-    @Schema(description = "部门级别")
-    @TableField("`level`")
-    private Integer level;
+    @Schema(description = "状态：ACTIVE-启用, INACTIVE-停用, PLANNING-编制中")
+    @TableField("status")
+    private String status;
 
-    @Schema(description = "部门编码")
-    @TableField("department_code")
-    private String departmentCode;
+    @Schema(description = "工作地点")
+    @TableField("work_location")
+    private String workLocation;
 
-    @Schema(description = "部门名称")
-    @TableField("department_name")
-    private String departmentName;
+    @Schema(description = "排序号")
+    @TableField("sort_order")
+    private Integer sortOrder;
+
+    @Schema(description = "职位简介")
+    @TableField("description")
+    private String description;
+
+    @Schema(description = "备注")
+    @TableField("comment")
+    private String comment;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

@@ -74,13 +74,13 @@ public class SystemMenuService {
         if (currentUserRoleId != null && currentUserRoleId != 1) {
             queryWrapper.eq(SystemMenu::getIsHide, 0);
         }
-        queryWrapper.orderByAsc(SystemMenu::getSequence);
+        queryWrapper.orderByAsc(SystemMenu::getSortOrder);
         return systemMenuMapper.selectList(queryWrapper);
     }
 
     public List<SystemMenu> getSystemMenuListWithoutRootLevel() {
         LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByAsc(SystemMenu::getSequence);
+        queryWrapper.orderByAsc(SystemMenu::getSortOrder);
         return systemMenuMapper.selectList(queryWrapper);
     }
 
@@ -128,10 +128,10 @@ public class SystemMenuService {
      */
     public void addSystemMenu(SystemMenu systemMenu) {
         // 将该菜单项的后续菜单次序+1
-        Integer sequence = systemMenu.getSequence();
+        Integer sequence = systemMenu.getSortOrder();
         LambdaUpdateWrapper<SystemMenu> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.ge(SystemMenu::getSequence, sequence);
-        updateWrapper.setIncrBy(SystemMenu::getSequence, 1);
+        updateWrapper.ge(SystemMenu::getSortOrder, sequence);
+        updateWrapper.setIncrBy(SystemMenu::getSortOrder, 1);
         systemMenuMapper.update(updateWrapper);
 
         // // 查询当前菜单项的父级菜单（如果存在）
@@ -174,10 +174,10 @@ public class SystemMenuService {
     @Transactional
     public void removeSystemMenu(SystemMenu systemMenu) {
         // 移除菜单项前更新后续菜单项的次序 次序-1
-        Integer sequence = systemMenu.getSequence();
+        Integer sequence = systemMenu.getSortOrder();
         LambdaUpdateWrapper<SystemMenu> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.gt(SystemMenu::getSequence, sequence);
-        updateWrapper.setDecrBy(SystemMenu::getSequence, 1);
+        updateWrapper.gt(SystemMenu::getSortOrder, sequence);
+        updateWrapper.setDecrBy(SystemMenu::getSortOrder, 1);
         systemMenuMapper.update(updateWrapper);
 
         // 删除菜单
@@ -200,12 +200,12 @@ public class SystemMenuService {
         }
 
         LambdaUpdateWrapper<SystemMenu> updateWrapper1 = new LambdaUpdateWrapper<>();
-        updateWrapper1.set(SystemMenu::getSequence, systemMenu2.getSequence());
+        updateWrapper1.set(SystemMenu::getSortOrder, systemMenu2.getSortOrder());
         updateWrapper1.eq(SystemMenu::getId, systemMenu1.getId());
         systemMenuMapper.update(updateWrapper1);
 
         LambdaUpdateWrapper<SystemMenu> updateWrapper2 = new LambdaUpdateWrapper<>();
-        updateWrapper2.set(SystemMenu::getSequence, systemMenu1.getSequence());
+        updateWrapper2.set(SystemMenu::getSortOrder, systemMenu1.getSortOrder());
         updateWrapper2.eq(SystemMenu::getId, systemMenu2.getId());
         systemMenuMapper.update(updateWrapper2);
     }
@@ -221,12 +221,12 @@ public class SystemMenuService {
             Long parentId = currentSystemMenu.getParentId();
             LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(SystemMenu::getParentId, parentId);
-            queryWrapper.orderByAsc(SystemMenu::getSequence);
+            queryWrapper.orderByAsc(SystemMenu::getSortOrder);
             systemMenus = systemMenuMapper.selectList(queryWrapper);
         } else {
             LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(SystemMenu::getLevel, 1);
-            queryWrapper.orderByAsc(SystemMenu::getSequence);
+            queryWrapper.orderByAsc(SystemMenu::getSortOrder);
             systemMenus = systemMenuMapper.selectList(queryWrapper);
         }
 
@@ -272,7 +272,7 @@ public class SystemMenuService {
 
         LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SystemMenu::getLevel, systemMenu.getLevel() - 1);
-        queryWrapper.orderByAsc(SystemMenu::getSequence);
+        queryWrapper.orderByAsc(SystemMenu::getSortOrder);
         List<SystemMenu> systemMenuList = systemMenuMapper.selectList(queryWrapper);
 
         return systemMenuList;
@@ -305,7 +305,7 @@ public class SystemMenuService {
     public List<SystemMenu> getZeroLevelMenuList() {
         LambdaQueryWrapper<SystemMenu> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SystemMenu::getLevel, 0);
-        queryWrapper.orderByAsc(SystemMenu::getSequence);
+        queryWrapper.orderByAsc(SystemMenu::getSortOrder);
         List<SystemMenu> systemMenus = systemMenuMapper.selectList(queryWrapper);
         return systemMenus;
     }
@@ -336,7 +336,7 @@ public class SystemMenuService {
         } else {
             queryWrapper.eq(SystemMenu::getParentId, id);
         }
-        queryWrapper.orderByDesc(SystemMenu::getSequence);
+        queryWrapper.orderByDesc(SystemMenu::getSortOrder);
         queryWrapper.last("LIMIT 1");
         SystemMenu systemMenu = systemMenuRepository.getOne(queryWrapper);
         return systemMenu;
@@ -375,12 +375,12 @@ public class SystemMenuService {
             item.put("menuName", menu.getMenuName());
             // item.put("menuFullName", menu.getMenuFullName());
             item.put("level", menu.getLevel());
-            // item.put("sequence", menu.getSequence());
+            // item.put("sequence", menu.getSortOrder());
             item.put("isHide", menu.getIsHide());
             menuList.add(item);
 
             List<Pair<Integer, String>> childMenuIdList = menuSequencePairMap.getOrDefault(parentMenuIdNotNull, new ArrayList<>());
-            Pair<Integer, String> pair = Pair.of(menu.getSequence(), menu.getMenuCode());
+            Pair<Integer, String> pair = Pair.of(menu.getSortOrder(), menu.getMenuCode());
             childMenuIdList.add(pair);
             menuSequencePairMap.put(parentMenuIdNotNull, childMenuIdList);
         }

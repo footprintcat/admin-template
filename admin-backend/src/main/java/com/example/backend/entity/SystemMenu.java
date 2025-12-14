@@ -59,8 +59,8 @@ public class SystemMenu implements Serializable {
     private String menuPath;
 
     @Schema(description = "菜单项顺序")
-    @TableField("sequence")
-    private Integer sequence;
+    @TableField("sort_order")
+    private Integer sortOrder;
 
     @Schema(description = "是否允许编辑（系统菜单请置为0，避免误操作导致后台页面无法正常展示）")
     @TableField("can_edit")
