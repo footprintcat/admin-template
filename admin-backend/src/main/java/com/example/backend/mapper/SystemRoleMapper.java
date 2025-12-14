@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.dto.SystemRoleDto;
 import com.example.backend.entity.SystemRole;
+import com.example.backend.entity.dbresult.DbResultAncestorRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -19,6 +21,24 @@ import java.util.List;
  */
 @Mapper
 public interface SystemRoleMapper extends BaseMapper<SystemRole> {
+
+    /**
+     * 递归获取指定角色的所有上级角色列表
+     *
+     * @param roleId 角色id
+     * @return ancestorRoleList
+     * @since 2025-12-14
+     */
+    List<DbResultAncestorRole> getAllAncestorByRoleId(@NotNull @Param("roleId") String roleId);
+
+    /**
+     * 递归获取若干角色的所有上级角色列表
+     *
+     * @param roleId 角色id列表
+     * @return ancestorRoleList
+     * @since 2025-12-14
+     */
+    List<DbResultAncestorRole> getAllAncestorByRoleIdList(@NotNull @Param("roleId") String roleId);
 
     Page<SystemRole> getSystemRolePage(Page<?> page, @Param("query") SystemRoleDto systemRoleDTO);
 
