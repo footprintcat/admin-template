@@ -22,8 +22,6 @@ public class SystemUserServiceV2 {
 
     @Resource
     private SystemUserMapper systemUserMapper;
-    @Resource
-    private SystemRoleService systemRoleService;
 
     /**
      * 获取当前登录用户

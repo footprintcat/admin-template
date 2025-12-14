@@ -1,3 +1,4 @@
+/*
 package com.example.backend.controller.manage.v1;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -9,9 +10,6 @@ import com.example.backend.modules.system.model.dto.SystemRoleDto;
 import com.example.backend.modules.system.model.entity.SystemRole;
 import com.example.backend.modules.system.model.entity.SystemUser;
 import com.example.backend.modules.system.repository.SystemRoleRepository;
-import com.example.backend.modules.system.repository.UserRepository;
-import com.example.backend.modules.system.service.needrefactor.SystemPrivilegeService;
-import com.example.backend.modules.system.service.needrefactor.SystemRoleService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,13 +30,7 @@ import java.util.List;
 public class SystemRoleController extends BaseController {
 
     @Resource
-    private SystemRoleService systemRoleService;
-    @Resource
     private SystemRoleRepository systemRoleRepository;
-    @Resource
-    private SystemPrivilegeService systemPrivilegeService;
-    @Resource
-    private UserRepository userRepository;
 
     @GetMapping("/list")
     public CommonReturn list() {
@@ -89,14 +81,16 @@ public class SystemRoleController extends BaseController {
         return CommonReturn.success(map);
     }
 
-    /**
+    */
+/**
      * 更新角色
      *
      * @param systemRoleDTO
      * @param request       请求参数
      * @return
      * @throws BusinessException 业务异常
-     */
+     *//*
+
     @PostMapping("/update")
     public CommonReturn update(@RequestBody SystemRoleDto systemRoleDTO, HttpServletRequest request) {
         // TODO
@@ -170,3 +164,4 @@ public class SystemRoleController extends BaseController {
         return CommonReturn.success();
     }
 }
+*/

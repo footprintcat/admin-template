@@ -1,3 +1,4 @@
+/*
 package com.example.backend.modules.system.service.needrefactor;
 
 import com.example.backend.common.error.BusinessErrorCode;
@@ -119,11 +120,13 @@ public class SystemRoleService {
         return true;
     }
 
-    /**
+    */
+/**
      * 获取指定角色的下级角色
      *
      * @param roleId
-     */
+     *//*
+
 
     public List<SystemRole> findChildRoles(Long roleId, List<SystemRole> systemRoleList) {
         List<SystemRole> result = new ArrayList<>();
@@ -213,3 +216,4 @@ public class SystemRoleService {
         return roleTree;
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.example.backend.controller.manage.v1;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -11,8 +12,6 @@ import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.modules.system.model.dto.SystemPrivilegeDto;
 import com.example.backend.modules.system.model.entity.Privilege;
 import com.example.backend.modules.system.model.entity.SystemMenu;
-import com.example.backend.modules.system.repository.needrefactor.PrivilegeRepository;
-import com.example.backend.modules.system.service.needrefactor.SystemPrivilegeService;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleService;
 import com.example.backend.modules.system.service.needrefactor.SystemMenuService;
 import jakarta.annotation.Resource;
@@ -38,10 +37,6 @@ import java.util.Objects;
 @RequestMapping("/v1/privilege")
 public class SystemPrivilegeController extends BaseController {
 
-    @Resource
-    private SystemPrivilegeService systemPrivilegeService;
-    @Resource
-    private PrivilegeRepository privilegeRepository;
     @Resource
     private SystemRoleService systemRoleService;
     @Resource
@@ -277,11 +272,13 @@ public class SystemPrivilegeController extends BaseController {
         return CommonReturn.success();
     }
 
-    /**
+    */
+/**
      * 导出权限
      *
      * @return
-     */
+     *//*
+
     @GetMapping("/exportJson")
     public CommonReturn exportJson(HttpServletRequest request) {
         // TODO
@@ -294,3 +291,4 @@ public class SystemPrivilegeController extends BaseController {
     }
 
 }
+*/

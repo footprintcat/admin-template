@@ -46,8 +46,8 @@ public class SystemMenuService {
     private SystemMenuMapper systemMenuMapper;
     @Resource
     private SystemMenuRepository systemMenuRepository;
-    @Resource
-    private SystemPrivilegeService systemPrivilegeService;
+    // @Resource
+    // private SystemPrivilegeService systemPrivilegeService;
 
     /**
      * 获取 当前用户的 SystemMenu 树
@@ -184,7 +184,8 @@ public class SystemMenuService {
         systemMenuMapper.deleteById(systemMenu.getId());
 
         // 删除该菜单相关权限
-        systemPrivilegeService.removePrivilegesByModule(systemMenu.getMenuCode());
+        // TODO
+        // systemPrivilegeService.removePrivilegesByModule(systemMenu.getMenuCode());
     }
 
     public void exchangeSystemMenu(String fromMenuId, String movingMode) throws BusinessException {
