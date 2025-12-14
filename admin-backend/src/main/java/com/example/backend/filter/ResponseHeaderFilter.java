@@ -1,16 +1,27 @@
 package com.example.backend.filter;
 
-import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.FilterRegistration;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Slf4j
-@WebFilter(filterName = "ResponseHeader", urlPatterns = "/*")
+// 不在此处使用 Servlet @WebFilter 注解，改为使用 @Component + @FilterRegistration 方式加载
+// docs:
+// - Registering Servlets, Filters, and Listeners as Spring Beans
+//   https://docs.spring.io/spring-boot/reference/web/servlet.html#web.servlet.embedded-container.servlets-filters-listeners.beans
+@Component
+@FilterRegistration(order = 20, urlPatterns = "/*")
+// @WebFilter(filterName = "ResponseHeader", urlPatterns = "/*")
 public class ResponseHeaderFilter implements Filter {
 
     private static final String filterName = "ResponseHeaderFilter";
@@ -22,32 +33,33 @@ public class ResponseHeaderFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        log.info("[{}] doFilter(): ", filterName);
 
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        HttpSession session = httpServletRequest.getSession();
-        String userAgent = httpServletRequest.getHeader("User-Agent");
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         String method = httpServletRequest.getMethod();
         String origin = httpServletRequest.getHeader("Origin");
-        String requestURI = httpServletRequest.getRequestURI();
-        log.info("[{}] doFilter(): method, origin, requestURI: {}  {}  {}", filterName, method, origin, requestURI);
 
-        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
         // 响应头
+        // 在 Filter 中设置如下 header，就不需要在每个 Controller 类上写 @CrossOrigin 注解了
         httpServletResponse.addHeader("Access-Control-Allow-Origin", origin);
         httpServletResponse.addHeader("Access-Control-Request-Headers", "content-type");
         httpServletResponse.addHeader("Access-Control-Allow-Headers", "content-type");
         httpServletResponse.addHeader("Access-Control-Allow-Credentials", "true");
 
-        filterChain.doFilter(servletRequest, servletResponse);
-
-        // 记录日志
-        if (!"OPTIONS".equals(method)) {
-            // TODO 记录日志
-            // systemLogService.log(session, "Call Api", "[" + method + "] " + requestURI, userAgent, "");
+        if ("OPTIONS".equalsIgnoreCase(method)) {
+            // 直接返回 200 OK 响应
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            return;
         }
+
+        chain.doFilter(request, response);
+
+        // TODO 记录日志
+        // systemLogService.log(session, "Call Api", "[" + method + "] " + requestURI, userAgent, "");
     }
 
     @Override
