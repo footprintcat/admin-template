@@ -18,6 +18,7 @@ import com.example.backend.modules.system.model.dto.SystemRoleDto;
 import com.example.backend.modules.system.model.entity.Role;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleServiceV2;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +35,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/manage/v1/system/role")
+@Tag(name = "[system] 角色 role", description = "/manage/v1/system/role")
 public class ManageV1SystemRoleController extends BaseController {
 
     @Resource

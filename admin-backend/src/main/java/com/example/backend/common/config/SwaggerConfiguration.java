@@ -44,20 +44,25 @@ public class SwaggerConfiguration {
     public List<GroupedOpenApi> groupedOpenApi() {
         return Arrays.asList(
                 GroupedOpenApi.builder()
-                        .group(getGroupName("所有"))
+                        .group(getGroupName("所有接口"))
                         .pathsToMatch("/**")
                         .build(),
 
                 // 按包路径扫描
                 GroupedOpenApi.builder()
                         .group(getGroupName("公开接口"))
-                        .packagesToScan("com.example.backend.controller.PublicApi")
+                        .packagesToScan("com.example.backend.controller.publicapi")
                         .build(),
                 GroupedOpenApi.builder()
                         .group(getGroupName("后台管理接口"))
-                        .packagesToScan("com.example.backend.controller.Manage")
+                        .packagesToScan("com.example.backend.controller.manage")
                         .build(),
+                GroupedOpenApi.builder()
+                        .group(getGroupName("App接口"))
+                        .packagesToScan("com.example.backend.controller.app")
+                        .build()
 
+/*
                 // 匹配路径
                 GroupedOpenApi.builder()
                         .group(getGroupName("v3前缀接口"))
@@ -71,12 +76,14 @@ public class SwaggerConfiguration {
                         .group(getGroupName("v1前缀接口"))
                         .pathsToMatch("/v1/**")
                         .build()
+*/
         );
     }
 
     int i = 0;
 
     private String getGroupName(String name) {
+        // 添加数字前缀以保证 Swagger 网页右上角下拉框排序
         return ++i + "-" + name;
     }
 }

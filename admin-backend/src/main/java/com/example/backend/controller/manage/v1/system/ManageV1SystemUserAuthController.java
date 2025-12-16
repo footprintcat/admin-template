@@ -10,6 +10,7 @@ import com.example.backend.controller.manage.v1.system.dto.request.userauth.Mana
 import com.example.backend.modules.system.model.dto.SystemUserDto;
 import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.service.SystemUserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/manage/v1/system/user-auth")
+@Tag(name = "[system] 用户认证 user-auth", description = "/manage/v1/system/user-auth")
 public class ManageV1SystemUserAuthController extends BaseController {
 
     @Resource

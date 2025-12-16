@@ -7,6 +7,7 @@ import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.modules.system.model.entity.Privilege;
 import com.example.backend.modules.system.repository.PrivilegeRepository;
 import com.example.backend.modules.system.repository.UserRoleRelationRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/manage/v1/system/privilege")
+@Tag(name = "[system] 权限 privilege", description = "/manage/v1/system/privilege")
 public class ManageV1SystemPrivilegeController {
 
     @Resource

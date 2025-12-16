@@ -21,6 +21,7 @@ import com.example.backend.modules.system.model.dto.SystemUserDto;
 import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleServiceV2;
 import com.example.backend.modules.system.service.needrefactor.SystemUserServiceV2;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -42,6 +43,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/manage/v1/system/user")
+@Tag(name = "[system] 用户 user", description = "/manage/v1/system/user")
 public class ManageV1SystemUserController extends BaseController {
 
     @Resource

@@ -16,6 +16,7 @@ import com.example.backend.modules.system.model.dto.SystemLogDto;
 import com.example.backend.modules.system.model.entity.Log;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.modules.system.service.needrefactor.SystemLogService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,7 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/manage/v1/system/system-log")
+@RequestMapping("/manage/v1/system/log")
+@Tag(name = "[system] 日志 log", description = "/manage/v1/system/log")
 public class ManageV1SystemLogController extends BaseController {
 
     @Resource
