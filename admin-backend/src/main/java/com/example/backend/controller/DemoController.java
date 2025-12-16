@@ -1,14 +1,27 @@
 package com.example.backend.controller;
 
+import com.example.backend.common.baseobject.controller.BaseController;
+import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
-import com.example.backend.common.baseobject.response.CommonReturn;
-import com.example.backend.common.baseobject.controller.BaseController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DemoController extends BaseController {
+
+    record TestRecord(Long id, String name) {
+    }
+
+    @RequestMapping("/testSuccess")
+    public CommonReturn testSuccess() {
+        // 测试 Long 类型反序列化是否正确
+        Object result = null;
+        // result = 12345678901234567L;
+        // result = new TestRecord(null, "test");
+        result = new TestRecord(12345678901234567L, "test");
+        return CommonReturn.success(result);
+    }
 
     @RequestMapping("/testError")
     public CommonReturn testError() {
