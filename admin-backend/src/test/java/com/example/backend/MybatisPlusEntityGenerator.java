@@ -37,6 +37,7 @@ public class MybatisPlusEntityGenerator {
          */
         // includeTables.add("system_config");
         // includeTables.add("system_department");
+        // includeTables.add("system_identity");
         // includeTables.add("system_job_position");
         // includeTables.add("system_log");
         // // includeTables.add("system_log_detail");

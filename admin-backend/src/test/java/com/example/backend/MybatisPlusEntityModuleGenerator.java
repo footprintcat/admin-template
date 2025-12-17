@@ -42,6 +42,7 @@ public class MybatisPlusEntityModuleGenerator {
         moduleTables.add(new ModuleTables("system", "system_", Arrays.asList(
                 // "system_config",
                 // "system_department",
+                // "system_identity",
                 // "system_job_position",
                 // "system_log",
                 // // "system_log_detail",
