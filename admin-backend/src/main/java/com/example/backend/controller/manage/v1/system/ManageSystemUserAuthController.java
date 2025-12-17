@@ -2,13 +2,16 @@ package com.example.backend.controller.manage.v1.system;
 
 import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.common.baseobject.response.CommonReturn;
-import com.example.backend.common.interceptor.checklogin.PublicAccess;
 import com.example.backend.common.error.BusinessException;
+import com.example.backend.common.interceptor.checklogin.PublicAccess;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserChangePasswordRequest;
+import com.example.backend.controller.manage.v1.system.dto.response.userauth.ManageSystemUserAuthLoginResponse;
+import com.example.backend.modules.system.model.dto.IdentityDto;
 import com.example.backend.modules.system.model.dto.SystemUserDto;
 import com.example.backend.modules.system.model.entity.User;
+import com.example.backend.modules.system.service.IdentityService;
 import com.example.backend.modules.system.service.SystemUserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -20,13 +23,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/manage/v1/system/user-auth")
 @Tag(name = "[system] 用户认证 user-auth", description = "/manage/v1/system/user-auth")
 public class ManageSystemUserAuthController extends BaseController {
 
     @Resource
-    SystemUserService systemUserService;
+    private SystemUserService systemUserService;
+    @Resource
+    private IdentityService identityService;
 
     /**
      * 后台管理登录接口
@@ -45,6 +52,7 @@ public class ManageSystemUserAuthController extends BaseController {
         String inputUsername = request.getUsername();
         String inputPassword = request.getPassword();
 
+        // 登录
         SystemUserDto systemUserDto = systemUserService.userLogin(session, inputUsername, inputPassword);
         boolean isLoginSuccess = systemUserDto != null;
 
@@ -52,8 +60,15 @@ public class ManageSystemUserAuthController extends BaseController {
         // 记录登录日志
 
         if (isLoginSuccess) {
-            return CommonReturn.success(systemUserDto);
+            // 查询用户身份列表
+            List<IdentityDto> identityList = identityService.getIdentityListByUserId(systemUserDto.getId());
+
+            ManageSystemUserAuthLoginResponse response = new ManageSystemUserAuthLoginResponse();
+            response.setUserInfo(systemUserDto);
+            response.setIdentityList(identityList);
+            return CommonReturn.success(response);
         }
+
         // 登录失败，请检查用户名和密码是否正确
         return CommonReturn.error("用户名或密码错误，登录失败");
     }

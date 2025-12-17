@@ -89,8 +89,11 @@ export function useLoginLogic() {
           return // 后端返回异常已弹出错误提示
         }
         ElMessage.success('登录成功')
+        console.log('登录成功', data)
 
-        userStore.set(data.id, data.username)
+        const userInfo = data.userInfo
+
+        userStore.set(userInfo.id, userInfo.username)
 
         // TODO
         // await permissionStore.asyncUpdatePermissionList(data.roleId, false)

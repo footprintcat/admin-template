@@ -24,6 +24,7 @@ public class IdentityRepository extends ServiceImpl<IdentityMapper, Identity> {
      * 通过 userId 获取身份列表
      *
      * @param userId 用户id
+     * @return identity 身份列表
      * @since 2025-12-17
      */
     public List<Identity> getIdentityListByUserId(@NotNull Long userId) {
