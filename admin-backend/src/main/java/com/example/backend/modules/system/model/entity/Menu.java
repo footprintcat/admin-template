@@ -42,11 +42,11 @@ public class Menu implements Serializable {
     @TableField("`level`")
     private Integer level;
 
-    @Schema(description = "菜单所属模块")
-    @TableField("module")
-    private String module;
+    @Schema(description = "菜单类型（directory-分组；menu-菜单；action-操作(页面中功能或按钮)）")
+    @TableField("menu_type")
+    private String menuType;
 
-    @Schema(description = "菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）")
+    @Schema(description = "菜单code（例如 system:foo-bar:list）")
     @TableField("menu_code")
     private String menuCode;
 

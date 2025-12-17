@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Date: 14/12/2025 14:16:55
+ Date: 17/12/2025 20:50:59
 */
 
 SET NAMES utf8mb4;
@@ -113,8 +113,8 @@ CREATE TABLE `system_menu`  (
   `id` bigint NOT NULL COMMENT '主键id',
   `parent_id` bigint NULL DEFAULT NULL COMMENT '父菜单id',
   `level` tinyint NOT NULL COMMENT '菜单级别',
-  `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单所属模块',
-  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
+  `menu_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单类型（directory-分组；menu-菜单；action-操作(页面中功能或按钮)）',
+  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 system:foo-bar:list）',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
   `menu_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单URL路径（无页面的分组菜单项为NULL）',
   `sort_order` int NOT NULL COMMENT '菜单项顺序',
@@ -127,7 +127,7 @@ CREATE TABLE `system_menu`  (
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `menu_code`(`module` ASC, `menu_code` ASC) USING BTREE
+  UNIQUE INDEX `menu_code`(`menu_code` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统菜单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
