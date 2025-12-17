@@ -9,10 +9,10 @@ import com.example.backend.controller.manage.v1.system.dto.request.userauth.Mana
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserChangePasswordRequest;
 import com.example.backend.controller.manage.v1.system.dto.response.userauth.ManageSystemUserAuthLoginResponse;
 import com.example.backend.modules.system.model.dto.IdentityDto;
-import com.example.backend.modules.system.model.dto.SystemUserDto;
+import com.example.backend.modules.system.model.dto.UserDto;
 import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.service.IdentityService;
-import com.example.backend.modules.system.service.SystemUserService;
+import com.example.backend.modules.system.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,10 +28,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/manage/v1/system/user-auth")
 @Tag(name = "[system] 用户认证 user-auth", description = "/manage/v1/system/user-auth")
-public class ManageSystemUserAuthController extends BaseController {
+public class UserAuthController extends BaseController {
 
     @Resource
-    private SystemUserService systemUserService;
+    private UserService userService;
     @Resource
     private IdentityService identityService;
 
@@ -53,18 +53,18 @@ public class ManageSystemUserAuthController extends BaseController {
         String inputPassword = request.getPassword();
 
         // 登录
-        SystemUserDto systemUserDto = systemUserService.userLogin(session, inputUsername, inputPassword);
-        boolean isLoginSuccess = systemUserDto != null;
+        UserDto userDto = userService.userLogin(session, inputUsername, inputPassword);
+        boolean isLoginSuccess = userDto != null;
 
         // TODO
         // 记录登录日志
 
         if (isLoginSuccess) {
             // 查询用户身份列表
-            List<IdentityDto> identityList = identityService.getIdentityListByUserId(systemUserDto.getId());
+            List<IdentityDto> identityList = identityService.getIdentityListByUserId(userDto.getId());
 
             ManageSystemUserAuthLoginResponse response = new ManageSystemUserAuthLoginResponse();
-            response.setUserInfo(systemUserDto);
+            response.setUserInfo(userDto);
             response.setIdentityList(identityList);
             return CommonReturn.success(response);
         }
@@ -83,9 +83,9 @@ public class ManageSystemUserAuthController extends BaseController {
     @PostMapping("/getInfo")
     public CommonReturn getUserInfo(HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
-        User currentUserInfo = systemUserService.getCurrentUserInfo(session);
-        SystemUserDto systemUserDto = SystemUserDto.fromEntity(currentUserInfo);
-        return CommonReturn.success(systemUserDto);
+        User currentUserInfo = userService.getCurrentUserInfo(session);
+        UserDto userDto = UserDto.fromEntity(currentUserInfo);
+        return CommonReturn.success(userDto);
     }
 
     /**
@@ -124,7 +124,7 @@ public class ManageSystemUserAuthController extends BaseController {
         String oldPassword = request.getOldPassword();
         String newPassword = request.getNewPassword();
 
-        systemUserService.changePassword(userId, oldPassword, newPassword);
+        userService.changePassword(userId, oldPassword, newPassword);
         return CommonReturn.success();
     }
 

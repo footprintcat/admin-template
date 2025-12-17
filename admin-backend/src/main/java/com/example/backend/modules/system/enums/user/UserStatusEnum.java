@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Getter
 @AllArgsConstructor
-public enum SystemUserStatusEnum {
+public enum UserStatusEnum {
 
     NORMAL("normal", "正常（可用）", null),
     LOCKED("locked", "锁定（禁用）","当前账号已被锁定，无法登录"),

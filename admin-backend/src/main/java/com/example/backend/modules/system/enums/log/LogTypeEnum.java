@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @Getter
 @AllArgsConstructor
-public enum SystemLogTypeEnum {
+public enum LogTypeEnum {
 
     // 操作类日志
     OPERATION("operation", "操作日志"),

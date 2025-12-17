@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/manage/v1/system/identity")
 @Tag(name = "[system] 身份 identity", description = "/manage/v1/system/identity")
-public class ManageSystemIdentityController {
+public class IdentityController {
 
 
 }

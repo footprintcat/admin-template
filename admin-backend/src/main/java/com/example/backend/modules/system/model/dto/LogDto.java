@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class SystemLogDto {
+public class LogDto {
 
     private String id;
     private Long createTimestamp;
@@ -21,37 +21,37 @@ public class SystemLogDto {
     private String title;
     private String content;
 
-    public static SystemLogDto fromEntity(Log log) {
+    public static LogDto fromEntity(Log log) {
         if (log == null) {
             return null;
         }
-        SystemLogDto systemLogDTO = new SystemLogDto();
-        BeanUtils.copyProperties(log, systemLogDTO);
+        LogDto logDTO = new LogDto();
+        BeanUtils.copyProperties(log, logDTO);
         // if (systemLog.getLogTime() != null) {
         //     systemLogDTO.setCreateTimestamp(systemLog.getLogTime().getTime());
         // }
         // systemLogDTO.setUserId(StringUtils.toNullableString(systemLog.getUserId()));
-        systemLogDTO.setId(StringUtils.toNullableString(log.getId()));
-        return systemLogDTO;
+        logDTO.setId(StringUtils.toNullableString(log.getId()));
+        return logDTO;
     }
 
-    public static List<SystemLogDto> fromEntity(List<Log> logList) {
-        return logList.stream().map(SystemLogDto::fromEntity).collect(Collectors.toList());
+    public static List<LogDto> fromEntity(List<Log> logList) {
+        return logList.stream().map(LogDto::fromEntity).collect(Collectors.toList());
     }
 
-    public static Log toEntity(SystemLogDto systemLogDTO) {
-        if (systemLogDTO == null) {
+    public static Log toEntity(LogDto logDTO) {
+        if (logDTO == null) {
             return null;
         }
         Log log = new Log();
-        BeanUtils.copyProperties(systemLogDTO, log);
-        if (systemLogDTO.getCreateTimestamp() != null) {
-            Date date = new Date(systemLogDTO.getCreateTimestamp());
+        BeanUtils.copyProperties(logDTO, log);
+        if (logDTO.getCreateTimestamp() != null) {
+            Date date = new Date(logDTO.getCreateTimestamp());
             // systemLog.setLogTime(date);
         }
 
         // systemLog.setUserId(NumberUtils.parseLong(systemLogDTO.getUserId()));
-        log.setId(NumberUtils.parseLong(systemLogDTO.getId()));
+        log.setId(NumberUtils.parseLong(logDTO.getId()));
 
         return log;
     }

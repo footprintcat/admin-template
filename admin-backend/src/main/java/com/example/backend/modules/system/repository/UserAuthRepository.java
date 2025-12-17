@@ -3,7 +3,7 @@ package com.example.backend.modules.system.repository;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.backend.modules.system.enums.userauth.SystemUserAuthTypeEnum;
+import com.example.backend.modules.system.enums.userauth.UserAuthTypeEnum;
 import com.example.backend.modules.system.model.entity.UserAuth;
 import com.example.backend.modules.system.mapper.UserAuthMapper;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +56,7 @@ public class UserAuthRepository extends ServiceImpl<UserAuthMapper, UserAuth> {
     public UserAuth getUserPasswordAuthObject(@NotNull Long userId) {
         LambdaQueryWrapper<UserAuth> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserAuth::getUserId, userId);
-        queryWrapper.eq(UserAuth::getAuthType, SystemUserAuthTypeEnum.PASSWORD);
+        queryWrapper.eq(UserAuth::getAuthType, UserAuthTypeEnum.PASSWORD);
         return this.getOne(queryWrapper);
     }
 
@@ -70,7 +70,7 @@ public class UserAuthRepository extends ServiceImpl<UserAuthMapper, UserAuth> {
     public void updatePassword(@NotNull Long userId, @NotNull String newPassword) {
         LambdaUpdateWrapper<UserAuth> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(UserAuth::getId, userId);
-        updateWrapper.eq(UserAuth::getAuthType, SystemUserAuthTypeEnum.PASSWORD);
+        updateWrapper.eq(UserAuth::getAuthType, UserAuthTypeEnum.PASSWORD);
         updateWrapper.set(UserAuth::getPasswordHash, encodePassword(newPassword));
         this.update(updateWrapper);
     }

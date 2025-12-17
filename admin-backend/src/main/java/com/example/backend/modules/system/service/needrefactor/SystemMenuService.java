@@ -9,7 +9,7 @@ import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.NumberUtils;
 import com.example.backend.common.utils.StringUtils;
-import com.example.backend.modules.system.model.dto.SystemMenuDto;
+import com.example.backend.modules.system.model.dto.MenuDto;
 import com.example.backend.modules.system.model.entity.Menu;
 import com.example.backend.modules.system.mapper.MenuMapper;
 import com.example.backend.modules.system.repository.MenuRepository;
@@ -56,7 +56,7 @@ public class SystemMenuService {
      * @param menuIdList
      * @return
      */
-    public List<SystemMenuDto> getCurrentUserMenuDTOTree(List<Menu> menus, Set<String> menuIdList) {
+    public List<MenuDto> getCurrentUserMenuDTOTree(List<Menu> menus, Set<String> menuIdList) {
         if (menus == null) {
             menus = getSystemMenuList(null);
         }
@@ -85,7 +85,7 @@ public class SystemMenuService {
     }
 
     @SneakyThrows
-    private List<SystemMenuDto> getMenuChildrenList(Long parentId, List<Menu> menus, List<Long> foundParent) {
+    private List<MenuDto> getMenuChildrenList(Long parentId, List<Menu> menus, List<Long> foundParent) {
         if (foundParent.contains(parentId)) {
             log.error("数据库菜单配置错误，递归死循环 parentId: {}, foundParent: {}", parentId, foundParent);
             throw new BusinessException(BusinessErrorCode.FAULT_ERROR, "数据库菜单配置错误，递归死循环！" +
@@ -98,11 +98,11 @@ public class SystemMenuService {
                     // 测试死循环检测 测试用
                     // foundParent.add(systemMenu.getIdWithOrder());
                     // 获取这一项的 children
-                    List<SystemMenuDto> children = getMenuChildrenList(menu.getId(), menus, foundParent);
+                    List<MenuDto> children = getMenuChildrenList(menu.getId(), menus, foundParent);
                     // 转 DTO
-                    SystemMenuDto systemMenuDTO = SystemMenuDto.fromEntity(menu);
-                    systemMenuDTO.setChildren(children);
-                    return systemMenuDTO;
+                    MenuDto menuDTO = MenuDto.fromEntity(menu);
+                    menuDTO.setChildren(children);
+                    return menuDTO;
                 })
                 .collect(Collectors.toList());
     }
@@ -148,8 +148,8 @@ public class SystemMenuService {
 
     }
 
-    public void updateSystemMenu(SystemMenuDto systemMenuDTO) {
-        Menu menu = SystemMenuDto.toEntity(systemMenuDTO);
+    public void updateSystemMenu(MenuDto menuDTO) {
+        Menu menu = MenuDto.toEntity(menuDTO);
 
         LambdaUpdateWrapper<Menu> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Menu::getId, menu.getId());

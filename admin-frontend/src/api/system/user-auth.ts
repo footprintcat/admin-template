@@ -1,6 +1,6 @@
 import { post } from '@/utils/api'
 import type { IdentityDto } from '@/types/backend/dto/IdentityDto'
-import type { SystemUserDto } from '@/types/backend/dto/SystemUserDto'
+import type { UserDto } from '@/types/backend/dto/UserDto'
 
 const API_PREFIX = '/manage/v1/system/user-auth'
 const getUrl = (url: string) => API_PREFIX + url
@@ -14,7 +14,7 @@ export interface ManageSystemUserAuthLoginRequest {
 
 // 接口响应参数
 export interface ManageSystemUserAuthLoginResponse {
-  userInfo: SystemUserDto
+  userInfo: UserDto
   identityList: Array<IdentityDto>
 }
 
@@ -37,5 +37,5 @@ export function systemUserAuthLoginPost(params: ManageSystemUserAuthLoginRequest
  */
 export function systemUserAuthLogoutPost() {
   const url = getUrl('/logout')
-  return post<SystemUserDto>(url)
+  return post<UserDto>(url)
 }

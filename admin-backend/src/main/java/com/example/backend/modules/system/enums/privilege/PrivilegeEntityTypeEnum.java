@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 @AllArgsConstructor
-public enum SystemPrivilegeEntityTypeEnum {
+public enum PrivilegeEntityTypeEnum {
 
     USER("user", "用户"),
     ROLE("role", "角色"),

@@ -1,6 +1,6 @@
 package com.example.backend.controller.manage.v1.system;
 
-import com.example.backend.modules.system.enums.privilege.SystemPrivilegeEntityTypeEnum;
+import com.example.backend.modules.system.enums.privilege.PrivilegeEntityTypeEnum;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.utils.SessionUtils;
@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/manage/v1/system/privilege")
 @Tag(name = "[system] 权限 privilege", description = "/manage/v1/system/privilege")
-public class ManageSystemPrivilegeController {
+public class PrivilegeController {
 
     @Resource
     private UserRoleRelationRepository userRoleRelationRepository;
@@ -50,8 +50,8 @@ public class ManageSystemPrivilegeController {
 
         // TODO 角色权限能继承
 
-        List<Privilege> userPrivilege = privilegeRepository.getListByEntityId(SystemPrivilegeEntityTypeEnum.USER, userId);
-        List<Privilege> rolePrivilege = privilegeRepository.getListByEntityIdList(SystemPrivilegeEntityTypeEnum.USER, roleIdList);
+        List<Privilege> userPrivilege = privilegeRepository.getListByEntityId(PrivilegeEntityTypeEnum.USER, userId);
+        List<Privilege> rolePrivilege = privilegeRepository.getListByEntityIdList(PrivilegeEntityTypeEnum.USER, roleIdList);
 
         return CommonReturn.success();
     }

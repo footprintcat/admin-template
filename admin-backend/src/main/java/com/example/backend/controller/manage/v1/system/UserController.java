@@ -17,7 +17,7 @@ import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.response.ManageListResponse;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.controller.manage.v1.system.dto.request.user.ManageSystemUserListRequest;
-import com.example.backend.modules.system.model.dto.SystemUserDto;
+import com.example.backend.modules.system.model.dto.UserDto;
 import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleServiceV2;
 import com.example.backend.modules.system.service.needrefactor.SystemUserServiceV2;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/manage/v1/system/user")
 @Tag(name = "[system] 用户 user", description = "/manage/v1/system/user")
-public class ManageSystemUserController extends BaseController {
+public class UserController extends BaseController {
 
     @Resource
     private SystemUserServiceV2 systemUserServiceV2;
@@ -65,9 +65,9 @@ public class ManageSystemUserController extends BaseController {
 
         // 分页数据转为 DTO
         List<User> list = page.getRecords();
-        List<SystemUserDto> dtoList = SystemUserDto.fromEntity(list);
+        List<UserDto> dtoList = UserDto.fromEntity(list);
 
-        ManageListResponse<SystemUserDto> response = ManageListResponse.<SystemUserDto>create()
+        ManageListResponse<UserDto> response = ManageListResponse.<UserDto>create()
                 .setTotal(page.getTotal())
                 .setList(dtoList);
 
@@ -78,14 +78,14 @@ public class ManageSystemUserController extends BaseController {
      * 获取用户列表
      *
      * @param pageQuery     分页参数
-     * @param systemUserDTO 筛选条件
+     * @param userDTO 筛选条件
      * @return
      */
     @GetMapping("/list")
     @ResponseBody
-    public CommonReturn list(PageQuery pageQuery, SystemUserDto systemUserDTO) {
+    public CommonReturn list(PageQuery pageQuery, UserDto userDTO) {
         // 查询分页数据
-        Page<User> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, systemUserDTO);
+        Page<User> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, userDTO);
 
         // 查询 roleMap
         HashMap<Long, String> roleMap = systemRoleServiceV2.getRoleMap();
@@ -95,7 +95,7 @@ public class ManageSystemUserController extends BaseController {
 
         // 分页数据转为 DTO
         List<User> userList = systemUserPage.getRecords();
-        List<SystemUserDto> systemUserDtoList = SystemUserDto.fromEntity(userList);
+        List<UserDto> userDtoList = UserDto.fromEntity(userList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -150,7 +150,7 @@ public class ManageSystemUserController extends BaseController {
         // 拼装返回结果
         JSONObject map = new JSONObject();
         map.put("total", systemUserPage.getTotal());
-        map.put("list", systemUserDtoList);
+        map.put("list", userDtoList);
         map.put("columns", columns);
         map.put("fieldMapper", fieldMapper);
         map.put("idFieldName", idFieldName);
@@ -167,17 +167,17 @@ public class ManageSystemUserController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public CommonReturn edit(HttpServletRequest httpServletRequest, @ModelAttribute SystemUserDto systemUserDTO, String password) {
+    public CommonReturn edit(HttpServletRequest httpServletRequest, @ModelAttribute UserDto userDTO, String password) {
         // 查询当前登录用户
         User currentLoginUser = systemUserServiceV2.getCurrentLoginUser(httpServletRequest);
         if (currentLoginUser == null) {
             return CommonReturn.error("当前用户未登录");
-        } else if (Objects.equals(currentLoginUser.getId(), systemUserDTO.getId())) {
+        } else if (Objects.equals(currentLoginUser.getId(), userDTO.getId())) {
             return CommonReturn.error("不可以修改当前登录账号，如需修改个人账号信息，请前往个人中心进行修改");
         }
 
         // 传入参数 - 要修改的用户
-        User user = SystemUserDto.toEntity(systemUserDTO);
+        User user = UserDto.toEntity(userDTO);
 
         if (user.getId() == null || user.getId() < 1) {
             // 通过 username 查询系统中是否存在该用户
@@ -245,9 +245,9 @@ public class ManageSystemUserController extends BaseController {
      */
     @GetMapping("/export")
     @ResponseBody
-    public CommonReturn exportUserList(SystemUserDto systemUserDTO) {
-        List<User> userList = systemUserServiceV2.getUserList(systemUserDTO);
-        List<SystemUserDto> systemUserDtoList = SystemUserDto.fromEntity(userList);
+    public CommonReturn exportUserList(UserDto userDTO) {
+        List<User> userList = systemUserServiceV2.getUserList(userDTO);
+        List<UserDto> userDtoList = UserDto.fromEntity(userList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();
@@ -255,7 +255,7 @@ public class ManageSystemUserController extends BaseController {
         String dateTime = format.format(now);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("list", systemUserDtoList);
+        map.put("list", userDtoList);
         map.put("sheetName", "用户表-" + System.currentTimeMillis());
         map.put("fileName", "用户表_导出时间_" + dateTime);
 

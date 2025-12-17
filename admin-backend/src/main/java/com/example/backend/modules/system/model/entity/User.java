@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
-import com.example.backend.modules.system.enums.user.SystemUserStatusEnum;
-import com.example.backend.modules.system.enums.user.SystemUserTypeEnum;
+import com.example.backend.modules.system.enums.user.UserStatusEnum;
+import com.example.backend.modules.system.enums.user.UserTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,11 +46,11 @@ public class User implements Serializable {
 
     @Schema(description = "用户类型：super_admin-超级管理员；member-普通用户")
     @TableField("type")
-    private SystemUserTypeEnum type;
+    private UserTypeEnum type;
 
     @Schema(description = "用户状态：normal-正常（可用）, locked-锁定（禁用）, disabled-停用, expired-过期")
     @TableField("status")
-    private SystemUserStatusEnum status;
+    private UserStatusEnum status;
 
     @Schema(description = "租户id")
     @TableField("tenant_id")

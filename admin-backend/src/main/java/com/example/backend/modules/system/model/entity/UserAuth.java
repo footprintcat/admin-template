@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
-import com.example.backend.modules.system.enums.userauth.SystemUserAuthTypeEnum;
+import com.example.backend.modules.system.enums.userauth.UserAuthTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +41,7 @@ public class UserAuth implements Serializable {
 
     @Schema(description = "授权类型：password-账号密码登录, oauth2-OAuth 2.0 三方登录")
     @TableField("auth_type")
-    private SystemUserAuthTypeEnum authType;
+    private UserAuthTypeEnum authType;
 
     @Schema(description = "密码哈希")
     @TableField("password_hash")

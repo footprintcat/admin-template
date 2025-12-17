@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.example.backend.modules.system.enums.log.SystemLogSourceEnum;
-import com.example.backend.modules.system.enums.log.SystemLogTypeEnum;
+import com.example.backend.modules.system.enums.log.LogSourceEnum;
+import com.example.backend.modules.system.enums.log.LogTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,11 +36,11 @@ public class Log implements Serializable {
 
     @Schema(description = "日志来源（backend-后端日志；manage-管理端前端上报日志；app-移动端上报日志）")
     @TableField("source")
-    private SystemLogSourceEnum source;
+    private LogSourceEnum source;
 
     @Schema(description = "日志类型（见后端 SystemLogTypeEnum 枚举类）")
     @TableField("type")
-    private SystemLogTypeEnum type;
+    private LogTypeEnum type;
 
     @Schema(description = "日志记录对象")
     @TableField("object_name")

@@ -1,4 +1,4 @@
-export interface SystemUserDto {
+export interface UserDto {
   id: string
   username: string
   nickname: string

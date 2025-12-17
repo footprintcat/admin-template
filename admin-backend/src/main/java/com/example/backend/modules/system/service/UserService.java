@@ -1,11 +1,11 @@
 package com.example.backend.modules.system.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.backend.modules.system.enums.user.SystemUserStatusEnum;
+import com.example.backend.modules.system.enums.user.UserStatusEnum;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
-import com.example.backend.modules.system.model.dto.SystemUserDto;
+import com.example.backend.modules.system.model.dto.UserDto;
 import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.model.entity.UserAuth;
 import com.example.backend.modules.system.mapper.UserMapper;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class SystemUserService extends ServiceImpl<UserMapper, User> {
+public class UserService extends ServiceImpl<UserMapper, User> {
 
     @Resource
     private UserRepository userRepository;
@@ -35,7 +35,7 @@ public class SystemUserService extends ServiceImpl<UserMapper, User> {
      * @since 2025-12-13
      */
     @Nullable
-    public SystemUserDto userLogin(@NotNull HttpSession session, @NotNull String username, @NotNull String password) throws BusinessException {
+    public UserDto userLogin(@NotNull HttpSession session, @NotNull String username, @NotNull String password) throws BusinessException {
         // 通过用户名查出用户信息
         // 此时尚未判断用户密码是否正确，在判断完成前，禁止访问该对象其他信息
         @Nullable
@@ -60,16 +60,16 @@ public class SystemUserService extends ServiceImpl<UserMapper, User> {
 
         // 判断用户是否可以登录
         @Nullable
-        SystemUserStatusEnum status = user.getStatus();
+        UserStatusEnum status = user.getStatus();
         if (status == null) {
             throw new BusinessException(BusinessErrorCode.USER_NOT_ALLOWED_LOGIN, "当前用户状态异常，请联系管理员处理");
-        } else if (!SystemUserStatusEnum.NORMAL.equals(status)) {
+        } else if (!UserStatusEnum.NORMAL.equals(status)) {
             throw new BusinessException(BusinessErrorCode.USER_NOT_ALLOWED_LOGIN, status.getFailedMessage());
         }
 
         // 登录成功
         SessionUtils.setSession(session, user);
-        return SystemUserDto.fromEntity(user);
+        return UserDto.fromEntity(user);
     }
 
     /**
