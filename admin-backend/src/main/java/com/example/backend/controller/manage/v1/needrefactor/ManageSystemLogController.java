@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/manage/v1/system/log")
 @Tag(name = "[system] 日志 log", description = "/manage/v1/system/log")
-public class ManageV1SystemLogController extends BaseController {
+public class ManageSystemLogController extends BaseController {
 
     @Resource
     private SystemLogService systemLogService;

@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/manage/v1/system/user")
 @Tag(name = "[system] 用户 user", description = "/manage/v1/system/user")
-public class ManageV1SystemUserController extends BaseController {
+public class ManageSystemUserController extends BaseController {
 
     @Resource
     private SystemUserServiceV2 systemUserServiceV2;

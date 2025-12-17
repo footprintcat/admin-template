@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/manage/v1/system/user-auth")
 @Tag(name = "[system] 用户认证 user-auth", description = "/manage/v1/system/user-auth")
-public class ManageV1SystemUserAuthController extends BaseController {
+public class ManageSystemUserAuthController extends BaseController {
 
     @Resource
     SystemUserService systemUserService;

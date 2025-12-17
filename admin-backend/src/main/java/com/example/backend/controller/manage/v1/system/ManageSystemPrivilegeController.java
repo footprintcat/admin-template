@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/manage/v1/system/privilege")
 @Tag(name = "[system] 权限 privilege", description = "/manage/v1/system/privilege")
-public class ManageV1SystemPrivilegeController {
+public class ManageSystemPrivilegeController {
 
     @Resource
     private UserRoleRelationRepository userRoleRelationRepository;

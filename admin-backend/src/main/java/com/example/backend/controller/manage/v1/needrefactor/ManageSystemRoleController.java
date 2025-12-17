@@ -36,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/manage/v1/system/role")
 @Tag(name = "[system] 角色 role", description = "/manage/v1/system/role")
-public class ManageV1SystemRoleController extends BaseController {
+public class ManageSystemRoleController extends BaseController {
 
     @Resource
     private SystemRoleServiceV2 systemRoleServiceV2;
