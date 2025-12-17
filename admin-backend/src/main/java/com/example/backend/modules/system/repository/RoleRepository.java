@@ -1,8 +1,8 @@
 package com.example.backend.modules.system.repository;
 
-import com.example.backend.modules.system.model.entity.Role;
-import com.example.backend.modules.system.mapper.RoleMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.backend.modules.system.mapper.RoleMapper;
+import com.example.backend.modules.system.model.entity.Role;
 import org.springframework.stereotype.Service;
 
 /**

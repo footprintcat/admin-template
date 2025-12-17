@@ -2,8 +2,8 @@ package com.example.backend.modules.system.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.mapper.UserMapper;
+import com.example.backend.modules.system.model.entity.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,12 @@
 package com.example.backend.common.ManageList.pojo;
 
-import com.example.backend.common.ManageList.pojo.columnconfig.base.BaseColumnConfig;
 import com.example.backend.common.ManageList.enums.ColumnType;
 import com.example.backend.common.ManageList.enums.DateDisplayType;
 import com.example.backend.common.ManageList.enums.DateValueType;
 import com.example.backend.common.ManageList.pojo.columnconfig.DateTimeColumnConfig;
 import com.example.backend.common.ManageList.pojo.columnconfig.ImageColumnConfig;
 import com.example.backend.common.ManageList.pojo.columnconfig.TextColumnConfig;
+import com.example.backend.common.ManageList.pojo.columnconfig.base.BaseColumnConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;

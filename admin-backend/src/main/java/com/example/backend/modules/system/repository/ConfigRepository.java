@@ -1,8 +1,8 @@
 package com.example.backend.modules.system.repository;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.backend.modules.system.model.entity.Config;
 import com.example.backend.modules.system.mapper.ConfigMapper;
+import com.example.backend.modules.system.model.entity.Config;
 import org.springframework.stereotype.Service;
 
 /**

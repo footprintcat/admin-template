@@ -1,6 +1,5 @@
 package com.example.backend.common.ManageList.pojo.columnconfig;
 
-import com.alibaba.fastjson2.annotation.JSONField;
 import com.example.backend.common.ManageList.pojo.columnconfig.base.BaseColumnConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;

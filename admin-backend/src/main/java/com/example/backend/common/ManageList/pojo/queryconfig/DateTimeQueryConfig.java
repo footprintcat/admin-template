@@ -1,7 +1,7 @@
 package com.example.backend.common.ManageList.pojo.queryconfig;
 
-import com.example.backend.common.ManageList.pojo.queryconfig.base.BaseQueryConfig;
 import com.example.backend.common.ManageList.enums.DateQueryType;
+import com.example.backend.common.ManageList.pojo.queryconfig.base.BaseQueryConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

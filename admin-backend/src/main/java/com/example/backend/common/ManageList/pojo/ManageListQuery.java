@@ -1,14 +1,14 @@
 package com.example.backend.common.ManageList.pojo;
 
-import com.example.backend.common.ManageList.pojo.queryconfig.DropdownQueryConfig;
-import com.example.backend.common.ManageList.pojo.queryconfig.base.BaseQueryConfig;
 import com.example.backend.common.ManageList.enums.QueryType;
 import com.example.backend.common.ManageList.pojo.queryconfig.BooleanQueryConfig;
 import com.example.backend.common.ManageList.pojo.queryconfig.DateTimeQueryConfig;
+import com.example.backend.common.ManageList.pojo.queryconfig.DropdownQueryConfig;
 import com.example.backend.common.ManageList.pojo.queryconfig.MapLocation2DConfig;
 import com.example.backend.common.ManageList.pojo.queryconfig.MapLocation3DConfig;
 import com.example.backend.common.ManageList.pojo.queryconfig.NumberRangeQueryConfig;
 import com.example.backend.common.ManageList.pojo.queryconfig.StringQueryConfig;
+import com.example.backend.common.ManageList.pojo.queryconfig.base.BaseQueryConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;

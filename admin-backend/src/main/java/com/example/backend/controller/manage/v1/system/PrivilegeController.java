@@ -1,9 +1,9 @@
 package com.example.backend.controller.manage.v1.system;
 
-import com.example.backend.modules.system.enums.privilege.PrivilegeEntityTypeEnum;
-import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.baseobject.response.CommonReturn;
+import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
+import com.example.backend.modules.system.enums.privilege.PrivilegeEntityTypeEnum;
 import com.example.backend.modules.system.model.entity.Privilege;
 import com.example.backend.modules.system.repository.PrivilegeRepository;
 import com.example.backend.modules.system.repository.UserRoleRelationRepository;

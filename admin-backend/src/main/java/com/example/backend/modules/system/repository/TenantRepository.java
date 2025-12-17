@@ -1,8 +1,8 @@
 package com.example.backend.modules.system.repository;
 
-import com.example.backend.modules.system.model.entity.Tenant;
-import com.example.backend.modules.system.mapper.TenantMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.backend.modules.system.mapper.TenantMapper;
+import com.example.backend.modules.system.model.entity.Tenant;
 import org.springframework.stereotype.Service;
 
 /**

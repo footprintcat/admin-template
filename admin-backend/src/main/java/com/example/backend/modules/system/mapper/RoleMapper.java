@@ -2,9 +2,9 @@ package com.example.backend.modules.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.backend.modules.system.mapper.dto.DbResultAncestorRole;
 import com.example.backend.modules.system.model.dto.RoleDto;
 import com.example.backend.modules.system.model.entity.Role;
-import com.example.backend.modules.system.mapper.dto.DbResultAncestorRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
