@@ -109,6 +109,29 @@ COMMENT = '系统部门表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for system_identity
+-- ----------------------------
+DROP TABLE IF EXISTS `system_identity`;
+CREATE TABLE `system_identity` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `department_id` bigint NOT NULL COMMENT '部门id',
+  `user_id` bigint NOT NULL COMMENT '用户id',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `department_id`(`user_id` ASC, `department_id` ASC, `delete_time` ASC) USING BTREE,
+  INDEX `user_id`(`user_id` ASC) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统身份表\r\n（一个 user 在一个 department 下只能有一个用户身份）'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for system_job_position
 -- ----------------------------
 DROP TABLE IF EXISTS `system_job_position`;
@@ -186,8 +209,8 @@ CREATE TABLE `system_menu` (
   `id` bigint NOT NULL COMMENT '主键id',
   `parent_id` bigint NULL DEFAULT NULL COMMENT '父菜单id',
   `level` tinyint NOT NULL COMMENT '菜单级别',
-  `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单所属模块',
-  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
+  `menu_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单类型（directory-分组；menu-菜单；action-操作(页面中功能或按钮)）',
+  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 system:foo-bar:list）',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
   `menu_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单URL路径（无页面的分组菜单项为NULL）',
   `sort_order` int NOT NULL COMMENT '菜单项顺序',
@@ -200,7 +223,7 @@ CREATE TABLE `system_menu` (
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `menu_code`(`module` ASC, `menu_code` ASC) USING BTREE
+  UNIQUE INDEX `menu_code`(`menu_code` ASC) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 COMMENT = '系统菜单表'

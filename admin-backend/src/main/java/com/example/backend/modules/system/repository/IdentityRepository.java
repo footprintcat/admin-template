@@ -1,9 +1,13 @@
 package com.example.backend.modules.system.repository;
 
-import com.example.backend.modules.system.model.entity.Identity;
-import com.example.backend.modules.system.mapper.IdentityMapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.backend.modules.system.mapper.IdentityMapper;
+import com.example.backend.modules.system.model.entity.Identity;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,5 +19,17 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class IdentityRepository extends ServiceImpl<IdentityMapper, Identity> {
+
+    /**
+     * 通过 userId 获取身份列表
+     *
+     * @param userId 用户id
+     * @since 2025-12-17
+     */
+    public List<Identity> getIdentityListByUserId(@NotNull Long userId) {
+        LambdaQueryWrapper<Identity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Identity::getUserId, userId);
+        return this.list(queryWrapper);
+    }
 
 }

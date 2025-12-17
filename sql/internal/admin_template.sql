@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Date: 17/12/2025 20:58:38
+ Date: 17/12/2025 21:12:10
 */
 
 SET NAMES utf8mb4;
@@ -59,8 +59,10 @@ CREATE TABLE `system_identity`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统身份表' ROW_FORMAT = DYNAMIC;
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `department_id`(`user_id` ASC, `department_id` ASC, `delete_time` ASC) USING BTREE,
+  INDEX `user_id`(`user_id` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统身份表\r\n（一个 user 在一个 department 下只能有一个用户身份）' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for system_job_position
