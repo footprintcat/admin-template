@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @return ancestorRoleList
      * @since 2025-12-14
      */
-    List<DbResultAncestorRole> getAllAncestorByRoleId(@NotNull @Param("roleId") String roleId);
+    List<DbResultAncestorRole> getAllAncestorByRoleId(@NotNull @Param("roleId") Long roleId);
 
     /**
      * 递归获取若干角色的所有上级角色列表
@@ -38,7 +39,10 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @return ancestorRoleList
      * @since 2025-12-14
      */
-    List<DbResultAncestorRole> getAllAncestorByRoleIdList(@NotNull @Param("roleId") String roleId);
+    List<DbResultAncestorRole> getAllAncestorByRoleIdList(
+            @NotNull @Param("roleIdList") Collection<Long> roleIdList,
+            @NotNull @Param("distinctResult") Boolean distinctResult
+    );
 
     Page<Role> getSystemRolePage(Page<?> page, @Param("query") RoleDto roleDTO);
 
