@@ -1,9 +1,9 @@
 package com.example.backend.controller.manage.v1.system;
 
 import com.example.backend.common.annotations.HandleControllerGlobalException;
+import com.example.backend.common.annotations.PublicAccess;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessException;
-import com.example.backend.common.annotations.PublicAccess;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserChangePasswordRequest;
@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,13 +43,15 @@ public class UserAuthController {
      * 后台管理登录接口
      *
      * @param request            请求参数
+     *                           （需要添加 @Valid 注解，否则会报错：java.lang.IllegalArgumentException:
+     *                           Argument for @NotNull parameter 'xxx' of xxx must not be null）
      * @param httpServletRequest 请求对象
      * @return 登录成功返回用户信息，登录失败返回 null
      * @since 2025-12-12
      */
     @PublicAccess
     @PostMapping("/login")
-    public CommonReturn login(@RequestBody ManageSystemUserAuthLoginRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
+    public CommonReturn login(@RequestBody @Valid ManageSystemUserAuthLoginRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
 
         // 获取用户输入
