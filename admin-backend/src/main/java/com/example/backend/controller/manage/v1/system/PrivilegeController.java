@@ -7,7 +7,6 @@ import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.modules.system.enums.privilege.PrivilegeEntityTypeEnum;
 import com.example.backend.modules.system.model.entity.Privilege;
 import com.example.backend.modules.system.repository.PrivilegeRepository;
-import com.example.backend.modules.system.repository.UserRoleRelationRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +27,6 @@ import java.util.List;
 @Tag(name = "[system] 权限 privilege", description = "/manage/v1/system/privilege")
 public class PrivilegeController {
 
-    @Resource
-    private UserRoleRelationRepository userRoleRelationRepository;
     @Resource
     private PrivilegeRepository privilegeRepository;
 
