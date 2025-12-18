@@ -47,7 +47,6 @@ public class MybatisPlusEntityGenerator {
         // includeTables.add("system_tenant");
         // includeTables.add("system_user");
         // includeTables.add("system_user_auth");
-        // includeTables.add("system_user_department_relation");
         // includeTables.add("system_user_role_relation");
 
         if (includeTables.isEmpty()) {

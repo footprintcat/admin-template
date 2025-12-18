@@ -254,24 +254,6 @@ CREATE TABLE `system_user_auth`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户认证表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for system_user_department_relation
--- ----------------------------
-DROP TABLE IF EXISTS `system_user_department_relation`;
-CREATE TABLE `system_user_department_relation`  (
-  `id` bigint NOT NULL COMMENT '雪花id',
-  `user_id` bigint NOT NULL COMMENT '用户id',
-  `department_id` bigint NOT NULL COMMENT '角色id',
-  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
-  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
-  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户-部门关联表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
 -- Table structure for system_user_role_relation
 -- ----------------------------
 DROP TABLE IF EXISTS `system_user_role_relation`;

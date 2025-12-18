@@ -52,7 +52,6 @@ public class MybatisPlusEntityModuleGenerator {
                 // "system_tenant",
                 // "system_user",
                 // "system_user_auth",
-                // "system_user_department_relation",
                 // "system_user_role_relation",
                 null
         )));

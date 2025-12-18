@@ -301,27 +301,6 @@ COMMENT = '系统用户认证表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for system_user_department_relation
--- ----------------------------
-DROP TABLE IF EXISTS `system_user_department_relation`;
-CREATE TABLE `system_user_department_relation` (
-  `id` bigint NOT NULL COMMENT '雪花id',
-  `user_id` bigint NOT NULL COMMENT '用户id',
-  `department_id` bigint NOT NULL COMMENT '角色id',
-  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
-  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
-  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
-)
-ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '系统用户-部门关联表'
-ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- Table structure for system_user_role_relation
 -- ----------------------------
 DROP TABLE IF EXISTS `system_user_role_relation`;
@@ -555,48 +534,6 @@ INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `men
 (5018, 'user', 1, 'system', 'user:manage', 'export', 'granted', NULL, 1, 1),
 (5019, 'user', 12, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
 (5020, 'user', 12, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1);
-
--- ########################################################
-
--- system_user_department_relation 表测试数据（20条）
-INSERT INTO `system_user_department_relation` (`id`, `user_id`, `department_id`, `tenant_id`, `create_by`, `update_by`) VALUES
--- 总公司
-(6001, 1, 3001, NULL, 1, 1),
-(6002, 11, 3001, NULL, 1, 1),
-
--- 技术部
-(6003, 12, 3002, NULL, 1, 1),
-(6004, 21, 3002, NULL, 1, 1),
-(6005, 22, 3002, NULL, 1, 1),
-(6006, 23, 3002, NULL, 1, 1),
-(6007, 33, 3002, NULL, 1, 1),
-
--- 前端开发组
-(6008, 12, 3006, NULL, 1, 1),
-(6009, 21, 3006, NULL, 1, 1),
-
--- 后端开发组
-(6010, 22, 3007, NULL, 1, 1),
-
--- 测试组
-(6011, 23, 3008, NULL, 1, 1),
-
--- 市场部
-(6012, 13, 3003, NULL, 1, 1),
-(6013, 26, 3003, NULL, 1, 1),
-
--- 品牌推广组
-(6014, 13, 3009, NULL, 1, 1),
-(6015, 26, 3009, NULL, 1, 1),
-
--- 销售部
-(6016, 14, 3004, NULL, 1, 1),
-(6017, 27, 3004, NULL, 1, 1),
-(6018, 28, 3004, NULL, 1, 1),
-
--- 人力资源部
-(6019, 15, 3005, NULL, 1, 1),
-(6020, 30, 3005, NULL, 1, 1);
 
 -- ########################################################
 
