@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>admin-backend</artifactId>
+    <artifactId>admin-application</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>backend</name>
     <description>backend</description>
@@ -153,23 +153,6 @@
 
     </dependencies>
 
-    <!-- mybatis-plus SNAPSHOT 仓库 -->
-    <!--
-    <repositories>
-        <repository>
-            <id>snapshots</id>
-            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-    -->
-
     <build>
         <plugins>
             <plugin>
@@ -187,10 +170,25 @@
         </plugins>
     </build>
 
-    <!-- 若未配置本地 maven 镜像源，可打开下方注释使用阿里云镜像 -->
-    <!-- 阿里云镜像地址 -->
-    <!--
     <repositories>
+        <!-- mybatis-plus SNAPSHOT 仓库 -->
+        <!--
+        <repository>
+            <id>snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+        -->
+
+        <!-- 若未配置本地 maven 镜像源，可打开下方注释使用阿里云镜像 -->
+        <!-- 阿里云镜像地址 -->
+        <!--
         <repository>
             <id>aliyun</id>
             <name>Aliyun Maven Repository</name>
@@ -202,7 +200,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        -->
     </repositories>
-    -->
 
 </project>
