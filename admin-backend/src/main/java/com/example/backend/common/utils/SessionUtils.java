@@ -53,16 +53,24 @@ public class SessionUtils {
         return getLong(session, "user_id");
     }
 
-    public static @Nullable Long getIdentityId(HttpSession session) {
-        return getLong(session, "identity_id");
-    }
-
     public static @NotNull Long getUserIdOrThrow(HttpSession session) throws BusinessException {
         @Nullable Long userId = getLong(session, "user_id");
         if (userId == null) {
             throw new BusinessException(BusinessErrorCode.USER_NOT_LOGIN);
         }
         return userId;
+    }
+
+    public static @Nullable Long getIdentityId(HttpSession session) {
+        return getLong(session, "identity_id");
+    }
+
+    public static @NotNull Long getIdentityIdOrThrow(HttpSession session) throws BusinessException {
+        @Nullable Long identityId = getLong(session, "identity_id");
+        if (identityId == null) {
+            throw new BusinessException(BusinessErrorCode.USER_NOT_SELECT_IDENTITY);
+        }
+        return identityId;
     }
 
     private static @Nullable Integer getInteger(HttpSession session, String attrName) {

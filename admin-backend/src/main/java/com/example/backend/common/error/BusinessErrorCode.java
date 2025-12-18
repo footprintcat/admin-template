@@ -18,6 +18,7 @@ public enum BusinessErrorCode implements ICommonError {
     USER_TOKEN_EXPIRED(20004, "用户令牌过期"),
     USER_ALREADY_EXIST(20005, "用户已存在"),
     USER_NOT_ALLOWED_LOGIN(20006, "当前用户状态不允许登录"),
+    USER_NOT_SELECT_IDENTITY(20007, "用户还未选择登入身份"),
 
     // 30000 权限相关错误定义
     OPERATION_NOT_ALLOWED(30001, "用户没有此操作的权限"),
