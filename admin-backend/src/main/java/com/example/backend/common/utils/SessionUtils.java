@@ -13,12 +13,9 @@ public class SessionUtils {
      * 登录时设置 session
      *
      * @param session
-     * @param username
      * @param userId
-     * @param roleId
      */
-    public static void setSession(@NotNull HttpSession session, @NotNull String username, @NotNull Long userId) {
-        session.setAttribute("username", username);
+    public static void setSessionUserId(@NotNull HttpSession session, @NotNull Long userId) {
         session.setAttribute("user_id", userId);
     }
 
@@ -29,9 +26,19 @@ public class SessionUtils {
      * @param session
      * @param user
      */
-    public static void setSession(@NotNull HttpSession session, @NotNull User user) {
-        session.setAttribute("username", user.getUsername());
+    public static void setSessionUserId(@NotNull HttpSession session, @NotNull User user) {
         session.setAttribute("user_id", user.getId());
+    }
+
+    /**
+     * 切换身份
+     *
+     * @param session
+     * @param identityId 身份id
+     * @since 2025-12-18
+     */
+    public static void setSessionIdentityId(@NotNull HttpSession session, @NotNull Long identityId) {
+        session.setAttribute("identity_id", identityId);
     }
 
     public static void logout(HttpSession session) {
@@ -39,15 +46,15 @@ public class SessionUtils {
     }
 
     public static boolean isLogin(HttpSession session) {
-        return session.getAttribute("username") != null;
-    }
-
-    public static @Nullable String getUsername(HttpSession session) {
-        return session.getAttribute("username").toString();
+        return session.getAttribute("user_id") != null;
     }
 
     public static @Nullable Long getUserId(HttpSession session) {
         return getLong(session, "user_id");
+    }
+
+    public static @Nullable Long getIdentityId(HttpSession session) {
+        return getLong(session, "identity_id");
     }
 
     public static @NotNull Long getUserIdOrThrow(HttpSession session) throws BusinessException {

@@ -68,7 +68,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         }
 
         // 登录成功
-        SessionUtils.setSession(session, user);
+        SessionUtils.setSessionUserId(session, user);
         return UserDto.fromEntity(user);
     }
 

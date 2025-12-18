@@ -33,4 +33,19 @@ public class IdentityRepository extends ServiceImpl<IdentityMapper, Identity> {
         return this.list(queryWrapper);
     }
 
+    /**
+     * 通过 userId, identityId 获取身份列表
+     *
+     * @param userId 用户id
+     * @param identityId 身份id
+     * @return identity 身份列表
+     * @since 2025-12-18
+     */
+    public Identity getUserIdentityId(@NotNull Long userId, @NotNull Long identityId) {
+        LambdaQueryWrapper<Identity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Identity::getId, identityId);
+        queryWrapper.eq(Identity::getUserId, userId);
+        return this.getOne(queryWrapper);
+    }
+
 }
