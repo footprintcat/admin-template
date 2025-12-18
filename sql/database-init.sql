@@ -110,6 +110,26 @@ COMMENT = '系统身份表\r\n（一个 user 在一个 department 下只能有�
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for system_identity_role_relation
+-- ----------------------------
+CREATE TABLE `system_identity_role_relation` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `identity_id` bigint NOT NULL COMMENT '身份id',
+  `role_id` bigint NOT NULL COMMENT '角色id',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统身份-角色关联表'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for system_job_position
 -- ----------------------------
 CREATE TABLE `system_job_position` (
@@ -184,7 +204,8 @@ CREATE TABLE `system_menu` (
   `parent_id` bigint NULL DEFAULT NULL COMMENT '父菜单id',
   `level` tinyint NOT NULL COMMENT '菜单级别',
   `menu_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单类型（directory-分组；menu-菜单；action-操作(页面中功能或按钮)）',
-  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 system:foo-bar:list）',
+  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 system:foo-bar）',
+  `action_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '操作code（例如：export）',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
   `menu_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单URL路径（无页面的分组菜单项为NULL）',
   `sort_order` int NOT NULL COMMENT '菜单项顺序',
@@ -197,7 +218,8 @@ CREATE TABLE `system_menu` (
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `menu_code`(`menu_code` ASC) USING BTREE
+  UNIQUE INDEX `idx_menu_code`(`menu_code` ASC, `action_code` ASC) USING BTREE,
+  UNIQUE INDEX `idx_sort_order`(`parent_id` ASC, `sort_order` ASC) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 COMMENT = '系统菜单表'
@@ -211,9 +233,9 @@ CREATE TABLE `system_privilege` (
   `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（user-用户；role-角色）',
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
-  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
-  `privilege_code` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）',
+  `menu_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单id',
   `grant_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限授予类型（granted-有权；denied-无权；inheritable-有权继承）',
+  `privilege_scope` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0' COMMENT '权限范围（CURRENT_MENU-当前菜单；CURRENT_AND_SUB_MENUS-当前菜单及其下属菜单）',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
@@ -272,36 +294,22 @@ COMMENT = '系统用户认证表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for system_user_role_relation
--- ----------------------------
-CREATE TABLE `system_user_role_relation` (
-  `id` bigint NOT NULL COMMENT '雪花id',
-  `user_id` bigint NOT NULL COMMENT '用户id',
-  `role_id` bigint NOT NULL COMMENT '角色id',
-  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
-  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
-  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
-)
-ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '系统用户-角色关联表'
-ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- 数据库初始数据
 -- ----------------------------
 
 -- system_menu
 INSERT INTO
-    `system_menu` (`id`, `parent_id`, `level`, `module`, `menu_code`, `menu_name`, `menu_path`, `sort_order`, `can_edit`)
+    `system_menu` (`id`, `parent_id`, `level`, `menu_type`, `menu_code`, `action_code`, `menu_name`, `menu_path`, `sort_order`, `can_edit`)
 VALUES
-    (10000, NULL, 1, 'global', 'dashboard', '仪表盘', '/dashboard', 1, 0),
-    (10001, NULL, 1, 'system', 'index', '系统管理', NULL, 1, 0),
-    (10002, 10001, 2, 'system', 'user:manage', '用户管理', '/system/user/manage', 1, 0);
+    (10000, NULL, 1, 'menu', 'global:dashboard', NULL, '仪表盘', '/dashboard', 1, 0),
+    (10010, NULL, 1, 'directory', 'system', NULL, '系统管理', NULL, 1, 0),
+    (10011, 10001, 2, 'menu', 'system:user', NULL, '用户管理', '/system/user/manage', 1, 0),
+    (10012, 10011, 3, 'action', 'system:user', 'view', '查询用户列表', NULL, 1, 0),
+    (10013, 10011, 3, 'action', 'system:user', 'add', '新增用户', NULL, 2, 0),
+    (10014, 10011, 3, 'action', 'system:user', 'edit', '修改用户', NULL, 3, 0),
+    (10015, 10011, 3, 'action', 'system:user', 'delete', '删除用户', NULL, 4, 0),
+    (10016, 10011, 3, 'action', 'system:user', 'import', '导入用户', NULL, 5, 0),
+    (10017, 10011, 3, 'action', 'system:user', 'export', '导出用户', NULL, 6, 0);
 
 -- system_user
 INSERT INTO

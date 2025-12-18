@@ -43,6 +43,7 @@ public class MybatisPlusEntityModuleGenerator {
                 // "system_config",
                 // "system_department",
                 // "system_identity",
+                // "system_identity_role_relation",
                 // "system_job_position",
                 // "system_log",
                 // // "system_log_detail",
@@ -52,7 +53,6 @@ public class MybatisPlusEntityModuleGenerator {
                 // "system_tenant",
                 // "system_user",
                 // "system_user_auth",
-                // "system_user_role_relation",
                 null
         )));
 

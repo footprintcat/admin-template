@@ -46,9 +46,13 @@ public class Menu implements Serializable {
     @TableField("menu_type")
     private String menuType;
 
-    @Schema(description = "菜单code（例如 system:foo-bar:list）")
+    @Schema(description = "菜单code（例如 system:foo-bar）")
     @TableField("menu_code")
     private String menuCode;
+
+    @Schema(description = "操作code（例如：export）")
+    @TableField("action_code")
+    private String actionCode;
 
     @Schema(description = "菜单名称")
     @TableField("menu_name")

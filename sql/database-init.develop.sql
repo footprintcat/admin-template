@@ -132,6 +132,27 @@ COMMENT = '系统身份表\r\n（一个 user 在一个 department 下只能有�
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for system_identity_role_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `system_identity_role_relation`;
+CREATE TABLE `system_identity_role_relation` (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `identity_id` bigint NOT NULL COMMENT '身份id',
+  `role_id` bigint NOT NULL COMMENT '角色id',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统身份-角色关联表'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for system_job_position
 -- ----------------------------
 DROP TABLE IF EXISTS `system_job_position`;
@@ -210,7 +231,8 @@ CREATE TABLE `system_menu` (
   `parent_id` bigint NULL DEFAULT NULL COMMENT '父菜单id',
   `level` tinyint NOT NULL COMMENT '菜单级别',
   `menu_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单类型（directory-分组；menu-菜单；action-操作(页面中功能或按钮)）',
-  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 system:foo-bar:list）',
+  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 system:foo-bar）',
+  `action_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '操作code（例如：export）',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
   `menu_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单URL路径（无页面的分组菜单项为NULL）',
   `sort_order` int NOT NULL COMMENT '菜单项顺序',
@@ -223,7 +245,8 @@ CREATE TABLE `system_menu` (
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `menu_code`(`menu_code` ASC) USING BTREE
+  UNIQUE INDEX `idx_menu_code`(`menu_code` ASC, `action_code` ASC) USING BTREE,
+  UNIQUE INDEX `idx_sort_order`(`parent_id` ASC, `sort_order` ASC) USING BTREE
 )
 ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 COMMENT = '系统菜单表'
@@ -238,9 +261,9 @@ CREATE TABLE `system_privilege` (
   `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（user-用户；role-角色）',
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
-  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
-  `privilege_code` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）',
+  `menu_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单id',
   `grant_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限授予类型（granted-有权；denied-无权；inheritable-有权继承）',
+  `privilege_scope` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0' COMMENT '权限范围（CURRENT_MENU-当前菜单；CURRENT_AND_SUB_MENUS-当前菜单及其下属菜单）',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
@@ -301,37 +324,22 @@ COMMENT = '系统用户认证表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for system_user_role_relation
--- ----------------------------
-DROP TABLE IF EXISTS `system_user_role_relation`;
-CREATE TABLE `system_user_role_relation` (
-  `id` bigint NOT NULL COMMENT '雪花id',
-  `user_id` bigint NOT NULL COMMENT '用户id',
-  `role_id` bigint NOT NULL COMMENT '角色id',
-  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
-  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
-  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
-)
-ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-COMMENT = '系统用户-角色关联表'
-ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- 数据库初始数据
 -- ----------------------------
 
 -- system_menu
 INSERT INTO
-    `system_menu` (`id`, `parent_id`, `level`, `module`, `menu_code`, `menu_name`, `menu_path`, `sort_order`, `can_edit`)
+    `system_menu` (`id`, `parent_id`, `level`, `menu_type`, `menu_code`, `action_code`, `menu_name`, `menu_path`, `sort_order`, `can_edit`)
 VALUES
-    (10000, NULL, 1, 'global', 'dashboard', '仪表盘', '/dashboard', 1, 0),
-    (10001, NULL, 1, 'system', 'index', '系统管理', NULL, 1, 0),
-    (10002, 10001, 2, 'system', 'user:manage', '用户管理', '/system/user/manage', 1, 0);
+    (10000, NULL, 1, 'menu', 'global:dashboard', NULL, '仪表盘', '/dashboard', 1, 0),
+    (10010, NULL, 1, 'directory', 'system', NULL, '系统管理', NULL, 1, 0),
+    (10011, 10001, 2, 'menu', 'system:user', NULL, '用户管理', '/system/user/manage', 1, 0),
+    (10012, 10011, 3, 'action', 'system:user', 'view', '查询用户列表', NULL, 1, 0),
+    (10013, 10011, 3, 'action', 'system:user', 'add', '新增用户', NULL, 2, 0),
+    (10014, 10011, 3, 'action', 'system:user', 'edit', '修改用户', NULL, 3, 0),
+    (10015, 10011, 3, 'action', 'system:user', 'delete', '删除用户', NULL, 4, 0),
+    (10016, 10011, 3, 'action', 'system:user', 'import', '导入用户', NULL, 5, 0),
+    (10017, 10011, 3, 'action', 'system:user', 'export', '导出用户', NULL, 6, 0);
 
 -- system_user
 INSERT INTO
@@ -479,6 +487,57 @@ INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `
 
 -- ########################################################
 
+-- system_identity 表测试数据（27条）
+INSERT INTO `system_identity` (`id`, `user_id`, `department_id`, `tenant_id`, `create_by`, `update_by`) VALUES
+-- 总公司
+(6001, 1, 3001, NULL, 1, 1),
+(6002, 11, 3001, NULL, 1, 1),
+
+-- 技术部
+(6003, 12, 3002, NULL, 1, 1),
+(6004, 21, 3002, NULL, 1, 1),
+(6005, 22, 3002, NULL, 1, 1),
+(6006, 23, 3002, NULL, 1, 1),
+(6007, 33, 3002, NULL, 1, 1),
+
+-- 前端开发组
+(6008, 12, 3006, NULL, 1, 1),
+(6009, 21, 3006, NULL, 1, 1),
+
+-- 后端开发组
+(6010, 22, 3007, NULL, 1, 1),
+
+-- 测试组
+(6011, 23, 3008, NULL, 1, 1),
+
+-- 市场部
+(6012, 13, 3003, NULL, 1, 1),
+(6013, 26, 3003, NULL, 1, 1),
+
+-- 品牌推广组
+(6014, 13, 3009, NULL, 1, 1),
+(6015, 26, 3009, NULL, 1, 1),
+
+-- 销售部
+(6016, 14, 3004, NULL, 1, 1),
+(6017, 27, 3004, NULL, 1, 1),
+(6018, 28, 3004, NULL, 1, 1),
+
+-- 人力资源部
+(6019, 15, 3005, NULL, 1, 1),
+(6020, 30, 3005, NULL, 1, 1),
+
+-- 其他用户（用于角色关联）
+(6021, 16, 3001, NULL, 1, 1),
+(6022, 17, 3001, NULL, 1, 1),
+(6023, 18, 3001, NULL, 1, 1),
+(6024, 19, 3001, NULL, 1, 1),
+(6025, 20, 3001, NULL, 1, 1),
+(6026, 24, 3001, NULL, 1, 1),
+(6027, 25, 3001, NULL, 1, 1);
+
+-- ########################################################
+
 -- system_job_position 表测试数据（10条）
 INSERT INTO `system_job_position` (`id`, `position_code`, `position_name`, `department_id`, `position_category`, `position_level`, `parent_id`, `status`, `work_location`, `sort_order`, `description`) VALUES
 (4001, 'HR-001', '人力资源总监', 3005, 'HR', 'DIRECTOR', NULL, 'ACTIVE', '北京', 1, '负责公司人力资源战略规划'),
@@ -506,74 +565,74 @@ INSERT INTO `system_job_position` (`id`, `position_code`, `position_name`, `depa
 -- ########################################################
 
 -- system_privilege 表测试数据（20条）
-INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `menu_code`, `privilege_code`, `grant_type`, `tenant_id`, `create_by`, `update_by`) VALUES
+INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `menu_id`, `grant_type`, `privilege_scope`, `tenant_id`, `create_by`, `update_by`) VALUES
 -- 为超级管理员角色添加所有权限
-(5001, 'role', 2001, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
-(5002, 'role', 2001, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
-(5003, 'role', 2001, 'system', 'user:manage', 'view_tab', 'granted', NULL, 1, 1),
-(5004, 'role', 2001, 'system', 'user:manage', 'read', 'granted', NULL, 1, 1),
-(5005, 'role', 2001, 'system', 'user:manage', 'add', 'granted', NULL, 1, 1),
-(5006, 'role', 2001, 'system', 'user:manage', 'edit', 'granted', NULL, 1, 1),
-(5007, 'role', 2001, 'system', 'user:manage', 'delete', 'granted', NULL, 1, 1),
-(5008, 'role', 2001, 'system', 'user:manage', 'export', 'granted', NULL, 1, 1),
+(5001, 'role', 2001, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5002, 'role', 2001, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5003, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5004, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5005, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5006, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5007, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5008, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为系统管理员角色添加部分权限
-(5009, 'role', 2002, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
-(5010, 'role', 2002, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
-(5011, 'role', 2002, 'system', 'user:manage', 'view_tab', 'granted', NULL, 1, 1),
-(5012, 'role', 2002, 'system', 'user:manage', 'read', 'granted', NULL, 1, 1),
-(5013, 'role', 2002, 'system', 'user:manage', 'add', 'granted', NULL, 1, 1),
-(5014, 'role', 2002, 'system', 'user:manage', 'edit', 'granted', NULL, 1, 1),
+(5009, 'role', 2002, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5010, 'role', 2002, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5011, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5012, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5013, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5014, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为普通用户角色添加基本权限
-(5015, 'role', 2006, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
-(5016, 'role', 2006, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
+(5015, 'role', 2006, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5016, 'role', 2006, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为特定用户添加额外权限
-(5017, 'user', 1, 'system', 'user:manage', 'delete', 'granted', NULL, 1, 1),
-(5018, 'user', 1, 'system', 'user:manage', 'export', 'granted', NULL, 1, 1),
-(5019, 'user', 12, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
-(5020, 'user', 12, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1);
+(5017, 'user', 1, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5018, 'user', 1, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5019, 'user', 12, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5020, 'user', 12, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1);
 
 -- ########################################################
 
--- system_user_role_relation 表测试数据（20条）
-INSERT INTO `system_user_role_relation` (`id`, `user_id`, `role_id`, `tenant_id`, `create_by`, `update_by`) VALUES
+-- system_identity_role_relation 表测试数据（20条）
+INSERT INTO `system_identity_role_relation` (`id`, `identity_id`, `role_id`, `tenant_id`, `create_by`, `update_by`) VALUES
 -- 超级管理员角色关联
-(7001, 1, 2001, NULL, 1, 1),
-(7002, 11, 2001, NULL, 1, 1),
-(7003, 33, 2001, NULL, 1, 1),
+(7001, 6001, 2001, NULL, 1, 1),
+(7002, 6002, 2001, NULL, 1, 1),
+(7003, 6007, 2001, NULL, 1, 1),
 
 -- 系统管理员角色关联
-(7004, 12, 2002, NULL, 1, 1),
-(7005, 13, 2002, NULL, 1, 1),
-(7006, 14, 2002, NULL, 1, 1),
+(7004, 6003, 2002, NULL, 1, 1),
+(7005, 6012, 2002, NULL, 1, 1),
+(7006, 6016, 2002, NULL, 1, 1),
 
 -- 租户管理员角色关联
-(7007, 15, 2003, NULL, 1, 1),
-(7008, 16, 2003, NULL, 1, 1),
+(7007, 6019, 2003, NULL, 1, 1),
+(7008, 6021, 2003, NULL, 1, 1),
 
 -- 用户管理员角色关联
-(7009, 17, 2004, NULL, 1, 1),
-(7010, 18, 2004, NULL, 1, 1),
+(7009, 6022, 2004, NULL, 1, 1),
+(7010, 6023, 2004, NULL, 1, 1),
 
 -- 角色管理员角色关联
-(7011, 19, 2005, NULL, 1, 1),
+(7011, 6024, 2005, NULL, 1, 1),
 
 -- 普通用户角色关联
-(7012, 20, 2006, NULL, 1, 1),
-(7013, 24, 2006, NULL, 1, 1),
-(7014, 25, 2006, NULL, 1, 1),
+(7012, 6025, 2006, NULL, 1, 1),
+(7013, 6026, 2006, NULL, 1, 1),
+(7014, 6027, 2006, NULL, 1, 1),
 
 -- 部门经理角色关联
-(7015, 27, 2007, NULL, 1, 1),
-(7016, 28, 2007, NULL, 1, 1),
+(7015, 6017, 2007, NULL, 1, 1),
+(7016, 6018, 2007, NULL, 1, 1),
 
 -- 普通员工角色关联
-(7017, 21, 2008, NULL, 1, 1),
-(7018, 22, 2008, NULL, 1, 1),
-(7019, 23, 2008, NULL, 1, 1),
-(7020, 26, 2008, NULL, 1, 1);
+(7017, 6004, 2008, NULL, 1, 1),
+(7018, 6005, 2008, NULL, 1, 1),
+(7019, 6006, 2008, NULL, 1, 1),
+(7020, 6013, 2008, NULL, 1, 1);
 
 -- ########################################################
 

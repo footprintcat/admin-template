@@ -38,7 +38,7 @@ public class Log implements Serializable {
     @TableField("source")
     private LogSourceEnum source;
 
-    @Schema(description = "日志类型（见后端 SystemLogTypeEnum 枚举类）")
+    @Schema(description = "日志类型（见后端 LogTypeEnum 枚举类）")
     @TableField("type")
     private LogTypeEnum type;
 

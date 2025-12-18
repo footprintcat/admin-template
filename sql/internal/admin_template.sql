@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Date: 17/12/2025 21:12:10
+ Date: 18/12/2025 15:12:42
 */
 
 SET NAMES utf8mb4;
@@ -63,6 +63,24 @@ CREATE TABLE `system_identity`  (
   UNIQUE INDEX `department_id`(`user_id` ASC, `department_id` ASC, `delete_time` ASC) USING BTREE,
   INDEX `user_id`(`user_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统身份表\r\n（一个 user 在一个 department 下只能有一个用户身份）' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for system_identity_role_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `system_identity_role_relation`;
+CREATE TABLE `system_identity_role_relation`  (
+  `id` bigint NOT NULL COMMENT '雪花id',
+  `identity_id` bigint NOT NULL COMMENT '身份id',
+  `role_id` bigint NOT NULL COMMENT '角色id',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统身份-角色关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for system_job_position
@@ -134,7 +152,8 @@ CREATE TABLE `system_menu`  (
   `parent_id` bigint NULL DEFAULT NULL COMMENT '父菜单id',
   `level` tinyint NOT NULL COMMENT '菜单级别',
   `menu_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单类型（directory-分组；menu-菜单；action-操作(页面中功能或按钮)）',
-  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 system:foo-bar:list）',
+  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 system:foo-bar）',
+  `action_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '操作code（例如：export）',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
   `menu_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单URL路径（无页面的分组菜单项为NULL）',
   `sort_order` int NOT NULL COMMENT '菜单项顺序',
@@ -147,7 +166,8 @@ CREATE TABLE `system_menu`  (
   `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `menu_code`(`menu_code` ASC) USING BTREE
+  UNIQUE INDEX `idx_menu_code`(`menu_code` ASC, `action_code` ASC) USING BTREE,
+  UNIQUE INDEX `idx_sort_order`(`parent_id` ASC, `sort_order` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统菜单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -159,9 +179,9 @@ CREATE TABLE `system_privilege`  (
   `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（user-用户；role-角色）',
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
-  `menu_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单code（例如 foo-bar.bar-foo，不得包含 : 符号）',
-  `privilege_code` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限code（view_tab-查看tab权限；read-读取权限；add-新增权限；edit-编辑权限；delete-删除权限；export-导出权限）',
+  `menu_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单id',
   `grant_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限授予类型（granted-有权；denied-无权；inheritable-有权继承）',
+  `privilege_scope` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0' COMMENT '权限范围（CURRENT_MENU-当前菜单；CURRENT_AND_SUB_MENUS-当前菜单及其下属菜单）',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
@@ -252,23 +272,5 @@ CREATE TABLE `system_user_auth`  (
   `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户认证表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Table structure for system_user_role_relation
--- ----------------------------
-DROP TABLE IF EXISTS `system_user_role_relation`;
-CREATE TABLE `system_user_role_relation`  (
-  `id` bigint NOT NULL COMMENT '雪花id',
-  `user_id` bigint NOT NULL COMMENT '用户id',
-  `role_id` bigint NOT NULL COMMENT '角色id',
-  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
-  `delete_time` datetime NULL DEFAULT NULL COMMENT '逻辑删除',
-  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户-角色关联表' ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

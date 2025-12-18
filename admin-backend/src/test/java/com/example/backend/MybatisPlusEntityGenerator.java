@@ -38,6 +38,7 @@ public class MybatisPlusEntityGenerator {
         // includeTables.add("system_config");
         // includeTables.add("system_department");
         // includeTables.add("system_identity");
+        // includeTables.add("system_identity_role_relation");
         // includeTables.add("system_job_position");
         // includeTables.add("system_log");
         // // includeTables.add("system_log_detail");
@@ -47,7 +48,6 @@ public class MybatisPlusEntityGenerator {
         // includeTables.add("system_tenant");
         // includeTables.add("system_user");
         // includeTables.add("system_user_auth");
-        // includeTables.add("system_user_role_relation");
 
         if (includeTables.isEmpty()) {
             throw new RuntimeException("includeTables 为空，跳过代码生成");

@@ -127,6 +127,57 @@ INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `
 
 -- ########################################################
 
+-- system_identity 表测试数据（27条）
+INSERT INTO `system_identity` (`id`, `user_id`, `department_id`, `tenant_id`, `create_by`, `update_by`) VALUES
+-- 总公司
+(6001, 1, 3001, NULL, 1, 1),
+(6002, 11, 3001, NULL, 1, 1),
+
+-- 技术部
+(6003, 12, 3002, NULL, 1, 1),
+(6004, 21, 3002, NULL, 1, 1),
+(6005, 22, 3002, NULL, 1, 1),
+(6006, 23, 3002, NULL, 1, 1),
+(6007, 33, 3002, NULL, 1, 1),
+
+-- 前端开发组
+(6008, 12, 3006, NULL, 1, 1),
+(6009, 21, 3006, NULL, 1, 1),
+
+-- 后端开发组
+(6010, 22, 3007, NULL, 1, 1),
+
+-- 测试组
+(6011, 23, 3008, NULL, 1, 1),
+
+-- 市场部
+(6012, 13, 3003, NULL, 1, 1),
+(6013, 26, 3003, NULL, 1, 1),
+
+-- 品牌推广组
+(6014, 13, 3009, NULL, 1, 1),
+(6015, 26, 3009, NULL, 1, 1),
+
+-- 销售部
+(6016, 14, 3004, NULL, 1, 1),
+(6017, 27, 3004, NULL, 1, 1),
+(6018, 28, 3004, NULL, 1, 1),
+
+-- 人力资源部
+(6019, 15, 3005, NULL, 1, 1),
+(6020, 30, 3005, NULL, 1, 1),
+
+-- 其他用户（用于角色关联）
+(6021, 16, 3001, NULL, 1, 1),
+(6022, 17, 3001, NULL, 1, 1),
+(6023, 18, 3001, NULL, 1, 1),
+(6024, 19, 3001, NULL, 1, 1),
+(6025, 20, 3001, NULL, 1, 1),
+(6026, 24, 3001, NULL, 1, 1),
+(6027, 25, 3001, NULL, 1, 1);
+
+-- ########################################################
+
 -- system_job_position 表测试数据（10条）
 INSERT INTO `system_job_position` (`id`, `position_code`, `position_name`, `department_id`, `position_category`, `position_level`, `parent_id`, `status`, `work_location`, `sort_order`, `description`) VALUES
 (4001, 'HR-001', '人力资源总监', 3005, 'HR', 'DIRECTOR', NULL, 'ACTIVE', '北京', 1, '负责公司人力资源战略规划'),
@@ -154,74 +205,74 @@ INSERT INTO `system_job_position` (`id`, `position_code`, `position_name`, `depa
 -- ########################################################
 
 -- system_privilege 表测试数据（20条）
-INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `menu_code`, `privilege_code`, `grant_type`, `tenant_id`, `create_by`, `update_by`) VALUES
+INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `menu_id`, `grant_type`, `privilege_scope`, `tenant_id`, `create_by`, `update_by`) VALUES
 -- 为超级管理员角色添加所有权限
-(5001, 'role', 2001, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
-(5002, 'role', 2001, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
-(5003, 'role', 2001, 'system', 'user:manage', 'view_tab', 'granted', NULL, 1, 1),
-(5004, 'role', 2001, 'system', 'user:manage', 'read', 'granted', NULL, 1, 1),
-(5005, 'role', 2001, 'system', 'user:manage', 'add', 'granted', NULL, 1, 1),
-(5006, 'role', 2001, 'system', 'user:manage', 'edit', 'granted', NULL, 1, 1),
-(5007, 'role', 2001, 'system', 'user:manage', 'delete', 'granted', NULL, 1, 1),
-(5008, 'role', 2001, 'system', 'user:manage', 'export', 'granted', NULL, 1, 1),
+(5001, 'role', 2001, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5002, 'role', 2001, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5003, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5004, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5005, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5006, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5007, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5008, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为系统管理员角色添加部分权限
-(5009, 'role', 2002, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
-(5010, 'role', 2002, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
-(5011, 'role', 2002, 'system', 'user:manage', 'view_tab', 'granted', NULL, 1, 1),
-(5012, 'role', 2002, 'system', 'user:manage', 'read', 'granted', NULL, 1, 1),
-(5013, 'role', 2002, 'system', 'user:manage', 'add', 'granted', NULL, 1, 1),
-(5014, 'role', 2002, 'system', 'user:manage', 'edit', 'granted', NULL, 1, 1),
+(5009, 'role', 2002, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5010, 'role', 2002, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5011, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5012, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5013, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5014, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为普通用户角色添加基本权限
-(5015, 'role', 2006, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
-(5016, 'role', 2006, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1),
+(5015, 'role', 2006, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5016, 'role', 2006, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为特定用户添加额外权限
-(5017, 'user', 1, 'system', 'user:manage', 'delete', 'granted', NULL, 1, 1),
-(5018, 'user', 1, 'system', 'user:manage', 'export', 'granted', NULL, 1, 1),
-(5019, 'user', 12, 'global', 'dashboard', 'view_tab', 'granted', NULL, 1, 1),
-(5020, 'user', 12, 'global', 'dashboard', 'read', 'granted', NULL, 1, 1);
+(5017, 'user', 1, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5018, 'user', 1, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5019, 'user', 12, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5020, 'user', 12, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1);
 
 -- ########################################################
 
--- system_user_role_relation 表测试数据（20条）
-INSERT INTO `system_user_role_relation` (`id`, `user_id`, `role_id`, `tenant_id`, `create_by`, `update_by`) VALUES
+-- system_identity_role_relation 表测试数据（20条）
+INSERT INTO `system_identity_role_relation` (`id`, `identity_id`, `role_id`, `tenant_id`, `create_by`, `update_by`) VALUES
 -- 超级管理员角色关联
-(7001, 1, 2001, NULL, 1, 1),
-(7002, 11, 2001, NULL, 1, 1),
-(7003, 33, 2001, NULL, 1, 1),
+(7001, 6001, 2001, NULL, 1, 1),
+(7002, 6002, 2001, NULL, 1, 1),
+(7003, 6007, 2001, NULL, 1, 1),
 
 -- 系统管理员角色关联
-(7004, 12, 2002, NULL, 1, 1),
-(7005, 13, 2002, NULL, 1, 1),
-(7006, 14, 2002, NULL, 1, 1),
+(7004, 6003, 2002, NULL, 1, 1),
+(7005, 6012, 2002, NULL, 1, 1),
+(7006, 6016, 2002, NULL, 1, 1),
 
 -- 租户管理员角色关联
-(7007, 15, 2003, NULL, 1, 1),
-(7008, 16, 2003, NULL, 1, 1),
+(7007, 6019, 2003, NULL, 1, 1),
+(7008, 6021, 2003, NULL, 1, 1),
 
 -- 用户管理员角色关联
-(7009, 17, 2004, NULL, 1, 1),
-(7010, 18, 2004, NULL, 1, 1),
+(7009, 6022, 2004, NULL, 1, 1),
+(7010, 6023, 2004, NULL, 1, 1),
 
 -- 角色管理员角色关联
-(7011, 19, 2005, NULL, 1, 1),
+(7011, 6024, 2005, NULL, 1, 1),
 
 -- 普通用户角色关联
-(7012, 20, 2006, NULL, 1, 1),
-(7013, 24, 2006, NULL, 1, 1),
-(7014, 25, 2006, NULL, 1, 1),
+(7012, 6025, 2006, NULL, 1, 1),
+(7013, 6026, 2006, NULL, 1, 1),
+(7014, 6027, 2006, NULL, 1, 1),
 
 -- 部门经理角色关联
-(7015, 27, 2007, NULL, 1, 1),
-(7016, 28, 2007, NULL, 1, 1),
+(7015, 6017, 2007, NULL, 1, 1),
+(7016, 6018, 2007, NULL, 1, 1),
 
 -- 普通员工角色关联
-(7017, 21, 2008, NULL, 1, 1),
-(7018, 22, 2008, NULL, 1, 1),
-(7019, 23, 2008, NULL, 1, 1),
-(7020, 26, 2008, NULL, 1, 1);
+(7017, 6004, 2008, NULL, 1, 1),
+(7018, 6005, 2008, NULL, 1, 1),
+(7019, 6006, 2008, NULL, 1, 1),
+(7020, 6013, 2008, NULL, 1, 1);
 
 -- ########################################################
 
