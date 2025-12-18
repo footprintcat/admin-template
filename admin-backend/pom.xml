@@ -187,4 +187,22 @@
         </plugins>
     </build>
 
+    <!-- 若未配置本地 maven 镜像源，可打开下方注释使用阿里云镜像 -->
+    <!-- 阿里云镜像地址 -->
+    <!--
+    <repositories>
+        <repository>
+            <id>aliyun</id>
+            <name>Aliyun Maven Repository</name>
+            <url>https://maven.aliyun.com/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    -->
+
 </project>
