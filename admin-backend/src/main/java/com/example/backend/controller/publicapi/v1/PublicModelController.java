@@ -1,6 +1,6 @@
 package com.example.backend.controller.publicapi.v1;
 
-import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
+import com.example.backend.common.annotations.HandleControllerGlobalException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

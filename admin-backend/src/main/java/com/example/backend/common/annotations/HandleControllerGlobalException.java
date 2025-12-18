@@ -1,4 +1,4 @@
-package com.example.backend.common.baseobject.controller;
+package com.example.backend.common.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

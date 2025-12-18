@@ -1,4 +1,4 @@
-package com.example.backend.common.interceptor.checklogin;
+package com.example.backend.common.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

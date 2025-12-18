@@ -11,7 +11,7 @@ import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
-import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
+import com.example.backend.common.annotations.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.response.ManageListResponse;

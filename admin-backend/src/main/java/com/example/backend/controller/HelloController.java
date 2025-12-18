@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
+import com.example.backend.common.annotations.HandleControllerGlobalException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

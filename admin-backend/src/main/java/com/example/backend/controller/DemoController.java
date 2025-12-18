@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
+import com.example.backend.common.annotations.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;

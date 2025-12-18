@@ -3,7 +3,7 @@ package com.example.backend.controller.manage.v1;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
+import com.example.backend.common.annotations.HandleControllerGlobalException;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.modules.system.model.dto.SystemRoleDto;

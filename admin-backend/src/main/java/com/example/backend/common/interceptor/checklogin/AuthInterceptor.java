@@ -1,6 +1,7 @@
 package com.example.backend.common.interceptor.checklogin;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.example.backend.common.annotations.PublicAccess;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.utils.SessionUtils;
