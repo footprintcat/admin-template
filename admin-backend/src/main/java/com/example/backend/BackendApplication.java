@@ -24,6 +24,7 @@ public class BackendApplication {
         final String configName = environment.getProperty("project-config.config-name");
         final String env = environment.getProperty("project-config.env");
         final String datasourceUrl = environment.getProperty("spring.datasource.url");
+        final boolean springDocEnabled = Boolean.TRUE.equals(environment.getProperty("springdoc.api-docs.enabled", Boolean.class));
         DataSource dataSource = configurableApplicationContext.getBean(DataSource.class);
         System.out.println(
                 "============\n" +
@@ -33,7 +34,9 @@ public class BackendApplication {
                 "   数据库连接URL：" + datasourceUrl + "\n" +
                 "   当前使用数据源：" + dataSource.getClass() + "\n" +
                 "        接口地址：http://localhost:" + port + "\n" +
-                "Swagger 接口文档：http://localhost:" + port + "/swagger-ui/index.html" + "\n" +
+                "Swagger 接口文档：" + (springDocEnabled
+                        ? "http://localhost:" + port + "/swagger-ui/index.html"
+                        : "未启用") + "\n" +
                 "============"
         );
     }
