@@ -4,9 +4,7 @@ import com.example.backend.common.annotations.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
-import com.example.backend.modules.system.enums.privilege.PrivilegeEntityTypeEnum;
-import com.example.backend.modules.system.model.entity.Privilege;
-import com.example.backend.modules.system.repository.PrivilegeRepository;
+import com.example.backend.modules.system.service.PrivilegeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @HandleControllerGlobalException
@@ -28,7 +26,7 @@ import java.util.List;
 public class PrivilegeController {
 
     @Resource
-    private PrivilegeRepository privilegeRepository;
+    private PrivilegeService privilegeService;
 
     // TODO 接口尚未完工
 
@@ -39,21 +37,13 @@ public class PrivilegeController {
      * @return 权限列表
      * @throws BusinessException 业务异常
      */
-    @GetMapping("/getCurrentUserPrivilegeList")
+    @GetMapping("/getCurrentIdentityPermittedMenuIdList")
     @ResponseBody
-    public CommonReturn getCurrentUserPrivilegeList(HttpServletRequest httpServletRequest) throws BusinessException {
+    public CommonReturn getCurrentIdentityPermittedMenuIdList(HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
-
-        @NotNull
-        Long userId = SessionUtils.getUserIdOrThrow(session);
-
-        List<Long> roleIdList = userRoleRelationRepository.getRoleIdListByUserId(userId);
-
-        // TODO 角色权限能继承
-
-        List<Privilege> userPrivilege = privilegeRepository.getListByEntityId(PrivilegeEntityTypeEnum.USER, userId);
-        List<Privilege> rolePrivilege = privilegeRepository.getListByEntityIdList(PrivilegeEntityTypeEnum.USER, roleIdList);
-
-        return CommonReturn.success();
+        // 查询当前登录用户的身份信息
+        @NotNull Long identityId = SessionUtils.getIdentityIdOrThrow(session);
+        Set<Long> menuIdList = privilegeService.getMenuIdListByIdentityId(identityId);
+        return CommonReturn.success(menuIdList);
     }
 }

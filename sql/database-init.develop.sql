@@ -261,7 +261,7 @@ CREATE TABLE `system_privilege` (
   `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（user-用户；role-角色）',
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
-  `menu_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单id',
+  `menu_id` bigint NOT NULL COMMENT '菜单id',
   `grant_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限授予类型（granted-有权；denied-无权；inheritable-有权继承）',
   `privilege_scope` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0' COMMENT '权限范围（CURRENT_MENU-当前菜单；CURRENT_AND_SUB_MENUS-当前菜单及其下属菜单）',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
@@ -567,32 +567,32 @@ INSERT INTO `system_job_position` (`id`, `position_code`, `position_name`, `depa
 -- system_privilege 表测试数据（20条）
 INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `menu_id`, `grant_type`, `privilege_scope`, `tenant_id`, `create_by`, `update_by`) VALUES
 -- 为超级管理员角色添加所有权限
-(5001, 'role', 2001, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5002, 'role', 2001, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5003, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5004, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5005, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5006, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5007, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5008, 'role', 2001, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5001, 'role', 2001, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5002, 'role', 2001, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5003, 'role', 2001, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5004, 'role', 2001, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5005, 'role', 2001, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5006, 'role', 2001, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5007, 'role', 2001, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5008, 'role', 2001, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为系统管理员角色添加部分权限
-(5009, 'role', 2002, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5010, 'role', 2002, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5011, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5012, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5013, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5014, 'role', 2002, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5009, 'role', 2002, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5010, 'role', 2002, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5011, 'role', 2002, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5012, 'role', 2002, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5013, 'role', 2002, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5014, 'role', 2002, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为普通用户角色添加基本权限
-(5015, 'role', 2006, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5016, 'role', 2006, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5015, 'role', 2006, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5016, 'role', 2006, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
 -- 为特定用户添加额外权限
-(5017, 'user', 1, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5018, 'user', 1, 'system', '10011', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5019, 'user', 12, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5020, 'user', 12, 'global', '10000', 'granted', 'CURRENT_MENU', NULL, 1, 1);
+(5017, 'user', 1, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5018, 'user', 1, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5019, 'user', 12, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5020, 'user', 12, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1);
 
 -- ########################################################
 

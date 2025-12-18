@@ -6,16 +6,17 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 对象类型
+ * 权限授予类型
  *
- * @since 2025-12-14
+ * @since 2025-12-18
  */
 @Getter
 @AllArgsConstructor
-public enum PrivilegeEntityTypeEnum {
+public enum PrivilegeGrantTypeEnum {
 
-    IDENTITY("identity", "身份"),
-    ROLE("role", "角色"),
+    GRANTED("granted", "有权"),
+    DENIED("denied", "无权"),
+    INHERITABLE("inheritable", "有权继承"),
     ;
 
     @EnumValue

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.example.backend.modules.system.enums.privilege.PrivilegeGrantTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,11 +49,11 @@ public class Privilege implements Serializable {
 
     @Schema(description = "菜单id")
     @TableField("menu_id")
-    private String menuId;
+    private Long menuId;
 
     @Schema(description = "权限授予类型（granted-有权；denied-无权；inheritable-有权继承）")
     @TableField("grant_type")
-    private String grantType;
+    private PrivilegeGrantTypeEnum grantType;
 
     @Schema(description = "权限范围（CURRENT_MENU-当前菜单；CURRENT_AND_SUB_MENUS-当前菜单及其下属菜单）")
     @TableField("privilege_scope")

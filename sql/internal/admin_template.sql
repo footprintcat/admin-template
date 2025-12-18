@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Date: 18/12/2025 15:12:42
+ Date: 18/12/2025 16:15:05
 */
 
 SET NAMES utf8mb4;
@@ -179,7 +179,7 @@ CREATE TABLE `system_privilege`  (
   `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（user-用户；role-角色）',
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
-  `menu_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单id',
+  `menu_id` bigint NOT NULL COMMENT '菜单id',
   `grant_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限授予类型（granted-有权；denied-无权；inheritable-有权继承）',
   `privilege_scope` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0' COMMENT '权限范围（CURRENT_MENU-当前菜单；CURRENT_AND_SUB_MENUS-当前菜单及其下属菜单）',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
