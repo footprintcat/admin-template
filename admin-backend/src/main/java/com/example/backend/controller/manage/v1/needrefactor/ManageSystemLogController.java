@@ -10,7 +10,7 @@ import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
-import com.example.backend.common.baseobject.controller.BaseController;
+import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.modules.system.model.dto.LogDto;
@@ -18,6 +18,7 @@ import com.example.backend.modules.system.model.entity.Log;
 import com.example.backend.modules.system.service.needrefactor.SystemLogService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +31,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
+@HandleControllerGlobalException
 @RestController
 @RequestMapping("/manage/v1/system/log")
 @Tag(name = "[system] 日志 log", description = "/manage/v1/system/log")
-public class ManageSystemLogController extends BaseController {
+public class ManageSystemLogController {
 
     @Resource
     private SystemLogService systemLogService;

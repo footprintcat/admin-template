@@ -1,13 +1,15 @@
 package com.example.backend.controller;
 
-import com.example.backend.common.baseobject.controller.BaseController;
+import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+@HandleControllerGlobalException
 @RestController
-public class HelloController extends BaseController {
+public class HelloController {
 
     @RequestMapping("/")
     public String root() {

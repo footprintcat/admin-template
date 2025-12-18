@@ -3,6 +3,7 @@ package com.example.backend.controller.manage.v1;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
 import com.example.backend.modules.system.enums.PrivilegeTypeEnum;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
@@ -17,6 +18,7 @@ import com.example.backend.modules.system.service.needrefactor.SystemMenuService
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,9 +33,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
+@HandleControllerGlobalException
 @RestController
 @RequestMapping("/v1/privilege")
-public class SystemPrivilegeController extends BaseController {
+public class SystemPrivilegeController {
 
     @Resource
     private SystemRoleService systemRoleService;

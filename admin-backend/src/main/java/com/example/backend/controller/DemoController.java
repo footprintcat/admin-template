@@ -1,14 +1,15 @@
 package com.example.backend.controller;
 
-import com.example.backend.common.baseobject.controller.BaseController;
+import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@HandleControllerGlobalException
 @RestController
-public class DemoController extends BaseController {
+public class DemoController {
 
     record TestRecord(Long id, String name) {
     }

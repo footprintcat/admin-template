@@ -3,15 +3,16 @@ package com.example.backend.controller.manage.v1;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.baseobject.response.CommonReturn;
-import com.example.backend.common.baseobject.controller.BaseController;
 import com.example.backend.modules.system.model.dto.SystemRoleDto;
 import com.example.backend.modules.system.model.entity.SystemRole;
 import com.example.backend.modules.system.model.entity.SystemUser;
 import com.example.backend.modules.system.repository.SystemRoleRepository;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,9 +24,11 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
+@HandleControllerGlobalException
 @RestController
 @RequestMapping("/v1/system/role")
-public class SystemRoleController extends BaseController {
+public class SystemRoleController {
 
     @Resource
     private SystemRoleRepository systemRoleRepository;

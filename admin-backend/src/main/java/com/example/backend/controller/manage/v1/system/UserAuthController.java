@@ -1,6 +1,6 @@
 package com.example.backend.controller.manage.v1.system;
 
-import com.example.backend.common.baseobject.controller.BaseController;
+import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.interceptor.checklogin.PublicAccess;
@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,10 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
+@HandleControllerGlobalException
 @RestController
 @RequestMapping("/manage/v1/system/user-auth")
 @Tag(name = "[system] 用户认证 user-auth", description = "/manage/v1/system/user-auth")
-public class UserAuthController extends BaseController {
+public class UserAuthController {
 
     @Resource
     private UserService userService;
@@ -49,7 +52,9 @@ public class UserAuthController extends BaseController {
         HttpSession session = httpServletRequest.getSession();
 
         // 获取用户输入
+        @NotNull
         String inputUsername = request.getUsername();
+        @NotNull
         String inputPassword = request.getPassword();
 
         // 登录

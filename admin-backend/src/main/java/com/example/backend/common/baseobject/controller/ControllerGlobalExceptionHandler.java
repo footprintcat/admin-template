@@ -3,7 +3,6 @@ package com.example.backend.common.baseobject.controller;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,24 +10,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Controller 异常处理
+ *
+ * @since 2025-12-18
+ */
 @Slf4j
-public class BaseController {
-
-    @Resource
-    HttpServletRequest httpServletRequest;
+@RestControllerAdvice(annotations = HandleControllerGlobalException.class)
+public class ControllerGlobalExceptionHandler {
 
     @Value("${project-config.env}")
     String env;
-
-    /**
-     * content-type 常量
-     */
-    public static final String CONTENT_TYPE_FORMED = "application/x-www-form-urlencoded";
 
     /**
      * 定义ExceptionHandler解决未被Controller层吸收的Exception

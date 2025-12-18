@@ -11,7 +11,7 @@ import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
-import com.example.backend.common.baseobject.controller.BaseController;
+import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.response.ManageListResponse;
@@ -24,6 +24,7 @@ import com.example.backend.modules.system.service.needrefactor.SystemUserService
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,10 +42,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
+@HandleControllerGlobalException
 @RestController
 @RequestMapping("/manage/v1/system/user")
 @Tag(name = "[system] 用户 user", description = "/manage/v1/system/user")
-public class UserController extends BaseController {
+public class UserController {
 
     @Resource
     private SystemUserServiceV2 systemUserServiceV2;
@@ -77,8 +80,8 @@ public class UserController extends BaseController {
     /**
      * 获取用户列表
      *
-     * @param pageQuery     分页参数
-     * @param userDTO 筛选条件
+     * @param pageQuery 分页参数
+     * @param userDTO   筛选条件
      * @return
      */
     @GetMapping("/list")

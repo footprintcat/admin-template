@@ -10,7 +10,7 @@ import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
-import com.example.backend.common.baseobject.controller.BaseController;
+import com.example.backend.common.baseobject.controller.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessErrorCode;
@@ -20,6 +20,7 @@ import com.example.backend.modules.system.model.entity.Role;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleServiceV2;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,10 +34,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
+@HandleControllerGlobalException
 @RestController
 @RequestMapping("/manage/v1/system/role")
 @Tag(name = "[system] 角色 role", description = "/manage/v1/system/role")
-public class ManageSystemRoleController extends BaseController {
+public class ManageSystemRoleController {
 
     @Resource
     private SystemRoleServiceV2 systemRoleServiceV2;
@@ -44,8 +47,8 @@ public class ManageSystemRoleController extends BaseController {
     /**
      * 获取角色列表
      *
-     * @param pageQuery     分页参数
-     * @param roleDTO 筛选条件
+     * @param pageQuery 分页参数
+     * @param roleDTO   筛选条件
      * @return
      */
     @GetMapping("/list")
