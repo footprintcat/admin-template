@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://数据库IP地址:端口（默认3306）/数据库表名?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8
+    username: 数据库用户名
+    password: 数据库密码
