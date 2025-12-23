@@ -6,7 +6,7 @@ import settings from '@/utils/settings'
 import { systemUserAuthLoginPost } from '@/api/system/user-auth'
 import { usePermissionStore } from '@/stores/permission'
 import { useTabsStore } from '@/stores/tabs'
-import useUserStore from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 import type { ValidateError, ValidateFieldsError } from 'async-validator'
 
 // 登录信息接口

@@ -12,7 +12,9 @@ const routeList: Array<RouteRecordRaw> = [
 
   {
     path: '/',
-    redirect: '/Dashboard',
+    redirect: {
+      name: 'Dashboard',
+    },
   },
 
   {

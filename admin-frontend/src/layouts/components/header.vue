@@ -90,7 +90,7 @@ import { userLogout } from '@/utils/user_utils'
 import defaultAvatarUrl from '@/assets/img/default-avatar.jpg'
 import { useSidebarStore } from '@/stores/sidebar'
 import { useThemeStore } from '@/stores/theme'
-import useUserStore from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 // import ThemeSettingDrawer from './theme-setting-drawer.vue'
 
 const message: number = 2

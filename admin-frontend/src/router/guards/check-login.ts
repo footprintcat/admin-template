@@ -1,6 +1,6 @@
 import type { Router } from 'vue-router'
 import { usePermissionStore } from '@/stores/permission'
-import useUserStore from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 
 /**
  * 用户登录权限校验 路由守卫
@@ -11,7 +11,7 @@ export function createCheckLoginGuard(router: Router) {
     const userStore = useUserStore()
     const permissionStore = usePermissionStore()
 
-    if (!userStore.isLogin() && to.name !== 'Login') {
+    if (!userStore.isLogin && to.name !== 'Login') {
       next({
         name: 'Login',
         query: {
@@ -19,6 +19,9 @@ export function createCheckLoginGuard(router: Router) {
           redirectTo: router.currentRoute.value.fullPath,
         },
       })
+    } else if (userStore.isLogin && to.name === 'Login') {
+      // 已经登录, 访问登录页时跳转
+      // TODO
     } else if (to.meta.permission && !permissionStore.key.includes(to.meta.permission)) {
       // 如果没有权限，则进入403
       to.meta.showErrorPage = true

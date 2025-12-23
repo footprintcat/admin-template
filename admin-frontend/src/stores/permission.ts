@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import useUserStore from './user'
+import { useUserStore } from './user'
 
 interface UserInfo {
   id: string
@@ -26,6 +26,7 @@ export const usePermissionStore = defineStore('permission', {
       // 获取当前登录用户信息 (如果为空则会跳转登录页面)
       await send_request_without_loading('v1/user/getInfo', 'POST', {}, (userInfo: UserInfo) => {
         console.log('userInfo', userInfo)
+        // TODO
         userStore.set(userInfo.id, userInfo.roleId, userInfo.username)
       })
 
