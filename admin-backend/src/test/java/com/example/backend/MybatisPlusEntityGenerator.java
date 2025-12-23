@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class MybatisPlusEntityGenerator {
 
     // 数据库关键字（生成 entity 时，这些字段自动添加反引号 ``）

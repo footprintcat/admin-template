@@ -1,3 +1,11 @@
+# 配置说明：
+# 将此文件复制一份，命名为 application-local.yml
+# 在 application-local.yml 文件中添加需要覆盖的配置项
+
+# 注意：
+# - 请不要直接将配置项添加到 application-local.yml.template 文件中
+# - 请不要将 application-local.yml 文件提交到代码仓库中
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

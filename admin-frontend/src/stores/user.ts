@@ -42,7 +42,7 @@ export const useUserStore = defineStore('user', () => {
       .catch((err) => {
         console.error('systemUserAuthGetInfo', err)
         ElMessageBox
-          .alert('服务器连接失败', '网络异常', {
+          .alert('服务器连接失败，请检查网络连接', '网络异常', {
             showClose: false,
             closeOnClickModal: false,
             confirmButtonText: '点击重试',
