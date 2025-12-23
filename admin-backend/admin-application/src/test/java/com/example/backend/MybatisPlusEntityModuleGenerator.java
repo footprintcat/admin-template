@@ -31,7 +31,7 @@ public class MybatisPlusEntityModuleGenerator {
             "order", "group", "level", "timestamp", "key"
     );
 
-    record ModuleTables(String moduleName, String tablePrefix, List<String> tableList) {
+    record ModuleTables(String moduleName, String tablePrefix, String[] tableList) {
     }
 
     public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class MybatisPlusEntityModuleGenerator {
         List<ModuleTables> moduleTables = new ArrayList<>();
 
         /* 请按字母顺序添加 */
-        moduleTables.add(new ModuleTables("system", "system_", Arrays.asList(
+        moduleTables.add(new ModuleTables("system", "system_", new String[]{
                 // "system_config",
                 // "system_department",
                 // "system_identity",
@@ -54,10 +54,10 @@ public class MybatisPlusEntityModuleGenerator {
                 // "system_user",
                 // "system_user_auth",
                 null
-        )));
+        }));
 
         for (ModuleTables moduleTable : moduleTables) {
-            List<String> includeTables = moduleTable.tableList.stream().filter(StringUtils::isNotEmpty).toList();
+            List<String> includeTables = Arrays.stream(moduleTable.tableList).filter(StringUtils::isNotEmpty).toList();
             generateForTables(includeTables, moduleTable.moduleName, moduleTable.tablePrefix);
         }
     }
@@ -65,7 +65,9 @@ public class MybatisPlusEntityModuleGenerator {
     private static void generateForTables(List<String> includeTables, String moduleName, String tablePrefix) {
 
         if (includeTables.isEmpty()) {
-            throw new RuntimeException("includeTables 为空，跳过代码生成");
+            // throw new RuntimeException("includeTables 为空，跳过代码生成");
+            System.out.println(moduleName + " 模块 includeTables 为空，跳过该模块实体类生成");
+            return;
         }
 
         // 获取项目路径
