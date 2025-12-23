@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import { usePromiseLoading } from '@/composables/useLoading'
 import type { CommonReturn } from '@/types/backend/common-return'
+import { userLogout } from './user_utils'
 
 interface Extra {
   timeout?: number
@@ -10,6 +13,10 @@ interface Extra {
    * 默认为 true, 除非显式指定 false
    */
   showErrorWhenFailed?: boolean
+  /**
+   * 请求时是否展示全局 Loading 提示
+   */
+  showLoading?: boolean
 }
 
 const baseURL = 'http://localhost:8412'
@@ -63,6 +70,13 @@ export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<
           grouping: true,
         })
         isErrorMessageShown = true
+
+        // 若用户未登录
+        // TODO 异常枚举不要写死
+        if (result.errCode === 20003) {
+          const router = useRouter()
+          userLogout(router)
+        }
       }
 
       return {
@@ -80,6 +94,9 @@ export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<
       })
       throw err
     })
+  if (extra?.showLoading) {
+    return usePromiseLoading(promise)
+  }
   return promise
 }
 
@@ -101,6 +118,13 @@ export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
           grouping: true,
         })
         isErrorMessageShown = true
+
+        // 若用户未登录
+        // TODO 异常枚举不要写死
+        if (result.errCode === 20003) {
+          const router = useRouter()
+          userLogout(router)
+        }
       }
 
       return {
@@ -118,5 +142,8 @@ export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
       })
       throw err
     })
+  if (extra?.showLoading) {
+    return usePromiseLoading(promise)
+  }
   return promise
 }
