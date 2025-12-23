@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.example.backend.modules.system.enums.config.ConfigScopeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +36,7 @@ public class Config implements Serializable {
 
     @Schema(description = "该配置属于哪个系统('backend', 'management', 'app')")
     @TableField("scope")
-    private String scope;
+    private ConfigScopeEnum scope;
 
     @Schema(description = "键")
     @TableField("config")

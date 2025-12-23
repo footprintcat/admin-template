@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.backend.common.utils.DateUtils;
 import com.example.backend.common.utils.StringUtils;
+import com.example.backend.modules.system.enums.config.ConfigScopeEnum;
 import com.example.backend.modules.system.mapper.ConfigMapper;
 import com.example.backend.modules.system.model.entity.Config;
 import jakarta.annotation.Resource;
@@ -25,49 +26,49 @@ import java.time.LocalDateTime;
 @Service
 public class ConfigRepository extends ServiceImpl<ConfigMapper, Config> {
 
-    private static final String defaultScope = "backend";
+    private static final ConfigScopeEnum defaultScope = ConfigScopeEnum.BACKEND;
 
     @Resource
     private ConfigMapper configMapper;
 
-    public String getConfigValue(String config) {
-        Config systemConfig = getConfig(config);
+    public @Nullable String getConfigValue(@NotNull String config) {
+        @Nullable Config systemConfig = getConfig(config);
         return systemConfig == null ? null : systemConfig.getValue();
     }
 
-    public Integer getConfigValueInteger(String config) {
-        String configValue = getConfigValue(config);
+    public @Nullable Integer getConfigValueInteger(@NotNull String config) {
+        @Nullable String configValue = getConfigValue(config);
         return StringUtils.isEmpty(configValue) ? null : Integer.parseInt(configValue);
     }
 
-    public Double getConfigValueDouble(String config) {
-        String configValue = getConfigValue(config);
+    public @Nullable Double getConfigValueDouble(@NotNull String config) {
+        @Nullable String configValue = getConfigValue(config);
         return StringUtils.isEmpty(configValue) ? null : Double.parseDouble(configValue);
     }
 
-    public Long getConfigValueLong(String config) {
-        String configValue = getConfigValue(config);
+    public @Nullable Long getConfigValueLong(@NotNull String config) {
+        @Nullable String configValue = getConfigValue(config);
         return StringUtils.isEmpty(configValue) ? null : Long.parseLong(configValue);
     }
 
-    public boolean getConfigValueBoolean(String config) {
-        String configValue = getConfigValue(config);
+    public boolean getConfigValueBoolean(@NotNull String config) {
+        @Nullable String configValue = getConfigValue(config);
         return "1".equals(configValue);
     }
 
-    public String[] getConfigValues(String config) {
-        Config systemConfig = getConfig(config);
+    public @NotNull String[] getConfigValues(@NotNull String config) {
+        @Nullable Config systemConfig = getConfig(config);
         if (systemConfig == null || systemConfig.getValue() == null) {
             return new String[0];
         }
         return systemConfig.getValue().split(",");
     }
 
-    public Config getConfig(String config) {
+    public @Nullable Config getConfig(@NotNull String config) {
         return getConfig(defaultScope, config);
     }
 
-    public Config getConfig(String scope, String config) {
+    public @Nullable Config getConfig(@NotNull ConfigScopeEnum scope, @NotNull String config) {
         Config systemConfig = this.lambdaQuery()
                 .eq(Config::getScope, scope)
                 .eq(Config::getConfig, config)
@@ -95,7 +96,7 @@ public class ConfigRepository extends ServiceImpl<ConfigMapper, Config> {
         setConfig(defaultScope, config, String.valueOf(value), null);
     }
 
-    public void setConfigLong(@NotNull String scope, @NotNull String config, long value) {
+    public void setConfigLong(@NotNull ConfigScopeEnum scope, @NotNull String config, long value) {
         setConfig(scope, config, String.valueOf(value), null);
     }
 
@@ -107,7 +108,7 @@ public class ConfigRepository extends ServiceImpl<ConfigMapper, Config> {
         setConfig(defaultScope, config, value, expireTime);
     }
 
-    public void setConfig(@NotNull String scope, @NotNull String config, @NotNull String value) {
+    public void setConfig(@NotNull ConfigScopeEnum scope, @NotNull String config, @NotNull String value) {
         setConfig(scope, config, value, null);
     }
 
@@ -121,7 +122,7 @@ public class ConfigRepository extends ServiceImpl<ConfigMapper, Config> {
      * @param value
      * @param expireTime
      */
-    public void setConfig(@NotNull String scope, @NotNull String config, String value, @Nullable LocalDateTime expireTime) {
+    public void setConfig(@NotNull ConfigScopeEnum scope, @NotNull String config, String value, @Nullable LocalDateTime expireTime) {
         Config systemConfig = new Config();
         systemConfig.setConfig(config);
         systemConfig.setScope(scope);
@@ -143,7 +144,7 @@ public class ConfigRepository extends ServiceImpl<ConfigMapper, Config> {
         updateConfigValue(defaultScope, config, newValue);
     }
 
-    public void updateConfigValue(@NotNull String scope, @NotNull String config, @NotNull Long newValue) {
+    public void updateConfigValue(@NotNull ConfigScopeEnum scope, @NotNull String config, @NotNull Long newValue) {
         updateConfigValue(scope, config, String.valueOf(newValue), null);
     }
 
@@ -157,7 +158,7 @@ public class ConfigRepository extends ServiceImpl<ConfigMapper, Config> {
      * @param newValue
      * @param expireTimestamp
      */
-    public void updateConfigValue(@NotNull String scope, @NotNull String config, @NotNull String newValue, @Nullable Long expireTimestamp) {
+    public void updateConfigValue(@NotNull ConfigScopeEnum scope, @NotNull String config, @NotNull String newValue, @Nullable Long expireTimestamp) {
         LambdaQueryWrapper<Config> qw = new LambdaQueryWrapper<Config>()
                 .eq(Config::getConfig, config)
                 .eq(Config::getScope, scope)
@@ -182,7 +183,7 @@ public class ConfigRepository extends ServiceImpl<ConfigMapper, Config> {
      * @param scope
      * @param config
      */
-    public void removeConfig(@NotNull String scope, @NotNull String config) {
+    public void removeConfig(@NotNull ConfigScopeEnum scope, @NotNull String config) {
         LambdaQueryWrapper<Config> qw = new LambdaQueryWrapper<>();
         qw.eq(Config::getScope, scope);
         qw.eq(Config::getConfig, config);
