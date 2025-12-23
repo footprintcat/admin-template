@@ -2,6 +2,7 @@ package com.example.backend.common.baseobject.response;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
@@ -21,7 +22,18 @@ public class ManageListResponse<T> {
         return new ManageListResponse<>();
     }
 
-    private Long total;
+    // 使用 Integer 类型返回，因为 Long 类型会被 JacksonConfig 全局处理成字符串
+    private Integer total;
     private Collection<T> list;
+
+    public ManageListResponse<T> setTotal(@NotNull Long total) {
+        this.total = Math.toIntExact(total);
+        return this;
+    }
+
+    public ManageListResponse<T> setTotal(@NotNull Integer total) {
+        this.total = total;
+        return this;
+    }
 
 }

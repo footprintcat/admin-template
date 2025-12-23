@@ -90,6 +90,8 @@
 <script setup lang="ts">
 import { ElMessage, type ElTable, type TableColumnCtx } from 'element-plus'
 import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
+import type { CommonReturn } from '@/types/backend/common-return'
+import type { ManageListResponse } from '@/types/backend/manage-list-response'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import ExportFileDialog from './export-file/export-file-dialog.vue'
 import type { RequestParam, SortItemWithLabel } from './types/request-param'
@@ -121,7 +123,7 @@ interface Props {
    * 非查询条件的额外默认值
    */
   extraInitialParams?: Record<string, unknown>
-  fetchData: (requestParams: RequestParam) => Promise<Array<unknown>>
+  fetchData: (requestParams: RequestParam) => Promise<CommonReturn<ManageListResponse<unknown>>>
   /**
    * 组件挂载时是否拉取数据
    */
@@ -312,21 +314,29 @@ async function handleFetchData({
   }
   props.fetchData(requestParam)
     .then(result => {
-      console.log('result', result)
-      tableData.value = result.data.list
-      total.value = result.data.total || 0
+      try {
+        console.log('result', result)
+        tableData.value = result.data.list
+        total.value = result.data.total || 0
 
-      // 如果超出最后一页, 则跳转到最后一页
-      const totalPageCount = Math.ceil(total.value / pageQuery.value.pageSize)
-      if (pageQuery.value.pageIndex > totalPageCount) {
-        console.log('当前页', pageQuery.value.pageIndex, '总页数', totalPageCount, '当前页 > 总页数，将跳转到最后一页')
-        pageQuery.value.pageIndex = totalPageCount
-        // 重新请求数据
-        if (pageIndexReEvaluateCount && pageIndexReEvaluateCount >= 3) {
-          console.error('manage-list fetchData 超出最后一页 重试已达上限，停止重试')
-          return
+        // 如果超出最后一页, 则跳转到最后一页
+        const totalPageCount = Math.ceil(total.value / pageQuery.value.pageSize)
+        if (pageQuery.value.pageIndex > totalPageCount) {
+          console.log('当前页', pageQuery.value.pageIndex, '总页数', totalPageCount, '当前页 > 总页数，将跳转到最后一页')
+          pageQuery.value.pageIndex = totalPageCount
+          // 重新请求数据
+          if (pageIndexReEvaluateCount && pageIndexReEvaluateCount >= 3) {
+            console.error('manage-list fetchData 超出最后一页 重试已达上限，停止重试')
+            return
+          }
+          handleFetchData({ gotoFirstPage: false, pageIndexReEvaluateCount: (pageIndexReEvaluateCount || 0) + 1 })
         }
-        handleFetchData({ gotoFirstPage: false, pageIndexReEvaluateCount: (pageIndexReEvaluateCount || 0) + 1 })
+      } catch (error) {
+        console.error('查询失败，前端处理逻辑错误', error)
+        ElMessage.error({
+          message: '查询失败，前端处理逻辑错误',
+          grouping: true,
+        })
       }
     })
     .catch((error) => {

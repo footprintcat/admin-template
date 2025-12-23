@@ -149,8 +149,7 @@ const tableColumnList: TableColumnList = [
 // 模拟没有筛选条件的情况
 // tableColumnList.forEach(i => i.sortable = false)
 
-function fetchData(requestParam: RequestParam<Record<string, unknown>>): Promise<Array<unknown>> {
+function fetchData(requestParam: RequestParam<Record<string, unknown>>) {
   return systemUserPage(requestParam)
-    .then(({ data }) => data)
 }
 </script>
