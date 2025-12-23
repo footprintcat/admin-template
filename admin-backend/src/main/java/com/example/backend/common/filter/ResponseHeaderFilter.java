@@ -24,17 +24,17 @@ import java.io.IOException;
 // @WebFilter(filterName = "ResponseHeader", urlPatterns = "/*")
 public class ResponseHeaderFilter implements Filter {
 
-    private static final String filterName = "ResponseHeaderFilter";
+    private static final String FILTER_NAME = "ResponseHeaderFilter";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
-        log.info("{} init.", filterName);
+        log.info("{} init.", FILTER_NAME);
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info("[{}] doFilter(): ", filterName);
+        log.info("[{}] doFilter(): ", FILTER_NAME);
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
@@ -65,6 +65,6 @@ public class ResponseHeaderFilter implements Filter {
     @Override
     public void destroy() {
         Filter.super.destroy();
-        log.info("{} destroy.", filterName);
+        log.info("{} destroy.", FILTER_NAME);
     }
 }

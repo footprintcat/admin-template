@@ -19,12 +19,12 @@ import java.io.IOException;
 @FilterRegistration(order = 10, urlPatterns = "/*")
 public class LogApiPathFilter implements Filter {
 
-    private static final String filterName = "LogApiPathFilter";
+    private static final String FILTER_NAME = "LogApiPathFilter";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
-        log.info("{} init.", filterName);
+        log.info("{} init.", FILTER_NAME);
     }
 
     @Override
@@ -50,6 +50,6 @@ public class LogApiPathFilter implements Filter {
     @Override
     public void destroy() {
         Filter.super.destroy();
-        log.info("{} destroy.", filterName);
+        log.info("{} destroy.", FILTER_NAME);
     }
 }
