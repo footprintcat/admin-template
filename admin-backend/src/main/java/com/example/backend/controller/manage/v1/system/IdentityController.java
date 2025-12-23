@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +43,7 @@ public class IdentityController {
     @PostMapping("/switch")
     public CommonReturn switchIdentity(@RequestBody @Valid ManageSystemIdentitySwitchRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
-        Long userId = SessionUtils.getUserIdOrThrow(session);
+        @NotNull Long userId = SessionUtils.getUserIdOrThrow(session);
         @NotNull Long identityId = request.getIdentityId();
         identityService.switchUserIdentity(session, userId, identityId);
         return CommonReturn.success();
@@ -57,11 +58,11 @@ public class IdentityController {
      * @throws BusinessException 业务异常
      * @since 2025-12-18
      */
-    @PostMapping("/getCurrentIdentity")
-    public CommonReturn getCurrentIdentity(@RequestBody @Valid ManageSystemIdentitySwitchRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
+    @GetMapping("/getCurrentIdentity")
+    public CommonReturn getCurrentIdentity(HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
-        Long userId = SessionUtils.getUserIdOrThrow(session);
-        @NotNull Long identityId = request.getIdentityId();
+        @NotNull Long userId = SessionUtils.getUserIdOrThrow(session);
+        @NotNull Long identityId = SessionUtils.getIdentityIdOrThrow(session);
         @Nullable IdentityDto identityDto = identityService.getUserIdentityDtoById(userId, identityId);
         return CommonReturn.success(identityDto);
     }
