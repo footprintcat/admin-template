@@ -37,22 +37,17 @@ public class ManageFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
         System.out.println("PrivilegeFilter init.");
-        System.out.println("当前读取的配置文件: " + configName);
-        System.out.println("当前环境(project-config.env): " + env);
-        System.out.println("数据库连接URL: " + datasourceUrl);
+        // System.out.println("当前环境(project-config.env): " + env);
+        // System.out.println("数据库连接URL: " + datasourceUrl);
 
-        System.out.println("当前使用数据源: " + dataSource.getClass());
-        System.out.println("druid 后台：http://localhost:8080/druid/index.html");
+        // System.out.println("当前使用数据源: " + dataSource.getClass());
     }
 
-    @Value("${project-config.config-name}")
-    String configName = "";
+    // @Value("${spring.datasource.url}")
+    // String datasourceUrl = "";
 
-    @Value("${spring.datasource.url}")
-    String datasourceUrl = "";
-
-    @Value("${project-config.env}")
-    String env = "";
+    // @Value("${project-config.env}")
+    // String env = "";
 
     // private static final List<String> openAuthorityApi = new ArrayList<>();
     // private static final List<String> openAuthorityPathPrefix = new ArrayList<>();

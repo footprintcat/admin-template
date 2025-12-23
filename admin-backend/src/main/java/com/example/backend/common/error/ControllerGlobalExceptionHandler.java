@@ -5,12 +5,15 @@ import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.stream.Collectors;
 
@@ -33,7 +36,7 @@ public class ControllerGlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Object handlerException(Exception ex) {
+    public CommonReturn handlerException(Exception ex) {
         if (ex instanceof BusinessException businessException) {
             int errCode = businessException.getErrCode();
             String errMessage = businessException.getErrMsg();
@@ -51,7 +54,7 @@ public class ControllerGlobalExceptionHandler {
      * @since 2025-12-18
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Object handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public CommonReturn handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         // log.info("接口参数传入不正确", e);
 
         // 从异常中获取所有字段的错误信息，并将其合并为一个字符串
@@ -65,7 +68,7 @@ public class ControllerGlobalExceptionHandler {
                 : "参数错误：" + errorMessage;
 
         // 返回统一的错误响应体
-        return CommonReturn.error(null, msg);
+        return CommonReturn.error(msg);
     }
 
 }
