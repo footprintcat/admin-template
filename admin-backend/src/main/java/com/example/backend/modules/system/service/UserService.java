@@ -108,11 +108,14 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * 获取当前登录的用户信息
      *
      * @param session session 会话
-     * @return 用户信息
+     * @return 用户信息（未登录返回 null）
      * @since 2025-12-13
      */
-    public User getCurrentUserInfo(@NotNull HttpSession session) throws BusinessException {
-        @NotNull Long userId = SessionUtils.getUserIdOrThrow(session);
+    public @Nullable User getCurrentUserInfo(@NotNull HttpSession session) {
+        @Nullable Long userId = SessionUtils.getUserId(session);
+        if (userId == null) {
+            return null;
+        }
         return userRepository.getById(userId);
     }
 

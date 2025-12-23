@@ -45,7 +45,7 @@ export function systemUserAuthLogout() {
  *
  * @returns
  */
-export function systemUserGetInfo() {
+export function systemUserAuthGetInfo() {
   const url = getUrl('/getInfo')
-  return post<UserDto>(url)
+  return post<UserDto | null>(url, undefined, { showErrorWhenFailed: false })
 }

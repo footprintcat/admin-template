@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,14 +84,15 @@ public class UserAuthController {
      * 获取用户信息
      *
      * @param httpServletRequest 请求对象
-     * @return 用户信息
+     * @return 用户信息（未登录返回 null）
      * @since 2025-12-13
      */
+    @PublicAccess
     @PostMapping("/getInfo")
-    public CommonReturn getUserInfo(HttpServletRequest httpServletRequest) throws BusinessException {
+    public CommonReturn getUserInfo(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
-        User currentUserInfo = userService.getCurrentUserInfo(session);
-        UserDto userDto = UserDto.fromEntity(currentUserInfo);
+        @Nullable User currentUserInfo = userService.getCurrentUserInfo(session);
+        @Nullable UserDto userDto = UserDto.fromEntity(currentUserInfo);
         return CommonReturn.success(userDto);
     }
 

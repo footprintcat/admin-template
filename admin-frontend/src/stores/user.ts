@@ -1,6 +1,6 @@
 import { computed, readonly, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { systemUserGetInfo } from '@/api/system/user-auth'
+import { systemUserAuthGetInfo } from '@/api/system/user-auth'
 import type { UserDto } from '@/types/backend/dto/UserDto'
 
 export const useUserStore = defineStore('user', () => {
@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
   // 状态
   const userDto = ref<UserDto | null>(null)
   const userDtoReadonly = readonly(userDto) // 只读属性
+  const isFetchedUserDto = ref<boolean>(false)
 
   // 计算属性
   const isLogin = computed(() => {
@@ -20,22 +21,32 @@ export const useUserStore = defineStore('user', () => {
 
   function clear() {
     userDto.value = null
+    isFetchedUserDto.value = false
   }
 
-  async function fetchUserInfo() {
-    return systemUserGetInfo().then((data) => {
-      // TODO
-      console.log('systemUserGetInfo', data)
+  // 网页加载后 check-login.ts 中会调用一次 fetchUserInfo
+  async function fetchUserInfo({
+    skipWhenExists,
+  }: {
+    /** 当用户信息存在时跳过拉取 */
+    skipWhenExists: boolean
+  }) {
+    if (skipWhenExists && isFetchedUserDto.value) {
+      return
+    }
+    return systemUserAuthGetInfo().then((result) => {
+      debugger
+      const userInfo: UserDto | null = result.data
+      userDto.value = userInfo
+      isFetchedUserDto.value = true
     })
   }
 
   // 登录后接口会带回 UserDto, 此时不需要再调用 fetchUserInfo 多查询一次
   async function updateUserInfo(userInfo: UserDto) {
     userDto.value = userInfo
+    isFetchedUserDto.value = true
   }
-
-  // 网页加载后立即获取一次当前登录用户信息
-  fetchUserInfo()
 
   return {
     // 状态

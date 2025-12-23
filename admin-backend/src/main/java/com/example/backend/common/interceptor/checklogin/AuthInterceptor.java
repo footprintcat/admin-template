@@ -15,7 +15,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 
 /**
  * 登录校验
@@ -55,10 +54,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             response.addHeader("content-type", "application/json; charset=utf-8");
 
             // 返回“用户未登录”
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("errCode", BusinessErrorCode.USER_NOT_LOGIN.getErrCode());
-            map.put("errMsg", BusinessErrorCode.USER_NOT_LOGIN.getErrMsg());
-            CommonReturn commonReturn = CommonReturn.error(map, "用户未登录");
+            CommonReturn commonReturn = CommonReturn.error(BusinessErrorCode.USER_NOT_LOGIN, "用户未登录");
             String jsonString = JSONObject.toJSONString(commonReturn);
 
             response.resetBuffer();

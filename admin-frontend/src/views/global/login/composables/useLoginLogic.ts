@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import settings from '@/utils/settings'
 import { systemUserAuthLogin } from '@/api/system/user-auth'
+import { redirectAfterLogin } from '@/router/guards/scripts/redirect_to'
 import { usePermissionStore } from '@/stores/permission'
 import { useTabsStore } from '@/stores/tabs'
 import { useUserStore } from '@/stores/user'
@@ -97,13 +98,7 @@ export function useLoginLogic() {
         // TODO
         // await permissionStore.asyncUpdatePermissionList(data.roleId, false)
 
-        const fullPath = router.currentRoute?.value?.query?.redirectTo as string
-        const path = fullPath?.split('?')[0]
-        if (path && !path.includes('/login')) {
-          router.push(fullPath)
-        } else {
-          router.push({ name: 'Dashboard' })
-        }
+        redirectAfterLogin(router)
       })
       loading.value = false
     })
