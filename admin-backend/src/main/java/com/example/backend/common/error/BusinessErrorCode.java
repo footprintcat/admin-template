@@ -10,6 +10,7 @@ public enum BusinessErrorCode implements ICommonError {
     INCORRECT_DATA(10006, "数据不正确"),
     ILLEGAL_CALL(10007, "非法调用"),
     EXCESSIVE_DATA_VOLUME(10008, "数据量过大，请缩小查询范围后重试"),
+    API_NOT_EXIST(10009, "请求的接口不存在"),
 
     // 20000 用户信息相关错误定义
     USER_NOT_EXIST(20001, "用户不存在"),
