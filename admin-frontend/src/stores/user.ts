@@ -1,5 +1,6 @@
 import { computed, readonly, ref } from 'vue'
 import { defineStore } from 'pinia'
+import { ElMessageBox } from 'element-plus'
 import { systemUserAuthGetInfo } from '@/api/system/user-auth'
 import type { UserDto } from '@/types/backend/dto/UserDto'
 
@@ -25,21 +26,33 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 网页加载后 check-login.ts 中会调用一次 fetchUserInfo
-  async function fetchUserInfo({
-    skipWhenExists,
-  }: {
+  async function fetchUserInfo(params: {
     /** 当用户信息存在时跳过拉取 */
     skipWhenExists: boolean
   }) {
-    if (skipWhenExists && isFetchedUserDto.value) {
+    if (params.skipWhenExists && isFetchedUserDto.value) {
       return
     }
-    return systemUserAuthGetInfo().then((result) => {
-      debugger
-      const userInfo: UserDto | null = result.data
-      userDto.value = userInfo
-      isFetchedUserDto.value = true
-    })
+    return systemUserAuthGetInfo()
+      .then((result) => {
+        const userInfo: UserDto | null = result.data
+        userDto.value = userInfo
+        isFetchedUserDto.value = true
+      })
+      .catch((err) => {
+        console.error('systemUserAuthGetInfo', err)
+        ElMessageBox
+          .alert('服务器连接失败', '网络异常', {
+            showClose: false,
+            closeOnClickModal: false,
+            confirmButtonText: '点击重试',
+            type: 'error',
+          })
+          .then(() => {
+            fetchUserInfo(params)
+          })
+
+      })
   }
 
   // 登录后接口会带回 UserDto, 此时不需要再调用 fetchUserInfo 多查询一次

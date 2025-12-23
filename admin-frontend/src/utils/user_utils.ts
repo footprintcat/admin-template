@@ -22,7 +22,8 @@ export function userLogout(router: Router) {
 
   // 跳转到登录页面
   router.push({
-    path: '/login',
+    // path: '/login',
+    name: 'Login',
     query: {
       // 2025.08.26 route.path 改为 route.fullPath (支持携带 hash 路由参数)
       redirectTo: router.currentRoute.value.fullPath, // window.location.href
