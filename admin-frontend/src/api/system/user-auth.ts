@@ -24,7 +24,7 @@ export interface ManageSystemUserAuthLoginResponse {
  * @param params
  * @returns
  */
-export function systemUserAuthLoginPost(params: ManageSystemUserAuthLoginRequest) {
+export function systemUserAuthLogin(params: ManageSystemUserAuthLoginRequest) {
   const url = getUrl('/login')
   return post<ManageSystemUserAuthLoginResponse>(url, params)
 }
@@ -35,7 +35,17 @@ export function systemUserAuthLoginPost(params: ManageSystemUserAuthLoginRequest
  * @param params
  * @returns
  */
-export function systemUserAuthLogoutPost() {
+export function systemUserAuthLogout() {
   const url = getUrl('/logout')
+  return post<string>(url)
+}
+
+/**
+ * 获取当前登录的用户信息
+ *
+ * @returns
+ */
+export function systemUserGetInfo() {
+  const url = getUrl('/getInfo')
   return post<UserDto>(url)
 }

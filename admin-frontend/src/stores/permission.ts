@@ -1,12 +1,32 @@
 import { defineStore } from 'pinia'
-import { useUserStore } from './user'
 
-interface UserInfo {
-  id: string
-  roleId: string
-  username: string
-}
+export const usePermissionStore = defineStore('permission', () => {
 
+  // directory, menu 菜单列表
+  const menuCodeList = ref<Array<string>>([])
+  // 操作按钮权限
+  const actionCodeList = ref<Array<string>>([])
+
+  /**
+   * 页面加载后，异步获取最新的权限信息
+   * @param roleId 用户RoleId，Number类型
+   * @param refreshPageWhenPermissionMismatch 在本地保存的 PermissionList 和最新拉取的 PermissionList 不一致时，是否刷新页面
+   */
+  async function asyncUpdatePermissionList() {
+
+  }
+
+  return {
+    menuCodeList,
+    actionCodeList,
+  }
+}, {
+  // docs: https://prazdevs.github.io/pinia-plugin-persistedstate/zh/guide/
+  persist: true,
+})
+
+
+/*
 export const usePermissionStore = defineStore('permission', {
   state: () => {
     const keys = localStorage.getItem('ms_keys')
@@ -15,11 +35,11 @@ export const usePermissionStore = defineStore('permission', {
     }
   },
   actions: {
-    /**
+    / **
      * 页面加载后，异步获取最新的权限信息
      * @param roleId 用户RoleId，Number类型
      * @param refreshPageWhenPermissionMismatch 在本地保存的 PermissionList 和最新拉取的 PermissionList 不一致时，是否刷新页面
-     */
+     * /
     async asyncUpdatePermissionList(roleId: string | null = null, refreshPageWhenPermissionMismatch: boolean = false) {
       const userStore = useUserStore()
 
@@ -54,3 +74,4 @@ export const usePermissionStore = defineStore('permission', {
     },
   },
 })
+*/

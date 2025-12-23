@@ -11,7 +11,11 @@ export function createCheckLoginGuard(router: Router) {
     const userStore = useUserStore()
     const permissionStore = usePermissionStore()
 
-    if (!userStore.isLogin && to.name !== 'Login') {
+    const isLogin = userStore.isLogin
+    const isInLoginPage = to.name === 'Login'
+
+    if (!isLogin && !isInLoginPage) {
+      // 未登录, 不在登录页时跳转
       next({
         name: 'Login',
         query: {
@@ -19,15 +23,22 @@ export function createCheckLoginGuard(router: Router) {
           redirectTo: router.currentRoute.value.fullPath,
         },
       })
-    } else if (userStore.isLogin && to.name === 'Login') {
-      // 已经登录, 访问登录页时跳转
+    } else if (isLogin && isInLoginPage) {
+      // 已登录, 访问登录页时跳转
+      // TODO 如果有 redirect_url 则跳转，否则跳到 dashboard
+      // if()
+      console.log('router.currentRoute.value', router.currentRoute.value)
+      // next({
+      //   name: 'Dashboard',
+      // })
+
       // TODO
-    } else if (to.meta.permission && !permissionStore.key.includes(to.meta.permission)) {
-      // 如果没有权限，则进入403
-      to.meta.showErrorPage = true
-      to.meta.errorCode = 403
-      next()
-      // next('/403')
+    // } else if (to.meta.permission && !permissionStore.key.includes(to.meta.permission)) {
+    //   // 如果没有权限，则进入403
+    //   to.meta.showErrorPage = true
+    //   to.meta.errorCode = 403
+    //   next()
+    //   // next('/403')
     } else {
       to.meta.showErrorPage = false
       to.meta.errorCode = undefined

@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import settings from '@/utils/settings'
-import { systemUserAuthLoginPost } from '@/api/system/user-auth'
+import { systemUserAuthLogin } from '@/api/system/user-auth'
 import { usePermissionStore } from '@/stores/permission'
 import { useTabsStore } from '@/stores/tabs'
 import { useUserStore } from '@/stores/user'
@@ -81,7 +81,7 @@ export function useLoginLogic() {
       }
 
       loading.value = true
-      systemUserAuthLoginPost({
+      systemUserAuthLogin({
         username: param.username,
         password: param.password,
       }).then(async ({ data, raw }) => {
@@ -92,8 +92,7 @@ export function useLoginLogic() {
         console.log('登录成功', data)
 
         const userInfo = data.userInfo
-
-        userStore.set(userInfo.id, userInfo.username)
+        userStore.updateUserInfo(userInfo)
 
         // TODO
         // await permissionStore.asyncUpdatePermissionList(data.roleId, false)
