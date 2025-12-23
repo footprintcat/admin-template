@@ -85,6 +85,32 @@ COMMENT = '系统租户表'
 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for system_config
+-- ----------------------------
+DROP TABLE IF EXISTS `system_config`;
+CREATE TABLE `system_config` (
+  `id` bigint NOT NULL COMMENT '主键id',
+  `scope` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '该配置属于哪个系统(\'backend\', \'management\', \'app\')',
+  `config` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '键',
+  `value` varchar(750) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '值',
+  `expire_time` datetime NULL DEFAULT NULL COMMENT '过期时间',
+  `config_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '展示名称',
+  `comment` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注信息（方便配置，无实际用途）',
+  `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
+  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '版本号（乐观锁）',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_scope`(`scope` ASC) USING BTREE,
+  UNIQUE INDEX `idx_scope_config`(`scope` ASC, `config` ASC) USING BTREE
+)
+ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+COMMENT = '系统设置及临时信息存储表'
+ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for system_department
 -- ----------------------------
 DROP TABLE IF EXISTS `system_department`;

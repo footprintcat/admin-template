@@ -2,6 +2,7 @@ package com.example.backend.modules.system.service.needrefactor;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.example.backend.common.utils.DateUtils;
 import com.example.backend.common.utils.StringUtils;
 import com.example.backend.modules.system.mapper.ConfigMapper;
 import com.example.backend.modules.system.model.entity.Config;
@@ -11,10 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class SystemConfigService {
 
-    private static final String defaultOwner = "backend";
+    private static final String defaultScope = "backend";
 
     @Resource
     private ConfigRepository configRepository;
@@ -55,18 +58,18 @@ public class SystemConfigService {
     }
 
     public Config getConfig(String config) {
-        return getConfig(defaultOwner, config);
+        return getConfig(defaultScope, config);
     }
 
-    public Config getConfig(String owner, String config) {
+    public Config getConfig(String scope, String config) {
         Config systemConfig = configRepository.lambdaQuery()
-                .eq(Config::getOwner, owner)
+                .eq(Config::getScope, scope)
                 .eq(Config::getConfig, config)
                 .one();
         if (systemConfig == null) {
             return null;
         }
-        if (systemConfig.getExpireTimestamp() != null && systemConfig.getExpireTimestamp() < System.currentTimeMillis()) {
+        if (systemConfig.getExpireTime() != null && DateUtils.toTimestamp(systemConfig.getExpireTime()) < System.currentTimeMillis()) {
             // 配置已过期
             configMapper.deleteById(systemConfig);
             return null;
@@ -75,31 +78,31 @@ public class SystemConfigService {
     }
 
     public void setConfigBoolean(@NotNull String config, @NotNull Boolean value) {
-        setConfig(defaultOwner, config, value ? "1" : "0", null);
+        setConfig(defaultScope, config, value ? "1" : "0", null);
     }
 
-    public void setConfigDouble(String config, double value) {
-        setConfig(defaultOwner, config, String.valueOf(value), null);
+    public void setConfigDouble(@NotNull String config, double value) {
+        setConfig(defaultScope, config, String.valueOf(value), null);
     }
 
-    public void setConfigLong(String config, long value) {
-        setConfig(defaultOwner, config, String.valueOf(value), null);
+    public void setConfigLong(@NotNull String config, long value) {
+        setConfig(defaultScope, config, String.valueOf(value), null);
     }
 
-    public void setConfigLong(String owner, String config, long value) {
-        setConfig(owner, config, String.valueOf(value), null);
+    public void setConfigLong(@NotNull String scope, @NotNull String config, long value) {
+        setConfig(scope, config, String.valueOf(value), null);
     }
 
-    public void setConfig(String config, String value) {
-        setConfig(defaultOwner, config, value, null);
+    public void setConfig(@NotNull String config, @NotNull String value) {
+        setConfig(defaultScope, config, value, null);
     }
 
-    public void setConfig(String config, String value, Long expireTimestamp) {
-        setConfig(defaultOwner, config, value, expireTimestamp);
+    public void setConfig(@NotNull String config, @NotNull String value, @Nullable LocalDateTime expireTime) {
+        setConfig(defaultScope, config, value, expireTime);
     }
 
-    public void setConfig(String owner, String config, String value) {
-        setConfig(owner, config, value, null);
+    public void setConfig(@NotNull String scope, @NotNull String config, @NotNull String value) {
+        setConfig(scope, config, value, null);
     }
 
     /**
@@ -107,35 +110,35 @@ public class SystemConfigService {
      * <p>
      * 2025.05.19 注意！多线程并发调用可能会出现 Duplicate entry + Deadlock 问题
      *
-     * @param owner
+     * @param scope
      * @param config
      * @param value
-     * @param expireTimestamp
+     * @param expireTime
      */
-    public void setConfig(@NotNull String owner, @NotNull String config, String value, @Nullable Long expireTimestamp) {
+    public void setConfig(@NotNull String scope, @NotNull String config, String value, @Nullable LocalDateTime expireTime) {
         Config systemConfig = new Config();
         systemConfig.setConfig(config);
-        systemConfig.setOwner(owner);
+        systemConfig.setScope(scope);
         systemConfig.setValue(value);
-        systemConfig.setExpireTimestamp(expireTimestamp);
+        systemConfig.setExpireTime(expireTime);
 
         // 删除旧配置
-        removeConfig(owner, config);
+        removeConfig(scope, config);
 
         // 保存新配置
         configRepository.save(systemConfig);
     }
 
     public void updateConfigValue(@NotNull String config, @NotNull String newValue) {
-        updateConfigValue(defaultOwner, config, newValue, null);
+        updateConfigValue(defaultScope, config, newValue, null);
     }
 
     public void updateConfigValue(@NotNull String config, @NotNull Long newValue) {
-        updateConfigValue(defaultOwner, config, newValue);
+        updateConfigValue(defaultScope, config, newValue);
     }
 
-    public void updateConfigValue(@NotNull String owner, @NotNull String config, @NotNull Long newValue) {
-        updateConfigValue(owner, config, String.valueOf(newValue), null);
+    public void updateConfigValue(@NotNull String scope, @NotNull String config, @NotNull Long newValue) {
+        updateConfigValue(scope, config, String.valueOf(newValue), null);
     }
 
     /**
@@ -143,15 +146,15 @@ public class SystemConfigService {
      * <p>
      * 2025.05.19 注意！多线程并发调用可能会出现 Duplicate entry + Deadlock 问题
      *
-     * @param owner
+     * @param scope
      * @param config
      * @param newValue
      * @param expireTimestamp
      */
-    public void updateConfigValue(@NotNull String owner, @NotNull String config, @NotNull String newValue, @Nullable Long expireTimestamp) {
+    public void updateConfigValue(@NotNull String scope, @NotNull String config, @NotNull String newValue, @Nullable Long expireTimestamp) {
         LambdaQueryWrapper<Config> qw = new LambdaQueryWrapper<Config>()
                 .eq(Config::getConfig, config)
-                .eq(Config::getOwner, owner)
+                .eq(Config::getScope, scope)
                 .last("LIMIT 1");
         Config systemConfig = configRepository.getOne(qw);
         if (systemConfig == null) {
@@ -159,9 +162,9 @@ public class SystemConfigService {
         } else {
             LambdaUpdateWrapper<Config> uw = new LambdaUpdateWrapper<Config>()
                     .set(Config::getValue, newValue)
-                    .set(Config::getExpireTimestamp, expireTimestamp)
+                    .set(Config::getExpireTime, expireTimestamp)
                     .eq(Config::getConfig, config)
-                    .eq(Config::getOwner, owner)
+                    .eq(Config::getScope, scope)
                     .last("LIMIT 1");
             configMapper.update(uw);
         }
@@ -170,17 +173,17 @@ public class SystemConfigService {
     /**
      * 删除配置
      *
-     * @param owner
+     * @param scope
      * @param config
      */
-    public void removeConfig(@NotNull String owner, @NotNull String config) {
+    public void removeConfig(@NotNull String scope, @NotNull String config) {
         LambdaQueryWrapper<Config> qw = new LambdaQueryWrapper<>();
+        qw.eq(Config::getScope, scope);
         qw.eq(Config::getConfig, config);
-        qw.eq(Config::getOwner, owner);
         configMapper.delete(qw);
     }
 
     public void removeConfig(@NotNull String config) {
-        removeConfig(defaultOwner, config);
+        removeConfig(defaultScope, config);
     }
 }
