@@ -55,10 +55,8 @@ public class UserAuthController {
         HttpSession session = httpServletRequest.getSession();
 
         // 获取用户输入
-        @NotNull
-        String inputUsername = request.getUsername();
-        @NotNull
-        String inputPassword = request.getPassword();
+        @NotNull String inputUsername = request.getUsername();
+        @NotNull String inputPassword = request.getPassword();
 
         // 登录
         UserDto userDto = userService.userLogin(session, inputUsername, inputPassword);

@@ -112,8 +112,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * @since 2025-12-13
      */
     public User getCurrentUserInfo(@NotNull HttpSession session) throws BusinessException {
-        @NotNull
-        Long userId = SessionUtils.getUserIdOrThrow(session);
+        @NotNull Long userId = SessionUtils.getUserIdOrThrow(session);
         return userRepository.getById(userId);
     }
 

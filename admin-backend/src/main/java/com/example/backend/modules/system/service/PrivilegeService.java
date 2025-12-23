@@ -31,8 +31,7 @@ public class PrivilegeService {
      */
     public Set<Long> getMenuIdListByIdentityId(@NotNull Long identityId) {
         // 获取身份拥有的角色id列表
-        @NotNull
-        List<IdentityRoleRelation> roleList = identityRoleRelationRepository.getRoleListByIdentityId(identityId);
+        @NotNull List<IdentityRoleRelation> roleList = identityRoleRelationRepository.getRoleListByIdentityId(identityId);
         List<Long> roleIdList = roleList.stream().map(IdentityRoleRelation::getRoleId).toList();
         log.info("roleIdList: {}", roleIdList);
 

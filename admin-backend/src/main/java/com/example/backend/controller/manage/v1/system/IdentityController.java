@@ -43,8 +43,7 @@ public class IdentityController {
     public CommonReturn switchIdentity(@RequestBody @Valid ManageSystemIdentitySwitchRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
         Long userId = SessionUtils.getUserIdOrThrow(session);
-        @NotNull
-        Long identityId = request.getIdentityId();
+        @NotNull Long identityId = request.getIdentityId();
         identityService.switchUserIdentity(session, userId, identityId);
         return CommonReturn.success();
     }
@@ -62,10 +61,8 @@ public class IdentityController {
     public CommonReturn getCurrentIdentity(@RequestBody @Valid ManageSystemIdentitySwitchRequest request, HttpServletRequest httpServletRequest) throws BusinessException {
         HttpSession session = httpServletRequest.getSession();
         Long userId = SessionUtils.getUserIdOrThrow(session);
-        @NotNull
-        Long identityId = request.getIdentityId();
-        @Nullable
-        IdentityDto identityDto = identityService.getUserIdentityDtoById(userId, identityId);
+        @NotNull Long identityId = request.getIdentityId();
+        @Nullable IdentityDto identityDto = identityService.getUserIdentityDtoById(userId, identityId);
         return CommonReturn.success(identityDto);
     }
 

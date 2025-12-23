@@ -28,8 +28,6 @@ public class PrivilegeController {
     @Resource
     private PrivilegeService privilegeService;
 
-    // TODO 接口尚未完工
-
     /**
      * 获取当前用户所有权限列表
      *
