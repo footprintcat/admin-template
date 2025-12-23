@@ -39,5 +39,4 @@ mybatis-plus:
 
 project-config:
   env: production
-  config-name: application.yml
   site-id: develop

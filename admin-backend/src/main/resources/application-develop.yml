@@ -1,6 +1,5 @@
 project-config:
   env: develop
-  config-name: application-develop.yml
   site-id: develop
 
 spring:
