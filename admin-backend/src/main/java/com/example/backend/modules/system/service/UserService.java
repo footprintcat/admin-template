@@ -31,7 +31,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      *
      * @param username 用户名
      * @param password 密码
-     * @return 登陆成功返回用户信息，登陆失败返回 null
+     * @return 登录成功返回用户信息，登录失败返回 null
      * @since 2025-12-13
      */
     @Nullable

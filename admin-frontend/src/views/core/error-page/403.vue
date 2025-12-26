@@ -36,7 +36,7 @@ const goBack = () => {
 }
 
 const handleLogout = () => {
-  userLogout(router)
+  userLogout(router, true)
   ElMessage.success('已退出登录')
 }
 </script>

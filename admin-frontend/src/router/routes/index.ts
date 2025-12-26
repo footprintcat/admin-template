@@ -45,6 +45,15 @@ const routeList: Array<RouteRecordRaw> = [
   },
 
   {
+    path: '/choose-identity',
+    name: 'ChooseIdentity',
+    meta: {
+      title: '选择身份',
+    },
+    component: () => import('@/views/global/choose-identity/choose-identity.vue'),
+  },
+
+  {
     path: '/',
     name: 'ErrorPage',
     component: AppLayout,

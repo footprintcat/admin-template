@@ -75,7 +75,7 @@ export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<
         // TODO 异常枚举不要写死
         if (result.errCode === 20003) {
           const router = useRouter()
-          userLogout(router)
+          userLogout(router, true)
         }
       }
 
@@ -123,7 +123,7 @@ export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
         // TODO 异常枚举不要写死
         if (result.errCode === 20003) {
           const router = useRouter()
-          userLogout(router)
+          userLogout(router, true)
         }
       }
 

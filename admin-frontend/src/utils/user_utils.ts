@@ -1,10 +1,11 @@
 import type { Router } from 'vue-router'
 import { systemUserAuthLogout } from '@/api/system/user-auth'
+import { useIdentityStore } from '@/stores/system/identity'
 import { useTabsStore } from '@/stores/tabs'
 import { useUserStore } from '@/stores/user'
 // import { clearFrontendLocalStorage } from './local_storage_util'
 
-export function userLogout(router: Router) {
+export function userLogout(router: Router, includeRedirectToParamWhenRedirect: boolean) {
   // 发送退出登录请求
   systemUserAuthLogout()
 
@@ -16,6 +17,10 @@ export function userLogout(router: Router) {
   const userStore = useUserStore()
   userStore.clear()
 
+  // 清除身份信息
+  const identityStore = useIdentityStore()
+  identityStore.setCurrentIdentity(null)
+
   // // 清除本地 localStorage
   // clearFrontendLocalStorage()
 
@@ -25,8 +30,10 @@ export function userLogout(router: Router) {
     // path: '/login',
     name: 'Login',
     query: {
-      // 2025.08.26 route.path 改为 route.fullPath (支持携带 hash 路由参数)
-      redirectTo: router.currentRoute.value.fullPath, // window.location.href
+      ...includeRedirectToParamWhenRedirect ? {
+        // 2025.08.26 route.path 改为 route.fullPath (支持携带 hash 路由参数)
+        redirectTo: router.currentRoute.value.fullPath, // window.location.href
+      } : {},
     },
   })
 }

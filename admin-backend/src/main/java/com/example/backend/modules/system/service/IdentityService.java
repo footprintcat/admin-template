@@ -38,12 +38,15 @@ public class IdentityService {
     /**
      * 通过 identityId 查询身份信息
      *
-     * @param userId 用户id
+     * @param userId     用户id
      * @param identityId 身份id
      * @return IdentityDto
      * @since 2025-12-18
      */
-    public @Nullable IdentityDto getUserIdentityDtoById(@NotNull Long userId, @NotNull Long identityId) {
+    public @Nullable IdentityDto getUserIdentityDtoById(@NotNull Long userId, @Nullable Long identityId) {
+        if (identityId == null) {
+            return null;
+        }
         @Nullable
         Identity identity = identityRepository.getUserIdentityId(userId, identityId);
         return IdentityDto.fromEntity(identity);

@@ -45,6 +45,14 @@
             </el-icon>
           </el-tooltip>
         </div>
+        <!-- 切换身份 -->
+        <div class="btn-icon hide-on-narrow-screen" @click="handleSwitchIdentity">
+          <el-tooltip effect="dark" content="切换身份" placement="bottom">
+            <el-icon>
+              <Switch />
+            </el-icon>
+          </el-tooltip>
+        </div>
         <div class="btn-icon hide-on-narrow-screen" @click="() => themeSettingDrawerVisible = true">
           <el-tooltip effect="dark" content="自定义主题" placement="bottom">
             <el-icon>
@@ -84,13 +92,14 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowDown, Brush, Expand, Fold, FullScreen, Guide, Message } from '@element-plus/icons-vue'
+import { ArrowDown, Brush, Expand, Fold, FullScreen, Guide, Message, Switch } from '@element-plus/icons-vue'
 import settings from '@/utils/settings'
 import { userLogout } from '@/utils/user_utils'
 import defaultAvatarUrl from '@/assets/img/default-avatar.jpg'
 import { useSidebarStore } from '@/stores/sidebar'
 import { useThemeStore } from '@/stores/theme'
 import { useUserStore } from '@/stores/user'
+import { useIdentityStore } from '@/stores/system/identity'
 // import ThemeSettingDrawer from './theme-setting-drawer.vue'
 
 const message: number = 2
@@ -98,6 +107,7 @@ const message: number = 2
 const sidebarStore = useSidebarStore()
 const themeStore = useThemeStore()
 const userStore = useUserStore()
+const identityStore = useIdentityStore()
 
 // 侧边栏折叠
 const collapseChange = () => {
@@ -115,7 +125,7 @@ onMounted(() => {
 const router = useRouter()
 const handleCommand = (command: string) => {
   if (command == 'loginout') {
-    userLogout(router)
+    userLogout(router, true)
     ElMessage.success('已退出登录')
   } else if (command == 'user') {
     router.push('/user')
@@ -128,6 +138,15 @@ const setFullScreen = () => {
   } else {
     document.body.requestFullscreen.call(document.body)
   }
+}
+
+const handleSwitchIdentity = () => {
+  router.push({
+    name: 'ChooseIdentity',
+    query: {
+      redirectTo: router.currentRoute.value.fullPath,
+    },
+  })
 }
 
 const themeSettingDrawerVisible = ref<boolean>(false)

@@ -1,5 +1,6 @@
 import type { Router } from 'vue-router'
-import { redirectAfterLoginBeforeRoute, redirectToLoginBeforeRoute } from '@/router/guards/scripts/redirect_to'
+import { redirectAfterLoginBeforeRoute, redirectToChooseIdentityBeforeRoute, redirectToLoginBeforeRoute } from '@/router/guards/scripts/redirect_to'
+import { useIdentityStore } from '@/stores/system/identity'
 import { useUserStore } from '@/stores/user'
 
 /**
@@ -9,12 +10,14 @@ export function createCheckLoginGuard(router: Router) {
   router.beforeEach(async (to, from, next) => { // router.currentRoute.value === from
 
     const userStore = useUserStore()
+    const identityStore = useIdentityStore()
 
     // 网页加载后立即获取一次当前登录用户信息
     await userStore.fetchUserInfo({ skipIfExists: true })
 
     const isLogin = userStore.isLogin
     const isInLoginPage = to.name === 'Login'
+    const isInChooseIdentityPage = to.name === 'ChooseIdentity'
 
     if (isLogin) {
       if (isInLoginPage) {
@@ -26,6 +29,14 @@ export function createCheckLoginGuard(router: Router) {
       } else {
         // 已登录, 不在登录页
         // console.log('已登录, 不在登录页')
+        await identityStore.fetchIdentityInfo()
+
+        if (!isInChooseIdentityPage && !identityStore.currentIdentity) {
+          if (identityStore.userIdentityDtoList && identityStore.userIdentityDtoList.length > 1) {
+            redirectToChooseIdentityBeforeRoute(to, next)
+            return
+          }
+        }
       }
     } else {
       if (isInLoginPage) {

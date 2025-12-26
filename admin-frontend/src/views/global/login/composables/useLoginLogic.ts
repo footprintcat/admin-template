@@ -5,7 +5,6 @@ import type { FormInstance, FormRules } from 'element-plus'
 import settings from '@/utils/settings'
 import { systemUserAuthLogin } from '@/api/system/user-auth'
 import { redirectAfterLogin } from '@/router/guards/scripts/redirect_to'
-import { usePermissionStore } from '@/stores/permission'
 import { useIdentityStore } from '@/stores/system/identity'
 import { useTabsStore } from '@/stores/tabs'
 import { useUserStore } from '@/stores/user'
@@ -25,7 +24,6 @@ export function useLoginLogic() {
 
   const tabs = useTabsStore()
 
-  const permissionStore = usePermissionStore()
   const userStore = useUserStore()
   const identityStore = useIdentityStore()
 
@@ -100,10 +98,13 @@ export function useLoginLogic() {
         const identityList = data.identityList
         identityStore.setUserIdentityListAfterLogin(identityList)
 
-        // TODO
-        // await permissionStore.asyncUpdatePermissionList(data.roleId, false)
-
-        redirectAfterLogin(router)
+        console.log('当前用户拥有', identityList.length, '个身份', identityList)
+        const haveAndOnlyHaveOneIdentity = identityList.length === 1
+        if (haveAndOnlyHaveOneIdentity) {
+          await identityStore.saveSelectedIdentityToBackend(identityList[0].id)
+          identityStore.setCurrentIdentity(identityList[0])
+        }
+        redirectAfterLogin(router, { gotoChooseIdentity: !haveAndOnlyHaveOneIdentity })
       })
       loading.value = false
     })

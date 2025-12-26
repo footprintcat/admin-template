@@ -1,6 +1,7 @@
 package com.example.backend.common.interceptor.checklogin;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.example.backend.common.annotations.NoNeedIdentity;
 import com.example.backend.common.annotations.PublicAccess;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessErrorCode;
@@ -15,6 +16,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * 登录校验
@@ -24,6 +26,10 @@ import java.lang.reflect.Method;
 @Slf4j
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
+
+    private static final Set<String> IDENTITY_RELATED_PATHS = Set.of(
+            "/manage/v1/system/identity/switch"
+    );
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request,
@@ -36,7 +42,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         Method method = handlerMethod.getMethod();
 
-        // 检查方法上是否有@PublicAccess注解
+        // 检查方法上是否有 @PublicAccess 注解
         if (method.isAnnotationPresent(PublicAccess.class)) {
             // 有注解，直接放行，不需要登录
             log.info("@PublicAccess 接口直接放行");
@@ -55,6 +61,21 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             // 返回“用户未登录”
             CommonReturn commonReturn = CommonReturn.error(BusinessErrorCode.USER_NOT_LOGIN, "用户未登录");
+            String jsonString = JSONObject.toJSONString(commonReturn);
+
+            response.resetBuffer();
+            response.getWriter().print(jsonString);
+            response.flushBuffer();
+            return false;
+        }
+
+        // 检查方法上是否有 @NoNeedIdentity 注解
+        boolean isIdentityFree = method.isAnnotationPresent(NoNeedIdentity.class);
+        if (!isIdentityFree && SessionUtils.getIdentityId(session) == null) {
+            response.addHeader("content-type", "application/json; charset=utf-8");
+
+            // 返回“请先选择登录身份”
+            CommonReturn commonReturn = CommonReturn.error(BusinessErrorCode.USER_NOT_SELECT_IDENTITY, "请先选择登录身份");
             String jsonString = JSONObject.toJSONString(commonReturn);
 
             response.resetBuffer();
