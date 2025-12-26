@@ -4,7 +4,7 @@
     <ul>
       <li class="tabs-li" v-for="(item, index) in tabs.list" :key="index"
         :style="{ minWidth: `${Math.max(42, (12 * item.title.length) + 17)}px` }"
-        :class="{ active: isActive(item.path), 'tab-always-open': isAlwaysOpen(item.path) }"
+        :class="{ 'active': isActive(item.path), 'tab-always-open': isAlwaysOpen(item.path) }"
         :ref="(el) => setItemRef(el, item.path)" @click="handleTabClick(item.path, $event)">
         <span class="tabs-li-title">{{ item.title }}</span>
         <!-- 外侧有 @click 事件了，这里不再需要 router-link -->
@@ -84,6 +84,7 @@ const setTabs = (route: RouteLocationNormalizedLoaded) => {
       name: route.name as string,
       title: route.meta.title as string,
       path: route.fullPath,
+      isErrorPage: !!route.meta.isErrorPage,
     })
   }
 }

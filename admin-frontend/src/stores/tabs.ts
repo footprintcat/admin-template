@@ -6,6 +6,7 @@ interface ListItem {
   name: string
   path: string
   title: string
+  isErrorPage?: boolean
 }
 
 // 总是添加 dashboard 标签
@@ -31,13 +32,14 @@ export const useTabsStore = defineStore('tabs', () => {
   }
   function setTabsItem(data: ListItem) {
     // TODO 临时解决方案，待优化
-    for (const i in list.value) {
-      const index = Number(i)
-      const item = list.value[index]
-      if (item.name === data.name) {
-        delTabsItem(index)
-        break
-      }
+    const index = list.value.findIndex(item => item.name === data.name)
+    if (index !== -1) {
+      delTabsItem(index)
+    }
+
+    if (data.isErrorPage) {
+      console.log('Error Page 不显示到 Tab 标题栏')
+      return
     }
     list.value.push(data)
   }

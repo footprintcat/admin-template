@@ -16,9 +16,19 @@ export const usePermissionStore = defineStore('permission', () => {
 
   }
 
+  function checkMenuPermission(code: string): boolean {
+    return menuCodeList.value.includes(code)
+  }
+
+  function checkActionPermission(code: string): boolean {
+    return actionCodeList.value.includes(code)
+  }
+
   return {
     menuCodeList,
     actionCodeList,
+    checkMenuPermission,
+    checkActionPermission,
   }
 }, {
   // docs: https://prazdevs.github.io/pinia-plugin-persistedstate/zh/guide/

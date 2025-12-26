@@ -4,7 +4,7 @@
   <div class="content-box" :class="{ 'content-collapse': sidebar.collapse }">
     <v-tabs></v-tabs>
     <div class="content">
-      <component v-if="route.meta.showErrorPage" :is="errorPage403" />
+      <component v-if="showErrorPage" :is="currentErrorPage" />
       <router-view v-else v-slot="{ Component }">
         <transition name="move" mode="out-in">
           <keep-alive :include="tabs.nameList">
@@ -19,17 +19,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
-import { useRoute } from 'vue-router'
 import { useSidebarStore } from '@/stores/sidebar'
 import { useTabsStore } from '@/stores/tabs'
+import { useErrorPage } from '@/views/core/error-page/useErrorPage'
 import vHeader from './components/header.vue'
 import vSidebar from './components/sidebar/sidebar.vue'
 import vTabs from './components/tabs.vue'
 
 const sidebar = useSidebarStore()
 const tabs = useTabsStore()
-const route = useRoute()
 
-const errorPage403 = defineAsyncComponent(() => import('@/views/core/error-page/403.vue'))
+const { showErrorPage, currentErrorPage } = useErrorPage()
 </script>

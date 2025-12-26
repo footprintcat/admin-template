@@ -1,5 +1,6 @@
 import type { Router } from 'vue-router'
 import { createCheckLoginGuard } from './check-login'
+import { createCheckPermissionGuard } from './check-permission'
 import { createFooBarGuard } from './foo-bar'
 import { createSiteTitleUpdateGuardGuard } from './site-title-update-guard'
 
@@ -11,7 +12,11 @@ import { createSiteTitleUpdateGuardGuard } from './site-title-update-guard'
 export function setupRouterGuards(router: Router) {
 
   createSiteTitleUpdateGuardGuard(router)
+
+  // 先校验登录态，再校验权限
   createCheckLoginGuard(router)
+  createCheckPermissionGuard(router)
+
   createFooBarGuard(router)
 
 }

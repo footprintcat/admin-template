@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 import AppLayout from '@/layouts/AppLayout.vue'
+import errorPageRoute from './error-page'
 import frameworkRoute from './framework'
 import systemRoute from './system'
 
@@ -43,33 +44,24 @@ const routeList: Array<RouteRecordRaw> = [
     component: () => import('@/views/global/login/login-wrapper.vue'),
   },
 
+  {
+    path: '/',
+    name: 'ErrorPage',
+    component: AppLayout,
+    children: [
+      // 框架错误页路由 (需放在最后)
+      ...errorPageRoute,
+    ],
+  },
+
+  // 这里不应该添加通配路由, 否则将无法进入 errorPageRoute
   /*
-  {
-    path: '/403',
-    name: '403',
-    meta: {
-      title: '没有权限',
-    },
-    component: () => import('@/views/core/error-page/403.vue'),
-  },
-  */
-
-  {
-    path: '/:pathMatch(.*)*',
-    name: '404',
-    meta: {
-      title: '404',
-      showErrorPage: true,
-      errorCode: 404,
-    },
-    component: () => import('@/views/core/error-page/404.vue'),
-  },
-
   // 访问不存在的路径时，跳转到首页
   {
     path: '/:pathMatch(.*)*',
     redirect: '/', // 重定向到根路径
   },
+  */
 
 ]
 
