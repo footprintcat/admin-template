@@ -1,3 +1,4 @@
+import type { App } from 'vue'
 import { defineStore } from 'pinia'
 
 export const usePermissionStore = defineStore('permission', () => {
@@ -24,11 +25,26 @@ export const usePermissionStore = defineStore('permission', () => {
     return actionCodeList.value.includes(code)
   }
 
+  // 自定义权限指令
+  // 在 main.ts 中注册
+  function registerDirective(app: App) {
+    app.directive('permission', {
+      mounted(el, binding) {
+        const bindingValue: string = String(binding.value)
+        if (!checkMenuPermission(bindingValue)) {
+          el['hidden'] = true
+        }
+      },
+    })
+
+  }
+
   return {
     menuCodeList,
     actionCodeList,
     checkMenuPermission,
     checkActionPermission,
+    registerDirective,
   }
 }, {
   // docs: https://prazdevs.github.io/pinia-plugin-persistedstate/zh/guide/

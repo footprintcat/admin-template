@@ -24,13 +24,7 @@ app.use(router)
 
 // 自定义权限指令
 const permission = usePermissionStore()
-app.directive('permission', {
-  mounted(el, binding) {
-    if (!permission.key.includes(String(binding.value))) {
-      el['hidden'] = true
-    }
-  },
-})
+permission.registerDirective(app)
 
 app.mount('#app')
 
