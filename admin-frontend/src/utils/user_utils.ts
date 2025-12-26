@@ -1,5 +1,6 @@
 import type { Router } from 'vue-router'
 import { systemUserAuthLogout } from '@/api/system/user-auth'
+import { redirectToLogin } from '@/router/guards/scripts/redirect_to'
 import { useIdentityStore } from '@/stores/system/identity'
 import { useTabsStore } from '@/stores/tabs'
 import { useUserStore } from '@/stores/user'
@@ -24,16 +25,6 @@ export function userLogout(router: Router, includeRedirectToParamWhenRedirect: b
   // // 清除本地 localStorage
   // clearFrontendLocalStorage()
 
-
   // 跳转到登录页面
-  router.push({
-    // path: '/login',
-    name: 'Login',
-    query: {
-      ...includeRedirectToParamWhenRedirect ? {
-        // 2025.08.26 route.path 改为 route.fullPath (支持携带 hash 路由参数)
-        redirectTo: router.currentRoute.value.fullPath, // window.location.href
-      } : {},
-    },
-  })
+  redirectToLogin(router, includeRedirectToParamWhenRedirect)
 }

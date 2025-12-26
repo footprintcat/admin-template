@@ -44,7 +44,7 @@ export function useChooseIdentityLogic() {
     console.log('身份选择页初始化')
     if (identityList.value.length === 0) {
       ElMessage.warning('未获取到身份列表，暂无法登录')
-      // router.push({ name: 'Login' })
+      // redirectToLogin(router, false)
     }
   })
 

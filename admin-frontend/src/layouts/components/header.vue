@@ -74,8 +74,9 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="user">个人中心</el-dropdown-item>
-              <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+              <el-dropdown-item :icon="User" command="user">个人中心</el-dropdown-item>
+              <el-dropdown-item divided :icon="Switch" command="switch-identity">切换身份</el-dropdown-item>
+              <el-dropdown-item divided :icon="Right" command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -92,14 +93,14 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowDown, Brush, Expand, Fold, FullScreen, Guide, Message, Switch } from '@element-plus/icons-vue'
+import { ArrowDown, Brush, Expand, Fold, FullScreen, Guide, Message, Right, Switch, User } from '@element-plus/icons-vue'
 import settings from '@/utils/settings'
 import { userLogout } from '@/utils/user_utils'
 import defaultAvatarUrl from '@/assets/img/default-avatar.jpg'
+import { redirectToChooseIdentity } from '@/router/guards/scripts/redirect_to'
 import { useSidebarStore } from '@/stores/sidebar'
 import { useThemeStore } from '@/stores/theme'
 import { useUserStore } from '@/stores/user'
-import { useIdentityStore } from '@/stores/system/identity'
 // import ThemeSettingDrawer from './theme-setting-drawer.vue'
 
 const message: number = 2
@@ -107,7 +108,6 @@ const message: number = 2
 const sidebarStore = useSidebarStore()
 const themeStore = useThemeStore()
 const userStore = useUserStore()
-const identityStore = useIdentityStore()
 
 // 侧边栏折叠
 const collapseChange = () => {
@@ -124,9 +124,11 @@ onMounted(() => {
 // 用户名下拉菜单选择事件
 const router = useRouter()
 const handleCommand = (command: string) => {
-  if (command == 'loginout') {
+  if (command == 'logout') {
     userLogout(router, true)
     ElMessage.success('已退出登录')
+  } else if (command == 'switch-identity') {
+    handleSwitchIdentity()
   } else if (command == 'user') {
     router.push('/user')
   }
@@ -141,12 +143,7 @@ const setFullScreen = () => {
 }
 
 const handleSwitchIdentity = () => {
-  router.push({
-    name: 'ChooseIdentity',
-    query: {
-      redirectTo: router.currentRoute.value.fullPath,
-    },
-  })
+  redirectToChooseIdentity(router, false)
 }
 
 const themeSettingDrawerVisible = ref<boolean>(false)

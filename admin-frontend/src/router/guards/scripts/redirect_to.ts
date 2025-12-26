@@ -183,3 +183,39 @@ export function redirectToChooseIdentityBeforeRoute(/*router: Router,*/ from: Ro
     },
   })
 }
+
+/**
+ * 跳转登录页
+ *
+ * @param router
+ * @since 2025-12-27
+ */
+export function redirectToLogin(router: Router, redirectParam: boolean) {
+  router.push({
+    name: 'Login',
+    query: {
+      ...redirectParam ? {
+        // 2025.08.26 route.path 改为 route.fullPath (支持携带 hash 路由参数)
+        redirectTo: router.currentRoute.value.fullPath, // window.location.href
+      } : {},
+    },
+  })
+}
+
+
+/**
+ * 跳转到切换身份页
+ *
+ * @param router
+ * @since 2025-12-27
+ */
+export function redirectToChooseIdentity(router: Router, redirectParam: boolean) {
+  router.push({
+    name: 'ChooseIdentity',
+    query: {
+      ...redirectParam ? {
+        redirectTo: router.currentRoute.value.fullPath,
+      } : {},
+    },
+  })
+}
