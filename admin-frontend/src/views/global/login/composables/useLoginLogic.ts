@@ -105,8 +105,9 @@ export function useLoginLogic() {
           identityStore.setCurrentIdentity(identityList[0])
         }
         redirectAfterLogin(router, { gotoChooseIdentity: !haveAndOnlyHaveOneIdentity })
+      }).finally(() => {
+        loading.value = false
       })
-      loading.value = false
     })
   }
 
