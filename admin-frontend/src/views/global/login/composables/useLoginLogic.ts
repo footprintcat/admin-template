@@ -6,6 +6,7 @@ import settings from '@/utils/settings'
 import { systemUserAuthLogin } from '@/api/system/user-auth'
 import { redirectAfterLogin } from '@/router/guards/scripts/redirect_to'
 import { usePermissionStore } from '@/stores/permission'
+import { useIdentityStore } from '@/stores/system/identity'
 import { useTabsStore } from '@/stores/tabs'
 import { useUserStore } from '@/stores/user'
 import type { ValidateError, ValidateFieldsError } from 'async-validator'
@@ -26,6 +27,7 @@ export function useLoginLogic() {
 
   const permissionStore = usePermissionStore()
   const userStore = useUserStore()
+  const identityStore = useIdentityStore()
 
   const loading = ref<boolean>(false)
 
@@ -94,6 +96,9 @@ export function useLoginLogic() {
 
         const userInfo = data.userInfo
         userStore.updateUserInfo(userInfo)
+
+        const identityList = data.identityList
+        identityStore.setUserIdentityListAfterLogin(identityList)
 
         // TODO
         // await permissionStore.asyncUpdatePermissionList(data.roleId, false)
