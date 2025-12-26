@@ -67,7 +67,7 @@
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link" :style="themeStore.presentationMode ? { filter: 'blur(3px)' } : undefined">
-            {{ userStore.username }}
+            {{ userStore.user?.nickname }}
             <el-icon class="el-icon--right">
               <ArrowDown />
             </el-icon>
