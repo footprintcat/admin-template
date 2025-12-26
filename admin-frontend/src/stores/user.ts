@@ -28,9 +28,9 @@ export const useUserStore = defineStore('user', () => {
   // 网页加载后 check-login.ts 中会调用一次 fetchUserInfo
   async function fetchUserInfo(params: {
     /** 当用户信息存在时跳过拉取 */
-    skipWhenExists: boolean
+    skipIfExists: boolean
   }) {
-    if (params.skipWhenExists && isFetchedUserDto.value) {
+    if (params.skipIfExists && isFetchedUserDto.value) {
       return
     }
     return systemUserAuthGetInfo()

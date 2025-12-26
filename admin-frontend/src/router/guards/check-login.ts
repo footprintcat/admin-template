@@ -13,7 +13,7 @@ export function createCheckLoginGuard(router: Router) {
     const permissionStore = usePermissionStore()
 
     // 网页加载后立即获取一次当前登录用户信息
-    await userStore.fetchUserInfo({ skipWhenExists: true })
+    await userStore.fetchUserInfo({ skipIfExists: true })
 
     const isLogin = userStore.isLogin
     const isInLoginPage = to.name === 'Login'
