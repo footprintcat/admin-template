@@ -229,6 +229,10 @@ function processSQLFile(isDevelopSQL, inputFilePath, outputFilePath, tableOrder 
       endMarker +
       '\n';
 
+    if (finalFileContent.includes('\r\n')) {
+      console.warn('⚠ 文件中含有 CRLF 换行符！')
+    }
+
     // 保存到新文件
     fs.writeFileSync(outputFilePath, finalFileContent, 'utf8');
 

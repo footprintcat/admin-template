@@ -516,7 +516,8 @@ INSERT INTO `system_role` (`id`, `parent_id`, `level`, `role_name`, `comment`, `
 -- system_identity 表测试数据（27条）
 INSERT INTO `system_identity` (`id`, `user_id`, `department_id`, `tenant_id`, `create_by`, `update_by`) VALUES
 -- 总公司
-(6001, 1, 3001, NULL, 1, 1),
+(5001, 1, 3001, NULL, 1, 1),
+(5002, 1, 3002, NULL, 1, 1),
 (6002, 11, 3001, NULL, 1, 1),
 
 -- 技术部
