@@ -3,14 +3,15 @@ import { usePermissionStore } from '@/stores/permission'
 // import { useUserStore } from '@/stores/user'
 import { useErrorPage } from '@/views/core/error-page/useErrorPage'
 
+const { setErrorCode } = useErrorPage()
+
 /**
  * 用户权限校验 路由守卫
  */
 export function createCheckPermissionGuard(router: Router) {
   router.beforeEach(async (to, from, next) => { // router.currentRoute.value === from
 
-    const { setErrorCode } = useErrorPage()
-
+    // 检查页面是否存在
     if (to.matched.length === 0) {
       setErrorCode('404', to)
       // 跳到 404 页，这样在点击上一个页面还能回来（不然 router path 没变化不会进行跳转）
