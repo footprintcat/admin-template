@@ -12,7 +12,7 @@ export function createCheckPermissionGuard(router: Router) {
     const { setErrorCode } = useErrorPage()
 
     if (to.matched.length === 0) {
-      setErrorCode('404')
+      setErrorCode('404', to)
       // 跳到 404 页，这样在点击上一个页面还能回来（不然 router path 没变化不会进行跳转）
       next({
         name: '404',
@@ -31,12 +31,12 @@ export function createCheckPermissionGuard(router: Router) {
 
     const isNeedPermission: boolean = !!targetPagePermission
     const isIdentityHasPermission: boolean = permissionStore.checkMenuPermission(targetPagePermission)
-    console.log('isNeedPermission', isNeedPermission)
-    console.log('isIdentityHasPermission', isIdentityHasPermission)
+    // console.log('isNeedPermission', isNeedPermission)
+    // console.log('isIdentityHasPermission', isIdentityHasPermission)
 
     if (isNeedPermission && !isIdentityHasPermission) {
       // 如果没有权限，则进入403
-      setErrorCode('403')
+      setErrorCode('403', to)
       // next(false)
       next({
         name: '403',
@@ -48,7 +48,7 @@ export function createCheckPermissionGuard(router: Router) {
       return
     }
 
-    setErrorCode(null)
+    setErrorCode(null, to)
     next()
   })
 }

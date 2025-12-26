@@ -1,4 +1,5 @@
 import { type Component, defineAsyncComponent } from 'vue'
+import type { RouteLocationNormalizedGeneric } from 'vue-router'
 
 export type ErrorCode =
   | '403'
@@ -8,8 +9,12 @@ const errorCode = ref<ErrorCode | null>(null)
 const errorCodeReadonly = readonly(errorCode)
 const showErrorPage = computed<boolean>(() => errorCode.value !== null)
 
-function setErrorCode(code: ErrorCode | null) {
-  console.log('setErrorCode', code)
+/**
+ * @param code ErrorCode
+ * @param to   跳转到的路由, 仅用于 console.log 打印
+ */
+function setErrorCode(code: ErrorCode | null, to: RouteLocationNormalizedGeneric) {
+  console.log('setErrorCode', code, 'to', to)
   errorCode.value = code
 }
 

@@ -61,7 +61,7 @@ onBeforeUpdate(() => {
 
 // 关闭单个标签
 const closeTabs = (index: number) => {
-  const delItem = tabs.list[index]
+  const delItem = tabs.list[index]! // index 是 v-for 数组遍历渲染的 index, 所以这里 delItem 一定存在, 不会是 undefined
   tabs.delTabsItem(index)
   const item = tabs.list[index] ? tabs.list[index] : tabs.list[index - 1]
   if (item) {
