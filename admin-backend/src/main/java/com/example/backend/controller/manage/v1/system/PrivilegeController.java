@@ -28,6 +28,26 @@ public class PrivilegeController {
     @Resource
     private PrivilegeService privilegeService;
 
+    public record PrivilegeResponse(
+            String[] menuCodeList,
+            String[] combinedCodeList
+    ) {}
+
+    @GetMapping("/getCurrentUserPrivilegeList")
+    @ResponseBody
+    public CommonReturn getCurrentUserPrivilegeList(HttpServletRequest httpServletRequest) throws BusinessException {
+        HttpSession session = httpServletRequest.getSession();
+        @NotNull Long identityId = SessionUtils.getIdentityIdOrThrow(session);
+
+        PrivilegeService.PrivilegeCodeList privilegeCodeList = privilegeService.getPrivilegeCodeListByIdentityId(identityId);
+
+        PrivilegeResponse response = new PrivilegeResponse(
+                privilegeCodeList.menuCodeList().toArray(new String[0]),
+                privilegeCodeList.combinedCodeList().toArray(new String[0])
+        );
+        return CommonReturn.success(response);
+    }
+
     /**
      * 获取当前用户所有权限列表
      *

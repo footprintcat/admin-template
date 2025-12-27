@@ -32,7 +32,7 @@
       <el-scrollbar max-height="61.8vh" class="identity-list" v-loading="loading" wrap-style="padding: 1.2rem;">
         <el-card v-for="identity in identityList" :key="identity.id" class="identity-card"
           :class="{ 'is-selected': selectedId === identity.id, 'is-current': currentIdentity?.id === identity.id }"
-          @click="handleSelectIdentity(identity.id)">
+          @click="handleSelectIdentity(identity)">
           <div class="card-content">
             <el-badge :hidden="currentIdentity?.id !== identity.id" :value="'当前'" class="item">
               <div class="identity-icon">

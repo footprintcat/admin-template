@@ -101,8 +101,7 @@ export function useLoginLogic() {
         console.log('当前用户拥有', identityList.length, '个身份', identityList)
         const haveAndOnlyHaveOneIdentity = identityList.length === 1
         if (haveAndOnlyHaveOneIdentity) {
-          await identityStore.saveSelectedIdentityToBackend(identityList[0].id)
-          identityStore.setCurrentIdentity(identityList[0])
+          identityStore.switchCurrentIdentity(identityList[0])
         }
         redirectAfterLogin(router, { gotoChooseIdentity: !haveAndOnlyHaveOneIdentity })
       }).finally(() => {

@@ -29,3 +29,14 @@ export function switchIdentity(identityId: number) {
   const url = getUrl('/switch')
   return post<null>(url, { identityId })
 }
+
+/**
+ * 退出身份
+ *
+ * @param identityId 身份ID
+ * @returns
+ */
+export function exitIdentity() {
+  const url = getUrl('/exit')
+  return post<null>(url, {})
+}

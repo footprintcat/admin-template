@@ -1,9 +1,9 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { switchIdentity } from '@/api/system/identity'
 import { redirectAfterChooseIdentity } from '@/router/guards/scripts/redirect_to'
 import { useIdentityStore } from '@/stores/system/identity'
+import type { IdentityDto } from '@/types/backend/dto/IdentityDto'
 
 /**
  * 登录逻辑 组合式函数
@@ -48,28 +48,17 @@ export function useChooseIdentityLogic() {
     }
   })
 
-  const handleSelectIdentity = async (identityId: number) => {
+  const handleSelectIdentity = async (identity: IdentityDto) => {
     const isFirstSwitch = !currentIdentity.value
 
     if (loading.value) return
 
-    selectedId.value = identityId
+    selectedId.value = identity.id
     loading.value = true
 
     try {
-      await switchIdentity(identityId)
+      await identityStore.switchCurrentIdentity(identity)
       ElMessage.success(isFirstSwitch ? '身份选择成功' : '身份切换成功')
-
-      // TODO 获取用户权限
-      // const permissionStore = usePermissionStore()
-      // TODO
-      // await permissionStore.asyncUpdatePermissionList(data.roleId, false)
-
-      const identity = identityList.value.find(i => i.id === identityId)
-      if (identity) {
-        await identityStore.setCurrentIdentity(identity)
-      }
-
       redirectAfterChooseIdentity(router)
     } catch {
       ElMessage.error('身份选择失败，请重试')

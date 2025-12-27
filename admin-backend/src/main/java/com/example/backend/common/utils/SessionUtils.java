@@ -73,6 +73,10 @@ public class SessionUtils {
         return identityId;
     }
 
+    public static void clearIdentityId(HttpSession session) {
+        session.removeAttribute("identity_id");
+    }
+
     private static @Nullable Integer getInteger(HttpSession session, String attrName) {
         try {
             String str = session.getAttribute(attrName).toString();
