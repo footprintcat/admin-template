@@ -54,7 +54,7 @@ public class PrivilegeRepository extends ServiceImpl<PrivilegeMapper, Privilege>
         }
         LambdaQueryWrapper<Privilege> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Privilege::getEntityType, privilegeEntityTypeEnum);
-        queryWrapper.in(Privilege::getEntityType, entityIdList);
+        queryWrapper.in(Privilege::getEntityId, entityIdList);
         return this.list(queryWrapper);
     }
 

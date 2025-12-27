@@ -2,21 +2,17 @@ package com.example.backend.modules.system.service;
 
 import com.example.backend.modules.system.enums.privilege.PrivilegeEntityTypeEnum;
 import com.example.backend.modules.system.model.entity.IdentityRoleRelation;
-import com.example.backend.modules.system.model.entity.Menu;
 import com.example.backend.modules.system.model.entity.Privilege;
 import com.example.backend.modules.system.repository.IdentityRoleRelationRepository;
-import com.example.backend.modules.system.repository.MenuRepository;
 import com.example.backend.modules.system.repository.PrivilegeRepository;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -46,15 +42,13 @@ public class PrivilegeService {
 
         // 按照 identityId 和所有角色id 查询出所有权限
         List<Privilege> identityPrivilege = privilegeRepository.getListByEntityId(PrivilegeEntityTypeEnum.IDENTITY, identityId);
-        List<Privilege> rolePrivilege = privilegeRepository.getListByEntityIdList(PrivilegeEntityTypeEnum.IDENTITY, roleIdList);
+        List<Privilege> rolePrivilege = privilegeRepository.getListByEntityIdList(PrivilegeEntityTypeEnum.ROLE, roleIdList);
 
         // 合并权限列表
-        Set<Long> identityMenuIdSet = privilegeRepository.inheritAndMergePermissions(identityPrivilege);
-        Set<Long> roleMenuIdSet = privilegeRepository.inheritAndMergePermissions(identityMenuIdSet, rolePrivilege);
+        Set<Long> roleMenuIdSet = privilegeRepository.inheritAndMergePermissions(rolePrivilege);
+        Set<Long> identityMenuIdSet = privilegeRepository.inheritAndMergePermissions(roleMenuIdSet, identityPrivilege);
 
-        // 计算出指定身份下有权的菜单项
-        Set<Long> menuIdSet = new HashSet<>(identityMenuIdSet);
-        menuIdSet.removeAll(roleMenuIdSet);
-        return menuIdSet;
+        return new HashSet<>(identityMenuIdSet);
+        // return identityMenuIdSet;
     }
 }
