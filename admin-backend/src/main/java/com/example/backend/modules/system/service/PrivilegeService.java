@@ -26,43 +26,6 @@ public class PrivilegeService {
     private IdentityRoleRelationRepository identityRoleRelationRepository;
     @Resource
     private PrivilegeRepository privilegeRepository;
-    @Resource
-    private MenuRepository menuRepository;
-
-    public record PrivilegeCodeList(
-            List<String> menuCodeList,
-            List<String> combinedCodeList
-    ) {
-    }
-
-    public PrivilegeCodeList getPrivilegeCodeListByIdentityId(@NotNull Long identityId) {
-        @NotNull Set<Long> menuIdSet = getMenuIdListByIdentityId(identityId);
-
-        List<Menu> menuList = menuIdSet.isEmpty()
-                ? Collections.emptyList()
-                : menuRepository.listByIds(menuIdSet);
-
-        List<String> menuCodeList = menuList.stream()
-                .filter(menu -> !"action".equals(menu.getMenuType()))
-                .map(Menu::getMenuCode)
-                .filter(code -> code != null && !code.isEmpty())
-                .collect(Collectors.toList());
-
-        List<String> combinedCodeList = menuList.stream()
-                .filter(menu -> "action".equals(menu.getMenuType()))
-                .map(menu -> combineMenuAndActionCode(menu.getMenuCode(), menu.getActionCode()))
-                .filter(code -> code != null && !code.isEmpty())
-                .collect(Collectors.toList());
-
-        return new PrivilegeCodeList(menuCodeList, combinedCodeList);
-    }
-
-    private String combineMenuAndActionCode(String menuCode, String actionCode) {
-        if (menuCode == null || actionCode == null) {
-            return null;
-        }
-        return menuCode + ":" + actionCode;
-    }
 
     /**
      * 获取指定身份拥有的菜单权限

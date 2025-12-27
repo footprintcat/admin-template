@@ -626,6 +626,11 @@ INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `men
 -- system_identity_role_relation 表测试数据（20条）
 INSERT INTO `system_identity_role_relation` (`id`, `identity_id`, `role_id`, `tenant_id`, `create_by`, `update_by`) VALUES
 -- 超级管理员角色关联
+(6001, 5001, 2001, NULL, 1, 1),
+(6002, 5001, 2002, NULL, 1, 1),
+(6003, 5002, 2002, NULL, 1, 1),
+(6004, 5002, 2003, NULL, 1, 1),
+
 (7001, 6001, 2001, NULL, 1, 1),
 (7002, 6002, 2001, NULL, 1, 1),
 (7003, 6007, 2001, NULL, 1, 1),
