@@ -8,7 +8,7 @@ export interface PrivilegeResponse {
   combinedCodeList: string[]
 }
 
-export function getCurrentUserPrivilegeList() {
-  const url = getUrl('/getCurrentUserPrivilegeList')
+export function getCurrentIdentityPermittedMenuIdList() {
+  const url = getUrl('/getCurrentIdentityPermittedMenuIdList')
   return get<PrivilegeResponse>(url)
 }

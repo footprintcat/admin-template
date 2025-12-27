@@ -16,10 +16,13 @@ public class MenuDto implements Serializable {
     private String id;
     private String parentId;
     private Integer level;
-    private String menuId;
-    private String menuFullName;
+    private String menuType;
+    private String menuCode;
+    private String actionCode;
     private String menuName;
-    private Integer sequence;
+    private String menuPath;
+    private Integer sortOrder;
+    private Integer canEdit;
     private Integer isHide;
     private List<MenuDto> children;
 
