@@ -1,22 +1,30 @@
 package com.example.backend.modules.system.service.needrefactor;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.backend.common.baseobject.db.OrderByItem;
 import com.example.backend.common.baseobject.request.PageQuery;
+import com.example.backend.common.baseobject.request.SortColumnRequestItem;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.modules.system.mapper.UserMapper;
 import com.example.backend.modules.system.model.dto.UserDto;
 import com.example.backend.modules.system.model.entity.User;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 @Service
 public class SystemUserServiceV2 {
 
@@ -149,11 +157,48 @@ public class SystemUserServiceV2 {
      * 获取用户分页列表
      *
      * @param pageQuery
+     * @param userDTO
+     * @param sortList  排序参数列表
      * @return
      */
-    public Page<User> getUserPage(@NotNull PageQuery pageQuery, @NotNull UserDto userDTO) {
+    public Page<User> getUserPage(@NotNull PageQuery pageQuery, @NotNull UserDto userDTO, @NotNull List<SortColumnRequestItem> sortList) throws BusinessException {
         Page<User> page = new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize());
-        return userMapper.getUserPage(page, userDTO);
+        return userMapper.getUserPage(page, userDTO, _validateSortList(sortList));
+    }
+
+    /**
+     * 列表查询允许排序的字段
+     */
+    private static final Map<String, String> FIELD_TO_DB_COLUMN_MAP = new HashMap<>();
+
+    static {
+        FIELD_TO_DB_COLUMN_MAP.put("id", "id");
+        FIELD_TO_DB_COLUMN_MAP.put("username", "username");
+        FIELD_TO_DB_COLUMN_MAP.put("nickname", "nickname");
+        FIELD_TO_DB_COLUMN_MAP.put("status", "status");
+    }
+
+    /**
+     * 验证并转换排序参数（将前端字段名转换为数据库列名）
+     *
+     * @param sortList 原始排序参数列表
+     * @return 验证后的排序参数列表
+     */
+    private List<OrderByItem> _validateSortList(@NotNull List<SortColumnRequestItem> sortList) throws BusinessException {
+        @NotNull List<OrderByItem> orderByItemList = new ArrayList<>();
+        for (SortColumnRequestItem requestItem : sortList) {
+            String field = requestItem.getField();
+            boolean descSort = requestItem.isDescSort();
+
+            @Nullable String dbColumn = FIELD_TO_DB_COLUMN_MAP.get(field);
+            if (dbColumn == null) {
+                throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR, "未知的排序字段: " + field);
+            }
+
+            OrderByItem orderByItem = new OrderByItem();
+            orderByItemList.add(orderByItem.setField(dbColumn).setIsDesc(descSort));
+        }
+        return orderByItemList;
     }
 
     /**

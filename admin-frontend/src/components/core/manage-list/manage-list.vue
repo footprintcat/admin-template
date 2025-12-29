@@ -316,6 +316,9 @@ async function handleFetchData({
     .then(result => {
       try {
         console.log('result', result)
+        if (!result.isSuccess) {
+          return // 已经弹出全局提示了
+        }
         tableData.value = result.data.list
         total.value = result.data.total || 0
 

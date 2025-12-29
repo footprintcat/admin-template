@@ -23,27 +23,44 @@
     </update>
 
     <select id="getUserPage" resultType="com.example.backend.modules.system.model.entity.User">
-        <include refid="getUserList" />
-    </select>
-    <select id="getUserList" resultType="com.example.backend.modules.system.model.entity.User">
-        <include refid="getUserList" />
-    </select>
-    <sql id="getUserList">
         SELECT * FROM system_user
         <where>
-            <if test="query.id != null and query.id != ''">
-                AND id = #{query.id}
-            </if>
-            <if test="query.username != null and query.username != ''">
-                AND username LIKE concat('%',#{query.username},'%')
-            </if>
-            <if test="query.roleId != null">
-                AND role_id = #{query.roleId}
-            </if>
-            <if test="query.telephone != null and query.telephone != ''">
-                AND telephone LIKE concat('%',#{query.telephone},'%')
-            </if>
+            <include refid="whereCondition" />
         </where>
+        <include refid="orderByCondition" />
+    </select>
+    <select id="getUserList" resultType="com.example.backend.modules.system.model.entity.User">
+        SELECT * FROM system_user
+        <where>
+            <include refid="whereCondition" />
+        </where>
+    </select>
+
+    <sql id="whereCondition">
+        <if test="query.id != null and query.id != ''">
+            AND id = #{query.id}
+        </if>
+        <if test="query.username != null and query.username != ''">
+            AND username LIKE concat('%',#{query.username},'%')
+        </if>
+        <if test="query.roleId != null">
+            AND role_id = #{query.roleId}
+        </if>
+        <if test="query.telephone != null and query.telephone != ''">
+            AND telephone LIKE concat('%',#{query.telephone},'%')
+        </if>
+    </sql>
+    <sql id="orderByCondition">
+        <if test="orderByItem != null and orderByItem.size() > 0">
+            ORDER BY
+            <foreach collection="orderByItem" item="sort" separator=",">
+                `${sort.field}`
+                <choose>
+                    <when test="sort.isDesc == true">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </foreach>
+        </if>
     </sql>
 
 </mapper>

@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,9 +62,14 @@ public class UserController {
      */
     @PostMapping("/list")
     @ResponseBody
-    public CommonReturn list(@RequestBody ManageSystemUserListRequest queryRequest) {
+    public CommonReturn list(@RequestBody ManageSystemUserListRequest queryRequest) throws BusinessException {
+
         // 查询分页数据
-        Page<User> page = systemUserServiceV2.getUserPage(queryRequest.getPageQuery(), queryRequest.getParams());
+        Page<User> page = systemUserServiceV2.getUserPage(
+                queryRequest.getPageQuery(),
+                queryRequest.getParams(),
+                queryRequest.getSort()
+        );
 
         // 分页数据转为 DTO
         List<User> list = page.getRecords();
@@ -85,9 +91,9 @@ public class UserController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public CommonReturn list(PageQuery pageQuery, UserDto userDTO) {
+    public CommonReturn list(PageQuery pageQuery, UserDto userDTO) throws BusinessException {
         // 查询分页数据
-        Page<User> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, userDTO);
+        Page<User> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, userDTO, Collections.emptyList());
 
         // 查询 roleMap
         HashMap<Long, String> roleMap = systemRoleServiceV2.getRoleMap();
