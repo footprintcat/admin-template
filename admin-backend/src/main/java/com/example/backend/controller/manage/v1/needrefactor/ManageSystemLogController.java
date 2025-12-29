@@ -40,6 +40,8 @@ import java.util.List;
 public class ManageSystemLogController {
 
     @Resource
+    private LogConverter logConverter;
+    @Resource
     private SystemLogService systemLogService;
 
     @GetMapping("/list")
@@ -49,7 +51,7 @@ public class ManageSystemLogController {
 
         // 分页数据转为 DTO
         List<Log> logList = systemLogPage.getRecords();
-        List<LogDto> logDtoList = LogConverter.INSTANCE.toDto(logList);
+        List<LogDto> logDtoList = logConverter.toDto(logList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -145,7 +147,7 @@ public class ManageSystemLogController {
     @ResponseBody
     public CommonReturn exportSystemLogList(LogDto logDTO) {
         List<Log> logList = systemLogService.getSystemLogList(logDTO);
-        List<LogDto> logDtoList = LogConverter.INSTANCE.toDto(logList);
+        List<LogDto> logDtoList = logConverter.toDto(logList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();

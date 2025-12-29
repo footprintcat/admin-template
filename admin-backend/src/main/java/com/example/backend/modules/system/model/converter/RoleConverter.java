@@ -5,14 +5,11 @@ import com.example.backend.modules.system.model.dto.RoleDto;
 import com.example.backend.modules.system.model.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {ConvertHelper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoleConverter {
-
-    RoleConverter INSTANCE = Mappers.getMapper(RoleConverter.class);
 
     /**
      * entity -> dto

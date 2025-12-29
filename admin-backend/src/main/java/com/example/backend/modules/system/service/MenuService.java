@@ -20,6 +20,8 @@ import java.util.List;
 public class MenuService {
 
     @Resource
+    private MenuConverter menuConverter;
+    @Resource
     private MenuRepository menuRepository;
 
     public @NotNull @Unmodifiable List<MenuDto> getMenuListById(@NotNull Collection<Long> menuIdList) {
@@ -27,6 +29,6 @@ public class MenuService {
             return Collections.emptyList();
         }
         List<Menu> menus = menuRepository.listByIds(menuIdList);
-        return MenuConverter.INSTANCE.toDto(menus);
+        return menuConverter.toDto(menus);
     }
 }

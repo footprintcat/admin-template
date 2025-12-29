@@ -5,14 +5,11 @@ import com.example.backend.modules.system.model.dto.PrivilegeDto;
 import com.example.backend.modules.system.model.entity.Privilege;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {ConvertHelper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PrivilegeConverter {
-
-    PrivilegeConverter INSTANCE = Mappers.getMapper(PrivilegeConverter.class);
 
     /**
      * entity -> dto

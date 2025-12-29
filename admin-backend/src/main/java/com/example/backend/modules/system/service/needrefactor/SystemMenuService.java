@@ -44,6 +44,8 @@ public class SystemMenuService {
     private String siteId;
 
     @Resource
+    MenuConverter menuConverter;
+    @Resource
     private MenuMapper menuMapper;
     @Resource
     private MenuRepository systemMenuRepository;
@@ -101,7 +103,7 @@ public class SystemMenuService {
                     // 获取这一项的 children
                     List<MenuDto> children = getMenuChildrenList(menu.getId(), menus, foundParent);
                     // 转 DTO
-                    MenuDto menuDTO = MenuConverter.INSTANCE.toDto(menu);
+                    MenuDto menuDTO = menuConverter.toDto(menu);
                     menuDTO.setChildren(children);
                     return menuDTO;
                 })
@@ -150,7 +152,7 @@ public class SystemMenuService {
     }
 
     public void updateSystemMenu(MenuDto menuDTO) {
-        Menu menu = MenuConverter.INSTANCE.toEntity(menuDTO);
+        Menu menu = menuConverter.toEntity(menuDTO);
 
         LambdaUpdateWrapper<Menu> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Menu::getId, menu.getId());

@@ -43,6 +43,8 @@ import java.util.List;
 public class ManageSystemRoleController {
 
     @Resource
+    private RoleConverter roleConverter;
+    @Resource
     private SystemRoleServiceV2 systemRoleServiceV2;
 
     /**
@@ -60,7 +62,7 @@ public class ManageSystemRoleController {
 
         // 分页数据转为 DTO
         List<Role> roleList = rolePage.getRecords();
-        List<RoleDto> roleDtoList = RoleConverter.INSTANCE.toDto(roleList);
+        List<RoleDto> roleDtoList = roleConverter.toDto(roleList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -115,7 +117,7 @@ public class ManageSystemRoleController {
     public CommonReturn edit(@ModelAttribute RoleDto roleDTO) {
 
         // 传入参数 - 要修改的设备
-        Role role = RoleConverter.INSTANCE.toEntity(roleDTO);
+        Role role = roleConverter.toEntity(roleDTO);
 
         // 通过 staffId 查询系统中是否存在该设备
         Role existRole = systemRoleServiceV2.getRoleById(role.getId());
@@ -158,7 +160,7 @@ public class ManageSystemRoleController {
     @ResponseBody
     public CommonReturn exportRoleList(RoleDto roleDTO) {
         List<Role> roleList = systemRoleServiceV2.getRoleList(roleDTO);
-        List<RoleDto> roleDtoList = RoleConverter.INSTANCE.toDto(roleList);
+        List<RoleDto> roleDtoList = roleConverter.toDto(roleList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();

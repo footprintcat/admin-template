@@ -5,14 +5,11 @@ import com.example.backend.modules.system.model.dto.IdentityDto;
 import com.example.backend.modules.system.model.entity.Identity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {ConvertHelper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IdentityConverter {
-
-    IdentityConverter INSTANCE = Mappers.getMapper(IdentityConverter.class);
 
     /**
      * entity -> dto

@@ -5,14 +5,11 @@ import com.example.backend.modules.system.model.dto.MenuDto;
 import com.example.backend.modules.system.model.entity.Menu;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {ConvertHelper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MenuConverter {
-
-    MenuConverter INSTANCE = Mappers.getMapper(MenuConverter.class);
 
     /**
      * entity -> dto

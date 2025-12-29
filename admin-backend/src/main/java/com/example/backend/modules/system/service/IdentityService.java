@@ -22,6 +22,8 @@ import java.util.Objects;
 public class IdentityService {
 
     @Resource
+    private IdentityConverter identityConverter;
+    @Resource
     private IdentityRepository identityRepository;
 
     /**
@@ -33,7 +35,7 @@ public class IdentityService {
      */
     public @NotNull List<IdentityDto> getIdentityListByUserId(@NotNull Long userId) {
         List<Identity> identityList = identityRepository.getIdentityListByUserId(userId);
-        return IdentityConverter.INSTANCE.toDto(identityList);
+        return identityConverter.toDto(identityList);
     }
 
     /**
@@ -50,7 +52,7 @@ public class IdentityService {
         }
         @Nullable
         Identity identity = identityRepository.getUserIdentityId(userId, identityId);
-        return IdentityConverter.INSTANCE.toDto(identity);
+        return identityConverter.toDto(identity);
     }
 
     /**
