@@ -13,6 +13,7 @@ import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.annotations.HandleControllerGlobalException;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.common.baseobject.response.CommonReturn;
+import com.example.backend.modules.system.model.converter.LogConverter;
 import com.example.backend.modules.system.model.dto.LogDto;
 import com.example.backend.modules.system.model.entity.Log;
 import com.example.backend.modules.system.service.needrefactor.SystemLogService;
@@ -48,7 +49,7 @@ public class ManageSystemLogController {
 
         // 分页数据转为 DTO
         List<Log> logList = systemLogPage.getRecords();
-        List<LogDto> logDtoList = LogDto.fromEntity(logList);
+        List<LogDto> logDtoList = LogConverter.INSTANCE.toDto(logList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -144,7 +145,7 @@ public class ManageSystemLogController {
     @ResponseBody
     public CommonReturn exportSystemLogList(LogDto logDTO) {
         List<Log> logList = systemLogService.getSystemLogList(logDTO);
-        List<LogDto> logDtoList = LogDto.fromEntity(logList);
+        List<LogDto> logDtoList = LogConverter.INSTANCE.toDto(logList);
 
         // 当前时间
         Date now = Calendar.getInstance().getTime();

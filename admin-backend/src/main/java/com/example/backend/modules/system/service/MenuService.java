@@ -1,6 +1,7 @@
 package com.example.backend.modules.system.service;
 
 
+import com.example.backend.modules.system.model.converter.MenuConverter;
 import com.example.backend.modules.system.model.dto.MenuDto;
 import com.example.backend.modules.system.model.entity.Menu;
 import com.example.backend.modules.system.repository.MenuRepository;
@@ -26,6 +27,6 @@ public class MenuService {
             return Collections.emptyList();
         }
         List<Menu> menus = menuRepository.listByIds(menuIdList);
-        return MenuDto.fromEntity(menus);
+        return MenuConverter.INSTANCE.toDto(menus);
     }
 }

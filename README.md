@@ -87,7 +87,8 @@ TODO
 
 **编译时**
 
-- Lombok
+- Lombok 1.18
+- MapStruct 1.6
 - JetBrains Annotations 26.0
 
 **环境**

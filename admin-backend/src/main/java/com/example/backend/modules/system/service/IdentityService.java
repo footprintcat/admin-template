@@ -3,6 +3,7 @@ package com.example.backend.modules.system.service;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
+import com.example.backend.modules.system.model.converter.IdentityConverter;
 import com.example.backend.modules.system.model.dto.IdentityDto;
 import com.example.backend.modules.system.model.entity.Identity;
 import com.example.backend.modules.system.repository.IdentityRepository;
@@ -32,7 +33,7 @@ public class IdentityService {
      */
     public @NotNull List<IdentityDto> getIdentityListByUserId(@NotNull Long userId) {
         List<Identity> identityList = identityRepository.getIdentityListByUserId(userId);
-        return IdentityDto.fromEntity(identityList);
+        return IdentityConverter.INSTANCE.toDto(identityList);
     }
 
     /**
@@ -49,7 +50,7 @@ public class IdentityService {
         }
         @Nullable
         Identity identity = identityRepository.getUserIdentityId(userId, identityId);
-        return IdentityDto.fromEntity(identity);
+        return IdentityConverter.INSTANCE.toDto(identity);
     }
 
     /**

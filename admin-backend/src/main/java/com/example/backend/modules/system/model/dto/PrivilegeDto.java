@@ -17,27 +17,4 @@ public class PrivilegeDto {
     private String module;
     private String type;
 
-    public static PrivilegeDto fromEntity(Privilege privilege) {
-        if (privilege == null) {
-            return null;
-        }
-        PrivilegeDto privilegeDTO = new PrivilegeDto();
-        BeanUtils.copyProperties(privilege, privilegeDTO);
-        privilegeDTO.setId(StringUtils.toNullableString(privilege.getId()));
-        return privilegeDTO;
-    }
-
-    public static List<PrivilegeDto> fromEntity(List<Privilege> privilegeList) {
-        return privilegeList.stream().map(PrivilegeDto::fromEntity).collect(Collectors.toList());
-    }
-
-    public static Privilege toEntity(PrivilegeDto privilegeDTO) {
-        if (privilegeDTO == null) {
-            return null;
-        }
-        Privilege privilege = new Privilege();
-        BeanUtils.copyProperties(privilegeDTO, privilege);
-        privilege.setId(NumberUtils.parseLong(privilegeDTO.getId()));
-        return privilege;
-    }
 }
