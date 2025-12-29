@@ -6,7 +6,9 @@
       <el-form-item label="数据范围" v-if="!props.hideWithFilterRadioBox">
         <el-radio-group v-model="exportConfig.withFilter">
           <el-radio :value="false">全部数据</el-radio>
-          <el-radio :value="true">满足查询条件的数据</el-radio>
+          <el-radio :value="true">当前查询条件下全部数据</el-radio>
+          <!-- TODO -->
+          <el-radio :value="2">当前页数据 (TODO)</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="文件格式">
@@ -16,6 +18,10 @@
       </el-form-item>
       <el-alert v-if="exportInfo" :title="exportInfo.info" :type="exportInfo.type" :closable="false" show-icon />
     </el-form>
+    <p>
+      TODO:
+      将导出 x 条数据
+    </p>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
