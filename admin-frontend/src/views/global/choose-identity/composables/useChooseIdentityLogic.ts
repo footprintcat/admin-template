@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { redirectAfterChooseIdentity } from '@/router/guards/scripts/redirect_to'
 import { useIdentityStore } from '@/stores/system/identity'
-import type { IdentityDto } from '@/types/backend/dto/IdentityDto'
+import type { IdentityDto } from '@/types/backend/dto/system/IdentityDto'
 
 /**
  * 登录逻辑 组合式函数

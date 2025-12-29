@@ -120,7 +120,6 @@ export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
         isErrorMessageShown = true
 
         // 若用户未登录
-        // TODO 异常枚举不要写死
         if (result.errCode === BusinessErrorCode.USER_NOT_LOGIN) {
           const router = useRouter()
           userLogout(router, true)

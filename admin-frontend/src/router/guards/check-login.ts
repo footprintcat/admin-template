@@ -23,7 +23,7 @@ export function createCheckLoginGuard(router: Router) {
       if (isInLoginPage) {
         // 已登录, 访问登录页时跳转
         // console.log('已登录, 在登录页')
-        // TODO 如果有 redirect_url 则跳转，否则跳到 dashboard
+        // 如果有 redirect_url 则跳转，否则跳到 dashboard
         redirectAfterLoginBeforeRoute(to, next)
         return
       } else {

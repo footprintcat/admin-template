@@ -1,6 +1,6 @@
 import { post } from '@/utils/api'
-import type { IdentityDto } from '@/types/backend/dto/IdentityDto'
-import type { UserDto } from '@/types/backend/dto/UserDto'
+import type { IdentityDto } from '@/types/backend/dto/system/IdentityDto'
+import type { UserDto } from '@/types/backend/dto/system/UserDto'
 
 const API_PREFIX = '/manage/v1/system/user-auth'
 const getUrl = (url: string) => API_PREFIX + url

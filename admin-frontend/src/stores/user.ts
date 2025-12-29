@@ -2,7 +2,7 @@ import { computed, readonly, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { ElMessageBox } from 'element-plus'
 import { systemUserAuthGetInfo } from '@/api/system/user-auth'
-import type { UserDto } from '@/types/backend/dto/UserDto'
+import type { UserDto } from '@/types/backend/dto/system/UserDto'
 
 export const useUserStore = defineStore('user', () => {
 

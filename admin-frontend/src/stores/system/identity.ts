@@ -1,7 +1,7 @@
 import { readonly, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { exitIdentity, getIdentityInfo, switchIdentity } from '@/api/system/identity'
-import type { IdentityDto } from '@/types/backend/dto/IdentityDto'
+import type { IdentityDto } from '@/types/backend/dto/system/IdentityDto'
 import { usePermissionStore } from '../permission'
 
 export const useIdentityStore = defineStore('identity', () => {
