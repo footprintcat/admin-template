@@ -90,7 +90,7 @@
 <script setup lang="ts">
 import { ElMessage, type ElTable, type TableColumnCtx } from 'element-plus'
 import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
-import type { CommonReturn } from '@/types/backend/common-return'
+import type { CommonReturn } from '@/types/backend/common/common-return'
 import type { ManageListResponse } from '@/types/backend/manage-list-response'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import ExportFileDialog from './export-file/export-file-dialog.vue'

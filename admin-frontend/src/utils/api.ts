@@ -3,7 +3,8 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import { usePromiseLoading } from '@/composables/useLoading'
-import type { CommonReturn } from '@/types/backend/common-return'
+import { BusinessErrorCode } from '@/types/backend/common/business-error-code'
+import type { CommonReturn } from '@/types/backend/common/common-return'
 import { userLogout } from './user_utils'
 
 interface Extra {
@@ -72,8 +73,7 @@ export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<
         isErrorMessageShown = true
 
         // 若用户未登录
-        // TODO 异常枚举不要写死
-        if (result.errCode === 20003) {
+        if (result.errCode === BusinessErrorCode.USER_NOT_LOGIN) {
           const router = useRouter()
           userLogout(router, true)
         }
@@ -121,7 +121,7 @@ export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
 
         // 若用户未登录
         // TODO 异常枚举不要写死
-        if (result.errCode === 20003) {
+        if (result.errCode === BusinessErrorCode.USER_NOT_LOGIN) {
           const router = useRouter()
           userLogout(router, true)
         }
