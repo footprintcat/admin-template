@@ -4,12 +4,12 @@ import com.example.backend.common.mapstruct.ConvertHelper;
 import com.example.backend.modules.system.model.dto.RoleDto;
 import com.example.backend.modules.system.model.entity.Role;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-// 使用 @Autowired 注入 ConvertHelper (ConvertHelper 上需有 @Component 注解)
-@Mapper(componentModel = "spring", uses = {ConvertHelper.class})
+@Mapper(componentModel = "spring", uses = {ConvertHelper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoleConverter {
 
     RoleConverter INSTANCE = Mappers.getMapper(RoleConverter.class);

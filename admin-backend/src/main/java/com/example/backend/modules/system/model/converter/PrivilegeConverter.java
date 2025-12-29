@@ -4,12 +4,12 @@ import com.example.backend.common.mapstruct.ConvertHelper;
 import com.example.backend.modules.system.model.dto.PrivilegeDto;
 import com.example.backend.modules.system.model.entity.Privilege;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-// 使用 @Autowired 注入 ConvertHelper (ConvertHelper 上需有 @Component 注解)
-@Mapper(componentModel = "spring", uses = {ConvertHelper.class})
+@Mapper(componentModel = "spring", uses = {ConvertHelper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PrivilegeConverter {
 
     PrivilegeConverter INSTANCE = Mappers.getMapper(PrivilegeConverter.class);
