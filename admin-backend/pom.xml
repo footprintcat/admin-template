@@ -7,7 +7,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <!-- SpringBoot 4.x 不支持 JDK 11, 最低支持 JDK 17 -->
-        <version>4.0.0</version>
+        <version>4.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -112,11 +112,13 @@
         </dependency>
 
         <!-- 密码 Hash 加密 -->
+        <!--
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.18.0</version>
+            <version>1.20.0</version>
         </dependency>
+        -->
 
         <!-- WebSocket -->
         <dependency>
@@ -188,7 +190,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.14.1</version>
                 <configuration>
                     <source>${maven.compiler.source}</source> <!-- depending on your project -->
                     <target>${maven.compiler.target}</target> <!-- depending on your project -->

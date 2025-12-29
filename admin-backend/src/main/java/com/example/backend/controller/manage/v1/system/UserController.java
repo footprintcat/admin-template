@@ -25,7 +25,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -193,8 +192,8 @@ public class UserController {
             if (password == null || password.isEmpty()) {
                 return CommonReturn.error("密码不能为空");
             }
-            String passwordHash = DigestUtils.sha512Hex(password);
             // TODO
+            // String passwordHash = DigestUtils.sha512Hex(password);
             // systemUser.setPasswordHash(passwordHash);
             user.setId(null);
             systemUserServiceV2.addUser(user);
