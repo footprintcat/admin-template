@@ -107,7 +107,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import { Hide, Lock, User, View } from '@element-plus/icons-vue'
 import { useLoginLogic } from './composables/useLoginLogic'
 

@@ -64,6 +64,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import { ArrowLeft, Check, SwitchButton, User } from '@element-plus/icons-vue'
 import { userLogout } from '@/utils/user_utils'
 import { useChooseIdentityLogic } from './composables/useChooseIdentityLogic'

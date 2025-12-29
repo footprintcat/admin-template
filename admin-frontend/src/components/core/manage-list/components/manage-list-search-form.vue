@@ -112,6 +112,7 @@ function calcItemWidth(columnGap?: number) {
 }
 
 // TODO
+/** @deprecated */
 const tempOptions = [
   {
     value: 'Option1',

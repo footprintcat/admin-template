@@ -151,11 +151,11 @@ function copyMenuWithoutSubs(menu: SidebarItem): SidebarItem {
 }
 
 export function filterMenu(searchText: string | undefined, sidebarItemList: SidebarItem[]): SidebarItem[] {
-  const permission = usePermissionStore()
+  const permissionStore = usePermissionStore()
 
   const result: SidebarItem[] = []
   for (const sidebarItem of sidebarItemList) {
-    if (sidebarItem.permission && !permission.key.includes(sidebarItem.permission)) {
+    if (sidebarItem.permission && !permissionStore.checkMenuPermission(sidebarItem.permission)) {
       // console.log('跳过没有权限的菜单', sidebarItem)
       continue
     }

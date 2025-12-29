@@ -1,4 +1,5 @@
-import { type Component, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
+import type { Component } from 'vue'
 import type { RouteLocationNormalizedGeneric } from 'vue-router'
 
 export type ErrorCode =
