@@ -143,7 +143,7 @@ const setFullScreen = () => {
 }
 
 const handleSwitchIdentity = () => {
-  redirectToChooseIdentity(router, false)
+  redirectToChooseIdentity(router, true)
 }
 
 const themeSettingDrawerVisible = ref<boolean>(false)
