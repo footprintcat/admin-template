@@ -55,8 +55,12 @@ export const usePermissionStore = defineStore('permission', () => {
     }
   }
 
-  function checkMenuPermission(code: string): boolean {
-    return menuCodeList.value.includes(code)
+  function checkMenuPermission(code: string | null | undefined): boolean {
+    if (code === null || typeof code === 'undefined') {
+      return true
+    }
+    const codeStr = String(code)
+    return menuCodeList.value.includes(codeStr)
   }
 
   function checkActionPermission(menuCode: string, actionCode: string): boolean {
@@ -71,7 +75,7 @@ export const usePermissionStore = defineStore('permission', () => {
   function registerDirective(app: App) {
     app.directive('permission', {
       mounted(el, binding) {
-        const bindingValue: string = String(binding.value)
+        const bindingValue: string | null | undefined = binding.value
         if (!checkMenuPermission(bindingValue)) {
           el['hidden'] = true
         }

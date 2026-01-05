@@ -5,7 +5,7 @@ export interface SidebarItem {
   index: string
   title: string
   shortTitle?: string // <=4 个字的标题
-  permission: string
+  permission: string | null // permission 为 null 的菜单项不需要校验权限
   subs?: Array<SidebarItem>
 }
 
@@ -14,7 +14,7 @@ const dashboardItemList: Array<SidebarItem> = [
     icon: 'HomeFilled',//'/assets/image/svg/alert_warning.svg',
     index: '/dashboard',
     title: '系统首页', // 站点基础信息
-    permission: 'dashboard',
+    permission: null, // 'dashboard',
   },
   {
     icon: 'Guide',

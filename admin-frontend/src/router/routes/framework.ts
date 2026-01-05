@@ -9,7 +9,8 @@ export const frameworkRoute: Array<RouteRecordRaw> = [
     name: 'Dashboard', // 请不要修改此 name
     meta: {
       title: '系统首页',
-      permission: 'dashboard',
+      // 不添加 permission 则所有用户都可访问
+      // permission: 'dashboard',
     },
     component: () => import('@/views/core/dashboard.vue'),
   },
