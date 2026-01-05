@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { sidebarMenuItemListClassic } from '@/utils/sidebar_item'
+import { sidebarMenuItemListClassic } from '@/router/menus/sidebar_item'
 import { useSidebarStore } from '@/stores/sidebar'
 import SidebarMenuItem from './SidebarMenuItem.vue'
 

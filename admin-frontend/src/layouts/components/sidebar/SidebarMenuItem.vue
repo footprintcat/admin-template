@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SidebarItem } from '@/utils/sidebar_item'
+import type { SidebarItem } from '@/router/menus/types/sidebar-item'
 
 defineOptions({
   name: 'sidebar-menu-item',

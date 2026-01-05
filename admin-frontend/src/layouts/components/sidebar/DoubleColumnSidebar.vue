@@ -8,7 +8,8 @@
     ]">
       <!-- 菜单项 -->
       <div class="top-level-sidebar-container" @mouseenter="sidebarMouseHover(true)">
-        <div v-for="(item, index) in sidebarMenuItemListWithHomeItem" :key="`sidebar_${index}`" class="top-level-sidebar-item"
+        <div v-for="(item, index) in sidebarMenuItemListWithHomeItem" :key="`sidebar_${index}`"
+          class="top-level-sidebar-item"
           :class="(item.index === (activeTopItem ? activeTopItem.index : '')) ? 'active' : 'inactive'"
           @mouseenter="topItemMouseEnter(item, true)" @mouseleave="topItemMouseEnter(item, false)"
           @click="onTopItemClicked(item)" v-permission="item.permission">
@@ -59,8 +60,8 @@ import { computed, nextTick, onMounted, ref, toRaw, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { Download } from '@element-plus/icons-vue'
-import type { SidebarItem } from '@/utils/sidebar_item'
-import { doubleColumnHomeItem, getTopItemByChildIndex, sidebarMenuItemListClassic, sidebarMenuItemListDoubleColumn } from '@/utils/sidebar_item'
+import { doubleColumnHomeItem, getTopItemByChildIndex, sidebarMenuItemListClassic, sidebarMenuItemListDoubleColumn } from '@/router/menus/sidebar_item'
+import type { SidebarItem } from '@/router/menus/types/sidebar-item'
 import { useSidebarStore } from '@/stores/sidebar'
 import SidebarMenuItem from './SidebarMenuItem.vue'
 
