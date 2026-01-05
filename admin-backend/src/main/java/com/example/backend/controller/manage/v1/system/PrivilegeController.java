@@ -33,23 +33,4 @@ public class PrivilegeController {
     @Resource
     private MenuService menuService;
 
-    /**
-     * 获取当前用户所有权限列表
-     *
-     * @param httpServletRequest 请求对象
-     * @return 权限列表
-     * @throws BusinessException 业务异常
-     */
-    @GetMapping("/getCurrentIdentityPermittedMenuIdList")
-    @ResponseBody
-    public CommonReturn getCurrentIdentityPermittedMenuIdList(HttpServletRequest httpServletRequest) throws BusinessException {
-        HttpSession session = httpServletRequest.getSession();
-        // 查询当前登录用户的身份信息
-        @NotNull Long identityId = SessionUtils.getIdentityIdOrThrow(session);
-        // 查询当前身份有权访问菜单id列表
-        @NotNull Set<Long> menuIdList = privilegeService.getMenuIdListByIdentityId(identityId);
-        // 根据菜单id列表查询菜单详情
-        @NotNull List<MenuDto> menuList = menuService.getMenuListById(menuIdList);
-        return CommonReturn.success(menuList);
-    }
 }

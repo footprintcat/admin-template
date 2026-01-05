@@ -52,8 +52,6 @@ public class IdentityController {
         @NotNull Long userId = SessionUtils.getUserIdOrThrow(session);
         @NotNull Long identityId = request.getIdentityId();
         identityService.switchUserIdentity(session, userId, identityId);
-
-        // TODO 返回切换后的 Identity 信息 & 身份关联角色、权限信息
         return CommonReturn.success();
     }
 
