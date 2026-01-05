@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 /**
  * 错误页路由
  */
-const errorPageRoute: Array<RouteRecordRaw> = [
+export const errorPageRoute: Array<RouteRecordRaw> = [
   {
     path: '/403',
     name: '403',
@@ -23,5 +23,3 @@ const errorPageRoute: Array<RouteRecordRaw> = [
     component: () => import('@/views/core/error-page/404.vue'),
   },
 ]
-
-export default errorPageRoute

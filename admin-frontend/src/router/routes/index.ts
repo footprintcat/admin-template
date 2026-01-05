@@ -1,8 +1,8 @@
 import type { RouteRecordRaw } from 'vue-router'
 import AppLayout from '@/layouts/AppLayout.vue'
-import errorPageRoute from './error-page'
-import frameworkRoute from './framework'
-import systemRoute from './system'
+import { errorPageRoute } from './error-page'
+import { frameworkRoute } from './framework'
+import { systemRoute } from './system'
 
 /**
  * 业务路由定义 (合并入口)

@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 /**
  * system 模块路由
  */
-const systemRoute: Array<RouteRecordRaw> = [
+export const systemRoute: Array<RouteRecordRaw> = [
   {
     path: 'system',
     children: [
@@ -19,5 +19,3 @@ const systemRoute: Array<RouteRecordRaw> = [
     ],
   },
 ]
-
-export default systemRoute

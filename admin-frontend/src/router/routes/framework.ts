@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 /**
  * 框架路由
  */
-const frameworkRoute: Array<RouteRecordRaw> = [
+export const frameworkRoute: Array<RouteRecordRaw> = [
   {
     path: 'dashboard',
     name: 'Dashboard', // 请不要修改此 name
@@ -14,5 +14,3 @@ const frameworkRoute: Array<RouteRecordRaw> = [
     component: () => import('@/views/core/dashboard.vue'),
   },
 ]
-
-export default frameworkRoute
