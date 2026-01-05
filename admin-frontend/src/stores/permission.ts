@@ -1,59 +1,57 @@
 import type { App } from 'vue'
+import { readonly } from 'vue'
 import { defineStore } from 'pinia'
-import { getCurrentIdentityPermittedMenuIdList } from '@/api/system/privilege'
+import type { MenuDto } from '@/types/backend/dto/system/MenuDto'
 
 export const usePermissionStore = defineStore('permission', () => {
 
   // directory, menu 菜单列表
   const menuCodeList = ref<Array<string>>([])
   // 操作按钮权限 (格式: menu_code:action_code)
-  const combinedCodeList = ref<Array<string>>([])
+  const actionCodeList = ref<Record<string, Array<string>>>({})
   const isInitialized = ref<boolean>(false)
+  const updateTime = ref<Date>() // 响应式更新时间
 
   function clearCurrentPermission() {
     menuCodeList.value = []
-    combinedCodeList.value = []
+    actionCodeList.value = {}
     isInitialized.value = false
   }
 
   /**
-   * 页面加载后，异步获取最新的权限信息
-   * @param refreshPageWhenPermissionMismatch 在本地保存的 PermissionList 和最新拉取的 PermissionList 不一致时，是否刷新页面
+   * 页面加载后，保存获取到的最新的权限信息
    */
-  async function asyncUpdatePermissionList(refreshPageWhenPermissionMismatch: boolean = false) {
-    // TODO 考虑更新失败情况
-    if (isInitialized.value) return
+  async function savePermissionList(list: MenuDto[], { clearFirst }: { clearFirst: boolean }) {
+    if (clearFirst) {
+      clearCurrentPermission()
+    }
 
-    // TODO 逻辑待确认
     try {
-      const { data } = await getCurrentIdentityPermittedMenuIdList()
-      if (!data) {
-        isInitialized.value = true
-        return
+      const newMenuCodeList: Array<string> = []
+      const newActionCodeList: Record<string, Array<string>> = {}
+
+      for (const item of list) {
+        if (item.menuType === 'directory' || item.menuType === 'menu') {
+          newMenuCodeList.push(item.menuCode)
+        } else if (item.menuType === 'action') {
+          if (newActionCodeList[item.menuCode] === undefined) {
+            newActionCodeList[item.menuCode] = []
+          }
+          newActionCodeList[item.menuCode].push(item.actionCode)
+        }
       }
 
-      const newMenuCodeList = data.menuCodeList || []
-      const newCombinedCodeList = data.combinedCodeList || []
-
-      const newMenuJsonString = JSON.stringify(newMenuCodeList)
-      const oldMenuJsonString = JSON.stringify(menuCodeList.value)
-      const newCombinedJsonString = JSON.stringify(newCombinedCodeList)
-      const oldCombinedJsonString = JSON.stringify(combinedCodeList.value)
-
-      const isMenuChanged = newMenuJsonString !== oldMenuJsonString
-      const isCombinedChanged = newCombinedJsonString !== oldCombinedJsonString
+      console.log('menuCodeList', newMenuCodeList)
+      console.log('actionCodeList', newActionCodeList)
 
       menuCodeList.value = newMenuCodeList
-      combinedCodeList.value = newCombinedCodeList
+      actionCodeList.value = newActionCodeList
       isInitialized.value = true
-
-      if ((isMenuChanged || isCombinedChanged) && refreshPageWhenPermissionMismatch) {
-        console.log('权限发生变化，刷新页面...')
-        location.reload()
-      }
+      updateTime.value = new Date()
     } catch (error) {
       console.error('获取权限列表失败:', error)
-      isInitialized.value = true
+      isInitialized.value = false
+      updateTime.value = undefined
     }
   }
 
@@ -62,8 +60,10 @@ export const usePermissionStore = defineStore('permission', () => {
   }
 
   function checkActionPermission(menuCode: string, actionCode: string): boolean {
-    const combinedCode = `${menuCode}:${actionCode}`
-    return combinedCodeList.value.includes(combinedCode)
+    if (actionCodeList.value[menuCode] === undefined) {
+      return false
+    }
+    return actionCodeList.value[menuCode].includes(actionCode)
   }
 
   // 自定义权限指令
@@ -77,20 +77,23 @@ export const usePermissionStore = defineStore('permission', () => {
         }
       },
     })
-
   }
 
   return {
-    menuCodeList,
-    combinedCodeList,
-    isInitialized,
+    menuCodeList: readonly(menuCodeList),
+    actionCodeList: readonly(actionCodeList),
+    isInitialized: readonly(isInitialized),
+
     checkMenuPermission,
     checkActionPermission,
-    registerDirective,
+
     clearCurrentPermission,
-    asyncUpdatePermissionList,
+    savePermissionList,
+
+    registerDirective,
   }
 }, {
   // docs: https://prazdevs.github.io/pinia-plugin-persistedstate/zh/guide/
-  persist: true,
+  persist: false,
+  // 2025.12.29 当 persist 设置为 false 时, 返回 readonly 属性会提示 WARNING: Set operation on key "xxx" failed: target is readonly.
 })

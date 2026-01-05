@@ -1,46 +1,89 @@
 import { readonly, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { exitIdentity, getIdentityInfo, switchIdentity } from '@/api/system/identity'
+import { BusinessErrorCode } from '@/types/backend/common/business-error-code'
 import type { IdentityDto } from '@/types/backend/dto/system/IdentityDto'
 import { usePermissionStore } from '../permission'
+import { useUserStore } from '../user'
 
 export const useIdentityStore = defineStore('identity', () => {
 
-  // 获取用户权限
+  const userStore = useUserStore()
   const permissionStore = usePermissionStore()
+
+  const isInit = ref<boolean>(false)
+  const isInitReadonly = readonly(isInit)
+
+  async function init(params: {
+    /** 如果已经初始化，那么是否需要重新初始化 */
+    reInit: boolean
+  }) {
+    if (!userStore.isInit) {
+      console.error('应先初始化 userStore 再初始化 identityStore')
+      return
+    }
+
+    if (params.reInit) {
+      clear({ exit: false })
+    }
+
+    if (isInit.value) {
+      return
+    }
+
+    const isLogin = userStore.isLogin
+    if (isLogin) { // 已登录
+      // 网页加载后立即获取一次当前登录身份信息
+      await fetchIdentityInfo()
+    } else { // 未登录
+      clear({ exit: false })
+    }
+    isInit.value = true
+  }
+
+  function clear(params: { exit: boolean }): Promise<unknown> {
+    _clearCurrentIdentity()
+    _clearIdentityList()
+    isInit.value = false
+    if (params.exit) {
+      return exitIdentity()
+    }
+    return Promise.resolve()
+  }
 
   // current identity
   const currentIdentity = ref<IdentityDto | null>(null)
   const currentIdentityReadonly = readonly(currentIdentity)
 
+  const isFetching = ref<boolean>(false)
+
   async function fetchIdentityInfo() {
-    if (userIdentityDtoList.value && currentIdentity.value) return
-    const { data } = await getIdentityInfo()
-    userIdentityDtoList.value = data.identityList
-    currentIdentity.value = data.currentIdentity
+    isFetching.value = true
+    console.log('fetchIdentityInfo (real)')
+    const { data, errCode } = await getIdentityInfo()
+    if (!errCode) {
+      userIdentityDtoList.value = data.identityList
+      currentIdentity.value = data.currentIdentity
+      // 更新权限
+      permissionStore.savePermissionList(data.menuList, { clearFirst: true })
+    } else {
+      if (errCode === BusinessErrorCode.USER_NOT_LOGIN) {
+        clear({ exit: false })
+      }
+    }
 
-    // 更新权限
-    await permissionStore.asyncUpdatePermissionList()
+    isFetching.value = false
   }
 
-  function switchCurrentIdentity(identity: IdentityDto) {
-    // 先调用接口保存到后端
-
-    return switchIdentity(identity.id)
-      .then(async () => {
-        // 然后更新 currentIdentity
-        currentIdentity.value = identity
-
-        // 最后更新权限
-        permissionStore.clearCurrentPermission()
-        await permissionStore.asyncUpdatePermissionList()
-      })
+  async function switchCurrentIdentity(identity: IdentityDto) {
+    await switchIdentity(identity.id)
+    console.log('fetchIdentityInfo in switchCurrentIdentity')
+    return fetchIdentityInfo()
   }
 
-  function exitCurrentIdentity(clearIdentityList: boolean): Promise<unknown> {
+  function _clearCurrentIdentity(): void {
     currentIdentity.value = null
     permissionStore.clearCurrentPermission()
-    return exitIdentity()
   }
 
   // identity list
@@ -51,21 +94,25 @@ export const useIdentityStore = defineStore('identity', () => {
     userIdentityDtoList.value = list
   }
 
-  function clearIdentityList() {
+  function _clearIdentityList() {
     userIdentityDtoList.value = []
   }
 
   return {
+    isInit: isInitReadonly,
+    init,
+    clear,
+
     // current identity
     currentIdentity: currentIdentityReadonly,
     userIdentityDtoList: userIdentityDtoListReadonly,
-    fetchIdentityInfo,
+    // fetchIdentityInfo,
     switchCurrentIdentity,
-    exitCurrentIdentity,
+    // _clearCurrentIdentity,
 
     // identity list
     setUserIdentityListAfterLogin,
-    clearIdentityList,
+    // _clearIdentityList,
   }
 }, {
   // docs: https://prazdevs.github.io/pinia-plugin-persistedstate/zh/guide/

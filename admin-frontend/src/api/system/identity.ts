@@ -1,5 +1,6 @@
 import { get, post } from '@/utils/api'
 import type { IdentityDto } from '@/types/backend/dto/system/IdentityDto'
+import type { MenuDto } from '@/types/backend/dto/system/MenuDto'
 
 const API_PREFIX = '/manage/v1/system/identity'
 const getUrl = (url: string) => API_PREFIX + url
@@ -7,6 +8,7 @@ const getUrl = (url: string) => API_PREFIX + url
 export interface IdentityInfoResponse {
   identityList: IdentityDto[]
   currentIdentity: IdentityDto | null
+  menuList: MenuDto[]
 }
 
 /**
@@ -16,7 +18,7 @@ export interface IdentityInfoResponse {
  */
 export function getIdentityInfo() {
   const url = getUrl('/info')
-  return get<IdentityInfoResponse>(url)
+  return get<IdentityInfoResponse>(url, {}, { showErrorWhenFailed: false })
 }
 
 /**

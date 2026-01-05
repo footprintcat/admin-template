@@ -12,12 +12,14 @@ export function createCheckLoginGuard(router: Router) {
     const userStore = useUserStore()
     const identityStore = useIdentityStore()
 
-    // 网页加载后立即获取一次当前登录用户信息
-    await userStore.fetchUserInfo({ skipIfExists: true })
+    // 网页加载后先确保用户信息、用户身份已初始化
+    await userStore.init({ reInit: false })
+    await identityStore.init({ reInit: false })
 
     const isLogin = userStore.isLogin
     const isInLoginPage = to.name === 'Login'
     const isInChooseIdentityPage = to.name === 'ChooseIdentity'
+    // console.log('createCheckLoginGuard -> isLogin:', isLogin, 'isInLoginPage:', isInLoginPage, 'isInChooseIdentityPage:', isInChooseIdentityPage)
 
     if (isLogin) {
       if (isInLoginPage) {
@@ -26,12 +28,14 @@ export function createCheckLoginGuard(router: Router) {
         // 如果有 redirect_url 则跳转，否则跳到 dashboard
         redirectAfterLoginBeforeRoute(to, next)
         return
+      } else if (isInChooseIdentityPage) {
+        // 已登录, 在切换身份页
+        // console.log('已登录, 在切换身份页')
+        // 不做跳转，在页面中点击才跳转
       } else {
-        // 已登录, 不在登录页
-        // console.log('已登录, 不在登录页')
-        await identityStore.fetchIdentityInfo()
-
-        if (!isInChooseIdentityPage && !identityStore.currentIdentity) {
+        // 已登录, 不在登录页、切换身份页
+        // console.log('已登录, 不在登录页、切换身份页')
+        if (!identityStore.currentIdentity) {
           if (identityStore.userIdentityDtoList && identityStore.userIdentityDtoList.length > 1) {
             redirectToChooseIdentityBeforeRoute(to, next)
             return

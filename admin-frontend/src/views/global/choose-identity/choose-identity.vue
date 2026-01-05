@@ -19,14 +19,15 @@
             </template>
           </el-button>
         </div>
-        <template v-if="currentIdentity">
-          <h1>切换登录身份</h1>
-          <p>您当前拥有以下身份，请选择要切换的身份</p>
-        </template>
-        <template v-else>
-          <h1>选择登录身份</h1>
-          <p>您当前拥有以下身份，请选择要登录的身份</p>
-        </template>
+        <h1>
+          {{ currentIdentity ? '切换登录身份' : '选择登录身份' }}
+        </h1>
+        <p>
+          {{ currentIdentity ? '您当前拥有以下身份，请选择要切换的身份' : '您当前拥有以下身份，请选择要登录的身份' }}
+        </p>
+        <el-text  style="opacity: 0.5;" v-if="userStore.isLogin && userStore.user">
+          当前登录用户：<b>{{ userStore.user.nickname }}</b>({{ userStore.user.username }})
+        </el-text>
       </div>
 
       <el-scrollbar max-height="61.8vh" class="identity-list" v-loading="loading" wrap-style="padding: 1.2rem;">
@@ -67,9 +68,12 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft, Check, SwitchButton, User } from '@element-plus/icons-vue'
 import { userLogout } from '@/utils/user_utils'
+import { useUserStore } from '@/stores/user'
 import { useChooseIdentityLogic } from './composables/useChooseIdentityLogic'
 
 const router = useRouter()
+
+const userStore = useUserStore()
 
 const {
   selectedId,

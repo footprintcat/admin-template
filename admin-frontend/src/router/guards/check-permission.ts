@@ -1,6 +1,5 @@
 import type { Router } from 'vue-router'
 import { usePermissionStore } from '@/stores/permission'
-// import { useUserStore } from '@/stores/user'
 import { useErrorPage } from '@/views/core/error-page/useErrorPage'
 
 const { setErrorCode } = useErrorPage()

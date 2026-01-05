@@ -1,15 +1,21 @@
 import { computed, readonly, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { ElMessageBox } from 'element-plus'
-import { systemUserAuthGetInfo } from '@/api/system/user-auth'
+import { systemUserAuthGetInfo, systemUserAuthLogout } from '@/api/system/user-auth'
 import type { UserDto } from '@/types/backend/dto/system/UserDto'
 
 export const useUserStore = defineStore('user', () => {
 
   // 状态
+  const isInit = ref<boolean>(false)
+
   const userDto = ref<UserDto | null>(null)
-  const userDtoReadonly = readonly(userDto) // 只读属性
   const isFetchedUserDto = ref<boolean>(false)
+
+  // 只读属性
+  const isInitReadonly = readonly(isInit)
+
+  const userDtoReadonly = readonly(userDto)
 
   // 计算属性
   const isLogin = computed(() => {
@@ -20,12 +26,35 @@ export const useUserStore = defineStore('user', () => {
     return userDto.value !== null && userDto.value.type === 'super_admin'
   })
 
-  function clear() {
-    userDto.value = null
-    isFetchedUserDto.value = false
+  // 网页加载后 check-login.ts 中会调用一次 userStore.init
+  async function init(params: {
+    /** 如果已经初始化，那么是否需要重新初始化 */
+    reInit: boolean
+  }) {
+    if (params.reInit) {
+      clear({ exit: false })
+    }
+
+    if (isInit.value) {
+      return
+    }
+    // 网页加载后立即获取一次当前登录用户信息
+    const result = await fetchUserInfo({ skipIfExists: true })
+    isInit.value = true
+    return result
   }
 
-  // 网页加载后 check-login.ts 中会调用一次 fetchUserInfo
+  function clear(params: { exit: boolean }): Promise<unknown> {
+    isInit.value = false
+    userDto.value = null
+    isFetchedUserDto.value = false
+    if (params.exit) {
+      // 发送退出登录请求
+      return systemUserAuthLogout()
+    }
+    return Promise.resolve()
+  }
+
   async function fetchUserInfo(params: {
     /** 当用户信息存在时跳过拉取 */
     skipIfExists: boolean
@@ -57,12 +86,14 @@ export const useUserStore = defineStore('user', () => {
 
   // 登录后接口会带回 UserDto, 此时不需要再调用 fetchUserInfo 多查询一次
   async function updateUserInfo(userInfo: UserDto) {
+    isInit.value = true
     userDto.value = userInfo
     isFetchedUserDto.value = true
   }
 
   return {
-    // 状态
+    // 只读属性
+    isInit: isInitReadonly,
     user: userDtoReadonly,
 
     // 计算属性
@@ -70,9 +101,10 @@ export const useUserStore = defineStore('user', () => {
     isSu,
 
     // 方法
+    init,
     clear,
 
-    fetchUserInfo,
+    // fetchUserInfo,
     updateUserInfo,
   }
 }, {

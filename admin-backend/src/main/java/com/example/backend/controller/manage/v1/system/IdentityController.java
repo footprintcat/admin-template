@@ -9,7 +9,10 @@ import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.controller.manage.v1.system.dto.request.identity.ManageSystemIdentitySwitchRequest;
 import com.example.backend.controller.manage.v1.system.dto.response.identity.ManageSystemIdentityInfoResponse;
 import com.example.backend.modules.system.model.dto.IdentityDto;
+import com.example.backend.modules.system.model.dto.MenuDto;
 import com.example.backend.modules.system.service.IdentityService;
+import com.example.backend.modules.system.service.MenuService;
+import com.example.backend.modules.system.service.PrivilegeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @HandleControllerGlobalException
@@ -35,6 +40,10 @@ public class IdentityController {
 
     @Resource
     private IdentityService identityService;
+    @Resource
+    private PrivilegeService privilegeService;
+    @Resource
+    private MenuService menuService;
 
     /**
      * 用户切换身份
@@ -77,16 +86,26 @@ public class IdentityController {
         HttpSession session = httpServletRequest.getSession();
         @NotNull Long userId = SessionUtils.getUserIdOrThrow(session);
 
+        ManageSystemIdentityInfoResponse response = new ManageSystemIdentityInfoResponse();
+
         // identityList
         @NotNull List<IdentityDto> identityList = identityService.getIdentityListByUserId(userId);
+        response.setIdentityList(identityList);
 
         // currentIdentity
         @Nullable Long identityId = SessionUtils.getIdentityId(session);
         @Nullable IdentityDto currentIdentity = identityService.getUserIdentityDtoById(userId, identityId);
-
-        ManageSystemIdentityInfoResponse response = new ManageSystemIdentityInfoResponse();
-        response.setIdentityList(identityList);
         response.setCurrentIdentity(currentIdentity);
+
+        // privilege
+        if (identityId != null) {
+            @NotNull Set<Long> menuIdList = privilegeService.getMenuIdListByIdentityId(identityId);
+            @NotNull List<MenuDto> menuList = menuService.getMenuListById(menuIdList);
+            response.setMenuList(menuList);
+        } else {
+            response.setMenuList(Collections.emptyList());
+        }
+
         return CommonReturn.success(response);
     }
 

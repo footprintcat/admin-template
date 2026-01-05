@@ -58,6 +58,7 @@ export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<
   raw: CommonReturn<T>
   data: T
   isSuccess: boolean
+  errCode: BusinessErrorCode | null
   toastMessage: string
   isErrorMessageShown: boolean
 }> => {
@@ -83,6 +84,7 @@ export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<
         raw: result,
         data: result.data,
         isSuccess: result.isSuccess,
+        errCode: result.errCode,
         toastMessage,
         isErrorMessageShown,
       }
@@ -105,6 +107,7 @@ export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
   raw: CommonReturn<T>
   data: T
   isSuccess: boolean
+  errCode: BusinessErrorCode | null
   toastMessage: string
   isErrorMessageShown: boolean
 }> => {
@@ -130,6 +133,7 @@ export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
         raw: result,
         data: result.data,
         isSuccess: result.isSuccess,
+        errCode: result.errCode,
         toastMessage,
         isErrorMessageShown,
       }
