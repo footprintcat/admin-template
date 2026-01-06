@@ -10,7 +10,7 @@ export const menuSystem: SidebarItem = {
       icon: 'User',
       index: '/system/user/manage',
       title: '用户管理',
-      permission: ':system:user:manage',
+      permission: 'system:user',
     },
     {
       icon: 'User',

@@ -5,8 +5,14 @@ import type { SidebarItem } from './types/sidebar-item'
 
 export const menuTree: Array<SidebarItem> = [
 
+  // 仪表盘
+  // 在不同地方做了不同处理, 不在此处添加
   // menuFramework,
+
+  // 系统管理
   menuSystem,
+
+  // 关于站点
   menuAbout,
 
 ]
