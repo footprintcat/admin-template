@@ -8,6 +8,8 @@ public class IdentityDto {
     private Long id;
     private Long departmentId;
     private Long userId;
+    private String name;
+    private String intro;
     private Long tenantId;
 
 }

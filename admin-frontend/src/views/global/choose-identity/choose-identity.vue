@@ -25,17 +25,17 @@
         <p>
           {{ currentIdentity ? '您当前拥有以下身份，请选择要切换的身份' : '您当前拥有以下身份，请选择要登录的身份' }}
         </p>
-        <el-text  style="opacity: 0.5;" v-if="userStore.isLogin && userStore.user">
+        <el-text style="opacity: 0.5;" v-if="userStore.isLogin && userStore.user">
           当前登录用户：<b>{{ userStore.user.nickname }}</b>({{ userStore.user.username }})
         </el-text>
       </div>
 
-      <el-scrollbar max-height="61.8vh" class="identity-list" v-loading="loading" wrap-style="padding: 1.2rem;">
+      <el-scrollbar max-height="61.8vh" class="identity-list" v-loading="loading" element-loading-background="#0000001a" element-loading-text="请稍候" wrap-style="padding: 1.2rem;">
         <el-card v-for="identity in identityList" :key="identity.id" class="identity-card"
           :class="{ 'is-selected': selectedId === identity.id, 'is-current': currentIdentity?.id === identity.id }"
           @click="handleSelectIdentity(identity)">
           <div class="card-content">
-            <el-badge :hidden="currentIdentity?.id !== identity.id" :value="'当前'" class="item">
+            <el-badge class="item" :offset="[-12, 0]" :hidden="currentIdentity?.id !== identity.id" :value="'当前'">
               <div class="identity-icon">
                 <el-icon :size="40">
                   <User />
@@ -43,8 +43,13 @@
               </div>
             </el-badge>
             <div class="identity-info">
-              <h3>身份 ID: {{ identity.id }}</h3>
-              <p>部门 ID: {{ identity.departmentId }}</p>
+              <h3>{{ identity.name }}</h3>
+              <p>{{ identity.intro }}</p>
+              <p>
+                <el-text style="font-size: 0.8em; opacity: 0.618;">
+                  身份 ID: {{ identity.id }}，部门 ID: {{ identity.departmentId }}
+                </el-text>
+              </p>
             </div>
             <div class="select-icon" v-if="selectedId === identity.id">
               <el-icon :size="24" color="#FFFFFF">
@@ -127,6 +132,7 @@ const handleLogout = async () => {
   text-align: center;
   margin-bottom: 2rem;
   color: #333;
+  user-select: none;
 }
 
 .header h1 {
@@ -166,13 +172,14 @@ const handleLogout = async () => {
 .card-content {
   display: flex;
   align-items: center;
-  gap: 1.618rem;
+  gap: 1.55rem;
   padding: 0.5rem 0.618rem;
 }
 
 .identity-icon {
-  width: 60px;
-  height: 60px;
+  --identity-icon-width: 72px;
+  width: var(--identity-icon-width);
+  height: var(--identity-icon-width);
   border-radius: 12px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
@@ -186,13 +193,15 @@ const handleLogout = async () => {
 }
 
 .identity-info h3 {
-  margin: 0 0 0.5rem 0;
+  /* margin: 0 0 0.5rem 0; */
+  margin: 0 0 0.2rem 0;
   font-size: 1.1rem;
   color: #333;
 }
 
 .identity-info p {
-  margin: 0;
+  /* margin: 0; */
+  margin: 0.05rem 0;
   color: #666;
   font-size: 0.9rem;
 }
