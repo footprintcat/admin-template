@@ -1,5 +1,6 @@
 import { readonly, ref } from 'vue'
 import { defineStore } from 'pinia'
+import type { IdentityInfoResponse } from '@/api/system/identity'
 import { exitIdentity, getIdentityInfo, switchIdentity } from '@/api/system/identity'
 import { BusinessErrorCode } from '@/types/backend/common/business-error-code'
 import type { IdentityDto } from '@/types/backend/dto/system/IdentityDto'
@@ -57,10 +58,31 @@ export const useIdentityStore = defineStore('identity', () => {
 
   const isFetching = ref<boolean>(false)
 
-  async function fetchIdentityInfo() {
+  async function fetchIdentityInfo(): Promise<void> {
     isFetching.value = true
-    console.log('fetchIdentityInfo (real)')
-    const { data, errCode } = await getIdentityInfo()
+
+    let data: IdentityInfoResponse
+    let errCode: BusinessErrorCode | null
+    try {
+      // const { data, errCode } = await getIdentityInfo()
+      const result = await getIdentityInfo()
+      data = result.data
+      errCode = result.errCode
+    } catch (err) {
+      console.error('fetchIdentityInfo err', err)
+      await ElMessageBox
+        .alert('服务器连接失败，请检查网络连接', '网络异常', {
+          showClose: false,
+          closeOnClickModal: false,
+          confirmButtonText: '点击重试',
+          type: 'error',
+        })
+        .then(async () => {
+          await fetchIdentityInfo()
+        })
+      return
+    }
+
     if (!errCode) {
       userIdentityDtoList.value = data.identityList
       currentIdentity.value = data.currentIdentity
@@ -77,7 +99,6 @@ export const useIdentityStore = defineStore('identity', () => {
 
   async function switchCurrentIdentity(identity: IdentityDto) {
     await switchIdentity(identity.id)
-    console.log('fetchIdentityInfo in switchCurrentIdentity')
     return fetchIdentityInfo()
   }
 

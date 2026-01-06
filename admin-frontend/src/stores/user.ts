@@ -68,19 +68,18 @@ export const useUserStore = defineStore('user', () => {
         userDto.value = userInfo
         isFetchedUserDto.value = true
       })
-      .catch((err) => {
+      .catch(async(err) => {
         console.error('systemUserAuthGetInfo', err)
-        ElMessageBox
+        await ElMessageBox
           .alert('服务器连接失败，请检查网络连接', '网络异常', {
             showClose: false,
             closeOnClickModal: false,
             confirmButtonText: '点击重试',
             type: 'error',
           })
-          .then(() => {
-            fetchUserInfo(params)
+          .then(async () => {
+            await fetchUserInfo(params)
           })
-
       })
   }
 
