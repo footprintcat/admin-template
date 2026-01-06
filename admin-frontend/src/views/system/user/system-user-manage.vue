@@ -34,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserFilled } from '@element-plus/icons-vue'
 import { systemUserPage } from '@/api/system/user'
 import ManageList from '@/components/core/manage-list/manage-list.vue'

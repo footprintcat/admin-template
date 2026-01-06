@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { getElementPlusDateTimePickerFormat, getElementPlusDateTimePickerValueFormat } from '../scripts/datetime-search';
+import { getElementPlusDateTimePickerFormat, getElementPlusDateTimePickerValueFormat } from '../scripts/datetime-search'
 import type { SearchInputList } from '../types/search-input'
 
 interface Props {

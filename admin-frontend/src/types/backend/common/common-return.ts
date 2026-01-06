@@ -1,4 +1,4 @@
-import type { BusinessErrorCode } from "./business-error-code"
+import type { BusinessErrorCode } from './business-error-code'
 
 interface BaseCommonReturn<T> {
   status: string
