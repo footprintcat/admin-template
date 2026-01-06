@@ -21,8 +21,8 @@
 
     <div class="header-right">
       <div class="header-user-con">
-        <!-- v-permission="'navi'" -->
-        <div class="btn-icon hide-on-narrow-screen" @click="router.push('/navi')">
+        <!-- v-permission="'navigation'" -->
+        <div class="btn-icon hide-on-narrow-screen" @click="router.push('/navigation')">
           <el-tooltip effect="dark" content="系统导航" placement="bottom">
             <el-icon>
               <Guide />

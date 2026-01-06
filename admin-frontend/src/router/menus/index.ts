@@ -50,7 +50,7 @@ export const sidebarMenuItemListDoubleColumn: Array<SidebarItem> = [
 /*
  * 导航页
  */
-// 基础菜单项: 用于 navi 页面展示
+// 基础菜单项: 用于 navigation 页面展示
 export const sidebarItems: Array<SidebarItem> = [
   ...menuTree,
 ]

@@ -7,16 +7,16 @@ export const FrameworkMenuItem_dashboard: SidebarItem = {
   permission: null, // 'dashboard',
 }
 
-export const FrameworkMenuItem_navi: SidebarItem = {
+export const FrameworkMenuItem_navigation: SidebarItem = {
   icon: 'Guide',
-  index: '/navi',
+  index: '/navigation',
   title: '系统导航',
-  permission: 'navi',
+  permission: 'navigation',
 }
 
 export const FrameworkMenuItemList: Array<SidebarItem> = [
   FrameworkMenuItem_dashboard,
-  FrameworkMenuItem_navi,
+  FrameworkMenuItem_navigation,
 ]
 
 export const menuFramework: SidebarItem = {
