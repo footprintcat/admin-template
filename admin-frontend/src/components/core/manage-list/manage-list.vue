@@ -152,7 +152,7 @@ const props = withDefaults(defineProps<Props>(), {
   searchInputList: () => [] satisfies SearchInputList,
   fetchDataOnMounted: true,
   allowParallelFetch: false,
-  pageSizeOptions: () => [5, 10, 15, 20, 25, 50, 100, 150, 200],
+  pageSizeOptions: () => [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 500],
   debug: false,
 })
 
