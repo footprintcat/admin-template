@@ -1,4 +1,3 @@
-
 export interface SidebarItem {
   icon?: string
   index: string

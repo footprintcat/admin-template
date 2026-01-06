@@ -5,7 +5,6 @@ import type { ManageListResponse } from '@/types/backend/common/manage-list-resp
 const API_PREFIX = '/manage/v1/system/user'
 const getUrl = (url: string) => API_PREFIX + url
 
-
 // 接口请求参数
 export interface ManageSystemUserAuthLoginRequest {
   username: string

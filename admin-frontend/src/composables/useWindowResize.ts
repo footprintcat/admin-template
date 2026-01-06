@@ -3,7 +3,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 export function useWindowResize({
   callback,
 }: {
-  callback?: () => void,
+  callback?: () => void
 } = {}) {
   const width = ref(window.innerWidth)
   const height = ref(window.innerHeight)

@@ -31,7 +31,7 @@ defineOptions({
 })
 
 const props = defineProps<{
-  forceShowIcon: boolean,
+  forceShowIcon: boolean
   sidebarItem: Array<SidebarItem>
 }>()
 </script>

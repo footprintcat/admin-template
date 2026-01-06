@@ -4,13 +4,13 @@
     <!-- 顶级菜单 -->
     <div class="top-level-sidebar" :class="[
       // 根据不同的 style 添加不同的 class 以实现样式调整
-      doubleColumnConfig.topLevelBarStyle
+      doubleColumnConfig.topLevelBarStyle,
     ]">
       <!-- 菜单项 -->
       <div class="top-level-sidebar-container" @mouseenter="sidebarMouseHover(true)">
         <div v-for="(item, index) in sidebarMenuItemListWithHomeItem" :key="`sidebar_${index}`"
           class="top-level-sidebar-item"
-          :class="(item.index === (activeTopItem ? activeTopItem.index : '')) ? 'active' : 'inactive'"
+          :class="item.index === (activeTopItem ? activeTopItem.index : '') ? 'active' : 'inactive'"
           @mouseenter="topItemMouseEnter(item, true)" @mouseleave="topItemMouseEnter(item, false)"
           @click="onTopItemClicked(item)" v-permission="item.permission">
           <el-icon :size="20" class="top-level-sidebar-item-icon">
@@ -71,7 +71,10 @@ const sidebar = useSidebarStore()
 
 const { doubleColumnConfig } = storeToRefs(sidebar)
 
-const sidebarMenuItemListWithHomeItem: Array<SidebarItem> = [doubleColumnHomeItem, ...sidebarMenuItemListDoubleColumn]
+const sidebarMenuItemListWithHomeItem: Array<SidebarItem> = [
+  doubleColumnHomeItem,
+  ...sidebarMenuItemListDoubleColumn,
+]
 
 // 激活菜单对应的顶级菜单项
 const activeTopItem = ref<SidebarItem | undefined>(undefined)
@@ -247,7 +250,7 @@ function topItemMouseEnter(sidebarItem: SidebarItem, hover: boolean) {
   place-items: center;
 
   cursor: pointer;
-  transition: background-color .13s;
+  transition: background-color 0.13s;
 }
 
 /* 侧边栏顶级菜单样式 diy 开始 */

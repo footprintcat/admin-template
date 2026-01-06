@@ -1,4 +1,3 @@
-
 export interface TableColumnBase {
   /** 列名称 */
   label: string

@@ -24,12 +24,12 @@ export function useChooseIdentityLogic() {
     // return [...list].sort((a, b) => a.id === currentIdentity.value?.id ? -1 : 0)
     const newList = [...list]
     // 找到当前项的索引
-    const index = newList.findIndex(item => item.id === currentIdentity.value?.id)
+    const index = newList.findIndex((item) => item.id === currentIdentity.value?.id)
 
     // 如果找到了，移动到数组顶部
-    if (index > 0) {  // index > 0 表示不是已经在最顶部
-      const [currentItem] = newList.splice(index, 1)  // 删除并返回当前项
-      newList.unshift(currentItem!)  // 插入到数组开头
+    if (index > 0) { // index > 0 表示不是已经在最顶部
+      const [currentItem] = newList.splice(index, 1) // 删除并返回当前项
+      newList.unshift(currentItem!) // 插入到数组开头
     }
 
     return newList

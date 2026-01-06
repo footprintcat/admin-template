@@ -159,7 +159,7 @@ const handleLogout = async () => {
 
 .identity-card.is-selected {
   /* border-color: #0f50c0; */
-  border-color: #67C23A;
+  border-color: #67c23a;
   background: #f0f9eb;
 }
 
@@ -201,7 +201,7 @@ const handleLogout = async () => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #67C23A;
+  background: #67c23a;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -23,11 +23,14 @@ function show() {
   }
   const currentInstance = getCurrentInstance()
 
-  loading = ElLoading.service({
-    lock: true,
-    text: '请稍候...',
-    background: 'rgba(0, 0, 0, 0.2)',
-  }, currentInstance !== null ? currentInstance.appContext : undefined)
+  loading = ElLoading.service(
+    {
+      lock: true,
+      text: '请稍候...',
+      background: 'rgba(0, 0, 0, 0.2)',
+    },
+    currentInstance !== null ? currentInstance.appContext : undefined,
+  )
 }
 
 function hide() {

@@ -38,7 +38,7 @@ export const rawGet = <T = any>(url: string, params?: any, extra?: Extra): Promi
     params,
     timeout: extra?.timeout,
   }
-  const promise = request.get<T>(url, axiosConfig).then(response => response.data)
+  const promise = request.get<T>(url, axiosConfig).then((response) => response.data)
   // 这里可以做一些异常处理
   return promise
 }
@@ -48,13 +48,17 @@ export const rawPost = <T = any>(url: string, data?: any, extra?: Extra): Promis
   const axiosConfig: AxiosRequestConfig = {
     timeout: extra?.timeout,
   }
-  const promise = request.post<T>(url, data, axiosConfig).then(response => response.data)
+  const promise = request.post<T>(url, data, axiosConfig).then((response) => response.data)
   // 这里可以做一些异常处理
   return promise
 }
 
 // GET请求 - 直接返回Promise
-export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<{
+export const get = <T = any>(
+  url: string,
+  params?: any,
+  extra?: Extra,
+): Promise<{
   raw: CommonReturn<T>
   data: T
   isSuccess: boolean
@@ -63,7 +67,7 @@ export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<
   isErrorMessageShown: boolean
 }> => {
   const promise = rawGet<CommonReturn<T>>(url, params, extra)
-    .then(result => {
+    .then((result) => {
       const toastMessage = result.message || '服务器内部错误，请稍后再试'
       let isErrorMessageShown: boolean = false
       if (!result.isSuccess && extra?.showErrorWhenFailed !== false /* undefined || true */) {
@@ -103,7 +107,11 @@ export const get = <T = any>(url: string, params?: any, extra?: Extra): Promise<
 }
 
 // POST请求 - 直接返回Promise
-export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
+export const post = <T = any>(
+  url: string,
+  data?: any,
+  extra?: Extra,
+): Promise<{
   raw: CommonReturn<T>
   data: T
   isSuccess: boolean
@@ -112,7 +120,7 @@ export const post = <T = any>(url: string, data?: any, extra?: Extra): Promise<{
   isErrorMessageShown: boolean
 }> => {
   const promise = rawPost<CommonReturn<T>>(url, data, extra)
-    .then(result => {
+    .then((result) => {
       const toastMessage = result.message || '服务器内部错误，请稍后再试'
       let isErrorMessageShown: boolean = false
       if (!result.isSuccess && extra?.showErrorWhenFailed !== false /* undefined || true */) {

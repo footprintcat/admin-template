@@ -5,7 +5,6 @@ import type { UserDto } from '@/types/backend/dto/system/UserDto'
 const API_PREFIX = '/manage/v1/system/user-auth'
 const getUrl = (url: string) => API_PREFIX + url
 
-
 // 接口请求参数
 export interface ManageSystemUserAuthLoginRequest {
   username: string

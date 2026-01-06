@@ -1,6 +1,6 @@
 <template>
   <!-- class="no-scroll" -->
-  <div style="display: flex; flex-direction: column; ">
+  <div style="display: flex; flex-direction: column;">
 
     <page-title title="用户管理" type="single-line">
       <UserFilled />

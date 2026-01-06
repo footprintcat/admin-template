@@ -75,7 +75,7 @@ const closeTabs = (index: number) => {
 
 // 设置标签
 const setTabs = (route: RouteLocationNormalizedLoaded) => {
-  const isExist = tabs.list.some(item => {
+  const isExist = tabs.list.some((item) => {
     return item.path === route.fullPath
   })
   if (!isExist) {
@@ -116,12 +116,12 @@ const scrollToTarget = (path: string) => {
       // console.log('菜单已关闭')
       return
     }
-    // const childPosition = child.offsetTop  // 获取子元素到父容器顶部的距离
-    const childPositionX = child.offsetLeft  // 获取子元素到父容器左边的距离
+    // const childPosition = child.offsetTop // 获取子元素到父容器顶部的距离
+    const childPositionX = child.offsetLeft // 获取子元素到父容器左边的距离
     child.parentElement!.scrollTo({
       // top: childPosition,
-      left: childPositionX - 10/* 左侧留一点边距 */,
-      behavior: 'smooth',  // 平滑滚动
+      left: childPositionX - 10, // 左侧留一点边距
+      behavior: 'smooth', // 平滑滚动
     })
   })
 }
@@ -232,8 +232,8 @@ function handleTabClick(path: string, event: PointerEvent) {
 
 .tabs-li.active {
   color: #fff;
-  border: 1px solid #409EFF;
-  background-color: #409EFF;
+  border: 1px solid #409eff;
+  background-color: #409eff;
 }
 
 .tabs-li .tabs-li-title {
