@@ -42,6 +42,14 @@ public class Identity implements Serializable {
     @TableField("user_id")
     private Long userId;
 
+    @Schema(description = "身份名称")
+    @TableField("name")
+    private String name;
+
+    @Schema(description = "身份描述")
+    @TableField("intro")
+    private String intro;
+
     @Schema(description = "租户id")
     @TableField("tenant_id")
     private Long tenantId;

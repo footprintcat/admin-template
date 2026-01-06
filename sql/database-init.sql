@@ -119,6 +119,8 @@ CREATE TABLE `system_identity` (
   `id` bigint NOT NULL COMMENT '雪花id',
   `department_id` bigint NOT NULL COMMENT '部门id',
   `user_id` bigint NOT NULL COMMENT '用户id',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '身份名称',
+  `intro` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '身份描述',
   `tenant_id` bigint NULL DEFAULT NULL COMMENT '租户id',
   `create_by` bigint NULL DEFAULT NULL COMMENT '创建人',
   `update_by` bigint NULL DEFAULT NULL COMMENT '更新人',

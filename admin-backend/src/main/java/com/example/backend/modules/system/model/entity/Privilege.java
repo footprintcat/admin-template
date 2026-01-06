@@ -35,7 +35,7 @@ public class Privilege implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @Schema(description = "对象类型（user-用户；role-角色）")
+    @Schema(description = "对象类型（identity-身份；role-角色）")
     @TableField("entity_type")
     private String entityType;
 
