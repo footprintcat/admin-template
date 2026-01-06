@@ -255,7 +255,7 @@ ROW_FORMAT = Dynamic;
 -- ----------------------------
 CREATE TABLE `system_privilege` (
   `id` bigint NOT NULL COMMENT '雪花id',
-  `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（user-用户；role-角色）',
+  `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（identity-身份；role-角色）',
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
   `menu_id` bigint NOT NULL COMMENT '菜单id',

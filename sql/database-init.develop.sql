@@ -284,7 +284,7 @@ ROW_FORMAT = Dynamic;
 DROP TABLE IF EXISTS `system_privilege`;
 CREATE TABLE `system_privilege` (
   `id` bigint NOT NULL COMMENT '雪花id',
-  `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（user-用户；role-角色）',
+  `entity_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '对象类型（identity-身份；role-角色）',
   `entity_id` bigint NOT NULL COMMENT '对象id',
   `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '所属模块',
   `menu_id` bigint NOT NULL COMMENT '菜单id',
@@ -615,11 +615,13 @@ INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `men
 (5015, 'role', 2006, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
 (5016, 'role', 2006, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
--- 为特定用户添加额外权限
-(5017, 'user', 1, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5018, 'user', 1, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5019, 'user', 12, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5020, 'user', 12, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1);
+-- 为特定身份添加额外权限
+-- 5001
+(5019, 'identity', 5001, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5017, 'identity', 5001, 'system', 10010, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5018, 'identity', 5001, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+-- 5001
+(5020, 'identity', 5002, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1);
 
 -- ########################################################
 

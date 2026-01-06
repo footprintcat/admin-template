@@ -229,11 +229,13 @@ INSERT INTO `system_privilege` (`id`, `entity_type`, `entity_id`, `module`, `men
 (5015, 'role', 2006, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
 (5016, 'role', 2006, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
 
--- 为特定用户添加额外权限
-(5017, 'user', 1, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5018, 'user', 1, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5019, 'user', 12, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
-(5020, 'user', 12, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1);
+-- 为特定身份添加额外权限
+-- 5001
+(5019, 'identity', 5001, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5017, 'identity', 5001, 'system', 10010, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+(5018, 'identity', 5001, 'system', 10011, 'granted', 'CURRENT_MENU', NULL, 1, 1),
+-- 5001
+(5020, 'identity', 5002, 'global', 10000, 'granted', 'CURRENT_MENU', NULL, 1, 1);
 
 -- ########################################################
 
