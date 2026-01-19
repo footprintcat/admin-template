@@ -17,6 +17,7 @@
 
 | Secret名称 | 说明 | 示例值 |
 |------------|------|--------|
+| `TARGET_REPO_TOKEN` | 用于访问目标GitHub仓库的Personal Access Token，需要有`repo`权限 | 从GitHub获取的PAT |
 | `GITEE_ACCESS_TOKEN` | Gitee访问令牌，用于推送代码 | 从Gitee获取的访问令牌 |
 | `GITEE_PASSWORD` | Gitee密码（可选，部分环境可能需要） | 你的Gitee密码 |
 | `TARGET_GITEE_REPO` | 目标Gitee仓库地址（格式：`用户名/仓库名`） | `user/target-repo` |

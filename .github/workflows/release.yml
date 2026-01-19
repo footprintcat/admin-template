@@ -34,14 +34,15 @@ jobs:
           fi
 
           # 格式化Changelog
-          FORMATTED_CHANGELOG="## Changelog for $CURRENT_TAG\n\n$CHANGELOG"
+          # 使用echo -e来确保换行符被正确解释
+          FORMATTED_CHANGELOG=$(echo -e "## Changelog for $CURRENT_TAG\n\n$CHANGELOG")
 
           # 输出Changelog到文件
-          echo "$FORMATTED_CHANGELOG" > CHANGELOG.md
+          echo -e "## Changelog for $CURRENT_TAG\n\n$CHANGELOG" > CHANGELOG.md
 
           # 输出到环境变量
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo "$FORMATTED_CHANGELOG" >> $GITHUB_ENV
+          echo -e "## Changelog for $CURRENT_TAG\n\n$CHANGELOG" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Set Up Git
@@ -87,7 +88,10 @@ jobs:
           # 复制必要的根目录文件
           cp README.md target-repo/ 2>/dev/null || true
           cp LICENSE target-repo/ 2>/dev/null || true
+          cp .editorconfig target-repo/ 2>/dev/null || true
+          cp .gitattributes target-repo/ 2>/dev/null || true
           cp .gitignore target-repo/ 2>/dev/null || true
+          cp package.json target-repo/ 2>/dev/null || true
 
       - name: Commit and Push to Target Repositories
         run: |
