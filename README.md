@@ -35,6 +35,16 @@
 
 - 本框架不适合用于搭建分布式或微服务项目
 
+## 🚀 快速开始
+
+如需使用本框架作为项目模板，请克隆[发布版本仓库](https://github.com/footprintcat/admin-template-release.git)以获取干净的代码：
+
+```bash
+git clone https://github.com/footprintcat/admin-template-release.git
+```
+
+发布版本仓库包含经过清理的代码，适合直接用于开发新项目。
+
 <span id="directory-structure"></span>
 ## 📂 目录结构
 
