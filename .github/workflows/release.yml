@@ -1,0 +1,117 @@
+name: Auto Release to Remote Repositories
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          # 获取当前tag
+          CURRENT_TAG=$(git describe --tags --abbrev=0)
+
+          # 获取上一个tag，如果没有则获取所有提交
+          PREV_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+
+          # 生成Changelog
+          if [ -z "$PREV_TAG" ]; then
+            # 没有上一个tag，获取所有提交
+            CHANGELOG=$(git log --pretty=format:"- %s" --reverse)
+          else
+            # 有上一个tag，获取两个tag之间的提交
+            CHANGELOG=$(git log $PREV_TAG..$CURRENT_TAG --pretty=format:"- %s" --reverse)
+          fi
+
+          # 格式化Changelog
+          FORMATTED_CHANGELOG="## Changelog for $CURRENT_TAG\n\n$CHANGELOG"
+
+          # 输出Changelog到文件
+          echo "$FORMATTED_CHANGELOG" > CHANGELOG.md
+
+          # 输出到环境变量
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$FORMATTED_CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Set Up Git
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+
+      # 克隆目标仓库
+      - name: Checkout Target Repository
+        uses: actions/checkout@v4
+        with:
+          repository: footprintcat/admin-template-release
+          token: ${{ secrets.TARGET_REPO_TOKEN }}
+          path: target-repo
+          fetch-depth: 0
+
+      # - name: Add Gitee Remote
+      #   run: |
+      #     cd target-repo
+      #     # 添加Gitee远端
+      #     git remote add gitee https://${{ secrets.GITEE_ACCESS_TOKEN }}:${{ secrets.GITEE_PASSWORD }}@gitee.com/footprintcat/admin-template-release.git
+
+      - name: Pull Latest Changes from Target Repositories
+        run: |
+          cd target-repo
+          # 拉取GitHub仓库最新代码
+          git pull origin main || true
+          # # 拉取Gitee仓库最新代码（可选，确保两边代码同步）
+          # git pull gitee main || true
+
+      - name: Update Source Code in Target Repository
+        run: |
+          # 确保前后端目录存在
+          mkdir -p target-repo/admin-backend target-repo/admin-frontend
+
+          # 复制前后端代码到目标仓库，覆盖现有文件
+          cp -r admin-backend/* target-repo/admin-backend/
+          cp -r admin-frontend/* target-repo/admin-frontend/
+
+          # 复制Changelog文件
+          cp CHANGELOG.md target-repo/
+
+          # 复制必要的根目录文件
+          cp README.md target-repo/ 2>/dev/null || true
+          cp LICENSE target-repo/ 2>/dev/null || true
+          cp .gitignore target-repo/ 2>/dev/null || true
+
+      - name: Commit and Push to Target Repositories
+        run: |
+          cd target-repo
+
+          # 添加所有文件
+          git add .
+
+          # 检查是否有改动
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            # 提交代码
+            git commit -m "Release ${{ github.ref_name }}: Auto release from source repository"
+
+            # 推送到GitHub
+            # git push origin main
+            git push https://x-access-token:${{ secrets.TARGET_REPO_TOKEN }}@github.com/footprintcat/admin-template-release.git main
+
+            # # 推送到Gitee
+            # git push gitee main
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clean Up
+        run: rm -rf target-repo CHANGELOG.md
