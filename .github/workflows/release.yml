@@ -15,36 +15,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Generate Changelog
-        id: changelog
-        run: |
-          # 获取当前tag
-          CURRENT_TAG=$(git describe --tags --abbrev=0)
-
-          # 获取上一个tag，如果没有则获取所有提交
-          PREV_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
-
-          # 生成Changelog
-          if [ -z "$PREV_TAG" ]; then
-            # 没有上一个tag，获取所有提交
-            CHANGELOG=$(git log --pretty=format:"- %s" --reverse)
-          else
-            # 有上一个tag，获取两个tag之间的提交
-            CHANGELOG=$(git log $PREV_TAG..$CURRENT_TAG --pretty=format:"- %s" --reverse)
-          fi
-
-          # 格式化Changelog
-          # 使用echo -e来确保换行符被正确解释
-          FORMATTED_CHANGELOG=$(echo -e "## Changelog for $CURRENT_TAG\n\n$CHANGELOG")
-
-          # 输出Changelog到文件
-          echo -e "## Changelog for $CURRENT_TAG\n\n$CHANGELOG" > CHANGELOG.md
-
-          # 输出到环境变量
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo -e "## Changelog for $CURRENT_TAG\n\n$CHANGELOG" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
       - name: Set Up Git
         run: |
           git config --global user.name "GitHub Action"
@@ -73,6 +43,44 @@ jobs:
           # # 拉取Gitee仓库最新代码（可选，确保两边代码同步）
           # git pull gitee main || true
 
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          # 获取当前tag
+          CURRENT_TAG=$(git describe --tags --abbrev=0)
+
+          # 获取上一个tag，如果没有则获取所有提交
+          PREV_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+
+          # 生成Changelog
+          if [ -z "$PREV_TAG" ]; then
+            # 没有上一个tag，获取所有提交
+            CHANGELOG=$(git log --pretty=format:"- %s" --reverse)
+          else
+            # 有上一个tag，获取两个tag之间的提交
+            CHANGELOG=$(git log $PREV_TAG..$CURRENT_TAG --pretty=format:"- %s" --reverse)
+          fi
+
+          # 格式化Changelog
+          NEW_CHANGELOG="# $CURRENT_TAG\n\n$CHANGELOG"
+
+          # 输出Changelog到文件
+          # 检查是否存在旧的CHANGELOG.md文件
+          if [ -f target-repo/CHANGELOG.md ]; then
+            # 读取旧的CHANGELOG内容（保留所有内容，除了首行的# Changelog和可能的空行）
+            OLD_CHANGELOG=$(tail -n +2 target-repo/CHANGELOG.md || true)
+            # 新的CHANGELOG内容（添加主标题和新条目，然后是旧条目）
+            echo -e "# Changelog\n\n$NEW_CHANGELOG\n\n$OLD_CHANGELOG" > CHANGELOG.md
+          else
+            # 没有旧文件，直接创建新的CHANGELOG
+            echo -e "# Changelog\n\n$NEW_CHANGELOG" > CHANGELOG.md
+          fi
+
+          # 输出到环境变量（保持与文件内容一致的格式）
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo -e "# Changelog\n\n# $CURRENT_TAG\n\n$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Update Source Code in Target Repository
         run: |
           # 确保前后端目录存在
@@ -92,7 +100,7 @@ jobs:
           cp .gitattributes target-repo/ 2>/dev/null || true
           cp .gitignore target-repo/ 2>/dev/null || true
           cp package.json target-repo/ 2>/dev/null || true
-          
+
           # 从replace-file目录复制文件到目标仓库根目录，覆盖现有文件
           cp -r .github/workflows/replace-file/* target-repo/ 2>/dev/null || true
           cp -r .github/workflows/replace-file/.* target-repo/ 2>/dev/null || true
