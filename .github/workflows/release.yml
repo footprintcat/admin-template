@@ -87,8 +87,8 @@ jobs:
           mkdir -p target-repo/admin-backend target-repo/admin-frontend
 
           # 复制前后端代码到目标仓库，覆盖现有文件
-          cp -r admin-backend/* target-repo/admin-backend/
-          cp -r admin-frontend/* target-repo/admin-frontend/
+          cp -r -a admin-backend/. target-repo/admin-backend/
+          cp -r -a admin-frontend/. target-repo/admin-frontend/
 
           # 复制Changelog文件
           cp CHANGELOG.md target-repo/
@@ -102,8 +102,7 @@ jobs:
           cp package.json target-repo/ 2>/dev/null || true
 
           # 从replace-file目录复制文件到目标仓库根目录，覆盖现有文件
-          cp -r .github/workflows/replace-file/* target-repo/ 2>/dev/null || true
-          cp -r .github/workflows/replace-file/.* target-repo/ 2>/dev/null || true
+          cp -r -a .github/workflows/replace-file/. target-repo/ 2>/dev/null || true
 
       - name: Commit and Push to Target Repositories
         run: |
