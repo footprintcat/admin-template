@@ -83,12 +83,19 @@ jobs:
 
       - name: Update Source Code in Target Repository
         run: |
-          # 确保前后端目录存在
-          mkdir -p target-repo/admin-backend target-repo/admin-frontend
+          # 确保项目目录存在
+          mkdir -p target-repo/admin-backend
+          mkdir -p target-repo/admin-frontend
+          mkdir -p target-repo/admin-mobile
+          mkdir -p target-repo/docs
+          mkdir -p target-repo/sql
 
-          # 复制前后端代码到目标仓库，覆盖现有文件
+          # 复制项目代码到目标仓库，覆盖现有文件
           cp -r -a admin-backend/. target-repo/admin-backend/
           cp -r -a admin-frontend/. target-repo/admin-frontend/
+          cp -r -a admin-mobile/. target-repo/admin-mobile/
+          cp -r -a docs/. target-repo/docs/
+          cp -r -a sql/. target-repo/sql/
 
           # 复制Changelog文件
           cp CHANGELOG.md target-repo/
