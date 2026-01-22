@@ -2,7 +2,7 @@
 import { globalIgnores } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import skipFormatting from 'eslint-config-prettier/flat'
 import eslintPluginImport from 'eslint-plugin-import'
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
