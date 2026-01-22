@@ -7,10 +7,15 @@ cmd 命令行可以创建相对链接的符号链接
 ```batch
 E:
 cd E:\Project\admin-template
-mkdir -p .qoder\rules
 :: 当前使用 ↓
-mklink   ".trae\rules\intro.md" "..\..\.ai\rules\project_rules.md"
-mklink  ".qoder\rules\intro.md" "..\..\.ai\rules\project_rules.md"
+:: trae
+mkdir -p .trae\rules
+mklink /D ".trae\rules\project"             "..\..\.ai\rules\project"
+mklink    ".trae\rules\project_rules.md"    "..\..\.ai\rules\project_rules.md"
+:: qoder
+mkdir -p .qoder\rules
+mklink /D ".qoder\rules\project"            "..\..\.ai\rules\project"
+mklink    ".qoder\rules\project_rules.md"   "..\..\.ai\rules\project_rules.md"
 
 :: 这种方式创建后提交还是会提交完整文件到 Git 仓库中
 :: mklink /H ".qoder\rules\intro.md" ".ai\rules\intro.md"

@@ -1,6 +1,8 @@
 import axios from 'axios'
 import type { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 
+// 计划弃用，改用 api.ts
+
 const service: AxiosInstance = axios.create({
   timeout: 6000,
 })
