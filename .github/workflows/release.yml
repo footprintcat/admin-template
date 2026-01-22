@@ -94,7 +94,8 @@ jobs:
           cp -r -a admin-backend/. target-repo/admin-backend/
           cp -r -a admin-frontend/. target-repo/admin-frontend/
           cp -r -a admin-mobile/. target-repo/admin-mobile/
-          cp -r -a docs/. target-repo/docs/
+          # cp -r -a docs/. target-repo/docs/
+          rsync -av --exclude='internal' docs/ target-repo/docs/
           cp -r -a sql/. target-repo/sql/
 
           # 复制Changelog文件
