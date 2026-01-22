@@ -18,7 +18,7 @@
     "source.fixAll": "explicit"
   },
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "prettier.prettier-vscode",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "cSpell.words": [
     "footprintcat",
     "persistedstate",
