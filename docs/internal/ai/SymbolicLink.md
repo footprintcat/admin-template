@@ -12,10 +12,12 @@ cd E:\Project\admin-template
 mkdir -p .trae\rules
 mklink /D ".trae\rules\project"             "..\..\.ai\rules\project"
 mklink    ".trae\rules\project_rules.md"    "..\..\.ai\rules\project_rules.md"
+mklink /D ".trae\skills"                    "..\..\.ai\skills"
 :: qoder
 mkdir -p .qoder\rules
 mklink /D ".qoder\rules\project"            "..\..\.ai\rules\project"
 mklink    ".qoder\rules\project_rules.md"   "..\..\.ai\rules\project_rules.md"
+mklink /D ".qoder\skills"                   "..\..\.ai\skills"
 
 :: 这种方式创建后提交还是会提交完整文件到 Git 仓库中
 :: mklink /H ".qoder\rules\intro.md" ".ai\rules\intro.md"
@@ -34,8 +36,8 @@ Remove-Item ".qoder\rules\intro.md"
 
 ## linux / macOS 下创建符号链接
 
-> 需测试
-
 ```sh
+# 需测试
+mkdir -p .qoder/rules
 ln -s ./.ai/rules/intro.md .qoder/rules/intro.md
 ```
