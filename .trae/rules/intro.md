@@ -1,0 +1,1 @@
+../../.ai/rules/project_rules.md
