@@ -61,8 +61,11 @@ jobs:
             CHANGELOG=$(git log $PREV_TAG..$CURRENT_TAG --pretty=format:"- %s" --reverse)
           fi
 
+          # 获取当前日期
+          CURRENT_DATE=$(date +"%Y-%m-%d")
+
           # 格式化Changelog
-          NEW_CHANGELOG="# $CURRENT_TAG\n\n$CHANGELOG"
+          NEW_CHANGELOG="# $CURRENT_TAG\n\n$CURRENT_DATE 发布，该版本包含以下改动：\n\n$CHANGELOG"
 
           # 输出Changelog到文件
           # 检查是否存在旧的CHANGELOG.md文件
@@ -78,7 +81,7 @@ jobs:
 
           # 输出到环境变量（保持与文件内容一致的格式）
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo -e "# Changelog\n\n# $CURRENT_TAG\n\n$CHANGELOG" >> $GITHUB_ENV
+          echo -e "# Changelog\n\n# $CURRENT_TAG\n\n$CURRENT_DATE 发布，该版本包含以下改动：\n\n$CHANGELOG" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Update Source Code in Target Repository

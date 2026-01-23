@@ -6,9 +6,11 @@
 
 项目主仓库: https://github.com/footprintcat/admin-template
 
+更新日志：[点击查看](./CHANGELOG.md)
+
 ---
 
-⚠ 请注意：当前仓库为自动生成，仅用于项目发布，不接收代码贡献。
+**⚠ 请注意：当前仓库为自动生成，仅用于项目发布，不接收代码贡献。**
 
 如需提出问题或参与贡献 (issue & pr) 请前往[主仓库](https://github.com/footprintcat/admin-template)提交。
 
