@@ -53,19 +53,21 @@ export const rawPost = <T = any>(url: string, data?: any, extra?: Extra): Promis
   return promise
 }
 
-// GET请求 - 直接返回Promise
-export const get = <T = any>(
-  url: string,
-  params?: any,
-  extra?: Extra,
-): Promise<{
+export interface ApiCommonReturnType<T> {
   raw: CommonReturn<T>
   data: T
   isSuccess: boolean
   errCode: BusinessErrorCode | null
   toastMessage: string
   isErrorMessageShown: boolean
-}> => {
+}
+
+// GET请求 - 直接返回Promise
+export const get = <T = any>(
+  url: string,
+  params?: any,
+  extra?: Extra,
+): Promise<ApiCommonReturnType<T>> => {
   const promise = rawGet<CommonReturn<T>>(url, params, extra)
     .then((result) => {
       const toastMessage = result.message || '服务器内部错误，请稍后再试'
@@ -111,14 +113,7 @@ export const post = <T = any>(
   url: string,
   data?: any,
   extra?: Extra,
-): Promise<{
-  raw: CommonReturn<T>
-  data: T
-  isSuccess: boolean
-  errCode: BusinessErrorCode | null
-  toastMessage: string
-  isErrorMessageShown: boolean
-}> => {
+): Promise<ApiCommonReturnType<T>> => {
   const promise = rawPost<CommonReturn<T>>(url, data, extra)
     .then((result) => {
       const toastMessage = result.message || '服务器内部错误，请稍后再试'

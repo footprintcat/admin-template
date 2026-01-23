@@ -90,7 +90,7 @@
 <script setup lang="ts">
 import { ElMessage, type ElTable, type TableColumnCtx } from 'element-plus'
 import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
-import type { CommonReturn } from '@/types/backend/common/common-return'
+import type { ApiCommonReturnType } from '@/utils/api'
 import type { ManageListResponse } from '@/types/backend/common/manage-list-response'
 import ManageListSearchForm from './components/manage-list-search-form.vue'
 import ExportFileDialog from './export-file/export-file-dialog.vue'
@@ -123,7 +123,7 @@ interface Props {
    * 非查询条件的额外默认值
    */
   extraInitialParams?: Record<string, unknown>
-  fetchData: (requestParams: RequestParam) => Promise<CommonReturn<ManageListResponse<unknown>>>
+  fetchData: (requestParams: RequestParam) => Promise<ApiCommonReturnType<ManageListResponse<unknown>>>
   /**
    * 组件挂载时是否拉取数据
    */
