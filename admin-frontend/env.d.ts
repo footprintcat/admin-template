@@ -2,3 +2,9 @@
 
 // 声明全局变量
 declare const __APP_BUILD_TIME__: number
+
+interface ImportMetaEnv {
+  /** 后端 API 接口地址前缀 */
+  readonly VITE_API_BASE_URL: string
+  // 更多环境变量...
+}

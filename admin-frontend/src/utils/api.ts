@@ -20,7 +20,7 @@ interface Extra {
   showLoading?: boolean
 }
 
-const baseURL = 'http://localhost:8412'
+const baseURL = import.meta.env.VITE_API_BASE_URL
 
 // 创建axios实例
 const request: AxiosInstance = axios.create({
