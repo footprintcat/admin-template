@@ -74,6 +74,9 @@
             }}排序
           </template>
         </el-text>
+        <el-link v-if="!isDefaultFilters" type="primary" style="vertical-align: unset;" @click="handleResetFilters">
+          重置排序
+        </el-link>
       </div>
       <!-- 分页组件 -->
       <el-pagination v-model:current-page="pageQuery.pageIndex" v-model:page-size="pageQuery.pageSize"
@@ -193,6 +196,11 @@ const fieldNameMap = computed<Record<string, string>>(() => {
     map[column.field] = column.label
   })
   return map
+})
+
+// 当前排序条件是否是默认排序
+const isDefaultFilters = computed(() => {
+  return JSON.stringify(sortList.value) === JSON.stringify(initialSortList.value)
 })
 
 function handleResetFilters() {
