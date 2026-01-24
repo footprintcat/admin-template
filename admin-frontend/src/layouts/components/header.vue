@@ -13,7 +13,7 @@
 
     <div class="logo" @click="router.push('/')" style="cursor: pointer;">
       <el-tooltip effect="dark" content="回到首页">
-        <span>{{ settings.siteFullTitle }}</span>
+        <span>{{ siteFullTitle }}</span>
       </el-tooltip>
     </div>
 
@@ -94,7 +94,6 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowDown, Brush, Expand, Fold, FullScreen, Guide, Message, Right, Switch, User } from '@element-plus/icons-vue'
-import settings from '@/utils/settings'
 import { userLogout } from '@/utils/user_utils'
 import defaultAvatarUrl from '@/assets/img/default-avatar.jpg'
 import { redirectToChooseIdentity } from '@/router/guards/scripts/redirect_to'
@@ -102,6 +101,8 @@ import { useSidebarStore } from '@/stores/sidebar'
 import { useThemeStore } from '@/stores/theme'
 import { useUserStore } from '@/stores/user'
 // import ThemeSettingDrawer from './theme-setting-drawer.vue'
+
+const siteFullTitle = import.meta.env.VITE_APP_FULL_TITLE
 
 const message: number = 2
 

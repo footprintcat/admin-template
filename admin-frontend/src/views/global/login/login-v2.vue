@@ -12,8 +12,7 @@
             <div class="logo">
               <img :src="baseUrl + '/favicon.svg'" alt="Logo" />
             </div>
-            <!-- <h1 class="title">{{ settings.siteFullTitle }}</h1> -->
-            <h1 class="title">简构后台管理系统</h1>
+            <h1 class="title">{{ siteFullTitle }}</h1>
             <p>请登录以继续</p>
           </div>
 
@@ -112,6 +111,7 @@ import { Hide, Lock, User, View } from '@element-plus/icons-vue'
 import { useLoginLogic } from './composables/useLoginLogic'
 
 const baseUrl = import.meta.env.BASE_URL
+const siteFullTitle = import.meta.env.VITE_APP_FULL_TITLE
 
 const loginFormRef = useTemplateRef('loginFormRef')
 

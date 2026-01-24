@@ -30,12 +30,6 @@ export default {
   isHttps: isHttps,
 
   /**
-   * 网站全称
-   * （登录页标题 / 左上角标题 / dashboard 标题 / 站点信息显示）
-   */
-  siteFullTitle: '简构后台管理系统',
-
-  /**
    * 开发公司名称
    * （留空则不显示）
    */
