@@ -36,6 +36,9 @@ coverage
 # Vitest
 __screenshots__/
 
+# Vite
+*.timestamp-*-*.mjs
+
 auto-imports.d.ts
 components.d.ts
 
