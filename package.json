@@ -32,7 +32,9 @@
       "devDependencies.unplugin-vue-components": "element-plus 自动按需导入插件 | docs: https://element-plus.org/zh-CN/guide/quickstart",
       "devDependencies.vite": "Vue 框架依赖",
       "devDependencies.vite-plugin-vue-devtools": "Vue 框架依赖",
-      "devDependencies.vue-tsc": "Vue 框架依赖"
+      "devDependencies.vue-tsc": "Vue 框架依赖",
+      "overrides.eslint-plugin-import.eslint": "让插件使用项目根目录定义的 eslint 版本",
+      "overrides.eslint-plugin-import": "临时解决方案 | related issues: https://github.com/import-js/eslint-plugin-import/issues/3227"
     }
   }
 }

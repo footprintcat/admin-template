@@ -121,12 +121,12 @@ Visual Studio Code
 - Vue 3.5
 - Vite 7.3
 - TypeScript 5.9
-- ESLint 9
+- ESLint 10
 
 **状态与路由管理**
 
 - Pinia 3.0 (Persistedstate 4.7)
-- Vue Router 4.6
+- Vue Router 5.0
 
 **项目**
 
