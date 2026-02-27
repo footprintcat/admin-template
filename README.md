@@ -99,7 +99,7 @@ TODO
 
 - Lombok 1.18
 - MapStruct 1.6
-- JetBrains Annotations 26.0
+- JetBrains Annotations 26.1
 
 **环境**
 
