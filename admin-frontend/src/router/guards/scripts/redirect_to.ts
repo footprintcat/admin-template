@@ -1,4 +1,4 @@
-import type { NavigationGuardNext, RouteLocationNormalized, Router } from 'vue-router'
+import type { NavigationGuardReturn, RouteLocationNormalized, Router } from 'vue-router'
 
 /**
  *
@@ -119,7 +119,7 @@ export function redirectAfterChooseIdentity(router: Router) {
  * @param to
  * @param next
  */
-export function redirectAfterLoginBeforeRoute(to: RouteLocationNormalized, next: NavigationGuardNext): void {
+export function redirectAfterLoginBeforeRoute(to: RouteLocationNormalized): NavigationGuardReturn {
   const fullPath: string | undefined = to.query?.redirectTo as string | undefined
   if (isLogRedirectInfo) {
     console.log(LOG_PREFIX, 'redirectAfterLoginBeforeRoute -> fullPath', fullPath)
@@ -127,9 +127,9 @@ export function redirectAfterLoginBeforeRoute(to: RouteLocationNormalized, next:
   const path: string | undefined = fullPath?.split('?')[0]
 
   if (path && !path.includes('/login') && !path.includes('/choose-identity')) {
-    next(fullPath!)
+    return fullPath!
   } else {
-    next({ name: 'Dashboard' })
+    return { name: 'Dashboard' }
   }
 }
 
@@ -144,18 +144,18 @@ export function redirectAfterLoginBeforeRoute(to: RouteLocationNormalized, next:
  * @param next
  * @since 2025-12-24
  */
-export function redirectToLoginBeforeRoute(/*router: Router,*/ from: RouteLocationNormalized, next: NavigationGuardNext) {
+export function redirectToLoginBeforeRoute(/*router: Router,*/ from: RouteLocationNormalized): NavigationGuardReturn {
   if (isLogRedirectInfo) {
     console.log(LOG_PREFIX, 'redirectToLoginBeforeRoute')
   }
   // router.currentRoute.value === from
-  next({
+  return {
     name: 'Login',
     query: {
       // 2025.08.26 route.path 改为 route.fullPath (支持携带 hash 路由参数)
       redirectTo: from.fullPath,
     },
-  })
+  }
 }
 
 /**
@@ -170,18 +170,18 @@ export function redirectToLoginBeforeRoute(/*router: Router,*/ from: RouteLocati
  * @param next
  * @since 2025-12-26
  */
-export function redirectToChooseIdentityBeforeRoute(/*router: Router,*/ from: RouteLocationNormalized, next: NavigationGuardNext) {
+export function redirectToChooseIdentityBeforeRoute(/*router: Router,*/ from: RouteLocationNormalized): NavigationGuardReturn {
   if (isLogRedirectInfo) {
     console.log(LOG_PREFIX, 'redirectToChooseIdentityBeforeRoute')
   }
   // router.currentRoute.value === from
-  next({
+  return {
     name: 'ChooseIdentity',
     query: {
       // 2025.08.26 route.path 改为 route.fullPath (支持携带 hash 路由参数)
       redirectTo: from.fullPath,
     },
-  })
+  }
 }
 
 /**
