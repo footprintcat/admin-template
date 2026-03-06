@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage, type ElTable, type TableColumnCtx } from 'element-plus'
+import { ElMessage, type TableColumnCtx } from 'element-plus'
 import { Delete, Download, RefreshRight, Search } from '@element-plus/icons-vue'
 import type { ApiCommonReturnType } from '@/utils/api'
 import type { ManageListResponse } from '@/types/backend/common/manage-list-response'
@@ -160,8 +160,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 // 组件 ref
-const manageListTableRef = ref<InstanceType<typeof ElTable>>()
-const manageListSearchFormRef = ref<InstanceType<typeof ManageListSearchForm>>()
+const manageListTableRef = useTemplateRef('manageListTableRef')
+const manageListSearchFormRef = useTemplateRef('manageListSearchFormRef')
 
 // 排序信息
 const sortList = ref<Array<SortItemWithLabel>>([])
