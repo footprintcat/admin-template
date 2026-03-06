@@ -1,7 +1,8 @@
 <template>
-  <el-form :inline="true" :label-position="props.searchFormLabelPosition">
+  <el-form ref="elFormRef" :inline="props.isNarrowScreen ? false : true"
+    :label-position="props.searchFormLabelPosition">
     <el-form-item v-for="(searchInput, index) in props.searchInputList" :key="index" :label="searchInput.label"
-      :style="{ width: `${calcItemWidth(searchInput.columnGap)}px` }">
+      :style="{ width: props.isNarrowScreen ? '100%' : `${calcItemWidth(searchInput.columnGap)}px` }">
       <template v-if="searchInput.type === 'text'">
         <el-input v-model="params[searchInput.field]" clearable
           :placeholder="searchInput.placeHolder || `请输入${searchInput.label}`" />
@@ -16,7 +17,7 @@
         <el-date-picker v-model="params[searchInput.field]" clearable
           :placeholder="searchInput.placeHolder || `请选择${searchInput.label}`"
           :format="getElementPlusDateTimePickerFormat(searchInput.showTimePart)"
-          :value-format="getElementPlusDateTimePickerValueFormat(searchInput.valueFormat)" />
+          :value-format="getElementPlusDateTimePickerValueFormat(searchInput.valueFormat)" :style="{ width: '100%' }" />
       </template>
       <template v-else-if="searchInput.type === 'datetime-range'">
         <el-date-picker v-model="params[searchInput.field]" clearable type="datetimerange"
@@ -40,12 +41,14 @@ interface Props {
   searchInputList?: SearchInputList
   /** 初始参数值 */
   extraInitialParams?: Record<string, unknown>
+  isNarrowScreen?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   searchFormLabelPosition: 'top',
   searchInputList: () => [] satisfies SearchInputList,
   extraInitialParams: () => ({}),
+  isNarrowScreen: false,
 })
 
 const emit = defineEmits<{

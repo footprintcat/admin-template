@@ -1,10 +1,10 @@
 <template>
   <div class="manage-list-wrapper" :class="[props.tableFillHeight ? 'fill-height' : '']">
     <!-- 顶部查询条件 -->
-    <div class="top-container container-style">
+    <div class="top-container container-style" ref="topContainerRef">
       <manage-list-search-form ref="manageListSearchFormRef" :search-form-label-position="props.searchFormLabelPosition"
         :search-input-list="props.searchInputList" :extra-initial-params="props.extraInitialParams"
-        @change="handleParamsUpdate" />
+        @change="handleParamsUpdate" :is-narrow-screen="isNarrowScreen" />
       <div>
         <el-button type="primary" :icon="Search" @click="handleFetchData({ gotoFirstPage: true })"
           :loading="props.allowParallelFetch ? false : isLoading">
@@ -162,6 +162,9 @@ const props = withDefaults(defineProps<Props>(), {
 // 组件 ref
 const manageListTableRef = useTemplateRef('manageListTableRef')
 const manageListSearchFormRef = useTemplateRef('manageListSearchFormRef')
+
+// DOM ref
+const topContainerRef = useTemplateRef('topContainerRef')
 
 // 排序信息
 const sortList = ref<Array<SortItemWithLabel>>([])
@@ -444,6 +447,35 @@ onMounted(() => {
   }
   */
 })
+
+
+// 是否是窄屏
+const isNarrowScreen = ref(false)
+let narrowScreenObserver: ResizeObserver | null
+const narrowScreenBreakpoint: number = 470
+onMounted(() => {
+  narrowScreenObserver = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      // 获取元素的内容宽度
+      const width = entry.contentRect.width
+      // 更新响应式变量的值
+      isNarrowScreen.value = width < narrowScreenBreakpoint
+    }
+  })
+  const topContainerDiv: HTMLDivElement | null = topContainerRef.value
+  if (topContainerDiv) {
+    narrowScreenObserver.observe(topContainerDiv)
+  } else {
+    console.warn('topContainerDiv is null')
+  }
+})
+onUnmounted(() => {
+  if (narrowScreenObserver) {
+    narrowScreenObserver.disconnect()
+    narrowScreenObserver = null
+  }
+})
+
 </script>
 
 <style scoped>
