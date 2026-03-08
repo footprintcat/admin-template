@@ -25,7 +25,7 @@
             <mxPoint x="160" y="320" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="sKOGI2LfXRXc0cSed7b3-17" edge="1" parent="sKOGI2LfXRXc0cSed7b3-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" value="User">
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-17" edge="1" parent="sKOGI2LfXRXc0cSed7b3-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" value="User / UserXxxDto">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="240" y="320" as="sourcePoint" />
             <mxPoint x="240" y="240" as="targetPoint" />
@@ -66,10 +66,10 @@
         <mxCell id="sKOGI2LfXRXc0cSed7b3-9" edge="1" parent="1" source="sKOGI2LfXRXc0cSed7b3-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="sKOGI2LfXRXc0cSed7b3-2" value="UserList&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Request&lt;/span&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="sKOGI2LfXRXc0cSed7b3-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="request" vertex="1">
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="api request" vertex="1">
           <mxGeometry height="40" width="160" x="200" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="sKOGI2LfXRXc0cSed7b3-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="response" vertex="1">
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="api response" vertex="1">
           <mxGeometry height="40" width="160" x="840" y="160" as="geometry" />
         </mxCell>
         <mxCell id="sKOGI2LfXRXc0cSed7b3-12" edge="1" parent="1" source="sKOGI2LfXRXc0cSed7b3-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="sKOGI2LfXRXc0cSed7b3-11" value="CommonReturn&amp;lt;UserVo&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;gt;&lt;/span&gt;">

@@ -17,6 +17,7 @@ public class UserDto {
     private String telephone;
     private String status;
 
+    @Deprecated
     public static UserDto fromEntity(User entity) {
         if (entity == null) {
             return null;
@@ -26,10 +27,12 @@ public class UserDto {
         return dto;
     }
 
+    @Deprecated
     public static List<UserDto> fromEntity(List<User> entityList) {
         return entityList.stream().map(UserDto::fromEntity).collect(Collectors.toList());
     }
 
+    @Deprecated
     public static User toEntity(UserDto dto) {
         if (dto == null) {
             return null;

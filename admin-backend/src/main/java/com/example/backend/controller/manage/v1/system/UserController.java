@@ -16,14 +16,19 @@ import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.response.ManageListResponse;
 import com.example.backend.common.error.BusinessException;
+import com.example.backend.common.utils.ExportExcelUtils;
+import com.example.backend.controller.manage.v1.system.dto.request.user.ManageSystemUserExportRequest;
 import com.example.backend.controller.manage.v1.system.dto.request.user.ManageSystemUserListRequest;
+import com.example.backend.modules.system.model.converter.UserConverter;
 import com.example.backend.modules.system.model.dto.UserDto;
+import com.example.backend.modules.system.model.dto.export.UserExportDto;
 import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleServiceV2;
 import com.example.backend.modules.system.service.needrefactor.SystemUserServiceV2;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,10 +38,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -50,6 +53,8 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @Resource
+    private UserConverter userConverter;
+    @Resource
     private SystemUserServiceV2 systemUserServiceV2;
     @Resource
     private SystemRoleServiceV2 systemRoleServiceV2;
@@ -57,18 +62,17 @@ public class UserController {
     /**
      * 获取用户列表
      *
-     * @param queryRequest 筛选条件
+     * @param requestBody 筛选条件
      * @return
      */
     @PostMapping("/list")
-    @ResponseBody
-    public CommonReturn list(@RequestBody ManageSystemUserListRequest queryRequest) throws BusinessException {
+    public CommonReturn list(@RequestBody ManageSystemUserListRequest requestBody) throws BusinessException {
 
         // 查询分页数据
         Page<User> page = systemUserServiceV2.getUserPage(
-                queryRequest.getPageQuery(),
-                queryRequest.getParams(),
-                queryRequest.getSort()
+                requestBody.getPageQuery(),
+                requestBody.getParams(),
+                requestBody.getSort()
         );
 
         // 分页数据转为 DTO
@@ -83,6 +87,55 @@ public class UserController {
     }
 
     /**
+     * 导出用户列表
+     *
+     * @param requestBody
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/export")
+    public void export(@RequestBody ManageSystemUserExportRequest requestBody, HttpServletResponse response) throws IOException {
+        final String fileName = "用户列表_" + ExportExcelUtils.getFormattedDateInFileName() + ".xlsx";
+        final String sheetName = "用户表";
+
+        // 响应头
+        ExportExcelUtils.setResponseHeader(response, fileName);
+
+        // 查询数据
+        UserDto params = requestBody.getParams();
+        List<User> userList = systemUserServiceV2.getUserList(params);
+        List<UserExportDto> exportDto = userConverter.toExportDto(userList);
+
+        // 导出 xlsx
+        ExportExcelUtils.exportToStream(exportDto, UserExportDto.class, sheetName, response.getOutputStream());
+    }
+
+    /**
+     * 导出用户列表
+     *
+     * @param requestBody
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/export-data")
+    public CommonReturn exportData(@RequestBody ManageSystemUserExportRequest requestBody) {
+        final String fileName = "用户列表_" + ExportExcelUtils.getFormattedDateInFileName();
+        final String sheetName = "用户表";
+
+        // 查询数据
+        UserDto params = requestBody.getParams();
+        List<User> userList = systemUserServiceV2.getUserList(params);
+        List<UserExportDto> exportDto = userConverter.toExportDto(userList);
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", exportDto);
+        map.put("fileName", fileName);
+        map.put("sheetName", sheetName);
+        return CommonReturn.success(map);
+    }
+
+    /**
      * 获取用户列表
      *
      * @param pageQuery 分页参数
@@ -91,6 +144,7 @@ public class UserController {
      */
     @GetMapping("/list")
     @ResponseBody
+    @Deprecated
     public CommonReturn list(PageQuery pageQuery, UserDto userDTO) throws BusinessException {
         // 查询分页数据
         Page<User> systemUserPage = systemUserServiceV2.getUserPage(pageQuery, userDTO, Collections.emptyList());
@@ -251,8 +305,10 @@ public class UserController {
      *
      * @return
      */
+/*
     @GetMapping("/export")
     @ResponseBody
+    @Deprecated
     public CommonReturn exportUserList(UserDto userDTO) {
         List<User> userList = systemUserServiceV2.getUserList(userDTO);
         List<UserDto> userDtoList = UserDto.fromEntity(userList);
@@ -269,4 +325,5 @@ public class UserController {
 
         return CommonReturn.success(map);
     }
+*/
 }

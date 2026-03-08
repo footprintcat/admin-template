@@ -1,5 +1,9 @@
 export interface ExportConfig {
-  withFilter: boolean
+  dataRange: 'all' | 'current-page' | 'top-n'
+  dataRangeTopN: number | null
+  filterType: 'none' | 'current'
+  sortType: 'none' | 'current'
+  exportType: 'backend' | 'frontend'
   ext: string
 }
 

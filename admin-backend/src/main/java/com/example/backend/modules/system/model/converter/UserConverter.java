@@ -1,9 +1,13 @@
 package com.example.backend.modules.system.model.converter;
 
 import com.example.backend.common.mapstruct.ConvertHelper;
+import com.example.backend.modules.system.enums.user.UserStatusEnum;
 import com.example.backend.modules.system.model.dto.UserDto;
+import com.example.backend.modules.system.model.dto.export.UserExportDto;
 import com.example.backend.modules.system.model.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -31,4 +35,23 @@ public interface UserConverter {
 
     List<User> toEntity(List<UserDto> userDto);
 
+    /**
+     *
+     * entity -> exportDto
+     *
+     * @param user
+     * @return
+     */
+    @Mapping(target = "statusName", source = "status", qualifiedByName = "userStatusCodeToName")
+    UserExportDto toExportDto(User user);
+
+    List<UserExportDto> toExportDto(List<User> user);
+
+    @Named("userStatusCodeToName")
+    default String userStatusCodeToName(UserStatusEnum statusEnum) {
+        if (statusEnum == null) {
+            return "";
+        }
+        return statusEnum.getName();
+    }
 }

@@ -17,6 +17,7 @@
     <!-- 用户管理 -->
     <!-- <el-config-provider size="small"> -->
     <manage-list :search-input-list="searchInputList" :table-column-list="tableColumnList" :fetch-data="fetchData"
+      :export-data-frontend="exportDataFrontend" :export-data-backend="exportDataBackend"
       :extra-initial-params="extraInitialParams" :debug="true" />
     <!-- </el-config-provider> -->
 
@@ -36,7 +37,7 @@
 <script setup lang="ts">
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserFilled } from '@element-plus/icons-vue'
-import { systemUserPage } from '@/api/system/user'
+import { systemUserExport, systemUserExportData, systemUserPage } from '@/api/system/user'
 import ManageList from '@/components/core/manage-list/manage-list.vue'
 import type { RequestParam } from '@/components/core/manage-list/types/request-param'
 import type { SearchInputList } from '@/components/core/manage-list/types/search-input'
@@ -152,5 +153,13 @@ const tableColumnList: TableColumnList = [
 
 function fetchData(requestParam: RequestParam<Record<string, unknown>>) {
   return systemUserPage(requestParam)
+}
+
+async function exportDataFrontend(requestParam: RequestParam<Record<string, unknown>>) {
+  return systemUserExportData(requestParam)
+}
+
+async function exportDataBackend(requestParam: RequestParam<Record<string, unknown>>) {
+  return systemUserExport(requestParam)
 }
 </script>
