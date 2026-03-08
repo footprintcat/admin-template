@@ -1,11 +1,9 @@
 package com.example.backend.modules.system.service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.modules.system.enums.user.UserStatusEnum;
-import com.example.backend.modules.system.mapper.UserMapper;
 import com.example.backend.modules.system.model.dto.UserDto;
 import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.model.entity.UserAuth;
@@ -19,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService extends ServiceImpl<UserMapper, User> {
+public class UserService {
 
     @Resource
     private UserRepository userRepository;
