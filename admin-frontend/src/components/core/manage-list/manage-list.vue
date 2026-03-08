@@ -17,7 +17,8 @@
           重置排序
         </el-button>
         <!-- type="primary" plain -->
-        <el-button type="primary" plain :icon="Download" @click="handleExportFile">
+        <el-button v-if="props.showExportButton" type="primary" plain :icon="Download" @click="handleExportFile"
+          :disabled="!props.exportData">
           导出到文件
         </el-button>
 
@@ -127,6 +128,11 @@ interface Props {
    */
   extraInitialParams?: Record<string, unknown>
   fetchData: (requestParams: RequestParam) => Promise<ApiCommonReturnType<ManageListResponse<unknown>>>
+  /**
+   * 导出数据接口函数
+   * 如果未提供，则导出按钮不可用
+   */
+  exportData?: (requestParams: RequestParam) => Promise<ApiCommonReturnType<ExportResult>>
   /**
    * 组件挂载时是否拉取数据
    */
