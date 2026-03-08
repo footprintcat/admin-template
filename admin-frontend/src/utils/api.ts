@@ -91,7 +91,7 @@ export const get = <T = any>(
         data: result.data,
         isSuccess: result.isSuccess,
         errCode: result.errCode,
-        toastMessage,
+        toastMessage: result.isSuccess ? toastMessage : '',
         isErrorMessageShown,
       }
     })
@@ -137,7 +137,7 @@ export const post = <T = any>(
         data: result.data,
         isSuccess: result.isSuccess,
         errCode: result.errCode,
-        toastMessage,
+        toastMessage: result.isSuccess ? toastMessage : '',
         isErrorMessageShown,
       }
     })

@@ -43,5 +43,11 @@ public interface UserMapper extends BaseMapper<User> {
      */
     Page<User> getUserPage(Page<?> page, @Param("query") UserDto userDTO, @Param("orderByItem") List<OrderByItem> orderByItem);
 
+    /**
+     * 导出用户列表数据
+     *
+     * @param userDTO
+     * @return
+     */
     List<User> getUserList(@Param("query") UserDto userDTO);
 }
