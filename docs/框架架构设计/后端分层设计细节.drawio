@@ -1,0 +1,81 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.5.2 Chrome/142.0.7444.265 Electron/39.6.1 Safari/537.36" version="29.5.2">
+  <diagram name="第 1 页" id="fGvIff2XVp5VtsJP5yVE">
+    <mxGraphModel dx="1181" dy="687" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-3" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Backend" vertex="1">
+          <mxGeometry height="440" width="400" x="400" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-13" edge="1" parent="sKOGI2LfXRXc0cSed7b3-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" value="UserQuery">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="160" y="120" as="sourcePoint" />
+            <mxPoint x="160" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-2" parent="sKOGI2LfXRXc0cSed7b3-3" style="rounded=0;whiteSpace=wrap;html=1;" value="Controller" vertex="1">
+          <mxGeometry height="40" width="160" x="120" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-4" parent="sKOGI2LfXRXc0cSed7b3-3" style="rounded=0;whiteSpace=wrap;html=1;" value="Service" vertex="1">
+          <mxGeometry height="40" width="160" x="120" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-14" edge="1" parent="sKOGI2LfXRXc0cSed7b3-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" value="UserCriteria">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="160" y="240" as="sourcePoint" />
+            <mxPoint x="160" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-17" edge="1" parent="sKOGI2LfXRXc0cSed7b3-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" value="User">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="320" as="sourcePoint" />
+            <mxPoint x="240" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-18" edge="1" parent="sKOGI2LfXRXc0cSed7b3-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" value="UserDto">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="200" as="sourcePoint" />
+            <mxPoint x="240" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-19" parent="sKOGI2LfXRXc0cSed7b3-3" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="以 User 为例" vertex="1">
+          <mxGeometry height="30" width="100" x="10" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-21" parent="sKOGI2LfXRXc0cSed7b3-3" style="swimlane;startSize=0;" value="" vertex="1">
+          <mxGeometry height="80" width="320" x="40" y="320" as="geometry">
+            <mxRectangle height="40" width="50" x="70" y="420" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-5" parent="sKOGI2LfXRXc0cSed7b3-21" style="rounded=0;whiteSpace=wrap;html=1;" value="Repository" vertex="1">
+          <mxGeometry height="40" width="80" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-6" parent="sKOGI2LfXRXc0cSed7b3-21" style="rounded=0;whiteSpace=wrap;html=1;" value="Mapper" vertex="1">
+          <mxGeometry height="40" width="80" x="220" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-15" edge="1" parent="sKOGI2LfXRXc0cSed7b3-21" source="sKOGI2LfXRXc0cSed7b3-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="sKOGI2LfXRXc0cSed7b3-6" value="UserCriteria">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="30" as="sourcePoint" />
+            <mxPoint x="210" y="50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-16" edge="1" parent="sKOGI2LfXRXc0cSed7b3-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" target="sKOGI2LfXRXc0cSed7b3-5" value="User">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="30" as="sourcePoint" />
+            <mxPoint x="590" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-9" edge="1" parent="1" source="sKOGI2LfXRXc0cSed7b3-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="sKOGI2LfXRXc0cSed7b3-2" value="UserList&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Request&lt;/span&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="request" vertex="1">
+          <mxGeometry height="40" width="160" x="200" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="response" vertex="1">
+          <mxGeometry height="40" width="160" x="840" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="sKOGI2LfXRXc0cSed7b3-12" edge="1" parent="1" source="sKOGI2LfXRXc0cSed7b3-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="sKOGI2LfXRXc0cSed7b3-11" value="CommonReturn&amp;lt;UserVo&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;gt;&lt;/span&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
