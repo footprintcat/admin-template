@@ -1,11 +1,12 @@
 package com.example.backend.common.interceptor.checklogin;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.example.backend.common.annotations.NoNeedIdentity;
 import com.example.backend.common.annotations.PublicAccess;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.utils.SessionUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +27,8 @@ import java.util.Set;
 @Slf4j
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private static final Set<String> IDENTITY_RELATED_PATHS = Set.of(
             "/manage/v1/system/identity/switch"
@@ -59,9 +62,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             // 响应头
             response.addHeader("content-type", "application/json; charset=utf-8");
 
-            // 返回“用户未登录”
+            // 返回"用户未登录"
             CommonReturn commonReturn = CommonReturn.error(BusinessErrorCode.USER_NOT_LOGIN, "用户未登录");
-            String jsonString = JSONObject.toJSONString(commonReturn);
+            String jsonString = toJsonString(commonReturn);
 
             response.resetBuffer();
             response.getWriter().print(jsonString);
@@ -74,9 +77,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (!isIdentityFree && SessionUtils.getIdentityId(session) == null) {
             response.addHeader("content-type", "application/json; charset=utf-8");
 
-            // 返回“请先选择登录身份”
+            // 返回"请先选择登录身份"
             CommonReturn commonReturn = CommonReturn.error(BusinessErrorCode.USER_NOT_SELECT_IDENTITY, "请先选择登录身份");
-            String jsonString = JSONObject.toJSONString(commonReturn);
+            String jsonString = toJsonString(commonReturn);
 
             response.resetBuffer();
             response.getWriter().print(jsonString);
@@ -85,5 +88,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         return true;
+    }
+
+    private String toJsonString(Object obj) {
+        try {
+            return OBJECT_MAPPER.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            log.error("JSON 序列化失败", e);
+            return "{}";
+        }
     }
 }

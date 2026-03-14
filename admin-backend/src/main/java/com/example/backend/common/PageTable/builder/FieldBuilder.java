@@ -1,7 +1,8 @@
 package com.example.backend.common.PageTable.builder;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.example.backend.common.PageTable.enums.AddType;
 import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
@@ -19,11 +20,13 @@ public class FieldBuilder {
 
     public final static String EDIT_SMALL_TEXT_HTML_SAME_AS_ADD_PLACEHOLDER = "<EDIT_SMALL_TEXT_HTML_SAME_AS_ADD_PLACEHOLDER>";
 
-    private JSONArray columns;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private ArrayNode columns;
 
     public static FieldBuilder create() {
         FieldBuilder builder = new FieldBuilder();
-        builder.columns = new JSONArray();
+        builder.columns = OBJECT_MAPPER.createArrayNode();
         return builder;
     }
 
@@ -83,7 +86,7 @@ public class FieldBuilder {
                             String searchPlaceholder, String addPlaceholder, String editPlaceholder,
                             String addSmallTextHTML, String editSmallTextHTML, Map<String, Object> extraConfig,
                             FieldRuleListBuilder fieldRuleListBuilder, String mockDataPattern) {
-        JSONObject jsonObject = new JSONObject();
+        ObjectNode jsonObject = OBJECT_MAPPER.createObjectNode();
 
         /*  实际字段  */
         // 用于筛选、增删改
@@ -112,14 +115,14 @@ public class FieldBuilder {
         jsonObject.put("editPlaceholder", EDIT_PLACEHOLDER_SAME_AS_ADD_PLACEHOLDER.equals(editPlaceholder) ? addPlaceholder : editPlaceholder);
         jsonObject.put("editSmallTextHTML", EDIT_SMALL_TEXT_HTML_SAME_AS_ADD_PLACEHOLDER.equals(editSmallTextHTML) ? addSmallTextHTML : editSmallTextHTML);
         // 新增/修改时的前端表单验证
-        jsonObject.put("validateRules", Objects.nonNull(fieldRuleListBuilder)
-                ? fieldRuleListBuilder.build() : new JSONArray());
+        jsonObject.set("validateRules", Objects.nonNull(fieldRuleListBuilder)
+                ? fieldRuleListBuilder.build() : OBJECT_MAPPER.createArrayNode());
         // 新增弹窗 字段默认值
-        jsonObject.put("default", defaultValue);
+        jsonObject.putPOJO("default", defaultValue);
 
         /* 字段额外配置 */
         if (extraConfig != null) {
-            jsonObject.put("extraConfig", extraConfig); // 可能为 null
+            jsonObject.putPOJO("extraConfig", extraConfig);
         } else {
             if (addType == AddType.INPUT_AUTO_COMPLETE || editType == EditType.INPUT_AUTO_COMPLETE) {
                 throw new RuntimeException("INPUT_AUTO_COMPLETE 字段需要配置 extraConfig -> autoCompleteDropDown 属性");
@@ -133,7 +136,7 @@ public class FieldBuilder {
         return this;
     }
 
-    public JSONArray build() {
+    public ArrayNode build() {
         return columns;
     }
 }

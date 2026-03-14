@@ -104,12 +104,6 @@
             <version>2.3.34</version>
         </dependency>
 
-        <!-- JSON -->
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-            <version>2.0.61</version>
-        </dependency>
 
         <!-- 密码 Hash 加密 -->
         <!--

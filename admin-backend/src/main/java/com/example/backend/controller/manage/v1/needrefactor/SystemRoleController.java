@@ -1,7 +1,7 @@
 /*
 package com.example.backend.controller.manage.v1;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.backend.common.annotations.HandleControllerGlobalException;
 import com.example.backend.common.error.BusinessException;
@@ -130,11 +130,11 @@ public class SystemRoleController {
     }
 
     @PostMapping("/delete")
-    public CommonReturn delete(@RequestBody JSONObject params, HttpServletRequest request) throws BusinessException {
+    public CommonReturn delete(@RequestBody ObjectNode params, HttpServletRequest request) throws BusinessException {
         // TODO
         Long currentUserRoleId = null; // SessionUtils.getRoleId(request.getSession());
 
-        Long roleId = params.getLong("roleId");
+        Long roleId = params.get("roleId").asLong();
         if (roleId == null) {
             return CommonReturn.error("角色id不存在");
         }

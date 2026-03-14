@@ -1,7 +1,10 @@
 package com.example.backend.common.ManageList;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.example.backend.common.ManageList.enums.ColumnType;
 import com.example.backend.common.ManageList.enums.DateDisplayType;
 import com.example.backend.common.ManageList.enums.DateValueType;
@@ -10,7 +13,6 @@ import com.example.backend.common.ManageList.pojo.ManageListInfo;
 import com.example.backend.common.ManageList.pojo.ManageListPageInfo;
 import com.example.backend.common.ManageList.pojo.ManageListQuery;
 import com.example.backend.common.ManageList.pojo.queryconfig.StringQueryConfig;
-import com.example.backend.common.config.FastjsonInitializer;
 import com.example.backend.modules.system.model.entity.User;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,17 @@ import java.util.function.Function;
  */
 @Slf4j
 public class ManageListBuilder<T> {
+
+    // 共享的 ObjectMapper 实例
+    private static final ObjectMapper OBJECT_MAPPER;
+
+    static {
+        OBJECT_MAPPER = new ObjectMapper();
+        // 序列化时包含 null 值
+        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.ALWAYS);
+        // 禁用将日期序列化为时间戳
+        OBJECT_MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     // 页面信息
     private ManageListInfo manageListInfo;
@@ -224,16 +237,16 @@ public class ManageListBuilder<T> {
      *
      * @return json 对象
      */
-    public JSONObject toJsonObject() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("info", this.manageListInfo);
-        jsonObject.put("dropdown", this.dropdownMap);
-        jsonObject.put("list", this.pageData);
-        jsonObject.put("query", this.tableQuery);
-        jsonObject.put("column", this.tableColumn);
+    public ObjectNode toJsonObject() {
+        ObjectNode jsonObject = OBJECT_MAPPER.createObjectNode();
+        jsonObject.putPOJO("info", this.manageListInfo);
+        jsonObject.putPOJO("dropdown", this.dropdownMap);
+        jsonObject.putPOJO("list", this.pageData);
+        jsonObject.putPOJO("query", this.tableQuery);
+        jsonObject.putPOJO("column", this.tableColumn);
 
         // 添加列表配置
-        jsonObject.put("listConfig", pageInfo);
+        jsonObject.putPOJO("listConfig", pageInfo);
 
         return jsonObject;
     }
@@ -244,19 +257,18 @@ public class ManageListBuilder<T> {
      * @return json 字符串
      */
     public String toJson() {
-        // return JSON.toJSONString(this);
-        // return toJsonObject().toString();
-        // 保留 null 值
-        return toJsonObject().toJSONString(JSONWriter.Feature.WriteNulls);
+        try {
+            return OBJECT_MAPPER.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            log.error("JSON 序列化失败", e);
+            return "{}";
+        }
     }
 
     /**
      * ManageListBuilder 使用示例
      */
     public static void main(String[] args) {
-        FastjsonInitializer fastjsonInitializer = new FastjsonInitializer();
-        fastjsonInitializer.run(null);
-
         // 准备测试数据
         User user1 = new User();
         user1.setUsername("张三");

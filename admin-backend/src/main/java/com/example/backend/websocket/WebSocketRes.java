@@ -1,13 +1,16 @@
 package com.example.backend.websocket;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
 import java.util.List;
 
 @Data
+@Slf4j
 public class WebSocketRes {
 
     private List<WebSocketResData> data = new LinkedList<>();
@@ -35,10 +38,14 @@ public class WebSocketRes {
     }
 
     public String toJSON() {
-        JSONObject jsonObject = new JSONObject(1);
-        jsonObject.put("data", this.data);
-        // 2024.06.18 bugfix: 大屏 websocket Map value为null时丢失字段问题修复
-        String s = jsonObject.toString(JSONWriter.Feature.WriteMapNullValue);
-        return s;
+        // 使用 Jackson 序列化，保留 null 值
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            log.error("WebSocket 序列化失败", e);
+            return "{}";
+        }
     }
 }

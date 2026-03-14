@@ -1,6 +1,6 @@
 package com.example.backend.common.ManageList.pojo.columnconfig.base;
 
-import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 列配置接口
@@ -13,6 +13,6 @@ public interface ColumnConfig {
      *
      * @return 如果配置有效返回true，否则返回false
      */
-    @JSONField(serialize = false)
+    @JsonIgnore
     boolean getIsValid();
 }
