@@ -1,14 +1,17 @@
 package com.example.backend.common.PageTable.builder;
 
-import com.alibaba.fastjson2.JSONArray;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 public class FieldRuleListBuilder {
 
-    private JSONArray ruleList;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private ArrayNode ruleList;
 
     public static FieldRuleListBuilder create() {
         FieldRuleListBuilder builder = new FieldRuleListBuilder();
-        builder.ruleList = new JSONArray();
+        builder.ruleList = OBJECT_MAPPER.createArrayNode();
         return builder;
     }
 
@@ -17,7 +20,7 @@ public class FieldRuleListBuilder {
         return this;
     }
 
-    public JSONArray build() {
+    public ArrayNode build() {
         return ruleList;
     }
 }

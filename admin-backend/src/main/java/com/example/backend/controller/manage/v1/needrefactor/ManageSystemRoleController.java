@@ -1,7 +1,8 @@
 package com.example.backend.controller.manage.v1.needrefactor;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.common.PageTable.builder.FieldBuilder;
 import com.example.backend.common.PageTable.builder.FieldMapperBuilder;
@@ -42,6 +43,8 @@ import java.util.List;
 @Tag(name = "[system] 角色 role", description = "/manage/v1/system/role")
 public class ManageSystemRoleController {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @Resource
     private RoleConverter roleConverter;
     @Resource
@@ -72,7 +75,7 @@ public class ManageSystemRoleController {
         String pageName = "角色列表";
 
         // 指定前端表格显示列
-        JSONArray columns = FieldBuilder.create()
+        ArrayNode columns = FieldBuilder.create()
                 .add("roleName", "roleName", "角色名称", "",
                         FieldType.TEXT, SearchType.CAN_NOT_SEARCH, AddType.CAN_NOT_ADD, EditType.CAN_NOT_EDIT,
                         FieldBuilder.SEARCH_PLACEHOLDER_SAME_AS_FIELDNAME,
@@ -90,16 +93,16 @@ public class ManageSystemRoleController {
                 .build();
 
         // 指定需要翻译的字段
-        JSONArray fieldMapper = FieldMapperBuilder.create()
+        ArrayNode fieldMapper = FieldMapperBuilder.create()
                 // .add("monitorCode", "monitorCode", monitorCodeSelectMap)
                 .build();
 
         // 拼装返回结果
-        JSONObject map = new JSONObject();
+        ObjectNode map = OBJECT_MAPPER.createObjectNode();
         map.put("total", rolePage.getTotal());
-        map.put("list", roleDtoList);
-        map.put("columns", columns);
-        map.put("fieldMapper", fieldMapper);
+        map.set("list", OBJECT_MAPPER.valueToTree(roleDtoList));
+        map.set("columns", columns);
+        map.set("fieldMapper", fieldMapper);
         map.put("idFieldName", idFieldName);
         map.put("pageName", pageName);
 

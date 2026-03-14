@@ -1,7 +1,8 @@
 package com.example.backend.controller.manage.v1.needrefactor;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.common.PageTable.builder.FieldBuilder;
 import com.example.backend.common.PageTable.builder.FieldMapperBuilder;
@@ -39,6 +40,8 @@ import java.util.List;
 @Tag(name = "[system] 日志 log", description = "/manage/v1/system/log")
 public class ManageSystemLogController {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @Resource
     private LogConverter logConverter;
     @Resource
@@ -61,7 +64,7 @@ public class ManageSystemLogController {
         String pageName = "系统日志管理";
 
         // 指定前端表格显示列
-        JSONArray columns = FieldBuilder.create()
+        ArrayNode columns = FieldBuilder.create()
                 .add("createTimestamp", "createTimestamp", "产生时间", "",
                         FieldType.DATETIME, SearchType.CAN_NOT_SEARCH, AddType.CAN_NOT_ADD, EditType.CAN_NOT_EDIT,
                         FieldBuilder.SEARCH_PLACEHOLDER_SAME_AS_FIELDNAME, "", "",
@@ -100,15 +103,15 @@ public class ManageSystemLogController {
                 .build();
 
         // 指定需要翻译的字段
-        JSONArray fieldMapper = FieldMapperBuilder.create()
+        ArrayNode fieldMapper = FieldMapperBuilder.create()
                 .build();
 
         // 拼装返回结果
-        JSONObject map = new JSONObject();
+        ObjectNode map = OBJECT_MAPPER.createObjectNode();
         map.put("total", systemLogPage.getTotal());
-        map.put("list", logDtoList);
-        map.put("columns", columns);
-        map.put("fieldMapper", fieldMapper);
+        map.set("list", OBJECT_MAPPER.valueToTree(logDtoList));
+        map.set("columns", columns);
+        map.set("fieldMapper", fieldMapper);
         map.put("idFieldName", idFieldName);
         map.put("pageName", pageName);
 
@@ -124,14 +127,14 @@ public class ManageSystemLogController {
      * @return
      */
     // @PostMapping("/add")
-    // public CommonReturn dataProcessAdd(@RequestBody JSONObject params, HttpServletRequest request) {
+    // public CommonReturn dataProcessAdd(@RequestBody ObjectNode params, HttpServletRequest request) {
     //     String ipAddr = IPUtils.getIpAddr(request);
     //
     //     SystemLog systemLog = new SystemLog();
-    //     systemLog.setAction(params.getString("action"));
-    //     systemLog.setContent(params.getString("content"));
+    //     systemLog.setAction(params.get("action").asText());
+    //     systemLog.setContent(params.get("content").asText());
     //     systemLog.setIp(ipAddr);
-    //     systemLog.setTitle(params.getString("title"));
+    //     systemLog.setTitle(params.get("title").asText());
     //     systemLog.setUserId(null);
     //     systemLogService.add(systemLog);
     //

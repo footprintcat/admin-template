@@ -1,6 +1,6 @@
 package com.example.backend.common.ManageList.pojo.queryconfig.base;
 
-import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 查询配置接口
@@ -13,6 +13,6 @@ public interface QueryConfig {
      *
      * @return 如果配置有效返回true，否则返回false
      */
-    @JSONField(serialize = false)
+    @JsonIgnore
     boolean getIsValid();
 }

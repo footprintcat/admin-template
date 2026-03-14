@@ -1,6 +1,7 @@
 package com.example.backend.websocket;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -33,6 +34,9 @@ public class FooBarWebSocketServer {
 
     // concurrent包的线程安全Set,用来存放每个客户端对应的WebSocket对象。
     private static final CopyOnWriteArraySet<FooBarWebSocketServer> webSocketSet = new CopyOnWriteArraySet<>();
+
+    // 共享的 ObjectMapper 实例
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     /**
      * 建立WebSocket连接
@@ -143,9 +147,9 @@ public class FooBarWebSocketServer {
     /**
      * 群发消息
      *
-     * @param webSocketRes 发送的消息
+     * @param webSocketRes 发送的消息 (ObjectNode)
      */
-    public static int sendAllMessage(JSONObject webSocketRes) {
+    public static int sendAllMessage(ObjectNode webSocketRes) {
         for (FooBarWebSocketServer webSocket : webSocketSet) {
             try {
                 webSocket.session.getBasicRemote().sendText(webSocketRes.toString());
@@ -167,12 +171,12 @@ public class FooBarWebSocketServer {
                 continue;
             }
             try {
-                JSONObject jsonObject = new JSONObject();
+                ObjectNode jsonObject = OBJECT_MAPPER.createObjectNode();
                 jsonObject.put("platform", webSocket.platform);
                 jsonObject.put("module", module);
                 jsonObject.put("type", "json");
                 jsonObject.put("info", info);
-                jsonObject.put("content", content);
+                jsonObject.putPOJO("content", content);
                 webSocket.session.getBasicRemote().sendText(jsonObject.toString());
             } catch (IOException e) {
                 log.error("群发消息发生错误", e);

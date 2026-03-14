@@ -1,6 +1,7 @@
 package com.example.backend.common.PageTable.builder;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Element Plus 表单验证
@@ -8,12 +9,14 @@ import com.alibaba.fastjson2.JSONObject;
  */
 public class FieldRuleBuilder {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     private String fieldDisplayName;
-    private JSONObject rules;
+    private ObjectNode rules;
 
     public static FieldRuleBuilder create(String fieldDisplayName) {
         FieldRuleBuilder builder = new FieldRuleBuilder();
-        builder.rules = new JSONObject();
+        builder.rules = OBJECT_MAPPER.createObjectNode();
         builder.fieldDisplayName = fieldDisplayName;
         // 默认在 blur 时触发验证
         // builder.rules.put("trigger", "blur");
@@ -94,12 +97,11 @@ public class FieldRuleBuilder {
     }
 
     public FieldRuleBuilder add(String field, Object value) {
-        rules.put(field, value);
+        rules.putPOJO(field, value);
         return this;
     }
 
-    public JSONObject build() {
+    public ObjectNode build() {
         return rules;
     }
 }
-

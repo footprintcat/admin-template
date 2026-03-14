@@ -1,7 +1,7 @@
 /*
 package com.example.backend.controller.manage.v1;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.backend.common.annotations.HandleControllerGlobalException;
 import com.example.backend.modules.system.enums.PrivilegeTypeEnum;
@@ -45,10 +45,10 @@ public class SystemPrivilegeController {
     private SystemMenuService systemMenuService;
 
     @PostMapping("/togglePrivilege")
-    public CommonReturn add(@RequestBody JSONObject param, HttpServletRequest httpServletRequest) throws BusinessException {
-        String menuId = param.getString("menuId");
-        Long roleId = param.getLong("roleId");
-        Boolean value = param.getBoolean("value");
+    public CommonReturn add(@RequestBody ObjectNode param, HttpServletRequest httpServletRequest) throws BusinessException {
+        String menuId = param.get("menuId").asText();
+        Long roleId = param.get("roleId").asLong();
+        Boolean value = param.get("value").asBoolean();
         if (menuId == null || roleId == null || value == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
@@ -98,18 +98,18 @@ public class SystemPrivilegeController {
             }
         }
 
-        JSONObject jsonObject = new JSONObject();
+        ObjectNode jsonObject = OBJECT_MAPPER.createObjectNode();
         jsonObject.put("result", result);
         jsonObject.put("message", message);
         return CommonReturn.success(jsonObject);
     }
 
     @PostMapping("/togglePrivilegeType")
-    public CommonReturn togglePrivilegeType(@RequestBody JSONObject param, HttpServletRequest httpServletRequest) throws BusinessException {
-        String menuId = param.getString("menuId");
-        Long roleId = param.getLong("roleId");
-        Boolean value = param.getBoolean("value");
-        String type = param.getString("type"); // 权限类型
+    public CommonReturn togglePrivilegeType(@RequestBody ObjectNode param, HttpServletRequest httpServletRequest) throws BusinessException {
+        String menuId = param.get("menuId").asText();
+        Long roleId = param.get("roleId").asLong();
+        Boolean value = param.get("value").asBoolean();
+        String type = param.get("type").asText(); // 权限类型
         if (menuId == null || roleId == null || value == null || type == null) {
             throw new BusinessException(BusinessErrorCode.PARAMETER_VALIDATION_ERROR);
         }
@@ -195,7 +195,7 @@ public class SystemPrivilegeController {
             }
         }
 
-        JSONObject jsonObject = new JSONObject();
+        ObjectNode jsonObject = OBJECT_MAPPER.createObjectNode();
         jsonObject.put("result", result);
         jsonObject.put("message", message);
         return CommonReturn.success(jsonObject);

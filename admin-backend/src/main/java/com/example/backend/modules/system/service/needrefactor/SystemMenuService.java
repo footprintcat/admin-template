@@ -1,8 +1,5 @@
 package com.example.backend.modules.system.service.needrefactor;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.backend.common.error.BusinessErrorCode;
@@ -14,6 +11,12 @@ import com.example.backend.modules.system.model.converter.MenuConverter;
 import com.example.backend.modules.system.model.dto.MenuDto;
 import com.example.backend.modules.system.model.entity.Menu;
 import com.example.backend.modules.system.repository.MenuRepository;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class SystemMenuService {
+
+    private static final ObjectMapper OBJECT_MAPPER;
+
+    static {
+        OBJECT_MAPPER = new ObjectMapper();
+        // 序列化时包含 null 值
+        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.ALWAYS);
+        // 排序 Map 的 key
+        OBJECT_MAPPER.enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
+    }
 
     @Value("${project-config.site-id}")
     private String siteId;
@@ -367,19 +380,16 @@ public class SystemMenuService {
 
         // parentMenuId -> [ {sequence, childId}, {sequence, childId}, ... ]
         HashMap<String, List<Pair<Integer, String>>> menuSequencePairMap = new HashMap<>();
-        List<JSONObject> menuList = new ArrayList<>(list.size());
+        List<ObjectNode> menuList = new ArrayList<>(list.size());
         for (Menu menu : list) {
             @Nullable String parentMenuId = menuIdMap.get(menu.getParentId());
             @NotNull String parentMenuIdNotNull = parentMenuId == null ? "" : parentMenuId;
 
-            JSONObject item = new JSONObject();
+            ObjectNode item = OBJECT_MAPPER.createObjectNode();
             item.put("menuId", menu.getMenuCode());
-            // item.put("parentMenuId", parentMenuId);
             item.put("parentMenuId", parentMenuIdNotNull);
             item.put("menuName", menu.getMenuName());
-            // item.put("menuFullName", menu.getMenuFullName());
             item.put("level", menu.getLevel());
-            // item.put("sequence", menu.getSortOrder());
             item.put("isHide", menu.getIsHide());
             menuList.add(item);
 
@@ -401,30 +411,24 @@ public class SystemMenuService {
             menuSequenceMap.put(entry.getKey(), childMenuIdList);
         }
 
-        // LocalDate currentDate = LocalDate.now(); // 获取当前日期
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 定义格式
-        // String formattedDate = currentDate.format(formatter); // 格式化输出
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = currentDateTime.format(formatter);
 
-        LocalDateTime currentDateTime = LocalDateTime.now(); // 获取当前日期和时间（精确到纳秒）
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // 定义格式，包含时分秒
-        String formattedDateTime = currentDateTime.format(formatter); // 格式化输出
-
-        JSONObject info = new JSONObject();
+        ObjectNode info = OBJECT_MAPPER.createObjectNode();
         info.put("siteId", siteId);
         info.put("exportTime", formattedDateTime);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("info", info);
-        jsonObject.put("list", menuList);
-        jsonObject.put("order", menuSequenceMap);
+        ObjectNode jsonObject = OBJECT_MAPPER.createObjectNode();
+        jsonObject.set("info", info);
+        jsonObject.set("list", OBJECT_MAPPER.valueToTree(menuList));
+        jsonObject.set("order", OBJECT_MAPPER.valueToTree(menuSequenceMap));
 
-        return JSON.toJSONString(jsonObject,
-                // 保证每次导出时顺序相同
-                JSONWriter.Feature.SortMapEntriesByKeys,
-                // 导出时保留 null 值
-                JSONWriter.Feature.WriteMapNullValue
-                // 美化输出（改为前端 JSON.parse 美化输出）
-                // JSONWriter.Feature.PrettyFormat
-        );
+        try {
+            return OBJECT_MAPPER.writeValueAsString(jsonObject);
+        } catch (JsonProcessingException e) {
+            log.error("导出菜单 JSON 序列化失败", e);
+            return "{}";
+        }
     }
 }

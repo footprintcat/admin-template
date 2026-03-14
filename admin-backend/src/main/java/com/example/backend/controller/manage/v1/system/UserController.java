@@ -1,7 +1,8 @@
 package com.example.backend.controller.manage.v1.system;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.backend.common.PageTable.builder.FieldBuilder;
 import com.example.backend.common.PageTable.builder.FieldMapperBuilder;
@@ -51,6 +52,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/manage/v1/system/user")
 @Tag(name = "[system] 用户 user", description = "/manage/v1/system/user")
 public class UserController {
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Resource
     private UserConverter userConverter;
@@ -153,7 +156,9 @@ public class UserController {
         HashMap<Long, String> roleMap = systemRoleServiceV2.getRoleMap();
 
         // 用于 role 下拉框 mock 数据
-        String roleListForMock = JSONArray.from(roleMap.keySet().stream().map(Object::toString).collect(Collectors.toList())).toString();
+        String roleListForMock = OBJECT_MAPPER.valueToTree(
+                roleMap.keySet().stream().map(Object::toString).collect(Collectors.toList())
+        ).toString();
 
         // 分页数据转为 DTO
         List<User> userList = systemUserPage.getRecords();
@@ -167,7 +172,7 @@ public class UserController {
         String pageName = "用户管理";
 
         // 指定前端表格显示列
-        JSONArray columns = FieldBuilder.create()
+        ArrayNode columns = FieldBuilder.create()
                 .add("username", "username", "账号", "",
                         FieldType.TEXT, SearchType.INPUT, AddType.INPUT, EditType.PLAIN_TEXT,
                         FieldBuilder.SEARCH_PLACEHOLDER_SAME_AS_FIELDNAME,
@@ -205,16 +210,16 @@ public class UserController {
                 .build();
 
         // 指定需要翻译的字段
-        JSONArray fieldMapper = FieldMapperBuilder.create()
+        ArrayNode fieldMapper = FieldMapperBuilder.create()
                 .add("roleId", "roleName", roleMap)
                 .build();
 
         // 拼装返回结果
-        JSONObject map = new JSONObject();
+        ObjectNode map = OBJECT_MAPPER.createObjectNode();
         map.put("total", systemUserPage.getTotal());
-        map.put("list", userDtoList);
-        map.put("columns", columns);
-        map.put("fieldMapper", fieldMapper);
+        map.set("list", OBJECT_MAPPER.valueToTree(userDtoList));
+        map.set("columns", columns);
+        map.set("fieldMapper", fieldMapper);
         map.put("idFieldName", idFieldName);
         map.put("pageName", pageName);
 
