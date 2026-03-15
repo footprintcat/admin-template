@@ -9,15 +9,20 @@ E:
 cd E:\Project\admin-template
 :: 当前使用 ↓
 :: trae
-mkdir -p .trae\rules
+mkdir .trae\rules
 mklink /D ".trae\rules\project"             "..\..\.ai\rules\project"
 mklink    ".trae\rules\project_rules.md"    "..\..\.ai\rules\project_rules.md"
 mklink /D ".trae\skills"                    "..\..\.ai\skills"
 :: qoder
-mkdir -p .qoder\rules
+mkdir .qoder\rules
 mklink /D ".qoder\rules\project"            "..\..\.ai\rules\project"
 mklink    ".qoder\rules\project_rules.md"   "..\..\.ai\rules\project_rules.md"
 mklink /D ".qoder\skills"                   "..\..\.ai\skills"
+:: codebuddy
+mkdir .codebuddy\rules
+mklink /D ".codebuddy\rules\project"            "..\..\.ai\rules\project"
+mklink    ".codebuddy\rules\project_rules.md"   "..\..\.ai\rules\project_rules.md"
+mklink /D ".codebuddy\skills"                   "..\..\.ai\skills"
 
 :: 这种方式创建后提交还是会提交完整文件到 Git 仓库中
 :: mklink /H ".qoder\rules\intro.md" ".ai\rules\intro.md"
