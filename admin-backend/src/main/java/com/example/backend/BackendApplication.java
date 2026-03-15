@@ -29,7 +29,6 @@ public class BackendApplication {
                 "============\n" +
                 "系统启动成功！\n" +
                 "============\n" +
-                "当前读取的配置文件：" + configName + "\n" +
                 "        当前环境：" + env + "\n" +
                 "   数据库连接URL：" + datasourceUrl + "\n" +
                 "   当前使用数据源：" + dataSource.getClass() + "\n" +

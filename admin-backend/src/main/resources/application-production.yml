@@ -1,6 +1,5 @@
 project-config:
   env: production
-  config-name: application-production.yml
   # 是否开启登录验证码
   login-captcha-enabled: true
 
