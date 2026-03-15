@@ -11,5 +11,9 @@ public class ManageSystemUserAuthLoginRequest extends BaseManageQueryRequest {
     private String username;
     @NotEmpty(message = "密码不能为空")
     private String password;
+    /**
+     * 验证码（可选，根据配置决定是否需要）
+     */
+    private String captcha;
 
 }

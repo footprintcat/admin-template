@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import settings from '@/utils/settings'
 import { systemUserAuthLogin } from '@/api/system/user-auth'
+import { getSystemConfig } from '@/api/system/config'
 import { redirectAfterLogin } from '@/router/guards/scripts/redirect_to'
 import { useIdentityStore } from '@/stores/system/identity'
 import { useTabsStore } from '@/stores/tabs'
@@ -14,12 +15,13 @@ import type { ValidateError, ValidateFieldsError } from 'async-validator'
 export interface LoginInfo {
   username: string
   password: string
+  captcha?: string
 }
 
 /**
  * 登录逻辑 组合式函数
  */
-export function useLoginLogic() {
+export function useLoginLogic({ onLoginFailedCallback }: { onLoginFailedCallback: Function }) {
   const router = useRouter()
 
   const tabs = useTabsStore()
@@ -29,10 +31,39 @@ export function useLoginLogic() {
 
   const loading = ref<boolean>(false)
 
+  // 验证码是否启用
+  const captchaEnabled = ref<boolean>(false)
+
+  // 获取系统配置
+  const fetchSystemConfig = async () => {
+    try {
+      const { data } = await getSystemConfig()
+      captchaEnabled.value = data.loginCaptchaEnabled
+
+      // 动态更新验证码验证规则
+      if (!captchaEnabled.value) {
+        delete rules.captcha
+      } else if (!rules.captcha) {
+        rules.captcha = [
+          {
+            required: true,
+            message: '请输入验证码',
+            trigger: 'blur',
+          },
+        ]
+      }
+    } catch (error) {
+      console.error('获取系统配置失败:', error)
+      // 失败时默认启用验证码
+      captchaEnabled.value = true
+    }
+  }
+
   // 登录表单数据
   const param = reactive<LoginInfo>({
     username: '',
     password: '',
+    captcha: '',
   })
 
   if (settings.debugMode) {
@@ -57,6 +88,9 @@ export function useLoginLogic() {
       },
     ],
   }
+
+  // 获取系统配置
+  fetchSystemConfig()
 
   /**
    * 提交登录表单
@@ -85,8 +119,11 @@ export function useLoginLogic() {
       systemUserAuthLogin({
         username: param.username,
         password: param.password,
+        captcha: param.captcha,
       }).then(async ({ data, raw }) => {
         if (!raw.isSuccess) {
+          // 登录失败
+          onLoginFailedCallback()
           return // 后端返回异常已弹出错误提示
         }
         ElMessage.success('登录成功')
@@ -118,5 +155,6 @@ export function useLoginLogic() {
     rules,
     submitForm,
     loading,
+    captchaEnabled,
   }
 }

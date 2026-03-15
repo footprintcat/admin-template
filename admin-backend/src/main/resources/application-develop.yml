@@ -1,6 +1,8 @@
 project-config:
   env: develop
   site-id: develop
+  # 是否开启登录验证码
+  login-captcha-enabled: false
 
 spring:
   datasource:

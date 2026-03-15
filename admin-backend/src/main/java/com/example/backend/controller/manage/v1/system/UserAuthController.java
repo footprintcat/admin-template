@@ -3,6 +3,7 @@ package com.example.backend.controller.manage.v1.system;
 import com.example.backend.common.annotations.HandleControllerGlobalException;
 import com.example.backend.common.annotations.PublicAccess;
 import com.example.backend.common.baseobject.response.CommonReturn;
+import com.example.backend.common.config.ProjectConfig;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;
@@ -39,6 +40,8 @@ public class UserAuthController {
     private UserService userService;
     @Resource
     private IdentityService identityService;
+    @Resource
+    private ProjectConfig projectConfig;
 
     /**
      * 后台管理登录接口
@@ -58,6 +61,29 @@ public class UserAuthController {
         // 获取用户输入
         @NotNull String inputUsername = request.getUsername();
         @NotNull String inputPassword = request.getPassword();
+        String inputCaptcha = request.getCaptcha();
+
+        // 如果启用了验证码，则验证验证码
+        if (projectConfig.getLoginCaptchaEnabled()) {
+            // 获取Session中存储的验证码
+            String sessionCaptcha = (String) session.getAttribute("captcha");
+
+            if (inputCaptcha == null || inputCaptcha.trim().isEmpty()) {
+                return CommonReturn.error("请输入验证码");
+            }
+
+            // 移除Session中的验证码，防止重复使用
+            session.removeAttribute("captcha");
+
+            if (sessionCaptcha == null) {
+                return CommonReturn.error("验证码已过期，请刷新验证码");
+            }
+
+            // 验证码不区分大小写
+            if (!inputCaptcha.trim().equalsIgnoreCase(sessionCaptcha)) {
+                return CommonReturn.error("验证码错误，请重新输入");
+            }
+        }
 
         // 登录
         UserDto userDto = userService.userLogin(session, inputUsername, inputPassword);

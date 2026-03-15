@@ -47,6 +47,12 @@
               </el-input>
             </el-form-item>
 
+            <!-- 验证码输入框 -->
+            <el-form-item v-if="captchaEnabled" prop="captcha" ref="captchaInputElFormItemRef">
+              <CaptchaInput ref="captchaInputRef" v-model="param.captcha" @enter="submitForm(loginFormRef)"
+                @clear-validate="clearCaptchaInputValidate" />
+            </el-form-item>
+
             <!-- 记住我和忘记密码 -->
             <div class="form-options">
               <!-- <el-checkbox v-model="rememberMe" size="small">
@@ -109,14 +115,17 @@
 import { ref, useTemplateRef } from 'vue'
 import { Hide, Lock, User, View } from '@element-plus/icons-vue'
 import { useLoginLogic } from './composables/useLoginLogic'
+import CaptchaInput from './components/CaptchaInput.vue'
 
 const baseUrl = import.meta.env.BASE_URL
 const siteFullTitle = import.meta.env.VITE_APP_FULL_TITLE
 
+const captchaInputRef = useTemplateRef('captchaInputRef')
+const captchaInputElFormItemRef = useTemplateRef('captchaInputElFormItemRef')
 const loginFormRef = useTemplateRef('loginFormRef')
 
 // 使用抽离的登录逻辑
-const { param, rules, submitForm, loading } = useLoginLogic()
+const { param, rules, submitForm, loading, captchaEnabled } = useLoginLogic({ onLoginFailedCallback })
 
 // 本地状态
 const showPassword = ref(false)
@@ -127,6 +136,15 @@ const showPassword = ref(false)
  */
 const togglePassword = () => {
   showPassword.value = !showPassword.value
+}
+
+const clearCaptchaInputValidate = () => {
+  captchaInputElFormItemRef.value?.clearValidate()
+}
+
+function onLoginFailedCallback() {
+  // 刷新验证码
+  captchaInputRef.value?.refreshCaptcha()
 }
 </script>
 

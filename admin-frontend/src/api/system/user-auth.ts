@@ -9,6 +9,7 @@ const getUrl = (url: string) => API_PREFIX + url
 export interface ManageSystemUserAuthLoginRequest {
   username: string
   password: string
+  captcha?: string
 }
 
 // 接口响应参数
