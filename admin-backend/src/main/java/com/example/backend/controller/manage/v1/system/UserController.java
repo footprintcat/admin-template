@@ -17,6 +17,7 @@ import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.response.ManageListResponse;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.ExportExcelUtils;
+import com.example.backend.common.utils.ManageListFrontExportBuilder;
 import com.example.backend.controller.manage.v1.system.dto.request.user.ManageSystemUserExportRequest;
 import com.example.backend.controller.manage.v1.system.dto.request.user.ManageSystemUserListRequest;
 import com.example.backend.modules.system.model.converter.UserConverter;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -128,11 +130,9 @@ public class UserController {
         List<User> userList = systemUserServiceV2.getUserList(params);
         List<UserExportDto> exportDto = userConverter.toExportDto(userList);
 
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("data", exportDto);
-        map.put("fileName", fileName);
-        map.put("sheetName", sheetName);
-        return CommonReturn.success(map);
+        // 前端导出结构
+        Map<String, Object> build = ManageListFrontExportBuilder.build(fileName, sheetName, UserExportDto.class, exportDto);
+        return CommonReturn.success(build);
     }
 
     /**
