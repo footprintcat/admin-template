@@ -83,7 +83,9 @@
       </el-text>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleExport" :disabled="!exportCount">导出</el-button>
+        <el-button type="primary" @click="handleExport" :disabled="!exportCount || isExporting" :loading="isExporting">
+          导出
+        </el-button>
       </span>
     </template>
   </el-dialog>
@@ -233,6 +235,7 @@ const exportInfo = computed<null | { info: string; type: 'info' | 'warning' }>((
   return { info, type }
 })
 
+const isExporting = ref<boolean>(false)
 // 点击确认后，处理导出数据
 async function handleExport() {
   const params = props.getSearchFormParams()
@@ -250,6 +253,7 @@ async function handleExport() {
 
   console.log('导出请求参数', requestParam)
 
+  isExporting.value = true
   try {
     if (props.exportDataBackend && exportConfig.value.exportType === 'backend') {
       // 后端导出（仅支持 xlsx）
@@ -274,6 +278,8 @@ async function handleExport() {
   } catch (error) {
     console.error('导出失败', error)
     ElMessage.error({ message: '导出失败，网络连接异常', grouping: true })
+  } finally {
+    isExporting.value = false
   }
 }
 
