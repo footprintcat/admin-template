@@ -28,8 +28,8 @@ public class PageQuery {
     }
 
     public void setPageSize(int pageSize) {
-        if (pageSize < 1) {
-            pageSize = 1;
+        if (pageSize < 0) {
+            pageSize = 0;
         }
         if (pageSize > maxPageSize) {
             pageSize = maxPageSize;
