@@ -12,20 +12,22 @@ cd E:\Project\admin-template
 mkdir .trae\rules
 mklink /D ".trae\rules\project"             "..\..\.ai\rules\project"
 mklink    ".trae\rules\project_rules.md"    "..\..\.ai\rules\project_rules.md"
-mklink /D ".trae\skills"                    "..\..\.ai\skills"
+mklink /D ".trae\skills"                    "..\.ai\skills"
 :: qoder
 mkdir .qoder\rules
 mklink /D ".qoder\rules\project"            "..\..\.ai\rules\project"
 mklink    ".qoder\rules\project_rules.md"   "..\..\.ai\rules\project_rules.md"
-mklink /D ".qoder\skills"                   "..\..\.ai\skills"
+mklink /D ".qoder\skills"                   "..\.ai\skills"
 :: codebuddy
 mkdir .codebuddy\rules
 mklink /D ".codebuddy\rules\project"            "..\..\.ai\rules\project"
 mklink    ".codebuddy\rules\project_rules.md"   "..\..\.ai\rules\project_rules.md"
-mklink /D ".codebuddy\skills"                   "..\..\.ai\skills"
+mklink /D ".codebuddy\skills"                   "..\.ai\skills"
 
 :: 这种方式创建后提交还是会提交完整文件到 Git 仓库中
 :: mklink /H ".qoder\rules\intro.md" ".ai\rules\intro.md"
+
+:: 注意后面的相对路径是相对符号链接本身的相对路径，而不是相对执行命令的路径
 ```
 
 PowerShell 下无法创建相对路径的符号链接
