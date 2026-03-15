@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 依赖版本 -->
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
-        <org.projectlombok.version>1.18.42</org.projectlombok.version>
+        <org.projectlombok.version>1.18.44</org.projectlombok.version>
     </properties>
 
     <dependencyManagement>
@@ -138,7 +138,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
         </dependency>
         <!-- 引入 therapi, 实现 Swagger 文档自动获取 javadoc 注解 -->
         <!-- https://github.com/dnault/therapi-runtime-javadoc -->
