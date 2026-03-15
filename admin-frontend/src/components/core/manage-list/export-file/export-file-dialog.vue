@@ -255,6 +255,7 @@ async function handleExport() {
       // 后端导出（仅支持 xlsx）
       console.log('后端导出')
       props.exportDataBackend(requestParam)
+      dialogVisible.value = false
     } else if (props.exportDataFrontend) {
       // 前端导出
       console.log('前端导出')
