@@ -68,7 +68,7 @@
             暂无排序
           </template>
           <template v-else>
-            按{{
+            {{ sortList.length > 1 ? '依次' : '' }}按{{
               sortList
                 .map(item => ` [${[fieldNameMap[item.field]]}] ${item.order === 'ascending' ? '升序' : '降序'}`)
                 .join('、')

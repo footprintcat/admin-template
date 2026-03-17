@@ -1,6 +1,6 @@
 <template>
   <!-- 导出 Excel 公共组件 -->
-  <el-dialog v-model="dialogVisible" title="导出选项" width="700px"
+  <el-dialog v-model="dialogVisible" title="导出选项" :width="dialogWidth"
     v-if="props.exportDataFrontend !== undefined || props.exportDataBackend !== undefined">
     <!-- {{ exportConfig }} -->
     <p>前端导出: {{ props.exportDataFrontend !== undefined ? '已配置' : '未配置' }}</p>
@@ -311,4 +311,11 @@ function frontendExportFile(result: ExportResult): void {
   ElMessage.success({ message: '导出成功' })
   exportFormVisible.value = false
 }
+
+const dialogWidth = computed<string>(() => {
+  if (exportConfig.value.dataRange === 'top-n') {
+    return `900px` // 选中 [前N条数据] 选项时，弹窗需要宽一点
+  }
+  return `700px`
+})
 </script>
