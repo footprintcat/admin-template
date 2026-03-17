@@ -4,6 +4,7 @@ import com.example.backend.common.error.BusinessErrorCode;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.modules.system.enums.user.UserStatusEnum;
+import com.example.backend.modules.system.model.converter.UserConverter;
 import com.example.backend.modules.system.model.dto.UserDto;
 import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.model.entity.UserAuth;
@@ -23,6 +24,8 @@ public class UserService {
     private UserRepository userRepository;
     @Resource
     private UserAuthRepository userAuthRepository;
+    @Resource
+    private UserConverter userConverter;
 
     /**
      * 用户登录接口
@@ -67,7 +70,7 @@ public class UserService {
 
         // 登录成功
         SessionUtils.setSessionUserId(session, user);
-        return UserDto.fromEntity(user);
+        return userConverter.toDto(user);
     }
 
     /**

@@ -79,7 +79,7 @@ public class UserController {
 
         // 分页数据转为 DTO
         List<User> list = page.getRecords();
-        List<UserDto> dtoList = UserDto.fromEntity(list);
+        List<UserDto> dtoList = userConverter.toDto(list);
 
         ManageListResponse<UserDto> response = ManageListResponse.<UserDto>create()
                 .setTotal(page.getTotal())
@@ -157,7 +157,7 @@ public class UserController {
 
         // 分页数据转为 DTO
         List<User> userList = systemUserPage.getRecords();
-        List<UserDto> userDtoList = UserDto.fromEntity(userList);
+        List<UserDto> userDtoList = userConverter.toDto(userList);
 
         // id列 字段名（区分大小写；以VO中的变量名为准）
         // 新增、修改弹窗时，使用该列作为主键列进行操作
@@ -239,7 +239,7 @@ public class UserController {
         }
 
         // 传入参数 - 要修改的用户
-        User user = UserDto.toEntity(userDTO);
+        User user = userConverter.toEntity(userDTO);
 
         if (user.getId() == null || user.getId() < 1) {
             // 通过 username 查询系统中是否存在该用户

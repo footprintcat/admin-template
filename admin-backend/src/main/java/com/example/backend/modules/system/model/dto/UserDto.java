@@ -17,28 +17,4 @@ public class UserDto {
     private String telephone;
     private String status;
 
-    @Deprecated
-    public static UserDto fromEntity(User entity) {
-        if (entity == null) {
-            return null;
-        }
-        UserDto dto = new UserDto();
-        BeanUtils.copyProperties(entity, dto);
-        return dto;
-    }
-
-    @Deprecated
-    public static List<UserDto> fromEntity(List<User> entityList) {
-        return entityList.stream().map(UserDto::fromEntity).collect(Collectors.toList());
-    }
-
-    @Deprecated
-    public static User toEntity(UserDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        User entity = new User();
-        BeanUtils.copyProperties(dto, entity);
-        return entity;
-    }
 }

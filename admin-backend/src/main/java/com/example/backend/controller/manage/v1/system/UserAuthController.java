@@ -9,6 +9,7 @@ import com.example.backend.common.utils.SessionUtils;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserAuthLoginRequest;
 import com.example.backend.controller.manage.v1.system.dto.request.userauth.ManageSystemUserChangePasswordRequest;
 import com.example.backend.controller.manage.v1.system.dto.response.userauth.ManageSystemUserAuthLoginResponse;
+import com.example.backend.modules.system.model.converter.UserConverter;
 import com.example.backend.modules.system.model.dto.IdentityDto;
 import com.example.backend.modules.system.model.dto.UserDto;
 import com.example.backend.modules.system.model.entity.User;
@@ -42,6 +43,8 @@ public class UserAuthController {
     private IdentityService identityService;
     @Resource
     private ProjectConfig projectConfig;
+    @Resource
+    private UserConverter userConverter;
 
     /**
      * 后台管理登录接口
@@ -118,7 +121,7 @@ public class UserAuthController {
     public CommonReturn getUserInfo(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
         @Nullable User currentUserInfo = userService.getCurrentUserInfo(session);
-        @Nullable UserDto userDto = UserDto.fromEntity(currentUserInfo);
+        @Nullable UserDto userDto = userConverter.toDto(currentUserInfo);
         return CommonReturn.success(userDto);
     }
 
