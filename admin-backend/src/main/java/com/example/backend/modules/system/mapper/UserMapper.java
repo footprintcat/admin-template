@@ -7,6 +7,8 @@ import com.example.backend.modules.system.model.dto.UserDto;
 import com.example.backend.modules.system.model.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -41,7 +43,9 @@ public interface UserMapper extends BaseMapper<User> {
      * @param orderByItem 排序参数列表
      * @return
      */
-    Page<User> getUserPage(Page<?> page, @Param("query") UserDto userDTO, @Param("orderByItem") List<OrderByItem> orderByItem);
+    Page<User> getUserPage(@NotNull Page<?> page,
+                           @Param("query") @NotNull UserDto userDTO,
+                           @Param("orderByItem") @NotNull List<OrderByItem> orderByItem);
 
     /**
      * 导出用户列表数据
@@ -49,5 +53,8 @@ public interface UserMapper extends BaseMapper<User> {
      * @param userDTO
      * @return
      */
-    List<User> getUserList(@Param("query") UserDto userDTO);
+    List<User> getUserList(@Nullable Page<?> page,
+                           @Param("query") @Nullable UserDto userDTO,
+                           @Param("orderByItem") @NotNull List<OrderByItem> orderByItem);
+
 }

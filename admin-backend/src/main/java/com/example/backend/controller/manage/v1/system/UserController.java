@@ -12,13 +12,13 @@ import com.example.backend.common.PageTable.enums.EditType;
 import com.example.backend.common.PageTable.enums.FieldType;
 import com.example.backend.common.PageTable.enums.SearchType;
 import com.example.backend.common.annotations.HandleControllerGlobalException;
+import com.example.backend.common.baseobject.request.ManageListExportQueryRequest;
 import com.example.backend.common.baseobject.request.PageQuery;
 import com.example.backend.common.baseobject.response.CommonReturn;
 import com.example.backend.common.baseobject.response.ManageListResponse;
 import com.example.backend.common.error.BusinessException;
 import com.example.backend.common.utils.ExportExcelUtils;
 import com.example.backend.common.utils.ManageListFrontExportBuilder;
-import com.example.backend.controller.manage.v1.system.dto.request.user.ManageSystemUserExportRequest;
 import com.example.backend.controller.manage.v1.system.dto.request.user.ManageSystemUserListRequest;
 import com.example.backend.modules.system.model.converter.UserConverter;
 import com.example.backend.modules.system.model.dto.UserDto;
@@ -27,6 +27,7 @@ import com.example.backend.modules.system.model.entity.User;
 import com.example.backend.modules.system.service.needrefactor.SystemRoleServiceV2;
 import com.example.backend.modules.system.service.needrefactor.SystemUserServiceV2;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -97,7 +98,7 @@ public class UserController {
      * @throws IOException
      */
     @PostMapping("/export")
-    public void export(@RequestBody ManageSystemUserExportRequest requestBody, HttpServletResponse response) throws IOException {
+    public void export(@RequestBody ManageListExportQueryRequest<UserDto> requestBody, HttpServletResponse response) throws IOException, BusinessException {
         final String fileName = "用户列表_" + ExportExcelUtils.getFormattedDateInFileName() + ".xlsx";
         final String sheetName = "用户表";
 
@@ -105,8 +106,11 @@ public class UserController {
         ExportExcelUtils.setResponseHeader(response, fileName);
 
         // 查询数据
-        UserDto params = requestBody.getParams();
-        List<User> userList = systemUserServiceV2.getUserList(params);
+        List<User> userList = systemUserServiceV2.exportUserList(
+                requestBody.getPageQuery(),
+                requestBody.getParams(),
+                requestBody.getSort()
+        );
         List<UserExportDto> exportDto = userConverter.toExportDto(userList);
 
         // 导出 xlsx
@@ -121,13 +125,17 @@ public class UserController {
      * @throws IOException
      */
     @PostMapping("/export-data")
-    public CommonReturn exportData(@RequestBody ManageSystemUserExportRequest requestBody) {
+    public CommonReturn exportData(@RequestBody ManageListExportQueryRequest<UserDto> requestBody) throws BusinessException {
         final String fileName = "用户列表_" + ExportExcelUtils.getFormattedDateInFileName();
         final String sheetName = "用户表";
 
         // 查询数据
-        UserDto params = requestBody.getParams();
-        List<User> userList = systemUserServiceV2.getUserList(params);
+        @Nullable UserDto params = requestBody.getParams();
+        List<User> userList = systemUserServiceV2.exportUserList(
+                requestBody.getPageQuery(),
+                requestBody.getParams(),
+                requestBody.getSort()
+        );
         List<UserExportDto> exportDto = userConverter.toExportDto(userList);
 
         // 前端导出结构

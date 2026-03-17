@@ -167,6 +167,18 @@ public class SystemUserServiceV2 {
     }
 
     /**
+     * 导出用户列表
+     *
+     * @return
+     */
+    public List<User> exportUserList(@Nullable PageQuery pageQuery, @Nullable UserDto userDTO, @NotNull List<SortColumnRequestItem> sortList) throws BusinessException {
+        Page<User> page = pageQuery != null
+                ? new Page<>(pageQuery.getPageIndex(), pageQuery.getPageSize())
+                : null;
+        return userMapper.getUserList(page, userDTO, _validateSortList(sortList));
+    }
+
+    /**
      * 列表查询允许排序的字段
      */
     private static final Map<String, String> FIELD_TO_DB_COLUMN_MAP = new HashMap<>();
@@ -199,14 +211,5 @@ public class SystemUserServiceV2 {
             orderByItemList.add(orderByItem.setField(dbColumn).setIsDesc(descSort));
         }
         return orderByItemList;
-    }
-
-    /**
-     * 导出全部用户
-     *
-     * @return
-     */
-    public List<User> getUserList(@NotNull UserDto userDTO) {
-        return userMapper.getUserList(userDTO);
     }
 }

@@ -7,6 +7,15 @@ export interface RequestParam<Param = Record<string, unknown>> {
   }
 }
 
+export interface ExportRequestParam<Param = Record<string, unknown>> {
+  params: Param | null
+  sort: Array<SortItem>
+  pageQuery: null | {
+    pageIndex: number
+    pageSize: number
+  }
+}
+
 export interface SortItem {
   field: string
   order: 'ascending' | 'descending' | null

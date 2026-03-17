@@ -34,20 +34,23 @@
         <where>
             <include refid="whereCondition" />
         </where>
+        <include refid="orderByCondition" />
     </select>
 
     <sql id="whereCondition">
-        <if test="query.id != null and query.id != ''">
-            AND id = #{query.id}
-        </if>
-        <if test="query.username != null and query.username != ''">
-            AND username LIKE concat('%',#{query.username},'%')
-        </if>
-        <if test="query.roleId != null">
-            AND role_id = #{query.roleId}
-        </if>
-        <if test="query.telephone != null and query.telephone != ''">
-            AND telephone LIKE concat('%',#{query.telephone},'%')
+        <if test="query != null">
+            <if test="query.id != null and query.id != ''">
+                AND id = #{query.id}
+            </if>
+            <if test="query.username != null and query.username != ''">
+                AND username LIKE concat('%',#{query.username},'%')
+            </if>
+            <if test="query.roleId != null">
+                AND role_id = #{query.roleId}
+            </if>
+            <if test="query.telephone != null and query.telephone != ''">
+                AND telephone LIKE concat('%',#{query.telephone},'%')
+            </if>
         </if>
     </sql>
     <sql id="orderByCondition">

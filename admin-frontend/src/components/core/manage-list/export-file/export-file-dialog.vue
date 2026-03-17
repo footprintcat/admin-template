@@ -3,8 +3,8 @@
   <el-dialog v-model="dialogVisible" title="导出选项" :width="dialogWidth"
     v-if="props.exportDataFrontend !== undefined || props.exportDataBackend !== undefined">
     <!-- {{ exportConfig }} -->
-    <p>前端导出: {{ props.exportDataFrontend !== undefined ? '已配置' : '未配置' }}</p>
-    <p>后端导出: {{ props.exportDataBackend !== undefined ? '已配置' : '未配置' }}</p>
+    <!-- <p>前端导出: {{ props.exportDataFrontend !== undefined ? '已配置' : '未配置' }}</p> -->
+    <!-- <p>后端导出: {{ props.exportDataBackend !== undefined ? '已配置' : '未配置' }}</p> -->
     <p style="padding-top: 5px; padding-bottom: 15px;">
       您正在导出数据
     </p>
@@ -100,7 +100,7 @@ import { ElMessage } from 'element-plus'
 import * as xlsx from 'xlsx'
 import { downloadFile } from '@/utils/file_download_utils'
 import type { ExportConfig, ExportConfig_ExportType, ExportResult } from './types'
-import type { RequestParam, SortItemWithLabel } from '../types/request-param'
+import type { ExportRequestParam, SortItemWithLabel } from '../types/request-param'
 import type { ApiCommonReturnType } from '@/utils/api'
 import { backendSupportExportFormatList, frontendSupportExportFormatList, possibleSupportExportFormatList, type SupportExportFormats } from './support-export-formats'
 
@@ -119,8 +119,8 @@ interface Props {
   hideDataSortRadioBox?: boolean
 
   // 上级组件限制 以下两个参数至少传入1项
-  exportDataFrontend?: (requestParams: RequestParam) => Promise<ApiCommonReturnType<ExportResult>>
-  exportDataBackend?: (requestParams: RequestParam) => Promise<void>
+  exportDataFrontend?: (requestParams: ExportRequestParam) => Promise<ApiCommonReturnType<ExportResult>>
+  exportDataBackend?: (requestParams: ExportRequestParam) => Promise<void>
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -238,17 +238,33 @@ const exportInfo = computed<null | { info: string; type: 'info' | 'warning' }>((
 const isExporting = ref<boolean>(false)
 // 点击确认后，处理导出数据
 async function handleExport() {
-  const params = props.getSearchFormParams()
-  const requestParam: RequestParam = {
-    params: exportConfig.value.dataRange ? { ...params } : {},
-    sort: props.sortList.map(item => ({
-      field: item.field,
-      order: item.order,
-    })),
-    pageQuery: {
-      pageIndex: 1,
-      pageSize: -1, // -1 表示导出全部数据
-    },
+  const params = props.getSearchFormParams() || null
+
+  const sort = props.sortList.map(item => ({
+    field: item.field,
+    order: item.order,
+  }))
+
+  let pageQuery: ExportRequestParam['pageQuery']
+  switch (exportConfig.value.dataRange) {
+    case 'all':
+      pageQuery = null
+      break
+    case 'current-page':
+      pageQuery = toRaw(props.pageQuery)
+      break
+    case 'top-n':
+      pageQuery = {
+        pageIndex: 1,
+        pageSize: exportConfig.value.dataRangeTopN!,
+      }
+      break
+  }
+
+  const requestParam: ExportRequestParam = {
+    params: exportConfig.value.filterType === 'none' ? null : params,
+    sort: exportConfig.value.sortType === 'none' ? [] : sort,
+    pageQuery: pageQuery,
   }
 
   console.log('导出请求参数', requestParam)
