@@ -119,7 +119,7 @@ Visual Studio Code
 **框架基础**
 
 - Vue 3.5
-- Vite 7.3
+- Vite 8.0
 - TypeScript 5.9
 - ESLint 10
 
@@ -130,7 +130,7 @@ Visual Studio Code
 
 **项目**
 
-- Axios 1.13
+- Axios 1.14
 - Element Plus 2.13
 
 **业务 (可选)**
