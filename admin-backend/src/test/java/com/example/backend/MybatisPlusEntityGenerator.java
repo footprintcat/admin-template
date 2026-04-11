@@ -22,8 +22,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// refer: https://baomidou.com/reference/new-code-generator-configuration/
 @Deprecated
 public class MybatisPlusEntityGenerator {
+
+    private static final String DATASOURCE_URL = "jdbc:mysql://localhost:3306/admin_template" +
+            "?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8";
+    private static final String DATASOURCE_USERNAME = "root";
+    private static final String DATASOURCE_PASSWORD = "123456";
 
     // 数据库关键字（生成 entity 时，这些字段自动添加反引号 ``）
     private static final List<String> autoDelimitKeywords = Arrays.asList(
@@ -31,11 +37,8 @@ public class MybatisPlusEntityGenerator {
     );
 
     public static void main(String[] args) {
-
         LinkedList<String> includeTables = new LinkedList<>();
-        /**
-         * 请按字母顺序添加
-         */
+        /* 请按字母顺序添加 */
         // includeTables.add("system_config");
         // includeTables.add("system_department");
         // includeTables.add("system_identity");
@@ -51,7 +54,8 @@ public class MybatisPlusEntityGenerator {
         // includeTables.add("system_user_auth");
 
         if (includeTables.isEmpty()) {
-            throw new RuntimeException("includeTables 为空，跳过代码生成");
+            System.out.println(" includeTables 为空，跳过该模块实体类生成");
+            return;
         }
 
         // 获取项目路径
@@ -60,7 +64,7 @@ public class MybatisPlusEntityGenerator {
         String resourcesBasePath = projectPath + "/src/main/resources";
 
         // 数据源配置
-        FastAutoGenerator.create("jdbc:mysql://localhost:3306/admin_template?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false&characterEncoding=UTF-8", "root", "123456")
+        FastAutoGenerator.create(DATASOURCE_URL, DATASOURCE_USERNAME, DATASOURCE_PASSWORD)
                 .globalConfig(builder -> {
                     builder.author("coder-xiaomo")        // 设置作者
                             // .enableSwagger()        // 开启 swagger 模式 默认值:false
@@ -87,15 +91,13 @@ public class MybatisPlusEntityGenerator {
 
                 .packageConfig(builder -> {
                     builder.parent("com.example.backend") // 父包模块名
-                            // .controller("controller")   // Controller 包名 默认值:controller
-                            .entity("entity")           // Entity 包名 默认值:entity
-                            // .service("service")         // Service 包名 默认值:service
-                            .serviceImpl("repository")         // Service 实现类包名
-                            .mapper("mapper")           // Mapper 包名 默认值:mapper
-                            // .other("model") /* v3.5.9 没有这个函数了 */
-                            // .moduleName("xxx")        // 设置父包模块名 默认值:无
-                            // /* v3.5.1 -> */.pathInfo(Collections.singletonMap(OutputFile.mapperXml, resourcesBasePath + "/mapper")); // 设置mapperXml生成路径
-                            /* v3.5.2 -> */.pathInfo(Collections.singletonMap(OutputFile.xml, resourcesBasePath + "/mapper")); // 设置mapperXml生成路径
+                            // .controller("controller") // Controller 包名 默认值:controller
+                            .entity("entity") // Entity 包名 默认值:entity
+                            // .service("service") // Service 包名 默认值:service
+                            .serviceImpl("repository") // Service 实现类包名
+                            .mapper("mapper") // Mapper 包名 默认值:mapper
+                            // .moduleName("xxx") // 设置父包模块名 默认值:无
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, resourcesBasePath + "/mapper")); // 设置mapperXml生成路径
                     // 默认存放在mapper的xml下
                 })
 
@@ -112,56 +114,56 @@ public class MybatisPlusEntityGenerator {
                     builder.addInclude(includeTables)
                             // .addTablePrefix("tb_", "gms_") // 设置过滤表前缀
 
-                            .serviceBuilder() // service策略配置
+                            .controllerBuilder() // controller 策略配置
+                            .disable()
+                            // .formatFileName("%sController")
+                            // .enableRestStyle() // 开启RestController注解
                             // .enableFileOverride()
-                            // .formatServiceFileName("%sService")
-                            // .formatServiceImplFileName("%sServiceImpl")
-                            // /* v3.5.9 -> */.disable()
+
+                            .serviceBuilder() // service策略配置
+                            // .disable() // = disableService + disableServiceImpl
+                            // service
                             .disableService()
+                            // .formatServiceFileName("%sService")
+                            // serviceImpl
+                            // .formatServiceImplFileName("%sServiceImpl")
                             .formatServiceImplFileName("%sRepository")
+                            // .enableFileOverride()
 
                             .entityBuilder() // 实体类策略配置
                             .idType(IdType.ASSIGN_ID) // 主键策略  雪花算法自动生成的id
                             .addTableFills(new Column("create_time", FieldFill.INSERT)) // 自动填充配置
                             .addTableFills(new Property("update_time", FieldFill.INSERT_UPDATE))
                             .enableLombok() // 开启lombok
-                            /* v3.5.10 -> */.toString(false) // 不生成 lombok 的 @ToString, 默认值: true
-                            /* v3.5.10 -> */.fieldUseJavaDoc(false) // 不启用字段文档注释, 默认值: true
-                            // .logicDeleteColumnName("is_delete") // 说明逻辑删除是哪个字段
-                            .logicDeleteColumnName("delete_time") // 说明逻辑删除是哪个字段
+                            .toString(false) // 不生成 lombok 的 @ToString, 默认值: true
+                            .fieldUseJavaDoc(false) // 不启用字段文档注释, 默认值: true
+                            .logicDeleteColumnName("delete_time") // is_delete // 说明逻辑删除是哪个字段
                             .versionColumnName("version") // 说明乐观锁版本号是哪个字段
                             .enableTableFieldAnnotation()
-                            /* v3.5.2 -> */// .fileOverride()
-                            /* v3.5.9 -> */.enableFileOverride()
                             // entity 数据库关键字字段添加 ``
-                            /* v3.5.10 */.tableFieldAnnotationHandler(new CustomTableFieldAnnotationHandler())
+                            .tableFieldAnnotationHandler(new CustomTableFieldAnnotationHandler())
                             // entity 类注解 & 字段注解排序
                             // related issue: https://github.com/baomidou/mybatis-plus/issues/6685
-                            /* v3.5.11 */.annotationAttributesFunction(annotationAttributes -> annotationAttributes.stream()
+                            .annotationAttributesFunction(annotationAttributes -> annotationAttributes.stream()
                                     .sorted(Comparator.comparingInt((AnnotationAttributes c) -> c.getDisplayName().charAt(1))).collect(Collectors.toList()))
-
-                            .controllerBuilder() // controller 策略配置
-                            // .formatFileName("%sController")
-                            // .enableRestStyle() // 开启RestController注解
-                            /* v3.5.9 -> */.disable()
+                            .enableFileOverride()
 
                             .mapperBuilder() // mapper策略配置
-                            // .enableFileOverride()
+                            // xml
                             .formatXmlFileName("%sMapper")
+                            // mapper
                             .formatMapperFileName("%sMapper")
-                            /* v3.5.2 -> *///.enableMapperAnnotation() // @mapper注解开启
-                            /* v3.5.9 -> */.mapperAnnotation(org.apache.ibatis.annotations.Mapper.class) // @mapper注解开启
+                            // .enableMapperAnnotation() // @mapper注解开启
+                            .mapperAnnotation(org.apache.ibatis.annotations.Mapper.class) // @mapper注解开启
+                            // .enableFileOverride()
                     ;
                 })
 
-                /* v3.5.6 -> */
                 // .templateConfig(builder -> {
-                //     builder.disable(TemplateType.CONTROLLER, /* v3.5.2 -> TemplateType.SERVICEIMPL *//* v3.5.9 -> */TemplateType.SERVICE_IMPL, TemplateType.SERVICE);
+                //     builder.disable(TemplateType.CONTROLLER, TemplateType.SERVICE_IMPL, TemplateType.SERVICE);
                 // })
 
-                // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .templateEngine(new FreemarkerTemplateEngine())
-                // .templateEngine(new EnhanceFreemarkerTemplateEngine())
                 .execute();
     }
 

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <!-- SpringBoot 4.x 不支持 JDK 11, 最低支持 JDK 17 -->
+        <!-- SpringBoot 4.x 最低支持 JDK 17 -->
         <version>4.0.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
